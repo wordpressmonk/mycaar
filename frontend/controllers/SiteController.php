@@ -77,6 +77,7 @@ class SiteController extends Controller
 
     /**
      * Logs in a user.
+	 * check for both username/ email
      *
      * @return mixed
      */
