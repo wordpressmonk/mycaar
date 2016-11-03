@@ -21,8 +21,13 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  */
+ 
 class User extends ActiveRecord implements IdentityInterface
 {
+	public $fullname;
+	public $photo;
+	public $bio;
+	
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
@@ -51,8 +56,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['user_status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['user_status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
 
@@ -61,7 +66,20 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        //return static::findOne(['id' => $id, 'user_status' => self::STATUS_ACTIVE]);
+		
+		$user = static::findOne(['id' => $id, 'user_status' => self::STATUS_ACTIVE]);
+        $profile = UserProfile::find()->where(['user_id'=>$id])->one();
+		if($user && $profile){
+			if(!empty($profile->fullname))
+				$user->fullname= $profile->fullname;	
+			if(!empty($profile->profile_photo))
+				$user->photo= $profile->profile_photo;
+			if(!empty($profile->bio))
+				$user->bio= $profile->bio;				
+		}
+		return $user;
+		
     }
 
     /**
@@ -80,7 +98,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+       // return static::findOne(['username' => $username, 'user_status' => self::STATUS_ACTIVE]);
+     
+        $val = static::find()->where("user_status = ".self::STATUS_ACTIVE." AND (username = '$username' OR email = '$username')")->one();		
+		 return $val;
     }
 
     /**
@@ -97,7 +118,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'user_status' => self::STATUS_ACTIVE,
         ]);
     }
 
