@@ -50,17 +50,57 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+	  /**
+     * @inheritdoc
+     */
+	   public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'role' => 'Role',
+            'c_id' => 'C ID',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+	
     /**
      * @inheritdoc
      */
-    public function rules()
+ /*    public function rules()
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
-
+ */
+	
+	/**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['username', 'email', 'role', 'c_id'], 'required'],
+            [['c_id'], 'integer'],
+           
+             [['username', 'email'], 'string', 'max' => 255],
+             [['username'], 'unique','targetClass' => '\common\models\User', 'message' => 'This Username has already been taken.'],
+            [['email'], 'unique','targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            [['password_reset_token'], 'unique'],
+			
+			 ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+        ];
+    }
+	
     /**
      * @inheritdoc
      */
@@ -208,4 +248,17 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+	
+	public function rolename($data) {
+    
+		if($data == 0)
+			return 'User';
+		else if($data == 1)
+			return 'Accessor';
+		else if($data == 2)
+			return 'Company Admin';
+		else if($data == 3)
+			return 'Super Admin';
+
+	}
 }

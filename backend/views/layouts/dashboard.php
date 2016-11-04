@@ -219,7 +219,7 @@ AppAsset::register($this);
 						<!-- BEGIN user -->
 						<!-- <li class="gui-folder"> -->
 						<li >
-							<a href="<?=\Yii::$app->homeUrl?>usercreate/index"  >
+							<a href="<?=\Yii::$app->homeUrl?>usermanage/user"  >
 								<div class="gui-icon"><i class="fa fa-user"></i></div>
 								<span class="title">User Management</span>
 							</a>
