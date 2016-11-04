@@ -21,8 +21,13 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  */
+ 
 class User extends ActiveRecord implements IdentityInterface
 {
+	public $fullname;
+	public $photo;
+	public $bio;
+	
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
@@ -45,23 +50,77 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+	  /**
+     * @inheritdoc
+     */
+	   public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'role' => 'Role',
+            'c_id' => 'C ID',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+	
     /**
      * @inheritdoc
      */
-    public function rules()
+ /*    public function rules()
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
-
+ */
+	
+	/**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['username', 'email', 'role', 'c_id'], 'required'],
+            [['c_id'], 'integer'],
+           
+             [['username', 'email'], 'string', 'max' => 255],
+             [['username'], 'unique','targetClass' => '\common\models\User', 'message' => 'This Username has already been taken.'],
+            [['email'], 'unique','targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            [['password_reset_token'], 'unique'],
+			
+			 ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+        ];
+    }
+	
     /**
      * @inheritdoc
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        //return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+		
+		$user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);		
+        $profile = UserProfile::find()->where(['user_id'=>$id])->one();
+		if($user && $profile){
+			if(!empty($profile->fullname))
+				$user->fullname= $profile->fullname;	
+			if(!empty($profile->profile_photo))
+				$user->photo= $profile->profile_photo;
+			if(!empty($profile->bio))
+				$user->bio= $profile->bio;				
+		}
+		
+		return $user;
+		
     }
 
     /**
@@ -80,7 +139,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+       // return static::findOne(['username' => $username, 'user_status' => self::STATUS_ACTIVE]);
+     
+        $val = static::find()->where("status = ".self::STATUS_ACTIVE." AND (username = '$username' OR email = '$username')")->one();		
+		 return $val;
     }
 
     /**
@@ -186,4 +248,17 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+	
+	public function rolename($data) {
+    
+		if($data == 0)
+			return 'User';
+		else if($data == 1)
+			return 'Accessor';
+		else if($data == 2)
+			return 'Company Admin';
+		else if($data == 3)
+			return 'Super Admin';
+
+	}
 }

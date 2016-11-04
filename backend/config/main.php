@@ -16,6 +16,9 @@ return [
       'course' => [
           'class' => 'backend\modules\course\Course',
       ],
+      'usermanage' => [
+           'class' => 'backend\modules\usermanage\Module',
+       ],
     ],
     'components' => [
         'request' => [

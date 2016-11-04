@@ -6,6 +6,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\User;
+use backend\models\SetPassword;
 
 /**
  * Site controller
@@ -30,12 +32,20 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+					[
+                        'actions' => ['set-password', 'error'],
+                        'allow' => true,
+                    ],
+					[
+                        'actions' => ['pwdregister', 'error'],
+                        'allow' => true,
+                    ],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['get'],
                 ],
             ],
         ];
@@ -70,6 +80,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+		$this->layout = "login";
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -95,4 +106,57 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+	
+	public function actionSetPassword($authkey)
+    {		
+		if(isset($authkey))
+		{
+			$model = new User();
+			$ckuser = User::find()->where(['auth_key'=>$authkey])->one();	
+			//$ckuser = User::find()->where(['auth_key'=>$authkey,'password_hash' =>''])->one();	
+			
+			if(isset($ckuser) && !empty($ckuser))
+			{	
+				
+				$this->layout = "login";
+					$model = new SetPassword();
+				return $this->render('setpassword', ['model' => $model,'user_id'=>$ckuser->id]);
+			} else {
+				Yii::$app->getSession()->setFlash('Error', 'Already you used it!!!.');	
+				return $this->redirect('login');
+			}
+			
+		} else {		
+			Yii::$app->getSession()->setFlash('Error', 'Invalid value !!!.');	
+			return $this->redirect('login');
+		}
+		
+        
+
+	}
+	
+ 	public function actionPwdregister()
+    {		
+		$this->layout = "login";		
+		$model = new SetPassword();			
+        if ($model->load(Yii::$app->request->post())) {	
+			$password = Yii::$app->request->post()['SetPassword']['password_hash'];
+			$userid = Yii::$app->request->post()['SetPassword']['userid'];
+			
+			$password_hash = Yii::$app->security->generatePasswordHash($password);
+			$model2 = User::findOne($userid);
+			$model2->password_hash = $password_hash;
+			$model2->update();			
+			Yii::$app->getSession()->setFlash('Success', 'Password Set successfully, Please Login Once!!!.');	
+			return $this->redirect('logout');
+		}
+		else{
+			Yii::$app->getSession()->setFlash('Error', 'Please Try Again!!!.');
+			return $this->redirect('logout');
+		}
+		
+		
+	
+	} 
+	
 }

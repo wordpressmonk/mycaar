@@ -26,10 +26,11 @@ AppAsset::register($this);
 		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/bootstrap.css?1422792965" />
 		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/materialadmin.css?1425466319" />
 		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/font-awesome.min.css?1422529194" />
-		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/material-design-iconic-font.min.css" />
+		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/material-design-iconic-font.min.css" />	
 		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/libs/DataTables/jquery.dataTables.css?1423553989" />
 		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/libs/DataTables/extensions/dataTables.colVis.css?1423553990" />
 		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/libs/DataTables/extensions/dataTables.tableTools.css?1423553990" />
+		
 		<!-- END STYLESHEETS -->
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -41,6 +42,7 @@ AppAsset::register($this);
 </head>
 	<body class="menubar-hoverable header-fixed menubar-pin ">
 	<?php $this->beginBody() ?>
+	 
 		<!-- BEGIN HEADER-->
 		<header id="header" >
 			<div class="headerbar">
@@ -137,11 +139,9 @@ AppAsset::register($this);
 					<ul class="header-nav header-nav-profile">
 						<li class="dropdown">
 							<a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
-
 								<img src="<?php echo Yii::$app->user->identity->photo; ?>" alt="" />
 								<span class="profile-info">
 									 <?php echo Yii::$app->user->identity->fullname;?>
-									 <?php echo Yii::$app->user->id;?>
 									 <?php $roles = array( "User","Editor", "Admin","Super Admin"); ?>
 									<small><?php if(isset(Yii::$app->user->identity->role)){ echo $roles[Yii::$app->user->identity->role];  } ?></small>
 								</span>
@@ -153,9 +153,8 @@ AppAsset::register($this);
 								<li><a href="../../html/pages/calendar.html">My appointments</a></li>
 								<li class="divider"></li>
 								<li><a href="../../html/pages/locked.html"><i class="fa fa-fw fa-lock"></i> Lock</a></li>
-
 								<li><a href="<?=\Yii::$app->homeUrl?>site/logout"><i class="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>
-
+								
 							</ul><!--end .dropdown-menu -->
 						</li><!--end .dropdown -->
 					</ul><!--end .header-nav-profile -->
@@ -196,7 +195,6 @@ AppAsset::register($this);
 						</a>
 					</div>
 					<div class="expanded">
-
 						<a href="<?=\Yii::$app->homeUrl;?>">
 							<span class="text-lg text-bold text-primary ">MATERIAL&nbsp;ADMIN</span>
 						</a>
@@ -209,7 +207,6 @@ AppAsset::register($this);
 
 						<!-- BEGIN DASHBOARD -->
 						<li>
-
 							<a href="<?=\Yii::$app->homeUrl;?>" >
 								<div class="gui-icon"><i class="md md-home"></i></div>
 								<span class="title">Dashboard</span>
@@ -217,51 +214,252 @@ AppAsset::register($this);
 						</li><!--end /menu-li -->
 						<!-- END DASHBOARD -->
 
-
-
+						
 						<!-- BEGIN user -->
 						<!-- <li class="gui-folder"> -->
 						<li >
-							<a href="<?=\Yii::$app->homeUrl?>usermanage/user"  >
+							<a href="<?=\Yii::$app->homeUrl?>user/index"  >
 								<div class="gui-icon"><i class="fa fa-user"></i></div>
 								<span class="title">User Management</span>
 							</a>
 							<!--start submenu -->
-
+							
 							<!--<ul>
 								<li><a ><span class="title">Create Users</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>site/user-manage" ><span class="title">Manage Users</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>site/user-manage" ><span class="title">Manage Users</span></a></li>								
 							</ul>-->
-
+							
 							<!--end /submenu -->
 						</li><!--end /menu-li -->
 						<!-- END user -->
 
-
-							<!-- BEGIN user -->
-						<!-- <li class="gui-folder"> -->
-						<li >
-							<a href="<?=\Yii::$app->homeUrl?>companydetails/index"  >
-								<div class="gui-icon"><i class="fa fa-user"></i></div>
-								<span class="title">Company Management</span>
+						
+						<!-- BEGIN EMAIL -->
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="md md-email"></i></div>
+								<span class="title">Email</span>
 							</a>
 							<!--start submenu -->
-
-							<!--<ul>
-								<li><a ><span class="title">Create Users</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>site/user-manage" ><span class="title">Manage Users</span></a></li>
-							</ul>-->
-
-							<!--end /submenu -->
+							<ul>
+								<li><a href="../../html/mail/inbox.html" ><span class="title">Inbox</span></a></li>
+								<li><a href="../../html/mail/compose.html" ><span class="title">Compose</span></a></li>
+								<li><a href="../../html/mail/reply.html" ><span class="title">Reply</span></a></li>
+								<li><a href="../../html/mail/message.html" ><span class="title">View message</span></a></li>
+							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
-						<!-- END user -->
+						<!-- END EMAIL -->
+
+						<!-- BEGIN DASHBOARD -->
+						<li>
+							<a href="../../html/layouts/builder.html" >
+								<div class="gui-icon"><i class="md md-web"></i></div>
+								<span class="title">Layouts</span>
+							</a>
+						</li><!--end /menu-li -->
+						<!-- END DASHBOARD -->
+
+						<!-- BEGIN UI -->
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="fa fa-puzzle-piece fa-fw"></i></div>
+								<span class="title">UI elements</span>
+							</a>
+							<!--start submenu -->
+							<ul>
+								<li><a href="../../html/ui/colors.html" ><span class="title">Colors</span></a></li>
+								<li><a href="../../html/ui/typography.html" ><span class="title">Typography</span></a></li>
+								<li><a href="../../html/ui/cards.html" ><span class="title">Cards</span></a></li>
+								<li><a href="../../html/ui/buttons.html" ><span class="title">Buttons</span></a></li>
+								<li><a href="../../html/ui/lists.html" ><span class="title">Lists</span></a></li>
+								<li><a href="../../html/ui/tabs.html" ><span class="title">Tabs</span></a></li>
+								<li><a href="../../html/ui/accordions.html" ><span class="title">Accordions</span></a></li>
+								<li><a href="../../html/ui/messages.html" ><span class="title">Messages</span></a></li>
+								<li><a href="../../html/ui/offcanvas.html" ><span class="title">Off-canvas</span></a></li>
+								<li><a href="../../html/ui/grid.html" ><span class="title">Grid</span></a></li>
+								<li class="gui-folder">
+									<a href="javascript:void(0);">
+										<span class="title">Icons</span>
+									</a>
+									<!--start submenu -->
+									<ul>
+										<li><a href="../../html/ui/icons/materialicons.html" ><span class="title">Material Design Icons</span></a></li>
+										<li><a href="../../html/ui/icons/fontawesome.html" ><span class="title">Font Awesome</span></a></li>
+										<li><a href="../../html/ui/icons/glyphicons.html" ><span class="title">Glyphicons</span></a></li>
+										<li><a href="../../html/ui/icons/skycons.html" ><span class="title">Skycons</span></a></li>
+									</ul><!--end /submenu -->
+								</li><!--end /menu-li -->
+							</ul><!--end /submenu -->
+						</li><!--end /menu-li -->
+						<!-- END UI -->
+
+						<!-- BEGIN TABLES -->
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="fa fa-table"></i></div>
+								<span class="title">Tables</span>
+							</a>
+							<!--start submenu -->
+							<ul>
+								<li><a href="../../html/tables/static.html" ><span class="title">Static Tables</span></a></li>
+								<li><a href="../../html/tables/dynamic.html" ><span class="title">Dynamic Tables</span></a></li>
+								<li><a href="../../html/tables/responsive.html" ><span class="title">Responsive Table</span></a></li>
+							</ul><!--end /submenu -->
+						</li><!--end /menu-li -->
+						<!-- END TABLES -->
+
+						<!-- BEGIN FORMS -->
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><span class="glyphicon glyphicon-list-alt"></span></div>
+								<span class="title">Forms</span>
+							</a>
+							<!--start submenu -->
+							<ul>
+								<li><a href="../../html/forms/basic.html" ><span class="title">Form basic</span></a></li>
+								<li><a href="../../html/forms/advanced.html" ><span class="title">Form advanced</span></a></li>
+								<li><a href="../../html/forms/layouts.html" ><span class="title">Form layouts</span></a></li>
+								<li><a href="../../html/forms/editors.html" ><span class="title">Editors</span></a></li>
+								<li><a href="../../html/forms/validation.html" ><span class="title">Form validation</span></a></li>
+								<li><a href="../../html/forms/wizard.html" ><span class="title">Form wizard</span></a></li>
+							</ul><!--end /submenu -->
+						</li><!--end /menu-li -->
+						<!-- END FORMS -->
+
+						<!-- BEGIN PAGES -->
+						<li class="gui-folder">
+							<!--<a>
+								<div class="gui-icon"><i class="md md-computer"></i></div>
+								<span class="title">Pages</span>
+							</a>-->
+							<a>
+								<div class="gui-icon"><i class="md md-computer"></i></div>
+								<span class="title">Pages</span>
+							</a>
+							<!--start submenu -->
+							<ul>
+								<li class="gui-folder">
+									<a href="javascript:void(0);">
+										<span class="title">Contacts</span>
+									</a>
+									<!--start submenu -->
+									<ul>
+										<li><a href="../../html/pages/contacts/search.html" ><span class="title">Search</span></a></li>
+										<li><a href="../../html/pages/contacts/details.html" ><span class="title">Contact card</span></a></li>
+										<li><a href="../../html/pages/contacts/add.html" ><span class="title">Insert contact</span></a></li>
+									</ul><!--end /submenu -->
+								</li><!--end /menu-li -->
+								<li class="gui-folder">
+									<a href="javascript:void(0);">
+										<span class="title">Search</span>
+									</a>
+									<!--start submenu -->
+									<ul>
+										<li><a href="../../html/pages/search/results-text.html" ><span class="title">Results - Text</span></a></li>
+										<li><a href="../../html/pages/search/results-text-image.html" ><span class="title">Results - Text and Image</span></a></li>
+									</ul><!--end /submenu -->
+								</li><!--end /menu-li -->
+								<li class="gui-folder">
+									<a href="javascript:void(0);">
+										<span class="title">Blog</span>
+									</a>
+									<!--start submenu -->
+									<ul>
+										<li><a href="../../html/pages/blog/masonry.html" ><span class="title">Blog masonry</span></a></li>
+										<li><a href="../../html/pages/blog/list.html" ><span class="title">Blog list</span></a></li>
+										<li><a href="../../html/pages/blog/post.html" ><span class="title">Blog post</span></a></li>
+									</ul><!--end /submenu -->
+								</li><!--end /menu-li -->
+								<li class="gui-folder">
+									<a href="javascript:void(0);">
+										<span class="title">Error pages</span>
+									</a>
+									<!--start submenu -->
+									<ul>
+										<li><a href="../../html/pages/404.html" ><span class="title">404 page</span></a></li>
+										<li><a href="../../html/pages/500.html" ><span class="title">500 page</span></a></li>
+									</ul><!--end /submenu -->
+								</li><!--end /menu-li -->
+								<li><a href="../../html/pages/profile.html" ><span class="title">User profile<span class="badge style-accent">42</span></span></a></li>
+								<li><a href="../../html/pages/invoice.html" ><span class="title">Invoice</span></a></li>
+								<li><a href="../../html/pages/calendar.html" ><span class="title">Calendar</span></a></li>
+								<li><a href="../../html/pages/pricing.html" ><span class="title">Pricing</span></a></li>
+								<li><a href="../../html/pages/timeline.html" ><span class="title">Timeline</span></a></li>
+								<li><a href="../../html/pages/maps.html" ><span class="title">Maps</span></a></li>
+								<li><a href="../../html/pages/locked.html" ><span class="title">Lock screen</span></a></li>
+								<li><a href="../../html/pages/login.html" ><span class="title">Login</span></a></li>
+								<li><a href="../../html/pages/blank.html" class="active"><span class="title">Blank page</span></a></li>
+							</ul><!--end /submenu -->
+						</li><!--end /menu-li -->
+						<!-- END FORMS -->
+
+						<!-- BEGIN CHARTS -->
+						<li>
+							<a href="../../html/charts/charts.html" >
+								<div class="gui-icon"><i class="md md-assessment"></i></div>
+								<span class="title">Charts</span>
+							</a>
+						</li><!--end /menu-li -->
+						<!-- END CHARTS -->
+
+						<!-- BEGIN LEVELS -->
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="fa fa-folder-open fa-fw"></i></div>
+								<span class="title">Menu levels demo</span>
+							</a>
+							<!--start submenu -->
+							<ul>
+								<li><a href="#"><span class="title">Item 1</span></a></li>
+								<li><a href="#"><span class="title">Item 1</span></a></li>
+								<li class="gui-folder">
+									<a href="javascript:void(0);">
+										<span class="title">Open level 2</span>
+									</a>
+									<!--start submenu -->
+									<ul>
+										<li><a href="#"><span class="title">Item 2</span></a></li>
+										<li class="gui-folder">
+											<a href="javascript:void(0);">
+												<span class="title">Open level 3</span>
+											</a>
+											<!--start submenu -->
+											<ul>
+												<li><a href="#"><span class="title">Item 3</span></a></li>
+												<li><a href="#"><span class="title">Item 3</span></a></li>
+												<li class="gui-folder">
+													<a href="javascript:void(0);">
+														<span class="title">Open level 4</span>
+													</a>
+													<!--start submenu -->
+													<ul>
+														<li><a href="#"><span class="title">Item 4</span></a></li>
+														<li class="gui-folder">
+															<a href="javascript:void(0);">
+																<span class="title">Open level 5</span>
+															</a>
+															<!--start submenu -->
+															<ul>
+																<li><a href="#"><span class="title">Item 5</span></a></li>
+																<li><a href="#"><span class="title">Item 5</span></a></li>
+															</ul><!--end /submenu -->
+														</li><!--end /submenu-li -->
+													</ul><!--end /submenu -->
+												</li><!--end /submenu-li -->
+											</ul><!--end /submenu -->
+										</li><!--end /submenu-li -->
+									</ul><!--end /submenu -->
+								</li><!--end /submenu-li -->
+							</ul><!--end /submenu -->
+						</li><!--end /menu-li -->
+						<!-- END LEVELS -->
 
 					</ul><!--end .main-menu -->
 					<!-- END MAIN MENU -->
 
 					<div class="menubar-foot-panel">
 						<small class="no-linebreak hidden-folded">
-							<span class="opacity-75">Copyright &copy; 2016</span> <strong>CodeCovers</strong>
+							<span class="opacity-75">Copyright &copy; 2014</span> <strong>CodeCovers</strong>
 						</small>
 					</div>
 				</div><!--end .menubar-scroll-panel-->
