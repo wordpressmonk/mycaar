@@ -148,11 +148,11 @@ class SiteController extends Controller
 			$model2->password_hash = $password_hash;
 			$model2->update();			
 			Yii::$app->getSession()->setFlash('Success', 'Password Set successfully, Please Login Once!!!.');	
-			return $this->redirect('login');
+			return $this->redirect('logout');
 		}
 		else{
 			Yii::$app->getSession()->setFlash('Error', 'Please Try Again!!!.');
-			return $this->redirect('login');
+			return $this->redirect('logout');
 		}
 		
 		

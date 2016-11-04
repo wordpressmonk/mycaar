@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use backend\models\Usercreate;
 
 /**
- * UsercreateSearch represents the model behind the search form about `app\models\Usercreate`.
+ * UsercreateSearch represents the model behind the search form about `backend\models\Usercreate`.
  */
 class UsercreateSearch extends Usercreate
 {
@@ -18,8 +18,8 @@ class UsercreateSearch extends Usercreate
     public function rules()
     {
         return [
-            [['id', 'role', 'user_status'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'role', 'c_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email'], 'safe'],
         ];
     }
 
@@ -41,8 +41,24 @@ class UsercreateSearch extends Usercreate
      */
     public function search($params)
     {
-        $query = Usercreate::find();
+       // $query = Usercreate::find();
 
+	   $cid = Yii::$app->user->identity->c_id;
+
+		if(isset(Yii::$app->user->identity->role))
+		{
+			$role = Yii::$app->user->identity->role;
+			if($role == 3)
+				$query = Usercreate::find();
+			if($role == 2)
+				$query = Usercreate::find()->andwhere(['in', 'role', [0,1]])->andwhere(['c_id'=> $cid]);
+			if($role == 1)
+				$query = Usercreate::find()->where(['role' => 0 ]);
+		} else {
+
+			$query = usUsercreateer::find();
+		}
+		
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -61,7 +77,8 @@ class UsercreateSearch extends Usercreate
         $query->andFilterWhere([
             'id' => $this->id,
             'role' => $this->role,
-            'user_status' => $this->user_status,
+            'c_id' => $this->c_id,
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);

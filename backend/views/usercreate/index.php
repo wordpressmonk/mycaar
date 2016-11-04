@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\UsercreateSearch */
+/* @var $searchModel backend\models\UsercreateSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'User Management';
@@ -18,20 +18,59 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+	
+	<?php	
+		if(isset($searchModel->role))
+		{ 
+			if($searchModel->role === 0)
+				$searchModel->role = "User";
+			else if($searchModel->role === 1)
+				$searchModel->role = "Accessor";
+			else if($searchModel->role === 2)
+				$searchModel->role = "Company Admin";
+			else if($searchModel->role === 3)
+				$searchModel->role = "Super Admin";
+			else 
+				$searchModel->role = "";
+		}
+		else 
+		{
+			$searchModel->role = "";
+		}
+		
+	?>
+	
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-         /*    'id', */
+           // 'id',
             'username',
-           /*  'auth_key',
-            'password_hash',
-            'password_reset_token', */
+           // 'auth_key',
+            //'password_hash',
+            //'password_reset_token',
              'email:email',
-             'role',
-             'user_status',
+             
+			   [        
+            'attribute' => 'role',
+            'value' => function ($model) {
+                $data = $model->role;
+				if($data == 0)
+					return 'User';
+				else if($data == 1)
+					return 'Accessor';
+				else if($data == 2)
+					return 'Company Admin';
+				else if($data == 3)
+					return 'Super Admin';
+		
+            },
+				],
+				
+			 'c_id',
+            // 'status',
             // 'created_at',
             // 'updated_at',
 

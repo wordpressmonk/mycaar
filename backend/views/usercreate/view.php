@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Usercreate */
+/* @var $model backend\models\Usercreate */
 
-$this->title = "User Details";
+$this->title = "View User";
 $this->params['breadcrumbs'][] = ['label' => 'Usercreates', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,7 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($model->email) ?></h1>
 
-	<?php 
+	
+		<?php 
 $sessioncheck = Yii::$app->session->getFlash('Success');
 
 if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
@@ -38,15 +39,20 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+           // 'id',
             'username',
-          /*   'auth_key',
+         /*    'auth_key',
             'password_hash',
             'password_reset_token', */
             'email:email',
-            'role',
-            'user_status',
-         /*    'created_at',
+            [
+            'label'=>'role',
+            'value'=>$model->rolename($model->role),
+			
+			],
+            'c_id',
+            'status',
+           /*  'created_at',
             'updated_at', */
         ],
     ]) ?>

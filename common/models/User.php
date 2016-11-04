@@ -56,8 +56,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['user_status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['user_status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
 
@@ -66,9 +66,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        //return static::findOne(['id' => $id, 'user_status' => self::STATUS_ACTIVE]);
+        //return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
 		
-		$user = static::findOne(['id' => $id, 'user_status' => self::STATUS_ACTIVE]);
+		$user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);		
         $profile = UserProfile::find()->where(['user_id'=>$id])->one();
 		if($user && $profile){
 			if(!empty($profile->fullname))
@@ -78,6 +78,7 @@ class User extends ActiveRecord implements IdentityInterface
 			if(!empty($profile->bio))
 				$user->bio= $profile->bio;				
 		}
+		
 		return $user;
 		
     }
@@ -100,7 +101,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
        // return static::findOne(['username' => $username, 'user_status' => self::STATUS_ACTIVE]);
      
-        $val = static::find()->where("user_status = ".self::STATUS_ACTIVE." AND (username = '$username' OR email = '$username')")->one();		
+        $val = static::find()->where("status = ".self::STATUS_ACTIVE." AND (username = '$username' OR email = '$username')")->one();		
 		 return $val;
     }
 
@@ -118,7 +119,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'user_status' => self::STATUS_ACTIVE,
+            'status' => self::STATUS_ACTIVE,
         ]);
     }
 

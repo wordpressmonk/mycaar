@@ -142,6 +142,7 @@ AppAsset::register($this);
 								<img src="<?php echo Yii::$app->user->identity->photo; ?>" alt="" />
 								<span class="profile-info">
 									 <?php echo Yii::$app->user->identity->fullname;?>
+									 <?php echo Yii::$app->user->id;?>
 									 <?php $roles = array( "User","Editor", "Admin","Super Admin"); ?>
 									<small><?php if(isset(Yii::$app->user->identity->role)){ echo $roles[Yii::$app->user->identity->role];  } ?></small>
 								</span>

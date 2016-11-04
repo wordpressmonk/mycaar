@@ -35,7 +35,6 @@ class UsercreateController extends Controller
      */
     public function actionIndex()
     {
-		
         $searchModel = new UsercreateSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -65,17 +64,11 @@ class UsercreateController extends Controller
     public function actionCreate()
     {
         $model = new Usercreate();
-	
-	
-		
-        if ($model->load(Yii::$app->request->post())) {
+
+        if ($model->load(Yii::$app->request->post()) ) {
 			
-				$model->auth_key = Yii::$app->security->generateRandomString();				
-				$cdate = new \Datetime("now");
-				$create_date = $cdate->format('Y-m-d H:i:s');			
-				$model->created_at = $create_date;	
-				$model->created_by = Yii::$app->user->id; 				
-				$model->load($model);
+			$model->auth_key = Yii::$app->security->generateRandomString();				
+			$model->load($model);
 			
 			if($model->save())
 			{
@@ -95,6 +88,7 @@ class UsercreateController extends Controller
 			/************** End Email ************/
 			
 			Yii::$app->getSession()->setFlash('Success', 'New User Register Successfully!!!.');	
+			
             return $this->redirect(['view', 'id' => $model->id]);
 				}
 			else{
@@ -119,14 +113,7 @@ class UsercreateController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-		
-		$udate = new \Datetime("now");
-		$update_date = $udate->format('Y-m-d H:i:s');			
-		$model->updated_at = $update_date;
-		$model->updated_by = Yii::$app->user->id; 
-		$model->load($model);
-		
-		
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->getSession()->setFlash('Success', 'Updated the User Successfully!!!.');	
             return $this->redirect(['view', 'id' => $model->id]);

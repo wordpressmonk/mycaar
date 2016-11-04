@@ -3,12 +3,12 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Usercreate */
+/* @var $model backend\models\Usercreate */
 
-$this->title = 'Update User: ' . $model->email;
+$this->title = 'Update User';
 $this->params['breadcrumbs'][] = ['label' => 'Usercreates', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = '';
 ?>
 <div class="usercreate-update">
 
