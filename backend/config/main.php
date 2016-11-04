@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
+    'layout' => 'dashboard',
     'modules' => [
       'course' => [
           'class' => 'backend\modules\course\Course',
