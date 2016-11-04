@@ -11,8 +11,12 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-	'layout' => 'dashboard',
-    'modules' => [],
+	  'layout' => 'dashboard',
+    'modules' => [
+      'usermanage' => [
+           'class' => 'backend\modules\usermanage\Module',
+       ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -38,14 +42,14 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        
+
     ],
     'params' => $params,
 ];
