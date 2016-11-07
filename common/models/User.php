@@ -111,14 +111,23 @@ class User extends ActiveRecord implements IdentityInterface
 		$user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);		
         $profile = UserProfile::find()->where(['user_id'=>$id])->one();
 		if($user && $profile){
-			if(!empty($profile->fullname))
-				$user->fullname= $profile->fullname;	
-			if(!empty($profile->profile_photo))
-				$user->photo= $profile->profile_photo;
-			if(!empty($profile->bio))
-				$user->bio= $profile->bio;				
+			//if(!empty($profile->fullname))
+				$user->fullname= $profile->firstname." ".$profile->lastname;				
 		}
-		
+		switch ($user->role) {
+			case 3:
+				$role = "Superadmin" ;
+				break;
+			case 2:
+				$role = "Companyadmin" ;
+				break;
+			case 1:
+				$role = "Assessor" ;
+				break;
+			default:
+				$role = "Student";
+		}	
+		$user->role = $role;
 		return $user;
 		
     }
@@ -249,16 +258,5 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 	
-	public function rolename($data) {
-    
-		if($data == 0)
-			return 'User';
-		else if($data == 1)
-			return 'Accessor';
-		else if($data == 2)
-			return 'Company Admin';
-		else if($data == 3)
-			return 'Super Admin';
 
-	}
-}
+}

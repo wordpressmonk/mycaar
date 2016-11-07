@@ -134,31 +134,30 @@ AppAsset::register($this);
 							</ul><!--end .dropdown-menu -->
 						</li><!--end .dropdown -->
 					</ul><!--end .header-nav-options -->
-					<ul class="header-nav header-nav-profile">
-						<li class="dropdown">
-							<a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
+					<?php if(!\Yii::$app->user->isGuest){ ?>					
+						<ul class="header-nav header-nav-profile">
+							<li class="dropdown">
+								<a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
+									
+									<span class="profile-info">
+										 <?php echo Yii::$app->user->identity->fullname;?>
+										<small><?= Yii::$app->user->identity->role;?></small>
+									</span>
+								</a>
+								<ul class="dropdown-menu animation-dock">
+									<li class="dropdown-header">Config</li>
+									<li><a href="../../html/pages/profile.html">My profile</a></li>
+									<li><a href="../../html/pages/blog/post.html">My blog <span class="badge style-danger pull-right">16</span></a></li>
+									<li><a href="../../html/pages/calendar.html">My appointments</a></li>
+									<li class="divider"></li>
+									<li><a href="../../html/pages/locked.html"><i class="fa fa-fw fa-lock"></i> Lock</a></li>
 
-								<img src="<?php echo Yii::$app->user->identity->photo; ?>" alt="" />
-								<span class="profile-info">
-									 <?php echo Yii::$app->user->identity->fullname;?>
-									 <?php echo Yii::$app->user->id;?>
-									 <?php $roles = array( "User","Editor", "Admin","Super Admin"); ?>
-									<small><?php if(isset(Yii::$app->user->identity->role)){ echo $roles[Yii::$app->user->identity->role];  } ?></small>
-								</span>
-							</a>
-							<ul class="dropdown-menu animation-dock">
-								<li class="dropdown-header">Config</li>
-								<li><a href="../../html/pages/profile.html">My profile</a></li>
-								<li><a href="../../html/pages/blog/post.html">My blog <span class="badge style-danger pull-right">16</span></a></li>
-								<li><a href="../../html/pages/calendar.html">My appointments</a></li>
-								<li class="divider"></li>
-								<li><a href="../../html/pages/locked.html"><i class="fa fa-fw fa-lock"></i> Lock</a></li>
+									<li><a href="<?=\Yii::$app->homeUrl?>site/logout"><i class="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>
 
-								<li><a href="<?=\Yii::$app->homeUrl?>site/logout"><i class="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>
-
-							</ul><!--end .dropdown-menu -->
-						</li><!--end .dropdown -->
-					</ul><!--end .header-nav-profile -->
+								</ul><!--end .dropdown-menu -->
+							</li><!--end .dropdown -->
+						</ul><!--end .header-nav-profile -->
+					<?php } ?>
 					<ul class="header-nav header-nav-toggle">
 						<li>
 							<a class="btn btn-icon-toggle btn-default" href="#offcanvas-search" data-toggle="offcanvas" data-backdrop="false">
