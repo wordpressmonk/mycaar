@@ -19,13 +19,13 @@ use kartik\select2\Select2;
     <?= $form->field($model, 'title')->textInput(['rows' => 6,'class'=>'form-control']) ?>
 
 	<?php
-	if(\Yii::$app->user->identity->role == 'Superadmin'){
-		$data = ArrayHelper::map(Company::find()->all(), 'c_id', 'name');
-		echo $form->field($model, 'company_id')->widget(Select2::classname(), [
-			'data' => $data,
-			'options' => ['placeholder' => 'Select company'],
-		]);		
-	}
+		if(\Yii::$app->user->identity->role == 'Superadmin'){
+			$data = ArrayHelper::map(Company::find()->all(), 'company_id', 'name');
+			echo $form->field($model, 'company_id')->widget(Select2::classname(), [
+				'data' => $data,
+				'options' => ['placeholder' => 'Select company'],
+			]);		
+		}
 	?>
 	
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>

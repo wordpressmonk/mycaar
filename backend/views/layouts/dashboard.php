@@ -50,7 +50,7 @@ AppAsset::register($this);
 						<li class="header-nav-brand" >
 							<div class="brand-holder">
 								<a href="<?=\Yii::$app->homeUrl;?>">
-									<span class="text-lg text-bold text-primary">MATERIAL ADMIN</span>
+									<span class="text-lg text-bold text-primary">MY CAAR</span>
 								</a>
 							</div>
 						</li>
@@ -215,29 +215,22 @@ AppAsset::register($this);
 							</a>
 						</li><!--end /menu-li -->
 						<!-- END DASHBOARD -->
-
-
-
-						<!-- BEGIN user -->
-						<!-- <li class="gui-folder"> -->
-						<li >
-							<a href="<?=\Yii::$app->homeUrl?>usermanage/user"  >
-								<div class="gui-icon"><i class="fa fa-user"></i></div>
-								<span class="title">User Management</span>
+						<!-- BEGIN Admin -->						
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="md md-settings"></i></div>
+								<span class="title">Admin</span>
 							</a>
 							<!--start submenu -->
-
-							<!--<ul>
-								<li><a ><span class="title">Create Users</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>site/user-manage" ><span class="title">Manage Users</span></a></li>
-							</ul>-->
-
-							<!--end /submenu -->
+							<ul>
+								<li><a href="<?=\Yii::$app->homeUrl?>usermanage/user" ><span class="title">Users</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>course/program" ><span class="title">Programs</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
+							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
-						<!-- END user -->
 
-
-							<!-- BEGIN user -->
+						<!-- END Admin -->
+						<!-- BEGIN Company -->
 						<!-- <li class="gui-folder"> -->
 						<li >
 							<a href="<?=\Yii::$app->homeUrl?>companydetails/index"  >
@@ -253,7 +246,7 @@ AppAsset::register($this);
 
 							<!--end /submenu -->
 						</li><!--end /menu-li -->
-						<!-- END user -->
+						<!-- END Company -->
 
 					</ul><!--end .main-menu -->
 					<!-- END MAIN MENU -->
@@ -528,6 +521,7 @@ AppAsset::register($this);
 		<script src="<?=Yii::$app->homeUrl;?>js/core/source/AppNavSearch.js"></script>
 		<script src="<?=Yii::$app->homeUrl;?>js/core/source/AppVendor.js"></script>
 		<script src="<?=Yii::$app->homeUrl;?>js/core/demo/Demo.js"></script>
+		
 		<!-- END JAVASCRIPT -->
 
 	</body>

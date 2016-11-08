@@ -45,7 +45,7 @@ class Program extends \yii\db\ActiveRecord
         return [
             'program_id' => 'Program ID',
             'title' => 'Title',
-            'company_id' => 'Company ID',
+            'company_id' => 'Company',
             'description' => 'Description',
         ];
     }
@@ -64,5 +64,12 @@ class Program extends \yii\db\ActiveRecord
     public function getProgramEnrollments()
     {
         return $this->hasMany(ProgramEnrollment::className(), ['program_id' => 'program_id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompany()
+    {
+        return $this->hasOne(Company::className(), ['company_id' => 'company_id']);
     }
 }

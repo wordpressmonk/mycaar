@@ -1,0 +1,172 @@
+<?php
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use common\models\Program;
+use kartik\select2\Select2;
+/* @var $this yii\web\View */
+/* @var $model common\models\Module */
+/* @var $form yii\widgets\ActiveForm */
+$this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/summernote.css?1425218701");
+?>
+<style>
+	.checkbox.checkbox-styled>label>span:first-of-type {
+		display: none;
+	}
+</style>
+<div class="section-body contain-lg">
+	<div class="row">
+		<div class="col-lg-12">
+			<h1>Course</h1>
+		</div><!--end .col -->
+		<div class="col-lg-12">
+			<div class="panel-group" id="accordion7">
+				<div class="card panel">
+					<div class="card-head style-primary " data-toggle="collapse" data-parent="#accordion7" data-target="#accordion7-1">
+						<header>Step 1 - Course Overview</header>
+						<div class="tools">
+							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+					<div id="accordion7-1" class="collapse">
+						<div class="card-body">
+							<?php $form = ActiveForm::begin([
+											'options' => ['enctype'=>'multipart/form-data']
+							]); ?>
+								<?= $form->field($model, 'title')->textInput(['maxlength' => true,'class'=>'form-control']) ?>
+								
+								<h4>Course Excerpt / Short Overview	</h4>
+								<?= $form->field($model, 'short_description')->textarea(['id'=>'course_shortdesc']) ?>
+								
+								<h4>Listing Image</h4>
+								<p><?php if(!$model->isNewRecord && $model->featured_image != ''){ ?>
+									<img src="<?=Yii::$app->homeUrl.$model->featured_image?>" width="150px" height="150px"/>
+								<?php } 
+								else echo 'The image is used on the "Courses" listing ( archive ) page along with the course excerpt.';
+								?></p>
+								<?= $form->field($model, 'featured_image')->fileInput(['class'=>'form-control'])->label(false) ?>
+								
+								<h4>Course Category</h4>
+								<?php 
+								$data = ArrayHelper::map(Program::find()->all(), 'program_id', 'title');
+								echo $form->field($model, 'program_id')->widget(Select2::classname(), [
+									'data' => $data,
+									'options' => ['placeholder' => 'Select Category'],
+								])->label(false);	
+								?>	
+								<?= $form->field($model, 'language')->textInput(['maxlength' => true,'class'=>'form-control']) ?>								
+								<div class="form-group">
+									<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-sm ink-reaction btn-default' : 'btn btn-sm ink-reaction btn-default']) ?>
+								</div>
+							<?php ActiveForm::end(); ?>
+						</div>
+					</div>
+				</div><!--end .panel -->
+				</br>
+				<div class="card panel">
+					<div class="card-head collapsed" data-toggle="collapse" data-parent="#accordion7" data-target="#accordion7-2">
+						<header>Step 2 - Course Description</header>
+						<div class="tools">
+							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+					<?php if(!$model->isNewRecord){ ?>
+						<div id="accordion7-2" class="collapse">
+							<div class="card-body">
+							<?php $form = ActiveForm::begin(); ?>
+								
+									<h4>Featured Video</h4>
+									<p><?php if(!$model->isNewRecord && $model->featured_video_url != ''){ ?>
+										<video width="320" height="240" controls>
+											<source src="<?=Yii::$app->homeUrl.$model->featured_video_url?>" type="video/mp4">
+										</video>
+									<?php } 
+									else echo 'This is used on the Course Overview page and will be displayed with the course description.';
+									?></p>
+									<?= $form->field($model, 'featured_video_url')->fileInput(['class'=>'form-control'])->label(false) ?>
+								
+								
+									<h4>Course Description	</h4>
+									<p>This is an in-depth description of the course. It should include such things like an overview, outcomes, possible requirements, etc.</p>
+									<?= $form->field($model, 'detailed_description')->textarea(['id'=>'course_desc']) ?>
+								
+								<div class="form-group">
+									<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-sm ink-reaction btn-default' : 'btn btn-sm ink-reaction btn-default']) ?>
+								</div>
+							<?php ActiveForm::end(); ?>
+							</div>
+						</div>						
+					<?php } ?>
+
+				</div><!--end .panel -->
+				</br>
+				<div class="card panel">
+					<div class="card-head collapsed" data-toggle="collapse" data-parent="#accordion7" data-target="#accordion7-3">
+						<header>Step 3 - Course Dates</header>
+						<div class="tools">
+							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
+						</div>
+					</div>
+					<?php if(!$model->isNewRecord){ ?>
+					<div id="accordion7-3" class="collapse">
+						<div class="card-body">
+						<?php $form = ActiveForm::begin(); ?>
+							<div class="form-group">
+								<h4>Course Dates</h4>
+								<?= $form->field($model, 'is_course_open_anytime',['template' => '<div class="checkbox checkbox-styled"><label>{input}<span>This course has no end date</span></label></div>','options'=>['tag'=>'div']])->checkbox([],false); ?>
+								<p>This is the duration the course will be open to the students</p>
+							</div>
+							<div class="form-group">
+								<div class="input-daterange input-group" id="start_date">
+										<?= $form->field($model, 'course_start_date')->textInput(['template'=>'<div class="input-group-content">{input}</div>','class'=>'form-control']) ?>
+										<span class="input-group-addon">to</span>
+										<?= $form->field($model, 'course_end_date')->textInput(['template'=>'<div class="input-group-content">{input}</div>','class'=>'form-control']) ?>
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div><!--end .form-group -->
+							<div class="form-group">
+								<h4>Enrollment Dates</h4>
+										<?= $form->field($model, 'is_enrlmnt_open_anytime',['template' => '<div class="checkbox checkbox-styled"><label>{input}<span>Users can enroll at any time</span></label></div>','options'=>['tag'=>'div']])->checkbox([],false); ?>
+
+								<p>These are the dates that students can enroll</p>
+							</div>
+							<div class="form-group">
+								<div class="input-daterange input-group" id="start_enroll_date">
+										<?= $form->field($model, 'enrl_start_date')->textInput(['template'=>'<div class="input-group-content">{input}</div>','class'=>'form-control']) ?>
+										<span class="input-group-addon">to</span>
+										<?= $form->field($model, 'enrl_end_date')->textInput(['template'=>'<div class="input-group-content">{input}</div>','class'=>'form-control']) ?>
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div><!--end .form-group --></br>
+							<div class="form-group">
+								<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-sm ink-reaction btn-default' : 'btn btn-sm ink-reaction btn-default']) ?>
+							</div>
+						<?php ActiveForm::end(); ?>
+						</div>
+					</div>
+					<?php } ?>
+				</div><!--end .panel -->
+			</div><!--end .panel-group -->
+		</div><!--end .col -->
+	</div><!--end .row -->
+	<!-- END COLORS -->
+
+</div><!--end .section-body -->
+<?php 
+$this->registerJsFile(\Yii::$app->homeUrl."js/libs/summernote/summernote.min.js");
+$this->registerJsFile(\Yii::$app->homeUrl."js/libs/multi-select/jquery.multi-select.js");
+$this->registerJsFile(\Yii::$app->homeUrl."js/libs/bootstrap-datepicker/bootstrap-datepicker.js")
+?>
+<script>
+$(document).ready(function(){
+//$('#optcategory').multiSelect({selectableOptgroup: true});
+$('#course_desc').summernote();
+$('#course_shortdesc').summernote();
+$('#start_date').datepicker({
+	autoclose: true, 
+	todayHighlight: true,
+	format: 'yyyy-mm-dd'
+});
+$('#start_enroll_date').datepicker({autoclose: true, todayHighlight: true,format: 'yyyy-mm-dd'});
+});
+</script>

@@ -3,17 +3,17 @@
 namespace backend\modules\course\controllers;
 
 use Yii;
-use common\models\Program;
-use common\models\search\SearchProgram;
+use common\models\Module;
+use common\models\search\SearchModule;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\search\SearchModule;
+use yii\web\UploadedFile;
 
 /**
- * ProgramController implements the CRUD actions for Program model.
+ * ModuleController implements the CRUD actions for Module model.
  */
-class ProgramController extends Controller
+class ModuleController extends Controller
 {
     /**
      * @inheritdoc
@@ -31,12 +31,12 @@ class ProgramController extends Controller
     }
 
     /**
-     * Lists all Program models.
+     * Lists all Module models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SearchProgram();
+        $searchModel = new SearchModule();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,41 +46,45 @@ class ProgramController extends Controller
     }
 
     /**
-     * Displays a single Program model.
+     * Displays a single Module model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        $searchModel = new SearchModule();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Creates a new Program model.
+     * Creates a new Module model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Program();
+        $model = new Module();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->program_id]);
+        if ($model->load(Yii::$app->request->post())) {
+			//save image here
+			//print_r(Yii::$app->request->post());die;
+			$model->featured_image = UploadedFile::getInstance($model, 'featured_image');
+			if(!empty($model->featured_image)) {
+				if(!$model->uploadImage())
+					return;
+			}
+			if($model->save())
+            return $this->redirect(['update', 'id' => $model->module_id]);
         } else {
-            return $this->render('create', [
+            return $this->render('add', [
                 'model' => $model,
             ]);
         }
     }
 
     /**
-     * Updates an existing Program model.
+     * Updates an existing Module model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -88,18 +92,41 @@ class ProgramController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->program_id]);
+		$current_image = $model->featured_image;
+		$current_video = $model->featured_video_url;
+        if ($model->load(Yii::$app->request->post())) {
+			
+			//Save featured image here
+			$model->featured_image = UploadedFile::getInstance($model, 'featured_image');
+			if(!empty($model->featured_image)) {
+				if(!$model->uploadImage())
+					return;
+			}
+			else
+				$model->featured_image = $current_image;
+			//end of saving image
+			
+			//save featured video
+			$model->featured_video_url = UploadedFile::getInstance($model, 'featured_video_url');
+			if(!empty($model->featured_video_url)) {
+				if(!$model->uploadVideo())
+					return;
+			}
+			else
+				$model->featured_video_url = $current_video;
+			//end of saving video
+			
+			if($model->save())
+				return $this->redirect(['update', 'id' => $model->module_id]);
         } else {
-            return $this->render('update', [
+            return $this->render('add', [
                 'model' => $model,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Program model.
+     * Deletes an existing Module model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -112,15 +139,15 @@ class ProgramController extends Controller
     }
 
     /**
-     * Finds the Program model based on its primary key value.
+     * Finds the Module model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Program the loaded model
+     * @return Module the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Program::findOne($id)) !== null) {
+        if (($model = Module::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
