@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
         ],
     ]) ?>
-	<h3><?= 'Courses' ?></h3>
+	<h3><?= 'Courses ' ?><?= Html::a('Add new', ['module/create'], ['class' => 'btn btn-default']) ?></h3>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
