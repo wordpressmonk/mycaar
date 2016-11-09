@@ -215,6 +215,23 @@ AppAsset::register($this);
 							</a>
 						</li><!--end /menu-li -->
 						<!-- END DASHBOARD -->
+						<?php if(\Yii::$app->user->can('rbac permissions')){ ?>
+						<!-- BEGIN System -->						
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="md md-settings"></i></div>
+								<span class="title">System</span>
+							</a>
+							<!--start submenu -->
+							<ul>
+								<li><a href="<?=\Yii::$app->homeUrl?>admin/role" ><span class="title">Roles</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>admin/permission" ><span class="title">Permissions</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>admin/assignment" ><span class="title">Assignments</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>admin/rule" ><span class="title">Rules</span></a></li>
+							</ul><!--end /submenu -->
+						</li><!--end /menu-li -->
+						<!-- END System -->
+						<?php } ?>
 						<!-- BEGIN Admin -->						
 						<li class="gui-folder">
 							<a>
