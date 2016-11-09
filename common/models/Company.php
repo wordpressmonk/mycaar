@@ -12,6 +12,8 @@ use Yii;
  * @property string $about_us
  * @property string $logo
  * @property integer $admin
+ *
+ * @property User $admin0
  */
 class Company extends \yii\db\ActiveRecord
 {
@@ -33,6 +35,7 @@ class Company extends \yii\db\ActiveRecord
             [['about_us', 'logo'], 'string'],
             [['admin'], 'integer'],
             [['name'], 'string', 'max' => 200],
+            [['admin'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['admin' => 'id']],
         ];
     }
 
@@ -48,5 +51,13 @@ class Company extends \yii\db\ActiveRecord
             'logo' => 'Logo',
             'admin' => 'Admin',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanyAdmin()
+    {
+        return $this->hasOne(User::className(), ['id' => 'admin']);
     }
 }

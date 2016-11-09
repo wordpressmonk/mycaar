@@ -25,8 +25,9 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
 	public $fullname;
-	public $photo;
-	public $bio;
+	public $role;
+	public $password;
+
 	
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
@@ -49,7 +50,30 @@ class User extends ActiveRecord implements IdentityInterface
             TimestampBehavior::className(),
         ];
     }
-
+	/**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['username', 'email', 'role'], 'required'],
+			[['password'], 'required', 'except' => 'update_by_admin'],
+            [['c_id'], 'integer'],           
+            [['username', 'email'], 'string', 'max' => 255],
+            [['username'], 'unique','targetClass' => '\common\models\User', 'message' => 'This Username has already been taken.'],
+            [['email'], 'unique','targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            [['password_reset_token'], 'unique'],			
+			['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+        ];
+    }
+	
+	public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['update_by_admin'] = ['role','c_id','username','email'];//Scenario Values Only Accepted
+        return $scenarios;
+    }
 	  /**
      * @inheritdoc
      */
@@ -59,11 +83,11 @@ class User extends ActiveRecord implements IdentityInterface
             'id' => 'ID',
             'username' => 'Username',
             'auth_key' => 'Auth Key',
-            'password_hash' => 'Password Hash',
+            'password' => 'Password',
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
             'role' => 'Role',
-            'c_id' => 'C ID',
+            'c_id' => 'Company',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -73,47 +97,12 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
- /*    public function rules()
-    {
-        return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-        ];
-    }
- */
-	
-	/**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['username', 'email', 'role', 'c_id'], 'required'],
-            [['c_id'], 'integer'],
-           
-             [['username', 'email'], 'string', 'max' => 255],
-             [['username'], 'unique','targetClass' => '\common\models\User', 'message' => 'This Username has already been taken.'],
-            [['email'], 'unique','targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
-            [['password_reset_token'], 'unique'],
-			
-			 ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-        ];
-    }
-	
-    /**
-     * @inheritdoc
-     */
     public static function findIdentity($id)
     {
-        //return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-		
 		$user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);		
         $profile = UserProfile::find()->where(['user_id'=>$id])->one();
-		if($user && $profile){
-			//if(!empty($profile->fullname))
+		if($user && $profile)
 				$user->fullname= $profile->firstname." ".$profile->lastname;				
-		}
 		switch ($user->role) {
 			case 3:
 				$role = "Superadmin" ;
@@ -128,8 +117,7 @@ class User extends ActiveRecord implements IdentityInterface
 				$role = "Student";
 		}	
 		$user->role = $role;
-		return $user;
-		
+		return $user;		
     }
 
     /**
@@ -258,5 +246,21 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 	
+	/**
+	 * Returns user role name according to RBAC
+	 * @return string
+	 */
+	public function getRoleName()
+	{
+		$roles = Yii::$app->authManager->getRolesByUser($this->id);
+		if (!$roles) {
+			return null;
+		}
 
+		reset($roles);
+		/* @var $role \yii\rbac\Role */
+		$role = current($roles);
+
+		return $role->name;
+	}
 }

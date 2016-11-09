@@ -9,25 +9,19 @@ use Yii;
  *
  * @property integer $profile_id
  * @property integer $user_id
- * @property integer $profile_status
  * @property string $firstname
  * @property string $lastname
- * @property string $profile_url
- * @property string $profile_photo
- * @property string $short_description
- * @property string $display_url
- * @property string $display_email
- * @property string $profile_bg_image
- * @property string $bg_properties
- * @property integer $profile_privacy
- * @property string $temp_image
+ * @property integer $position
+ * @property integer $location
+ * @property integer $state
  *
  * @property User $user
- * @property Privacy $profilePrivacy
+ * @property Division $position0
+ * @property Location $location0
+ * @property State $state0
  */
 class UserProfile extends \yii\db\ActiveRecord
 {
-    public $imageFile;
     /**
      * @inheritdoc
      */
@@ -42,14 +36,13 @@ class UserProfile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['profile_url', 'short_description'], 'string'],
-            [['fullname', 'profile_photo', 'temp_image','display_email'], 'string', 'max' => 255],
+            [['user_id'], 'required'],
+            [['user_id', 'division', 'location', 'state'], 'integer'],
+            [['firstname', 'lastname'], 'string', 'max' => 100],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['profile_url'],'url'],
-			[['bio'],  'string', 'max' => 500],
-           // [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg' ]
-           // ['verify_password', 'compare', 'compareAttribute' => 'password'],
-          //  ['verify_password', 'compare', 'compareAttribute' => 'password'],
+            [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'division_id']],
+            [['location'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location' => 'location_id']],
+            [['state'], 'exist', 'skipOnError' => true, 'targetClass' => State::className(), 'targetAttribute' => ['state' => 'state_id']],
         ];
     }
 
@@ -61,14 +54,11 @@ class UserProfile extends \yii\db\ActiveRecord
         return [
             'profile_id' => 'Profile ID',
             'user_id' => 'User ID',
-            'profile_status' => 'Profile Status',
-            'fullname' => 'Name',
-            'profile_url' => 'Profile Url',
-            'profile_photo' => 'Profile Photo',
-			'bio' => 'Bio',
-            'short_description' => 'Short Description',
-            'profile_url' => 'Profile Url',
-            'display_email' => 'Display Email',
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+            'division' => 'Division',
+            'location' => 'Location',
+            'state' => 'State',
         ];
     }
 
@@ -80,18 +70,27 @@ class UserProfile extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-/* 	public function getFullName()
-	{
-		return $this->firstname.' '.$this->lastname;
-	} */
-	/**
-	 * @return mixed
-	 */
-	public function saveProfile(){
-        if (!$this->validate()) {
-            return null;
-        }
-		//upload pic here
-	
-	}
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPosition0()
+    {
+        return $this->hasOne(Division::className(), ['division_id' => 'position']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLocation0()
+    {
+        return $this->hasOne(Location::className(), ['location_id' => 'location']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getState0()
+    {
+        return $this->hasOne(State::className(), ['state_id' => 'state']);
+    }
 }

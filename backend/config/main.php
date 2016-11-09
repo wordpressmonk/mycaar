@@ -16,13 +16,14 @@ return [
       'course' => [
           'class' => 'backend\modules\course\Course',
       ],
-      'usermanage' => [
-           'class' => 'backend\modules\usermanage\Module',
-       ],
+      'user' => [
+          'class' => 'backend\modules\user\module',
+      ],
     ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+			'enableCsrfValidation'=>false,
         ],
         'user' => [
             'identityClass' => 'common\models\User',

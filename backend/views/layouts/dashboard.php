@@ -223,7 +223,7 @@ AppAsset::register($this);
 							</a>
 							<!--start submenu -->
 							<ul>
-								<li><a href="<?=\Yii::$app->homeUrl?>usermanage/user" ><span class="title">Users</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/user" ><span class="title">Users</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program" ><span class="title">Programs</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
 							</ul><!--end /submenu -->
@@ -233,7 +233,7 @@ AppAsset::register($this);
 						<!-- BEGIN Company -->
 						<!-- <li class="gui-folder"> -->
 						<li >
-							<a href="<?=\Yii::$app->homeUrl?>companydetails/index"  >
+							<a href="<?=\Yii::$app->homeUrl?>user/company/index"  >
 								<div class="gui-icon"><i class="fa fa-user"></i></div>
 								<span class="title">Company Management</span>
 							</a>
