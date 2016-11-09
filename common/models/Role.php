@@ -5,22 +5,23 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "location".
+ * This is the model class for table "role".
  *
- * @property integer $location_id
+ * @property integer $role_id
  * @property integer $company_id
- * @property string $name
+ * @property string $title
+ * @property string $description
  *
- * @property UserProfile[] $userProfiles
+ * @property Company $company
  */
-class Location extends \yii\db\ActiveRecord
+class Role extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'location';
+        return 'role';
     }
 
     /**
@@ -29,9 +30,11 @@ class Location extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_id', 'name'], 'required'],
+            [['company_id', 'title'], 'required'],
             [['company_id'], 'integer'],
-            [['name'], 'string', 'max' => 200],
+            [['description'], 'string'],
+            [['title'], 'string', 'max' => 1000],
+            [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'company_id']],
         ];
     }
 
@@ -41,20 +44,13 @@ class Location extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'location_id' => 'Location ID',
+            'role_id' => 'Role ID',
             'company_id' => 'Company ID',
-            'name' => 'Name',
+            'title' => 'Title',
+            'description' => 'Description',
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserProfiles()
-    {
-        return $this->hasMany(UserProfile::className(), ['location' => 'location_id']);
-    }
-	
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "division".
  *
  * @property integer $division_id
+ * @property integer $company_id
  * @property string $title
  * @property string $description
  *
@@ -29,8 +30,8 @@ class Division extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['division_id', 'title'], 'required'],
-            [['division_id'], 'integer'],
+            [['division_id', 'company_id', 'title'], 'required'],
+            [['division_id', 'company_id'], 'integer'],
             [['title'], 'string', 'max' => 200],
             [['description'], 'string', 'max' => 1000],
         ];
@@ -43,6 +44,7 @@ class Division extends \yii\db\ActiveRecord
     {
         return [
             'division_id' => 'Division ID',
+            'company_id' => 'Company ID',
             'title' => 'Title',
             'description' => 'Description',
         ];
@@ -53,6 +55,13 @@ class Division extends \yii\db\ActiveRecord
      */
     public function getUserProfiles()
     {
-        return $this->hasMany(UserProfile::className(), ['position' => 'division_id']);
+        return $this->hasMany(UserProfile::className(), ['division' => 'division_id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompany()
+    {
+        return $this->hasOne(Company::className(), ['company_id' => 'company_id']);
     }
 }
