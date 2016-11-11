@@ -13,7 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="company-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->company_id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->company_id], [
@@ -28,11 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'company_id',
             'name',
             'about_us:ntext',
-            'logo:ntext',
-            'admin',
+			[
+                'attribute'=>'Logo',
+				'value'=>Yii::$app->homeUrl.$model->logo,
+				'format' => ['image',['width'=>'150px','height'=>'150px']],
+				
+            ],	
+				'companyAdmin.email',
+				
         ],
     ]) ?>
 

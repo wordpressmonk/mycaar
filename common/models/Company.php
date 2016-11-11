@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 
+
 /**
  * This is the model class for table "company".
  *
@@ -31,14 +32,24 @@ class Company extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'admin'], 'required'],
-            [['about_us', 'logo'], 'string'],
+            [['name', 'admin'], 'required'],          
+            [['about_us', 'logo'], 'required','on' => 'update_by_company_admin'],          
+            [['about_us'], 'string'],
+			[['logo'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
             [['admin'], 'integer'],
             [['name'], 'string', 'max' => 200],
             [['admin'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['admin' => 'id']],
         ];
     }
 
+	
+	public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['update_by_company_admin'] = ['name','about_us','logo']; //Scenario Values Only Accepted
+        return $scenarios;
+    } 
+	
     /**
      * @inheritdoc
      */
@@ -60,4 +71,19 @@ class Company extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'admin']);
     }
+	
+
+	/**
+     * Upload the Company Logo On Particular Folder Structure
+     */
+	 
+	public function uploadImage(){	
+		if($this->validate()) {	
+			$this->logo->saveAs('uploads/company_logo/'.$this->logo->baseName.'.'.$this->logo->extension);
+			$this->logo = 'uploads/company_logo/'.$this->logo->baseName.'.'.$this->logo->extension;
+			return true;	
+		 }else {
+			return false;
+		}	 	
+	}	
 }

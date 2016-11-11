@@ -8,6 +8,8 @@ use common\models\search\SearchCompany;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\User;
+use yii\web\UploadedFile;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -36,8 +38,7 @@ class CompanyController extends Controller
     public function actionIndex()
     {
         $searchModel = new SearchCompany();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);		
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -64,12 +65,20 @@ class CompanyController extends Controller
     public function actionCreate()
     {
         $model = new Company();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->company_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
+        if ($model->load(Yii::$app->request->post())) {	
+		/**		Company Logo Image Uploaded for Created function Line --- Connected with "Company Module"
+			**/
+			
+			$model->logo = UploadedFile::getInstance($model, 'logo');			
+			if(!empty($model->logo)) { 
+				if(!$model->uploadImage())
+					return;
+			}			
+			if($model->save())
+				return $this->redirect(['view', 'id' => $model->company_id]);
+        } else {		
+         return $this->render('create', [
+                'model' => $model
             ]);
         }
     }
@@ -83,9 +92,35 @@ class CompanyController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->company_id]);
+		$current_image = $model->logo;
+		/**		Company admin User Edit Validation Rule is changed  Line --- Connected with "Company Module"
+		**/
+		if(\Yii::$app->user->can('company_admin')) {
+			$model->scenario = 'update_by_company_admin';
+		}
+			
+        if ($model->load(Yii::$app->request->post())) {	
+			/**		Company Logo Image Uploaded for Update function Line 
+			**/
+			$model->logo = UploadedFile::getInstance($model, 'logo');			
+				if(!empty($model->logo)){ 
+					if(!$model->uploadImage())
+						return;
+				}else
+					$model->logo = $current_image;
+		
+			/**		Company admin User can Change by Superadmin and System admin Line 
+			**/
+		 if(\Yii::$app->user->can('company manage')){ 
+				$cmpyadmin_id = Yii::$app->request->post('Company')['admin'];
+				$user = User::findOne($cmpyadmin_id);
+				$user->c_id = $model->company_id;								
+				$user->save(false); 								
+			} 
+			
+			if($model->save())
+				return $this->redirect(['view', 'id' => $model->company_id]);
+		
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -102,7 +137,6 @@ class CompanyController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -121,4 +155,15 @@ class CompanyController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+	
+	 /** Company Logo Remove Function Through AJAX Call 
+     **/	 	 
+	public function actionRemovelogo()
+    {       
+		$company_id = Yii::$app->request->post('company_id');
+		$company_details = $this->findModel($company_id);
+		$company_details->logo = "";
+		$company_details->save();      
+    }
+	
 }
