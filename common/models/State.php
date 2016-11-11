@@ -42,8 +42,8 @@ class State extends \yii\db\ActiveRecord
     {
         return [
             'state_id' => 'State ID',
-            'company_id' => 'Company ID',
-            'name' => 'Name',
+            'company_id' => 'Company Name',
+            'name' => 'State Name',
         ];
     }
 

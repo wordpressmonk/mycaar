@@ -240,9 +240,18 @@ AppAsset::register($this);
 							</a>
 							<!--start submenu -->
 							<ul>
+							<?php if(\Yii::$app->user->can('company manage')){ ?>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/user" ><span class="title">Users</span></a></li>
+							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/add-user" ><span class="title">Users</span></a></li>
+						<?php } ?>							
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program" ><span class="title">Programs</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
+								
+								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Division</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Location</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">State</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Role</span></a></li>
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
 

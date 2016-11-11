@@ -272,15 +272,6 @@ class User extends ActiveRecord implements IdentityInterface
 		return $role->name;
 	}
 	
-	/**
-     * Return All Users Details Depends Upon Role Name From DB
-     */
-    public function getUserAllByrole($rolename)
-    {			 	
-		$Roleusers = \Yii::$app->authManager->getUserIdsByRole($rolename);		
-		$data = User::find()->where(['IN', 'id', $Roleusers])->all();
-		return $data;
-    }
-	
+
 	 
 }

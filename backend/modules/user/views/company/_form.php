@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use common\models\User;
+use common\models\MyCaar;
 use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
@@ -32,7 +32,7 @@ use kartik\select2\Select2;
 	
 		if(\Yii::$app->user->can('company manage')) 
 		{
-			$data = ArrayHelper::map(User::getUserAllByrole("company_admin"), 'id', 'email');			
+			$data = ArrayHelper::map(MyCaar::getUserAllByrole("company_admin"), 'id', 'email');			
 			echo $form->field($model, 'admin')->widget(Select2::classname(), [
 				'data' => $data,
 				'options' => ['placeholder' => 'Select Company Admin'],

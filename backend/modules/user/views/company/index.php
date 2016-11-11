@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use common\models\User;
+use common\models\MyCaar;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\SearchCompany */
@@ -35,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'attribute' => 'admin',
 				'value' => 'companyAdmin.email',
-				'filter' => Html::activeDropDownList($searchModel, 'admin', ArrayHelper::map(User::getUserAllByrole("company_admin"), 'id', 'email'),['class'=>'form-control input-sm','prompt' => 'Company Admin']),
+				'filter' => Html::activeDropDownList($searchModel, 'admin', ArrayHelper::map(MyCaar::getUserAllByrole("company_admin"), 'id', 'email'),['class'=>'form-control input-sm','prompt' => 'Company Admin']),
 			],
 
             ['class' => 'yii\grid\ActionColumn'],

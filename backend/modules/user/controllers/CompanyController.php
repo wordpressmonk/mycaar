@@ -4,11 +4,13 @@ namespace backend\modules\user\controllers;
 
 use Yii;
 use common\models\Company;
+use common\models\MyCaar;
 use common\models\search\SearchCompany;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\User;
+use common\models\UserProfile as Profile;
 use yii\web\UploadedFile;
 
 /**
@@ -165,5 +167,14 @@ class CompanyController extends Controller
 		$company_details->logo = "";
 		$company_details->save();      
     }
+	public function actionAddUser(){					
+			$model = new User();
+			$profile = new Profile();					
+			$roles = MyCaar::getChildRoles('company_admin');		
+            return $this->render('userform', [
+                'model' => $model,'profile'=>$profile,'roles'=>$roles,
+            ]);		
+	}
+	
 	
 }
