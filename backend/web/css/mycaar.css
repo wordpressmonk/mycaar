@@ -1,0 +1,12 @@
+#build-wrap .stage-wrap>ul,#aware_form .stage-wrap>ul,#capability_form .stage-wrap>ul{		
+	min-height:200px !important;
+}	
+.option-label,.className-wrap,.name-wrap,.access-wrap,.other-wrap,.stage-wrap .fb-textdisplay,.stage-wrap .fb-audio,.stage-wrap .fb-img,.stage-wrap .fb-video,.stage-wrap .fb-fileupload{
+	display:none;
+}
+span.field_type_display {
+	position: relative;float: right;right: 100px;
+}
+#capability_form .add-opt{
+	display:none;
+}
