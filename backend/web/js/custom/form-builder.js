@@ -722,8 +722,8 @@ function formBuilderHelpersFn(opts, formBuilder) {
 
     utils.forEach(formData, function (fieldIndex, field) {
       var fieldContent = null;
-		console.log(field);
- 		if (field.type.match(/(img|video|audio)/)) { 
+		//console.log(field);
+ 		if (field.type.match(/(img|video|audio|filedownload)/)) { 
 			if(field.value){
 				delete field.value;
 			}
@@ -760,7 +760,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
       // build data object
       utils.forEach(form.childNodes, function (index, field) {
         var $field = $(field);
-
+		//console.log(field);
         if (!$field.hasClass('disabled')) {
           var match;
           var multipleField;
@@ -796,7 +796,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
             if (multipleField) {
               fieldData.values = _helpers.fieldOptionData($field);
             }
-			console.log($field[0].attributes.id.value);
+			//console.log($field[0].attributes.id.value);
 			fieldData.src = $('#value-'+$field[0].attributes.id.value).attr('src')||false;
             formData.push(fieldData);
           })();
@@ -1451,7 +1451,7 @@ function formBuilderEventsFn() {
 
     var defaults = {
       controlPosition: 'right',
-      controlOrder: ['autocomplete', 'button', 'checkbox', 'checkbox-group', 'date', 'header', 'hidden', 'paragraph', 'number', 'radio-group', 'select', 'text', 'textarea','textdisplay','img', 'video', 'audio', 'file','fileupload'],
+      controlOrder: ['autocomplete', 'button', 'checkbox', 'checkbox-group', 'date', 'header', 'hidden', 'paragraph', 'number', 'radio-group', 'select', 'text', 'textarea','textdisplay','img', 'video', 'audio', 'file','filedownload','fileupload'],
       dataType: 'xml',
       // Array of fields to disable
       disableFields: [],
@@ -1690,9 +1690,9 @@ function formBuilderEventsFn() {
     }, {
       label: opts.messages.fileDownload,
       attrs: {
-        type: 'file',
+        type: 'filedownload',
         className: 'file-input',
-        name: 'file-input'
+        //name: 'file-input'
       }
     }, {
       label: opts.messages.header,
@@ -2127,6 +2127,7 @@ function formBuilderEventsFn() {
      * @return {String}        markup for advanced fields
      */
     var advFields = function advFields(values) {
+		//console.log(values);
       var advFields = [],
           key,
           optionFields = ['select', 'checkbox-group', 'radio-group'],
@@ -2141,7 +2142,7 @@ function formBuilderEventsFn() {
       if (values.type === 'checkbox') {
         advFields.push(boolAttribute('toggle', values, { first: opts.messages.toggle }));
       }
-
+		
       advFields.push(textAttribute('label', values));
 
       values.size = values.size || 'm';
@@ -2166,7 +2167,9 @@ function formBuilderEventsFn() {
         advFields.push(numberAttribute('max', values));
         advFields.push(numberAttribute('step', values));
       }
-
+/* 		if(values.type === 'img' || values.type === 'video' || values.type === 'audio') {
+			advFields.push(textAttribute('src', values));
+		} */
       // Placeholder
       advFields.push(textAttribute('placeholder', values));
 
@@ -2425,6 +2428,7 @@ function formBuilderEventsFn() {
      * @return {String}
      */
     var textAttribute = function textAttribute(attribute, values) {
+		//console.log(attribute);
       if (opts.typeUserAttrs[values.type] && opts.typeUserAttrs[values.type][attribute]) {
         return;
       }
@@ -2437,6 +2441,7 @@ function formBuilderEventsFn() {
 	  var imageArea = ['img'];
 	  var videoArea = ['video'];
 	  var audioArea = ['audio'];
+	  var fileArea = ['filedownload'];
       var attrVal = values[attribute] || '',
           attrLabel = opts.messages[attribute];
       if (attribute === 'label' && utils.inArray(values.type, textArea)) {
@@ -2468,19 +2473,33 @@ function formBuilderEventsFn() {
           name: attribute,
           placeholder: placeholder,
           className: 'fld-' + attribute + ' form-control',
-          id: attribute + '-' + lastID
+          id: attribute + '-' + lastID,
         };
         var attributeLabel = '<label for="' + inputConfig.id + '">' + attrLabel + '</label>';
 
         if (attribute === 'label' && utils.inArray(values.type, textArea) || attribute === 'value' && values.type === 'textarea') {
           attributefield += '<textarea ' + utils.attrString(inputConfig) + '>' + attrVal + '</textarea>';
+		 /** Image **/
         } else if (attribute === 'value' && utils.inArray(values.type, imageArea)) {
-          attributefield += '<input onChange="saveFile(this);return false;" type="file" '+ utils.attrString(inputConfig) +'  accept="image/*">';
+          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +'  accept="image/*">';
+		  if(values.src)
+			attributefield += '<img src="'+values.src+'" width="100px" height="100px" />'; 
+		/** video **/
         } else if (attribute === 'value' && utils.inArray(values.type, videoArea)) {
-          attributefield += '<input onChange="saveFile(this);return false;" type="file" '+ utils.attrString(inputConfig) +' accept="video/*">';
+          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' accept="video/*">';
+		  if(values.src)
+			attributefield += '<video width="500" height="300" controls=""><source src="'+values.src+'"></audio>'; 
+		/** Audio **/
         } else if (attribute === 'value' && utils.inArray(values.type, audioArea)) {
-          attributefield += '<input onChange="saveFile(this);return false;" type="file" '+ utils.attrString(inputConfig) +' accept="audio/*">';
-        } else {
+          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' accept="audio/*">';
+		  if(values.src)
+			attributefield += '<audio width="500" height="300" controls=""><source src="'+values.src+'"></audio>';  
+		/** File Download **/
+        } else if (attribute === 'value' && utils.inArray(values.type, fileArea)) {
+          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' >';
+		  if(values.src)
+			attributefield += '<a href="'+values.src+'">'+values.src+'</a>'; 
+        }else {
           inputConfig.value = attrVal;
           inputConfig.type = 'text';
           attributefield += '<input ' + utils.attrString(inputConfig) + '>';
@@ -2721,13 +2740,18 @@ function formBuilderEventsFn() {
     });
 
     $sortableFields.on('change', '.prev-holder input, .prev-holder select', function (e) {
+	  
       if (e.target.classList.contains('other-option')) {
         return;
       }
       var field = $(e.target).closest('li.form-field')[0];
+	 // console.log(field.type);
       if (utils.inArray(field.type, ['select', 'checkbox-group', 'radio-group'])) {
         field.querySelector('[class="option-value"][value="' + e.target.value + '"]').parentElement.childNodes[0].checked = true;
-      } else {
+      }else if(field.type == "file"){
+		  //console.log('file-' + field.id + '-preview');
+			//document.getElementById('file-' + field.id + '-preview').value = e.target.value;
+	  } else {
         document.getElementById('value-' + field.id).value = e.target.value;
       }
 
@@ -2915,6 +2939,7 @@ function formBuilderEventsFn() {
     }
 
     _helpers.getData();
+	//console.log(_helpers.getData());
     loadFields();
 
     $sortableFields.css('min-height', $cbUL.height());

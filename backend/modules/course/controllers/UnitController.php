@@ -167,4 +167,38 @@ class UnitController extends Controller
 		move_uploaded_file($_FILES["media"]["tmp_name"], $dir. $_FILES["media"]["name"]);
 		return \Yii::$app->homeUrl.$dir. $_FILES["media"]["name"];
 	}
+	
+	public function actionSaveAwarenessTest(){
+		//print_r(Yii::$app->request->post());
+		$data = json_decode(Yii::$app->request->post()['awareness_data']);
+		//$data = Yii::$app->request->post()['awareness_data'];
+		//print_r($data->html);die;
+		$dom = new \DomDocument();
+/* 		$html = 
+		'<form>
+			<p>
+				<select type="radio-group" label="Single Choice" class="radio-group" name="radio-group-1479116923275" src="false">
+					<option label="option-1" value="option-1" selected="true">option-1</option>
+					<option label="option-2" value="option-2">option-2</option>
+				</select>
+				<select type="fileupload" label="File Upload" class="file-input" name="fileupload-1479116934816" src="false"></select>
+				<select type="text" label="Answer Field" subtype="text" class="form-control" name="text-1479116932882" src="false"></select>
+				<select type="checkbox-group" label="Multiple Choice" class="checkbox-group" name="checkbox-group-1479116930314" src="false">
+					<option label="option-1" value="option-1" selected="true">option-1</option>
+					<option label="option-2" value="option-2">option-2</option>
+					<option label="option-3" value="option-3">option-3</option>
+				</select>
+			</p>
+		</form>'; */
+		$matches = [];
+		//preg_match_all('/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/', $html,$matches, PREG_SET_ORDER);
+		//preg_match_all('~<field (.*?)>(.*?)</field>~', $html,$matches, PREG_SET_ORDER);
+		//print_r($matches);
+		$dom->loadHTML($data->html);
+foreach($dom->getElementsByTagName('input') as $element) {
+	print_r($element);
+}
+   
+		//print_r($dom);
+	}
 }

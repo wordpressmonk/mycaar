@@ -11,7 +11,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 ?>
 <div class="section-body contain-lg">
-<h2>Units</h2>
+<h2>Lessons</h2>
 <div class="row">
 	<div class="col-lg-12">
 	<div class="card tabs-left style-default-light">
@@ -22,14 +22,14 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 				else
 					echo '<li><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.$unit->title.'</a></li>';
 			}?>
-			<li><a class="unit_view" data-unit_id="new" href="#tab2">Add New Unit</a></li>
+			<li><a class="unit_view" data-unit_id="new" href="#tab2">Add New Lesson</a></li>
 		</ul>
 		<div class="card-body tab-content style-default-bright">
 		<div class="tab-pane active" id="tab1">
 			<div class="panel-group" id="unit_accordian">
 				<div class="card panel expanded">
 					<div class="card-head style-info" data-toggle="collapse" data-parent="#unit_accordian" data-target="#unit_details" aria-expanded="true">
-						<header>Unit Details</header>
+						<header>Lesson Details</header>
 						<div class="tools">
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
@@ -45,36 +45,17 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 							</div>
 							
 							<div class="form-group field-unit-title required">
-								<label>Unit Title</label>
+								<label>Lesson Title</label>
 								<input type="text" id="unit_title" class="form-control" value="<?=$model->title ?>">
 								<div class="help-block"></div>
 								
 							</div>
+
 							<div class="form-group">
 								<div class="checkbox checkbox-styled">
 									<label>
 										<input type="checkbox" value="">
-										<span>User needs to  all mandatory assessments and view all pages in order to access the next unit</span>
-									</label>
-								</div>
-								<div class="checkbox checkbox-styled">
-									<label>
-										<input type="checkbox" value="">
-										<span>User also needs to all mandatory assessments</span>
-									</label>
-								</div>
-								<div class="checkbox checkbox-styled">
-									<label>
-										<input type="checkbox" value="">
-										<span>Force unit completion refresh.</span>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="checkbox checkbox-styled">
-									<label>
-										<input type="checkbox" value="">
-										<span>Show Unit Deatils Page</span>
+										<span>Show Lesson Details Page</span>
 									</label>
 								</div>
 							</div>
@@ -96,11 +77,11 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
-					<!--<div id="awareness_test" class="collapse" aria-expanded="false">
+					<div id="awareness_test" class="collapse" aria-expanded="false">
 						<div class="card-body">
 						<div id="aware_form"></div>
 						</div>
-					</div>-->
+					</div>
 				</div><!--end .panel -->
 				<br>
 				<div class="card panel">
@@ -191,71 +172,67 @@ $(document).ready(function(){
 		//window.sessionStorage.setItem('formData', $(unit_element_editor).data('formBuilder').formData);
 	};
 	<!----------end of unit elements----------->
-	
-	var options2 = {
-	  disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','imageinput','videoinput','audioinput','paragraph','textdisplay','file'],
+	<!---------- start of awareness elements ------->
+	var awareness_elements = {
+	  disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','img','video','audio','paragraph','textdisplay','filedownload'],
 	   fieldRemoveWarn: true ,
 	   controlPosition: 'left'
 	};
-	$('#aware_form').formBuilder(options2);
-	var options3 = {
+	var awareness_editor = $(document.getElementById('aware_form'));
+	$(awareness_editor).formBuilder(awareness_elements);
+	//$('#aware_form').formBuilder(awareness_elements);
+	//SaveAwarenessTest
+	var saveBtn = document.querySelector('#frmb-2-save');
+	saveBtn.onclick = function() {
+	console.log($("#aware_form").data('formBuilder'));
+	var form_data = $(awareness_editor).data('formBuilder').formData;
+/* 	$.each(form_data,function(){
+		console.log(form_data.attr('class'))
+	}); */
+	var awareness_data = JSON.stringify({'html':$("#aware_form").html()});
+	//save to db
+	$.ajax({
+		url:'<?=Url::to(['unit/save-awareness-test'])?>',
+		data: {unit_id:'<?=$model->unit_id?>',awareness_data : awareness_data},
+		type: 'post',
+		dataType : 'json',
+		success : function(data){
+			//console.log(data);
+		}
+	});	
+	}
+	<!---------- end of awareness elements ------->
+	var cap_elements = {
 	  disableFields: ['autocomplete','button','checkbox','textarea','checkbox-group','hidden','select','header','date','number','file','paragraph','text','imageinput','videoinput','audioinput','textdisplay','fileupload'],
 	   fieldRemoveWarn: true,
 	   controlPosition: 'left'
 	};
 	var fbTemplate = document.getElementById('capability_form');
-	$(fbTemplate).formBuilder(options3);
+	$(fbTemplate).formBuilder(cap_elements);
 });
 <!---------- Save file -------------------->
 function saveFile(input){
-/* 	console.log(new FormData(elem));
-	$.ajax({
-		url: "form.php",
-		type: "POST",
-		data: new FormData(elem),
-		contentType: false,
-		cache: false,
-		processData: false,
-		success: function (data) {
-			$("#targetLayer").html(data);
-		},
-		error: function () {
-		}
-	});	 */	
 	var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
-	//&& (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")
-/* 	if (input.files && input.files[0] ) {
-		var reader = new FileReader();
-		reader.onload = function (e) {
-			$(input).attr('src', e.target.result);
-			console.log(e.target.result);
-		}
-		//console.log(e.target.result);
-		reader.readAsDataURL(input.files[0]);
-	}else{
-		 $('#img').attr('src', '/assets/no_preview.png');
-	} */
-  file = input.files[0];
-  var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
-  if(file != undefined){
-    formData= new FormData();
-	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3"){
+	file = input.files[0];
+	var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
+	if(file != undefined){
+	formData= new FormData();
+	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx"){
 		formData.append("media", file);
 	}
 
-    //if(!!file.type.match(/image.*/)){
-      $.ajax({
-        url: "<?=Url::to(['unit/upload'])?>",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(data){
-            alert('success');
+	$.ajax({
+		url: "<?=Url::to(['unit/upload'])?>",
+		type: "POST",
+		data: formData,
+		processData: false,
+		contentType: false,
+		success: function(data){
+			alert('success');
 			$(input).attr('src', data);
-        }
-      });
-    }
+		}
+		});
+	}
 }
 <!---------- End of save file ------------->
 </script>

@@ -12,7 +12,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 <div class="row">
 	<div class="col-lg-12">
-		<h4>Add Unit</h4>
+		<h2>Add Lesson</h2>
 	</div><!--end .col -->
 	<div class="col-lg-12">
 	<div class="card tabs-left style-default-light">
@@ -23,14 +23,14 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 				else */
 					echo '<li><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.$unit->title.'</a></li>';
 			}?>
-			<li class="active"><a class="unit_view" data-unit_id="new" href="#tab2">Add New Unit</a></li>
+			<li class="active"><a class="unit_view" data-unit_id="new" href="#tab2">Add New Lesson</a></li>
 		</ul>
 		<div class="card-body tab-content style-default-bright">
 		<div class="tab-pane active" id="tab1">
 			<div class="panel-group" id="unit_accordian">
 				<div class="card panel expanded">
 					<div class="card-head style-info" data-toggle="collapse" data-parent="#unit_accordian" data-target="#unit_details" aria-expanded="true">
-						<header>Unit Details</header>
+						<header>Lesson Details</header>
 						<div class="tools">
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
@@ -46,31 +46,12 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 							</div>
 							
 							<div class="form-group field-unit-title required">
-								<label>Unit Title</label>
+								<label>Lesson Title</label>
 								<input type="text" id="unit_title" class="form-control">
 								<div class="help-block"></div>
 								
 							</div>
-							<div class="form-group">
-								<div class="checkbox checkbox-styled">
-									<label>
-										<input type="checkbox" value="">
-										<span>User needs to  all mandatory assessments and view all pages in order to access the next unit</span>
-									</label>
-								</div>
-								<div class="checkbox checkbox-styled">
-									<label>
-										<input type="checkbox" value="">
-										<span>User also needs to all mandatory assessments</span>
-									</label>
-								</div>
-								<div class="checkbox checkbox-styled">
-									<label>
-										<input type="checkbox" value="">
-										<span>Force unit completion refresh.</span>
-									</label>
-								</div>
-							</div>
+
 							<div class="form-group">
 								<div class="checkbox checkbox-styled">
 									<label>
@@ -220,7 +201,7 @@ function saveFile(input){
   var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
   if(file != undefined){
     formData= new FormData();
-	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3"){
+	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx"){
 		formData.append("media", file);
 	}
 

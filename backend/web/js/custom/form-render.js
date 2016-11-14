@@ -450,6 +450,12 @@ fbUtils.fieldRender = function (fieldData, opts) {
 		'</div>';
 		;
 		break;
+	case 'filedownload':
+		fieldData.type = 'a';
+		fieldMarkup = '<div class="small-padding filedownload-preview"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p><button class="btn btn-info btn-lg">'+
+		'<' + fieldData.type + ' href="'+fieldData.src+'" >' + fieldLabelVal + '</' + fieldData.type + '></button>'+
+		'</div>';
+		break;
 	case 'video':
 		fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
 		'<' + fieldData.type + ' ' + fieldDataString + ' width="500" heigh="200" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
@@ -568,7 +574,7 @@ fbUtils.fieldRender = function (fieldData, opts) {
   } else {
     fieldMarkup = fbUtils.markup('input', null, fieldData);
   }
-	console.log(fieldMarkup);
+	//console.log(fieldMarkup);
   return fieldMarkup;
 };
 
