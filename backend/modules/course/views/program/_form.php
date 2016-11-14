@@ -20,7 +20,7 @@ use kartik\select2\Select2;
 
 	<?php
 		if(Yii::$app->user->can('add_program_for_companies')){
-			$data = ArrayHelper::map(Company::find()->all(), 'company_id', 'name');
+			$data = ArrayHelper::map(Company::find()->all(), 'company_id', 'name');		
 			echo $form->field($model, 'company_id')->widget(Select2::classname(), [
 				'data' => $data,
 				'options' => ['placeholder' => 'Select company'],

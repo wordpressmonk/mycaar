@@ -30,8 +30,8 @@ class Division extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['division_id', 'company_id', 'title'], 'required'],
-            [['division_id', 'company_id'], 'integer'],
+            [['company_id', 'title'], 'required'],
+            [['company_id'], 'integer'],
             [['title'], 'string', 'max' => 200],
             [['description'], 'string', 'max' => 1000],
         ];
@@ -44,7 +44,7 @@ class Division extends \yii\db\ActiveRecord
     {
         return [
             'division_id' => 'Division ID',
-            'company_id' => 'Company ID',
+            'company_id' => 'Company Name',
             'title' => 'Title',
             'description' => 'Description',
         ];

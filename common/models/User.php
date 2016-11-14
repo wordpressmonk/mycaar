@@ -98,25 +98,33 @@ class User extends ActiveRecord implements IdentityInterface
      * @inheritdoc
      */
     public static function findIdentity($id)
-    {
+    {		
 		$user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);		
-        $profile = UserProfile::find()->where(['user_id'=>$id])->one();
+        $profile = UserProfile::find()->where(['user_id'=>$id])->one();	 			
 		if($user && $profile)
-				$user->fullname= $profile->firstname." ".$profile->lastname;				
-		switch ($user->role) {
-			case 3:
-				$role = "Superadmin" ;
-				break;
-			case 2:
-				$role = "Companyadmin" ;
-				break;
-			case 1:
-				$role = "Assessor" ;
-				break;
-			default:
-				$role = "Student";
-		}	
-		$user->role = $role;
+		{
+			$roles = Yii::$app->authManager->getRolesByUser($id);
+			reset($roles);
+			/* @var $role \yii\rbac\Role */
+			$role = current($roles);
+			$user->role = $role->name;
+			
+			$user->fullname= $profile->firstname." ".$profile->lastname;				
+		/* 	switch ($user->role) {
+				case 3:
+					$role = "Superadmin" ;
+					break;
+				case 2:
+					$role = "Companyadmin" ;
+					break;
+				case 1:
+					$role = "Assessor" ;
+					break;
+				default:
+					$role = "User";
+			}	
+			$user->role = $role; */
+		}
 		return $user;		
     }
 
@@ -263,4 +271,7 @@ class User extends ActiveRecord implements IdentityInterface
 
 		return $role->name;
 	}
+	
+
+	 
 }

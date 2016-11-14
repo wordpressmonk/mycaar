@@ -42,8 +42,8 @@ class Location extends \yii\db\ActiveRecord
     {
         return [
             'location_id' => 'Location ID',
-            'company_id' => 'Company ID',
-            'name' => 'Name',
+            'company_id' => 'Company Name',
+            'name' => 'Location Name',
         ];
     }
 

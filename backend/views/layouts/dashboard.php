@@ -130,7 +130,7 @@ AppAsset::register($this);
 									
 									<span class="profile-info">
 										 <?php echo Yii::$app->user->identity->fullname;?>
-										<small><?= Yii::$app->user->identity->role;?></small>
+										<small><?= $user_role_name = Yii::$app->user->identity->role;?></small>
 									</span>
 								</a>
 								<ul class="dropdown-menu animation-dock">
@@ -229,29 +229,43 @@ AppAsset::register($this);
 							</a>
 							<!--start submenu -->
 							<ul>
+							<?php if(\Yii::$app->user->can('company manage')){ ?>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/user" ><span class="title">Users</span></a></li>
+							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/add-user" ><span class="title">Users</span></a></li>
+						<?php } ?>							
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program" ><span class="title">Programs</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
+								
+								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Division</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Location</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">State</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Role</span></a></li>
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
 
 						<!-- END Admin -->
 						<!-- BEGIN Company -->
 						<!-- <li class="gui-folder"> -->
-						<li >
+						
+						<?php if(\Yii::$app->user->can('company manage')){ ?>
+						<li>
 							<a href="<?=\Yii::$app->homeUrl?>user/company/index"  >
 								<div class="gui-icon"><i class="fa fa-user"></i></div>
 								<span class="title">Company Management</span>
-							</a>
-							<!--start submenu -->
-
-							<!--<ul>
-								<li><a ><span class="title">Create Users</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>site/user-manage" ><span class="title">Manage Users</span></a></li>
-							</ul>-->
-
-							<!--end /submenu -->
-						</li><!--end /menu-li -->
+							</a>						
+						</li>
+						<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
+						
+						<li>
+							<a href="<?=\Yii::$app->homeUrl?>user/company/view?id=<?= Yii::$app->user->identity->c_id;?>"  >
+								<div class="gui-icon"><i class="fa fa-user"></i></div>
+								<span class="title">Company Details</span>
+							</a>						
+						</li>
+						<?php } ?>
+						
+						<!--end /menu-li -->
 						<!-- END Company -->
 
 					</ul><!--end .main-menu -->
