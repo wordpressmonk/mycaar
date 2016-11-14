@@ -21,17 +21,6 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 
-		<!-- BEGIN STYLESHEETS -->
-		<link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet' type='text/css'/>
-		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/bootstrap.css?1422792965" />
-		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/materialadmin.css?1425466319" />
-		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/font-awesome.min.css?1422529194" />
-		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/material-design-iconic-font.min.css" />
-		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/libs/DataTables/jquery.dataTables.css?1423553989" />
-		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/libs/DataTables/extensions/dataTables.colVis.css?1423553990" />
-		<link type="text/css" rel="stylesheet" href="<?=\Yii::$app->homeUrl;?>css/theme-default/libs/DataTables/extensions/dataTables.tableTools.css?1423553990" />
-		<!-- END STYLESHEETS -->
-
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		<script type="text/javascript" src="<?=Yii::$app->homeUrl;?>js/libs/utils/html5shiv.js?1403934957"></script>
@@ -523,7 +512,7 @@ AppAsset::register($this);
 		</div><!--end #base-->
 		<!-- END BASE -->
 
-		<!-- BEGIN JAVASCRIPT -->
+		<!-- BEGIN JAVASCRIPT 
 		<script src="<?=Yii::$app->homeUrl;?>js/libs/jquery/jquery-1.11.2.min.js"></script>
 		<script src="<?=Yii::$app->homeUrl;?>js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
 		<script src="<?=Yii::$app->homeUrl;?>js/libs/bootstrap/bootstrap.min.js"></script>
@@ -537,7 +526,7 @@ AppAsset::register($this);
 		<script src="<?=Yii::$app->homeUrl;?>js/core/source/AppForm.js"></script>
 		<script src="<?=Yii::$app->homeUrl;?>js/core/source/AppNavSearch.js"></script>
 		<script src="<?=Yii::$app->homeUrl;?>js/core/source/AppVendor.js"></script>
-		<script src="<?=Yii::$app->homeUrl;?>js/core/demo/Demo.js"></script>
+		<script src="<?=Yii::$app->homeUrl;?>js/core/demo/Demo.js"></script>-->
 		
 		<!-- END JAVASCRIPT -->
 
