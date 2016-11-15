@@ -37,8 +37,8 @@ class UserProfile extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'division', 'location', 'state'], 'integer'],
-            [['firstname', 'lastname'], 'string', 'max' => 100],
+            [['user_id', 'division', 'location', 'state','role'], 'integer'],
+            [['firstname', 'lastname','employee_number'], 'string', 'max' => 100],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'division_id']],
             [['location'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location' => 'location_id']],
@@ -59,6 +59,8 @@ class UserProfile extends \yii\db\ActiveRecord
             'division' => 'Division',
             'location' => 'Location',
             'state' => 'State',
+            'role' => 'Role',
+            'employee_number' => 'Employee Number',
         ];
     }
 
@@ -73,15 +75,16 @@ class UserProfile extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPosition0()
+    public function getDivisionModel()
     {
-        return $this->hasOne(Division::className(), ['division_id' => 'position']);
+       // return $this->hasOne(Division::className(), ['division_id' => 'position']);
+        return $this->hasOne(Division::className(), ['division_id' => 'division']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getLocation0()
+    public function getLocationModel()
     {
         return $this->hasOne(Location::className(), ['location_id' => 'location']);
     }
@@ -89,8 +92,16 @@ class UserProfile extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getState0()
+    public function getStateModel()
     {
         return $this->hasOne(State::className(), ['state_id' => 'state']);
     }
+	
+	 /**
+     * @return \yii\db\ActiveQuery created function by Arivazhagan
+     */
+     public function getRoleModel()
+    {
+        return $this->hasOne(Role::className(), ['role_id' => 'role']);
+    } 
 }

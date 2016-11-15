@@ -264,7 +264,6 @@ class User extends ActiveRecord implements IdentityInterface
 		if (!$roles) {
 			return null;
 		}
-
 		reset($roles);
 		/* @var $role \yii\rbac\Role */
 		$role = current($roles);

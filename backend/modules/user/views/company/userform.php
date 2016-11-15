@@ -13,7 +13,7 @@ use common\models\Role;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<h1>Add User</h1>
+
 
 <div class="card">
 	<div class="card-body">
@@ -67,9 +67,7 @@ use common\models\Role;
             $role,           // Flat array ('id'=>'label')
             ['prompt'=>'--Role--']    // options
         );  ?>
-		
-		<?= $form->field($model, 'company_id')->hiddenInput(['value'=>Yii::$app->user->identity->c_id])->label(false); ?>
-		
+				
 		<div class="form-group">
 			<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 		</div>
