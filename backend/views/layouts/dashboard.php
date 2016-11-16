@@ -232,7 +232,8 @@ AppAsset::register($this);
 							<?php if(\Yii::$app->user->can('company manage')){ ?>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/user" ><span class="title">Users</span></a></li>
 							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/company/add-user" ><span class="title">Users</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index-user" ><span class="title">Users</span></a></li>
+								<!--<li><a href="<?=\Yii::$app->homeUrl?>user/company/index-user" ><span class="title">Index User</span></a></li>-->
 						<?php } ?>							
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program" ><span class="title">Programs</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>

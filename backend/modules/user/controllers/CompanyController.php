@@ -12,6 +12,8 @@ use yii\filters\VerbFilter;
 use common\models\User;
 use common\models\UserProfile as Profile;
 use yii\web\UploadedFile;
+use yii\filters\AccessControl;
+use common\models\search\SearchUser;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -167,14 +169,183 @@ class CompanyController extends Controller
 		$company_details->logo = "";
 		$company_details->save();      
     }
-	public function actionAddUser(){					
+	public function actionCreateUser(){					
 			$model = new User();
 			$profile = new Profile();					
-			$roles = MyCaar::getChildRoles('company_admin');		
-            return $this->render('userform', [
+			$roles = MyCaar::getChildRoles('company_admin');	
+
+		if(\Yii::$app->user->can('company_admin')) {
+			$model->scenario = 'update_by_admin';
+		}
+		
+		if($model->load(Yii::$app->request->post()))  {
+			$model->setPassword($model->password);
+			$model->generateAuthKey();
+			$model->c_id = Yii::$app->user->identity->c_id;
+
+			if($model->save())
+			{				
+				//handle the role first				
+				$auth = Yii::$app->authManager;
+				$authorRole = $auth->getRole($model->role);
+				$auth->assign($authorRole, $model->id); 
+				
+				//$model->sendEmail(); develop this function
+				
+				if($profile->load(Yii::$app->request->post()))
+				{
+				 $profile->user_id = $model->id;			
+				 $profile->save();	
+				}
+				
+				return $this->redirect(['view-user', 'id' => $model->id]);
+			} else
+			{	
+				return $this->render('create_user', ['model' => $model,'profile'=>$profile,'roles'=>$roles,]);
+			}			
+        } else {
+			
+            return $this->render('create_user', [
                 'model' => $model,'profile'=>$profile,'roles'=>$roles,
-            ]);		
-	}
+            ]);	
+		}		
+	}	
+	
+	
+	public function actionIndexUser()
+    {
+        $searchModel = new SearchUser();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index_user', [
+            'searchModel' => $searchModel,
+             'dataProvider' => $dataProvider, 
+        ]);
+    }
+	
+	
+	 public function actionViewUser($id)
+    {		
+	  if (($model = User::findOne($id)) !== null) {           
+		  $profile = Profile::findOne(['user_id'=>$id]);
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        } 
+		
+          return $this->render('view_user', [
+            'model' =>$profile,
+        ]); 
+    }
+	
+	
+	 public function actionDeleteUser($id)
+    {		
+		Profile::findOne(['user_id'=>$id])->delete();
+        User::findOne($id)->delete();
+        return $this->redirect(['index-user']);
+    }
+	
+	
+	public function actionUpdateUser($id)
+    {       
+		    $model = User::findOne($id);
+			$profile = Profile::find()->where(['user_id'=>$id])->one();				
+			$roles = MyCaar::getChildRoles('company_admin');	
+			$model->role = $model->getRoleName();
+		if(\Yii::$app->user->can('company_admin')) {
+			$model->scenario = 'update_by_admin';
+		}
+		
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			//handle the role first
+			$auth = Yii::$app->authManager;
+			$auth->revokeAll($id);
+			$authorRole = $auth->getRole($model->role);
+			$auth->assign($authorRole, $model->id);
+			
+			if($profile->load(Yii::$app->request->post()))
+				{
+				 $profile->user_id = $model->id;			
+				 $profile->save();	
+				}
+				
+            return $this->redirect(['view-user', 'id' => $model->id]); 
+        } else {
+            return $this->render('update_user', [
+                'model' => $model,
+				'profile' => $profile,
+				'roles' => $roles,
+            ]);
+        }
+    }
+
+   public function actionImportexcel()
+    {
+			  $model = new Company();			  
+			if ($model->load(Yii::$app->request->post()) ) {			
+				$model->upfile = UploadedFile::getInstance($model, 'upfile');			
+				if($model->upfile)
+				{
+					$inputFiles = $model->upfile->tempName ;					
+				  try{
+					 $inputFileType = \PHPExcel_IOFactory::identify($inputFiles);
+					 $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+					 $objPHPExcel = $objReader->load($inputFiles);
+					 
+				  } catch (Exception $ex) {             
+					 die('Error in File Formate');
+				  }
+						  
+				  $sheet = $objPHPExcel->getSheet(0);
+				  $highestRow = $sheet->getHighestRow();
+				  $highestColumn = $sheet->getHighestColumn();				
+				  $error_report = [];
+				
+				 //$row is start 2 because first row assigned for heading.         
+				 for($row=2; $row<=$highestRow; ++$row)
+				 {                  				 
+					 $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row,NULL,TRUE,FALSE);				   
+					//save to User  table.
+					 $usertabel = new User();
+					 
+					 if(\Yii::$app->user->can('company_admin')) {
+						$usertabel->scenario = 'update_by_admin';
+						}
+				
+					 $usertabel->username = $rowData[0][0];
+					 $usertabel->email = $rowData[0][1];
+					 $usertabel->role = $rowData[0][2];
+					 $usertabel->generateAuthKey();
+					 $usertabel->c_id = Yii::$app->user->identity->c_id; 
+					 
+					 if($usertabel->save())
+					 {			 
+						$auth = Yii::$app->authManager;
+						$authorRole = $auth->getRole($usertabel->role);
+						$auth->assign($authorRole, $usertabel->id); 				
+					 } else 
+					 {
+						$error_report[] = $usertabel->email;
+					 }
+					 
+				 }		 			   
+					
+				if(isset($error_report) && empty($error_report))
+				{
+					/* Yii::$app->getSession()->setFlash('Success', 'Upload the User Details Sucessfully!!!.'); */
+					return $this->render('upload_form', ['model' => $model ]);						
+				}
+				else{
+					/* Yii::$app->getSession()->setFlash('Error', 'User Details Failed Following User Email!!!.');
+					Yii::$app->getSession()->setFlash('Error-data', $error_report); */
+					return $this->render('upload_form', ['model' => $model ]);
+				}
+			}
+					
+		}else {
+					return $this->render('upload_form', ['model' => $model ]);
+			}
+    }
 	
 	
 }

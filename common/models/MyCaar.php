@@ -33,8 +33,21 @@ class MyCaar
 		$child_role = [];			
 		$child_role_name = \Yii::$app->authManager->getChildRoles($rolename);			
 		foreach($child_role_name as $tmp){
-			$child_role[] = $tmp->name;
+			$child_role[$tmp->name] = $tmp->name;
 		}
 		return $child_role;
+	}
+	
+	public function getRoleNameByUserid($userid)
+	{	// Return by dency Copied from common user model		
+		$roles = Yii::$app->authManager->getRolesByUser($userid);
+		if (!$roles) {
+			return null;
+		}
+		reset($roles);
+		/* @var $role \yii\rbac\Role */
+		$role = current($roles);
+
+		return $role->name;
 	}
 }

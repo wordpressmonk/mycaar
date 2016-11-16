@@ -41,8 +41,13 @@ class SearchUser extends User
      */
     public function search($params)
     {
-        $query = User::find();
-
+		 if(\Yii::$app->user->can('company manage')) 
+		{
+			 $query = User::find();
+		} else if(\Yii::$app->user->can('company_admin'))
+		{			
+			 $query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);
+		}
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
