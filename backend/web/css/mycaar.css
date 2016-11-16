@@ -1,0 +1,26 @@
+#build-wrap .stage-wrap>ul,#aware_form .stage-wrap>ul,#capability_form .stage-wrap>ul{		
+	min-height:200px !important;
+}	
+.option-label,.className-wrap,.name-wrap,.access-wrap,.other-wrap,.stage-wrap .fb-textdisplay,.stage-wrap .fb-audio,.stage-wrap .fb-img,.stage-wrap .fb-video,.stage-wrap .fb-fileupload,.stage-wrap .filedownload-preview{
+	display:none;
+}
+span.field_type_display {
+	position: relative;float: right;right: 100px;
+}
+#capability_form .add-opt{
+	display:none;
+}
+ul::-webkit-scrollbar {
+  width: 6px;
+}
+ul::-webkit-scrollbar-thumb {
+   background-color: grey;
+   border-radius: 4px;
+}
+ul::-webkit-scrollbar-track {
+   background-color: #eee;
+}
+#aware_form .stage-wrap>ul, #capability_form .stage-wrap>ul{
+height:350px;
+overflow-y:scroll;
+}
