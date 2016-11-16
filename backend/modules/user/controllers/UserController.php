@@ -93,7 +93,13 @@ class UserController extends Controller
 				$profile->save();
 				return $this->redirect(['view', 'id' => $model->id]);
 			}
-            
+            else{
+				  return $this->render('create', [
+                'model' => $model,
+				'profile'=> $profile,
+				'roles' => $roles,
+				]);
+			}
         } else {
             return $this->render('create', [
                 'model' => $model,

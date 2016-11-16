@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 
 
+
 /**
  * This is the model class for table "company".
  *
@@ -21,6 +22,9 @@ class Company extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+	 
+	public $upfile;
+	  
     public static function tableName()
     {
         return 'company';
@@ -36,13 +40,13 @@ class Company extends \yii\db\ActiveRecord
             [['about_us', 'logo'], 'required','on' => 'update_by_company_admin'],          
             [['about_us'], 'string'],
 			[['logo'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
+			[['upfile'], 'file','extensions' => 'xlsx,xls', 'skipOnEmpty' => true],
             [['admin'], 'integer'],
             [['name'], 'string', 'max' => 200],
             [['admin'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['admin' => 'id']],
         ];
     }
 
-	
 	public function scenarios()
     {
         $scenarios = parent::scenarios();
@@ -61,6 +65,7 @@ class Company extends \yii\db\ActiveRecord
             'about_us' => 'About Us',
             'logo' => 'Logo',
             'admin' => 'Admin',
+            'upfile' => 'Upfile',
         ];
     }
 
@@ -86,4 +91,5 @@ class Company extends \yii\db\ActiveRecord
 			return false;
 		}	 	
 	}	
+	
 }
