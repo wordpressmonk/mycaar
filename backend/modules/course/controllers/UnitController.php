@@ -5,6 +5,7 @@ namespace backend\modules\course\controllers;
 use Yii;
 use common\models\Module;
 use common\models\AwarenessQuestion;
+use common\models\CapabilityQuestion;
 use common\models\AwarenessOption;
 use common\models\Unit;
 use common\models\UnitElement;
@@ -95,6 +96,13 @@ class UnitController extends Controller
 				$element->element_order = 1;
 				$element->content ='';
 				$element->save();
+				//cp_dat
+				$element = new UnitElement();
+				$element->unit_id = $model->unit_id;
+				$element->element_type = "cap_data";
+				$element->element_order = 1;
+				$element->content ='';
+				$element->save();
 			}			
             return $this->redirect(['update', 'id' => $model->unit_id]);
         } else {
@@ -171,29 +179,42 @@ class UnitController extends Controller
         }
     }
 	
+	/**
+	 * Save the media to the uploads folder
+	 * Return the path
+	 */
 	public function actionUpload(){
-		$dir = "uploads/";
+		$dir = "uploads/media/";
 		move_uploaded_file($_FILES["media"]["tmp_name"], $dir. $_FILES["media"]["name"]);
 		return \Yii::$app->homeUrl.$dir. $_FILES["media"]["name"];
 	}
-	public function actionSaveAwarenessTest(){
-		//take other post data
-			/** TBD **/
-		//take out quesions data
+	
+	/**
+	 * Save the tests actionCreate
+	 * Parms: type- aw or cp 
+	 * Reload the update page after save
+	 */
+	public function actionSaveTest($type){
 		$output = [];
-		$data = json_decode(Yii::$app->request->post()['awareness_data']);	
-//print_r($data->html);	die;	
+		$data = json_decode(Yii::$app->request->post()['data']);		
 		$questions = $this->formatQuestions($data->html);
-		echo $this->saveQuestions(Yii::$app->request->post()['unit_id'],$questions);
-		//print_r($questions);die;
+		if($type == "aw")
+			$this->saveQuestions(Yii::$app->request->post()['unit_id'],$questions);
+		if($type == "cp")
+			$this->saveCapQuestions(Yii::$app->request->post()['unit_id'],$questions);
 		return $this->redirect(['update', 'id' => Yii::$app->request->post()['unit_id']]);
 	}
+	
+	/**
+	 * Format questios array from string to array
+	 * Parms: $data - formdata returned by formbuilder
+	 * Returns array
+	 */	
 	public function formatQuestions($data){
 		$output = [];
 		$html = str_replace("<fields>","",$data);
 		$html = str_replace("</fields>","",$html);
 		$questions = [];
-		//preg_match_all('/(<([\w]+)[^>]*>)(.*?)(<\/\\2>)/', $html,$matches, PREG_SET_ORDER);
 		preg_match_all('/<field[^>]*?>([\s\S]*?)<\/field>/', $html,$questions, PREG_SET_ORDER);
 		foreach($questions as $question){
 			$field_reg = $question[0];
@@ -204,23 +225,28 @@ class UnitController extends Controller
 				'options' => [],				
 				'id' => [],
 				'answer' => [],
+				'description' => [],
 			];
 		preg_match_all('/<option[^>]*?>([\s\S]*?)<\/option>/', $options_reg,$data['options'], PREG_SET_ORDER);
 		foreach($data['options'] as $key=>$dat){
 			preg_match_all('/option_id="([\s\S]*?)"/', $dat[0],$data['options'][$key][2], PREG_SET_ORDER);
 		}
 		preg_match_all('/type="([\s\S]*?)"/', $field_reg,$data['type'], PREG_SET_ORDER);
+		preg_match_all('/description="([\s\S]*?)"/', $field_reg,$data['description'], PREG_SET_ORDER);
 		preg_match_all('/[^<option] label="([\s\S]*?)"/', $field_reg,$data['question'], PREG_SET_ORDER);
 		preg_match_all('/name="([\s\S]*?)"/', $field_reg,$data['id'], PREG_SET_ORDER);
 		preg_match_all('/selected="true">([\s\S]*?)</', $options_reg,$data['answer'], PREG_SET_ORDER);
-		//iterate and save/update data
 		$output[] = $data;
-		//print_r($data);			
+	
 		}
 		return $output;		
 	}
 	
-	/** Save question and return form data **/
+	/**
+	 * Save awareness questions and options
+	 * Parms: unit_id , questions array 
+	 * Return null
+	 */	
 	public function saveQuestions($unit_id,$questions){
 		//see if any questions deleted
 		$from_update = $to_update = [];
@@ -244,12 +270,17 @@ class UnitController extends Controller
 			$awareness_question->question_type = $quest['type'][0][1];
 			$awareness_question->order_id = $order;
 			$answer = "";
+			$description = $awareness_question->description  = '';
+			if(isset($quest['description'][0][1]))
+					$awareness_question->description  = $quest['description'][0][1];
 			if($awareness_question->save(false)){
 				//reformat the form data
 				$name = $quest['type'][0][1]."-".$awareness_question->aq_id; //change this to primary key
 				$type = $class = $quest['type'][0][1];
 				$label = $quest['question'][0][1];
-				$html .= '<field type="'.$type.'" label="'.$label.'" class="'.$class.'" name="'.$name.'" src="false">';					
+				if(isset($quest['description'][0][1]))
+					$description = $quest['description'][0][1];
+				$html .= '<field type="'.$type.'" description="'.$description.'" label="'.$label.'" class="'.$class.'" name="'.$name.'" src="false">';					
 				//////////////
 				if(!empty($quest['options'])){
 					foreach($quest['options'] as $opt){
@@ -296,33 +327,85 @@ class UnitController extends Controller
 			AwarenessQuestion::findOne($del)->delete();
 		}
 	}	
-	public function prepareFormData($questions){
-		$html  = '<form-template><fields>';	
-		foreach($questions as $order => $quest){
-			$name = $quest['id'][0][0]; //change this to primary key
-			$type = $class = $quest['type'][0][1];
-			$label = $quest['question'][0][1];
-			$html .= '<field type="'.$type.'" label="'.$label.'" class="'.$class.'" name="'.$name.'" src="false">';
-			
-			if(!empty($quest['options']))
-			{
-				foreach($quest['options'] as $opt)
-				{
-					if(!empty($quest['answer']))
-					{
-						foreach($quest['answer'] as $ans)
-						{
-							if($ans[1] == $opt[1])
-								$html .= '<option id="'.$opt[0].'" label="'.$opt[1].'" value="'.$opt[1].'" selected="true">'.$opt[1].'</option>';
-							else
-								$html .= '<option id="'.$opt[0].'" label="'.$opt[1].'" value="'.$opt[1].'">'.$opt[1].'</option>';
-						}
-					}						
+	
+	/**
+	 * Save capability questions
+	 * No options are saved here
+	 * Parms: unit_id , questions array 
+	 * Return null
+	 */	
+	public function saveCapQuestions($unit_id,$questions){
+		//see if any questions deleted
+		$from_update = $to_update = [];
+		$current_qstns = Unit::findOne($unit_id)->capabilityQuestions;
+		foreach($current_qstns as $q){
+			$from_update[] = $q->cq_id;
+		}
+		$html  = '<form-template><fields>';			
+		foreach($questions as $order => $quest){		
+			$id = $quest['id'][0][1];
+			$id = preg_replace("/[^0-9]/","",$id);//die;
+			$cap_question = CapabilityQuestion::find()->where(['cq_id'=>$id,'unit_id'=>$unit_id])->one();			
+			if(!$cap_question){
+				$cap_question = new CapabilityQuestion();
+				$cap_question->unit_id = $unit_id;
+			}else{
+				//get the existing questions list
+				$to_update[] = $id;
+			}
+			$cap_question->question = $quest['question'][0][1];
+			//$cap_question->question_type = $quest['type'][0][1];
+			$cap_question->order_id = $order;
+			$answer = "";
+			$description = $cap_question->description  = '';
+			if(isset($quest['description'][0][1]))
+					$cap_question->description  = $quest['description'][0][1];
+			if($cap_question->save(false)){
+				//reformat the form data
+				$name = $quest['type'][0][1]."-".$cap_question->cq_id; //change this to primary key
+				$type = $class = $quest['type'][0][1];
+				$label = $quest['question'][0][1];
+				if(isset($quest['description'][0][1]))
+					$description = $quest['description'][0][1];
+				$html .= '<field type="'.$type.'" description="'.$description.'" label="'.$label.'" class="'.$class.'" name="'.$name.'" src="false">';					
+				//////////////
+				if(!empty($quest['options'])){
+					foreach($quest['options'] as $opt){
+						$opt_string = '<option  label="'.$opt[1].'" value="'.$opt[1].'">'.$opt[1].'</option>';
+							if(!empty($quest['answer'])){
+								foreach($quest['answer'] as $ans){
+									if($ans[1] === $opt[1]){
+										$answer = $opt[1];
+										$opt_string = '<option label="'.$opt[1].'" value="'.$opt[1].'" selected="true">'.$opt[1].'</option>';
+									}
+									 
+								}
+							}
+						$html .= $opt_string;
+					}
 				}
+				$html .= '</field>';
+				$cap_question->answer = $answer;
+				$cap_question->save();
+				//return true;
+				
 			}
 		}
 		$html  .= '</fields></form-template>';
-		return $html;
+		$element = UnitElement::find()->where(['unit_id'=>$unit_id,'element_type'=>'cap_data'])->one();
+		if(!$element)
+			$element = new UnitElement();
+		
+		$element->unit_id = $unit_id;
+		$element->element_type = "cap_data";
+		$element->element_order = 1;
+		$element->content =$html;
+		$element->save();
+		//delete the elements
+		$deleted=array_diff($from_update,$to_update);
+		foreach($deleted as $del){
+			CapabilityQuestion::findOne($del)->delete();
+		}		
+		
 	}
-	
 }

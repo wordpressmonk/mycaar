@@ -1979,6 +1979,7 @@ function formBuilderEventsFn() {
     };
 
     var prepFieldVars = function prepFieldVars($field) {
+		console.log($field);
       var isNew = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
       var field = {};
@@ -2085,7 +2086,7 @@ function formBuilderEventsFn() {
      * @param  {object} values
      */
     var fieldOptions = function fieldOptions(values) {
-		console.log('sdf',values);
+		//console.log('sdf',values);
       var optionActions = [utils.markup('a', opts.messages.addOption, { className: 'add add-opt' })],
           fieldOptions = ['<label class="false-label">' + opts.messages.selectOptions + '</label>'],
           isMultiple = values.multiple || values.type === 'checkbox-group';
@@ -2097,7 +2098,13 @@ function formBuilderEventsFn() {
 			  var ord= [1,2,3];
 		  }
         values.values = ord.map(function (index) {
-          var label = opts.messages.option + ' ' + index;
+			var label = opts.messages.option + ' ' + index;
+			//Customised for cap
+			if(values.type=='radio-group' && index == 1 )
+				var label = 'yes';
+			if(values.type=='radio-group' && index == 2 )
+				var label = 'no';
+			///////////////////////
           var option = {
             selected: false,
             label: label,
@@ -2135,7 +2142,6 @@ function formBuilderEventsFn() {
      * @return {String}        markup for advanced fields
      */
     var advFields = function advFields(values) {
-		//console.log(values);
       var advFields = [],
           key,
           optionFields = ['select', 'checkbox-group', 'radio-group'],
@@ -2622,7 +2628,7 @@ function formBuilderEventsFn() {
           optionInputs = [];
 
       optionData = Object.assign({ selected: false, label: '', value: '' ,'option_id':''}, optionData);
-
+		//console.log('doptions',optionDataOrder);
       for (var i = optionDataOrder.length - 1; i >= 0; i--) {
         var prop = optionDataOrder[i];
         if (optionData.hasOwnProperty(prop)) {
