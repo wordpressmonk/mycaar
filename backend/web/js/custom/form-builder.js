@@ -356,6 +356,7 @@ fbUtils.unique = function (array) {
    * @return {string}       preview markup for field
    */
 fbUtils.fieldRender = function (fieldData, opts) {
+	console.log('den',fieldData);
   var preview = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   var fieldMarkup = '',
       fieldLabel = '',
@@ -697,7 +698,8 @@ function formBuilderHelpersFn(opts, formBuilder) {
           selected = $('.option-selected', $option).is(':checked'),
           attrs = {
         label: $('.option-value', $option).val(),
-        value: $('.option-value', $option).val()
+        value: $('.option-value', $option).val(),
+		option_id:$('.option-value', $option).attr('option_id'),
       };
 
       if (selected) {
@@ -732,9 +734,10 @@ function formBuilderHelpersFn(opts, formBuilder) {
       if (field.type.match(/(select|checkbox-group|radio-group)/)) {
         var optionData = field.values,
             options = [];
-
+		console.log('final',optionData);
         for (var i = 0; i < optionData.length; i++) {
           var option = utils.markup('option', optionData[i].label, optionData[i]).outerHTML;
+		 
           options.push('\n\t\t\t' + option);
         }
         options.push('\n\t\t');
@@ -753,14 +756,14 @@ function formBuilderHelpersFn(opts, formBuilder) {
   };
 
   _helpers.prepData = function (form) {
-	  //console.log(form);
+	 console.log(form);
     var formData = [];
 
     if (form.childNodes.length !== 0) {
       // build data object
       utils.forEach(form.childNodes, function (index, field) {
         var $field = $(field);
-		//console.log(field);
+		console.log('field',$field);
         if (!$field.hasClass('disabled')) {
           var match;
           var multipleField;
@@ -902,6 +905,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
         option.selected = $('.option-selected', this).is(':checked');
         option.value = $('.option-value', this).val();
         option.label = $('.option-value', this).val();
+		option.option_id = $('.option-value', this).attr('option_id');
         previewData.values.push(option);
       });
     }
@@ -2081,6 +2085,7 @@ function formBuilderEventsFn() {
      * @param  {object} values
      */
     var fieldOptions = function fieldOptions(values) {
+		console.log('sdf',values);
       var optionActions = [utils.markup('a', opts.messages.addOption, { className: 'add add-opt' })],
           fieldOptions = ['<label class="false-label">' + opts.messages.selectOptions + '</label>'],
           isMultiple = values.multiple || values.type === 'checkbox-group';
@@ -2100,10 +2105,13 @@ function formBuilderEventsFn() {
           };
           return option;
         });
+		
         values.values[0].selected = true;
       } else {
+		 // console.log('sdf',values);
         // ensure option data is has all required keys
         values.values.forEach(function (option) {
+			//console.log('option',option);
           return Object.assign({}, { selected: false }, option);
         });
       }
@@ -2117,7 +2125,7 @@ function formBuilderEventsFn() {
       fieldOptions.push('</ol>');
       fieldOptions.push(utils.markup('div', optionActions, { className: 'option-actions' }).outerHTML);
       fieldOptions.push('</div>');
-
+//console.log('fieldOptions',fieldOptions);
       return utils.markup('div', fieldOptions.join(''), { className: 'form-group field-options' }).outerHTML;
     };
 
@@ -2428,7 +2436,7 @@ function formBuilderEventsFn() {
      * @return {String}
      */
     var textAttribute = function textAttribute(attribute, values) {
-		//console.log(attribute);
+		//console.log(values);
       if (opts.typeUserAttrs[values.type] && opts.typeUserAttrs[values.type][attribute]) {
         return;
       }
@@ -2509,6 +2517,7 @@ function formBuilderEventsFn() {
 
         attributefield = '<div class="form-group ' + attribute + '-wrap">' + attributeLabel + ' ' + inputWrap + '</div>';
       }
+	  //console.log(attributefield);
       return attributefield;
     };
 
@@ -2605,13 +2614,14 @@ function formBuilderEventsFn() {
 
     // Select field html, since there may be multiple
     var selectFieldOptions = function selectFieldOptions(name, optionData, multipleSelect) {
+		console.log('2',optionData);
       var optionInputType = {
         selected: multipleSelect ? 'checkbox' : 'radio'
       },
           optionDataOrder = ['value', 'label', 'selected'],
           optionInputs = [];
 
-      optionData = Object.assign({ selected: false, label: '', value: '' }, optionData);
+      optionData = Object.assign({ selected: false, label: '', value: '' ,'option_id':''}, optionData);
 
       for (var i = optionDataOrder.length - 1; i >= 0; i--) {
         var prop = optionDataOrder[i];
@@ -2620,7 +2630,7 @@ function formBuilderEventsFn() {
             type: optionInputType[prop] || 'text',
             'class': 'option-' + prop,
             value: optionData[prop],
-            name: name + '-option'
+            name: name + '-option',
           };
 
           if (opts.messages.placeholders[prop]) {
@@ -2630,7 +2640,7 @@ function formBuilderEventsFn() {
           if (prop === 'selected' && optionData.selected === true) {
             attrs.checked = optionData.selected;
           }
-
+			attrs.option_id = optionData.option_id;
           optionInputs.push(utils.markup('input', null, attrs));
         }
       }
