@@ -402,7 +402,7 @@ fbUtils.unique = function (array) {
    */
 fbUtils.fieldRender = function (fieldData, opts) {
   var preview = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
+  console.log('render',fieldData);
   var fieldMarkup = '',
       fieldLabel = '',
       optionsMarkup = '',
@@ -413,6 +413,7 @@ fbUtils.fieldRender = function (fieldData, opts) {
       fieldOptions = fieldData.values;
 
   fieldData.name = preview ? fieldData.name + '-preview' : fieldData.name;
+
   fieldData.id = fieldData.name;
   fieldData.name = fieldData.multiple ? fieldData.name + '[]' : fieldData.name;
 
@@ -437,7 +438,7 @@ fbUtils.fieldRender = function (fieldData, opts) {
   delete fieldData.description;
 
   var fieldDataString = fbUtils.attrString(fieldData);
-
+console.log(fieldData.type);
   switch (fieldData.type) {
     case 'textarea':
 	case 'textdisplay':
@@ -489,7 +490,7 @@ fbUtils.fieldRender = function (fieldData, opts) {
             fieldOptions[i].label = '';
           }
           optionAttrsString = fbUtils.attrString(fieldOptions[i]);
-          optionsMarkup += '<option ' + optionAttrsString + '>' + fieldOptions[i].label + '</option>';
+          optionsMarkup += '<option option_id="'+fieldData.option_id+'" ' + optionAttrsString + '>' + fieldOptions[i].label + '</option>';
         }
       }
 
@@ -509,7 +510,7 @@ fbUtils.fieldRender = function (fieldData, opts) {
         var _optionAttrsString = void 0;
 
         for (var _i = 0; _i < fieldOptions.length; _i++) {
-          optionAttrs = Object.assign({ value: '', label: '' }, fieldData, fieldOptions[_i]);
+          optionAttrs = Object.assign({ value: '', label: '',option_id:'' }, fieldData, fieldOptions[_i]);
 
           if (optionAttrs.selected) {
             delete optionAttrs.selected;

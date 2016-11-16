@@ -60,7 +60,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 								</div>
 							</div>
 							<?php 
-								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id])->one();
+								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'page'])->one();
 								$data = json_decode($element->content);
 								$formdata = $data->html;
 								$formdata = str_replace(array("\r", "\n"), '', $formdata);
@@ -79,6 +79,13 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 					</div>
 					<div id="awareness_test" class="collapse" aria-expanded="false">
 						<div class="card-body">
+							<?php 
+								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
+								//print_r($element);die;
+								//$data = json_decode($element->content);
+								$aw_data = $element->content;
+								//$formdata = str_replace(array("\r", "\n"), '', $formdata);
+							?>
 						<div id="aware_form"></div>
 						</div>
 					</div>
@@ -91,11 +98,11 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
-					<!--<div id="capability-test" class="collapse" aria-expanded="false">
+					<div id="capability-test" class="collapse" aria-expanded="false">
 						<div class="card-body">
 						<div id="capability_form"></div>
 						</div>
-					</div>-->
+					</div>
 				</div><!--end .panel -->
 			</div><!--end .panel-group -->
 		</div>
@@ -178,18 +185,23 @@ $(document).ready(function(){
 	   fieldRemoveWarn: true ,
 	   controlPosition: 'left'
 	};
+ 	var aw_data = '<?= $aw_data ?>';
+	console.log(aw_data);
+	if (aw_data) {
+		awareness_elements.formData = aw_data;
+	}	
 	var awareness_editor = $(document.getElementById('aware_form'));
 	$(awareness_editor).formBuilder(awareness_elements);
 	//$('#aware_form').formBuilder(awareness_elements);
 	//SaveAwarenessTest
 	var saveBtn = document.querySelector('#frmb-2-save');
 	saveBtn.onclick = function() {
-	console.log($("#aware_form").data('formBuilder'));
+	//console.log($("#aware_form").data('formBuilder'));
 	var form_data = $(awareness_editor).data('formBuilder').formData;
 /* 	$.each(form_data,function(){
 		console.log(form_data.attr('class'))
 	}); */
-	var awareness_data = JSON.stringify({'html':$("#aware_form").html()});
+	var awareness_data = JSON.stringify({'html':form_data});
 	//save to db
 	$.ajax({
 		url:'<?=Url::to(['unit/save-awareness-test'])?>',
@@ -203,7 +215,7 @@ $(document).ready(function(){
 	}
 	<!---------- end of awareness elements ------->
 	var cap_elements = {
-	  disableFields: ['autocomplete','button','checkbox','textarea','checkbox-group','hidden','select','header','date','number','file','paragraph','text','imageinput','videoinput','audioinput','textdisplay','fileupload'],
+	  disableFields: ['autocomplete','button','checkbox','textarea','checkbox-group','hidden','select','header','date','number','file','paragraph','text','img','video','audio','textdisplay','fileupload','filedownload'],
 	   fieldRemoveWarn: true,
 	   controlPosition: 'left'
 	};
