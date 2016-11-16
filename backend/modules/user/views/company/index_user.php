@@ -22,7 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create User', ['create-user'], ['class' => 'btn btn-success']) ?>
 		
-		 <?= Html::a('Import User', ['importexcel'], ['class' => 'btn btn-info','style'=>'margin-left:76%']) ?>
+		<?php if(\Yii::$app->user->can('company_admin')) { ?>
+		  <?= Html::a('Import User', ['importexcel'], ['class' => 'btn btn-info','style'=>'margin-left:76%']) ?>
+		<?php } ?>
+		 
     </p>
 	
 	

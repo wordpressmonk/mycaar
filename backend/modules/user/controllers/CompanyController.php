@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\User;
 use common\models\UserProfile as Profile;
+use common\models\ImportFile;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use common\models\search\SearchUser;
@@ -32,6 +33,7 @@ class CompanyController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+			
         ];
     }
 
@@ -281,12 +283,11 @@ class CompanyController extends Controller
 
    public function actionImportexcel()
     {
-			  $model = new Company();			  
-			if ($model->load(Yii::$app->request->post()) ) {			
-				$model->upfile = UploadedFile::getInstance($model, 'upfile');			
-				if($model->upfile)
-				{
-					$inputFiles = $model->upfile->tempName ;					
+			   $model = new ImportFile();			  
+			if($model->load(Yii::$app->request->post())){	
+				
+				$model->upfile = UploadedFile::getInstance($model, 'upfile');				
+				$inputFiles = $model->upfile->tempName ;					
 				  try{
 					 $inputFileType = \PHPExcel_IOFactory::identify($inputFiles);
 					 $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
@@ -300,6 +301,7 @@ class CompanyController extends Controller
 				  $highestRow = $sheet->getHighestRow();
 				  $highestColumn = $sheet->getHighestColumn();				
 				  $error_report = [];
+				  $password = [];
 				
 				 //$row is start 2 because first row assigned for heading.         
 				 for($row=2; $row<=$highestRow; ++$row)
@@ -307,45 +309,55 @@ class CompanyController extends Controller
 					 $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row,NULL,TRUE,FALSE);				   
 					//save to User  table.
 					 $usertabel = new User();
-					 
-					 if(\Yii::$app->user->can('company_admin')) {
+					if(\Yii::$app->user->can('company_admin')) {
 						$usertabel->scenario = 'update_by_admin';
 						}
-				
-					 $usertabel->username = $rowData[0][0];
-					 $usertabel->email = $rowData[0][1];
-					 $usertabel->role = $rowData[0][2];
-					 $usertabel->generateAuthKey();
-					 $usertabel->c_id = Yii::$app->user->identity->c_id; 
-					 
+						
+						 $profiletabel = new Profile();	 
+						 $usertabel->email = $rowData[0][0];					
+						 $usertabel->username = $usertabel->email;					 
+						 $usertabel->generateAuthKey();
+						 $usertabel->c_id = Yii::$app->user->identity->c_id; 					
+						 $usertabel->role = 'user';
+						// $password[] = \Yii::app()->getSecurityManager()->generateRandomString(6);	
+						
+						 $usertabel->password_hash= $password_hash = Yii::$app->security->generatePasswordHash('123456');
+						 $profiletabel->role = $rowData[0][1];
+						 $profiletabel->employee_number = $rowData[0][2];
+						 $profiletabel->division = $rowData[0][3];
+						 $profiletabel->location = $rowData[0][4];
+						 $profiletabel->firstname = $rowData[0][5];
+						 $profiletabel->lastname = $rowData[0][6];
+						 $profiletabel->state = $rowData[0][7]; 
+			
 					 if($usertabel->save())
 					 {			 
 						$auth = Yii::$app->authManager;
 						$authorRole = $auth->getRole($usertabel->role);
-						$auth->assign($authorRole, $usertabel->id); 				
+						$auth->assign($authorRole, $usertabel->id); 
+						$profiletabel->user_id =  $usertabel->id;	
+					 	$profiletabel->save();  
 					 } else 
 					 {
 						$error_report[] = $usertabel->email;
-					 }
-					 
-				 }		 			   
-					
+					 }					 
+				 }		 			   					
 				if(isset($error_report) && empty($error_report))
 				{
-					/* Yii::$app->getSession()->setFlash('Success', 'Upload the User Details Sucessfully!!!.'); */
-					return $this->render('upload_form', ['model' => $model ]);						
+					 Yii::$app->getSession()->setFlash('Success', 'Upload the User Details Sucessfully!!!.');
 				}
 				else{
-					/* Yii::$app->getSession()->setFlash('Error', 'User Details Failed Following User Email!!!.');
-					Yii::$app->getSession()->setFlash('Error-data', $error_report); */
-					return $this->render('upload_form', ['model' => $model ]);
+					 Yii::$app->getSession()->setFlash('Error', 'User Details Failed Following User Email!!!.');
+					 Yii::$app->getSession()->setFlash('Error-data', $error_report); 
 				}
-			}
-					
+				
+				echo "<pre>";
+				print_r($password);
+				exit;
+				
+				return $this->render('upload_form', ['model' => $model]);						
 		}else {
-					return $this->render('upload_form', ['model' => $model ]);
-			}
-    }
-	
-	
+				return $this->render('upload_form', ['model' => $model ]);
+			  }
+    }		
 }
