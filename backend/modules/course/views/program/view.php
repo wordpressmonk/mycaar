@@ -51,7 +51,17 @@ $this->params['breadcrumbs'][] = $this->title;
             //'featured_video_url:ntext',
             // 'detailed_description:ntext',
             // 'status',
-
+			[
+			'class' => 'yii\grid\ActionColumn',
+			'controller' => 'unit',
+			'template' => '{units}', 
+				'buttons' => [
+					'units' => function ($url, $model, $key) {
+						return Html::a('Units', ['unit/create', 'm_id'=>$model->module_id]);
+					},
+				]
+			],
+			
             ['class' => 'yii\grid\ActionColumn',
 			'template' => '{update}{delete}',
 			'controller' => 'module'],
