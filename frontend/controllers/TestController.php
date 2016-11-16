@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\course\controllers;
+namespace frontend\controllers;
 
 use Yii;
 use common\models\Module;
@@ -17,7 +17,7 @@ use yii\filters\VerbFilter;
 /**
  * UnitController implements the CRUD actions for Unit model.
  */
-class UnitController extends Controller
+class TestController extends Controller
 {
     /**
      * @inheritdoc
