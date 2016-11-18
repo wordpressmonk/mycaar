@@ -98,7 +98,7 @@ class ProgramController extends Controller
 		}else{
 					//yii\web\ForbiddenHttpException
 					throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
-				}
+		}
     }
 
     /**
