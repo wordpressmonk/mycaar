@@ -21,7 +21,7 @@ class MyCaar
   	/**
      * Return All Users Details Depends Upon Role Name From DB
      */
-    public function getUserAllByrole($rolename)
+    public static function getUserAllByrole($rolename)
     {			 	
 		$Roleusers = \Yii::$app->authManager->getUserIdsByRole($rolename);		
 		$data = User::find()->where(['IN', 'id', $Roleusers])->all();
@@ -29,7 +29,7 @@ class MyCaar
     }
 	
 	
-	public function getChildRoles($rolename){
+	public static function getChildRoles($rolename){
 		$child_role = [];			
 		$child_role_name = \Yii::$app->authManager->getChildRoles($rolename);			
 		foreach($child_role_name as $tmp){
@@ -38,7 +38,7 @@ class MyCaar
 		return $child_role;
 	}
 	
-	public function getRoleNameByUserid($userid)
+	public static function getRoleNameByUserid($userid)
 	{	// Return by dency Copied from common user model		
 		$roles = Yii::$app->authManager->getRolesByUser($userid);
 		if (!$roles) {
