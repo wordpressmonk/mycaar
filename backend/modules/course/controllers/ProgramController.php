@@ -67,6 +67,9 @@ class ProgramController extends Controller
      */
     public function actionCompanyPrograms()
     {
+		if (\Yii::$app->user->can('superadmin')) {
+			return $this->redirect(['index']);
+		}
         $searchModel = new SearchProgram();
         $dataProvider = $searchModel->searchCompanyPrograms(Yii::$app->request->queryParams);
 
