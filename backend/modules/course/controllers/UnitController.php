@@ -294,7 +294,7 @@ class UnitController extends Controller
 						$opt_string = '<option option_id="'.$awareness_option->option_id.'" label="'.$opt[1].'" value="'.$opt[1].'">'.$opt[1].'</option>';
 							if(!empty($quest['answer'])){
 								foreach($quest['answer'] as $ans){
-									if($ans[1] === $awareness_option->answer){
+									if($ans[1] == $awareness_option->answer){
 										$answer .= $awareness_option->option_id."_";
 										$opt_string = '<option option_id="'.$awareness_option->option_id.'" label="'.$opt[1].'" value="'.$opt[1].'" selected="true">'.$opt[1].'</option>';
 									}
@@ -305,6 +305,7 @@ class UnitController extends Controller
 					}
 				}
 				$html .= '</field>';
+				$answer = trim($answer, "_");
 				$awareness_question->answer = $answer;
 				$awareness_question->save();
 				//return true;
