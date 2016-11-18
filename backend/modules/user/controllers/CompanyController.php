@@ -457,78 +457,45 @@ class CompanyController extends Controller
 				return $this->render('upload_form', ['model' => $model ]);
 			  }
     }	
-
-	public function actionEnrollUser()
-    {		
-	    
-		if(Yii::$app->request->post())
-		{
-				$programid = Yii::$app->request->post()['program_id'];				
-				if(isset(Yii::$app->request->post()['selecteduser']))
-				{
-				  $selectedlist = Yii::$app->request->post()['selecteduser'];								 
-				  foreach($selectedlist as $tmp1)
-				  {
-					$model = new Enrollment();							
-					$model->program_id = $programid;
-					$model->user_id = $tmp1;
-					$checkuser = $model->find()->where(['program_id'=>$programid,'user_id'=>$tmp1])->one();
-					if(!$checkuser)
-						$model->save();					
-				  }					
-				} 
-				 
-				if(isset(Yii::$app->request->post()['unselecteduser']))
-				{	
-				  $unselectedlist = Yii::$app->request->post()['unselecteduser'];		
-				
-				  foreach($unselectedlist as $tmp2)
-				   { 
-					$model = new Enrollment();					
-					$model->program_id = $programid;
-					$model->user_id = $tmp2;
-					$checkuser = $model->find()->where(['program_id'=>$programid,'user_id'=>$tmp2])->one();
-					if($checkuser)
-						Enrollment::deleteAll(['program_id' => $programid, 'user_id' =>$tmp2]);				
-				  }
-				}					
-		   }
-		 return $this->render('enroll_user');
-    }
-	 public function actionUnselectedList()
-     {		
-		$connection = Yii::$app->getDb(); 	
-		$programid = Yii::$app->request->post()['program_id'];
-		if($programid)
-		{				
-			$command = $connection->createCommand('SELECT * FROM `user` where id NOT IN (SELECT user_id FROM `program_enrollment` pe where program_id = '.$programid.') and c_id = '.Yii::$app->user->identity->c_id);
-			$unselecteduser = $command->queryAll(); 			
-			if($unselecteduser)
-			{
-				foreach($unselecteduser as $tmp)
-				{
-					echo "<option value='".$tmp['id']."'>".$tmp['email']."</option>";
-				}
-			}
-		} 
-    }
-
-	 public function actionSelectedList()
-     {		
-		$connection = Yii::$app->getDb(); 	
-		$programid = Yii::$app->request->post()['program_id'];
-		if($programid)
-		{				
-			$command = $connection->createCommand('SELECT * FROM `program_enrollment` pe, `user` u WHERE u.id= pe.user_id and u.c_id = '.Yii::$app->user->identity->c_id.' and pe.program_id = '.$programid);
-			$unselecteduser = $command->queryAll(); 			
-			if($unselecteduser)
-			{
-				foreach($unselecteduser as $tmp)
-				{
-					echo "<option value='".$tmp['id']."'>".$tmp['email']."</option>";
-				}
-			}
-		} 
-    }
 	
+	public function actionEnrollUser($program_id=false)
+    {		
+		$model = new Enrollment();	
+        $searchModel = new SearchUser();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		if($post=Yii::$app->request->post()){
+				
+			if(isset($post['Program']) && ($post['action'] === "enrolled") && isset($post['selection']) )
+			{				
+					foreach($post['selection'] as $tmp1)
+					{
+						$check_userid = Enrollment::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp1])->one();
+						if(!$check_userid)
+						{
+							$model->program_id = $post['Program'];
+							$model->user_id = $tmp1;
+							$model->save();
+						} 
+					}				
+			}
+			else if(isset($post['Program']) && ($post['action'] === "unenrolled") && isset($post['selection']))
+			{				
+					foreach($post['selection'] as $tmp2)
+					{
+						$model2 = Enrollment::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp2])->one();
+						if($model2)
+							$model2->delete();
+					}								
+			}						
+			 return $this->render('enroll_user', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
+				]);
+		}
+        else { return $this->render('enroll_user', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
+			]);
+			}
+    }
 }

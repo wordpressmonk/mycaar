@@ -16,7 +16,8 @@ use Yii;
  */
 class ProgramEnrollment extends \yii\db\ActiveRecord
 {
-    /**
+    public $selected_program;
+	/**
      * @inheritdoc
      */
     public static function tableName()
@@ -64,4 +65,15 @@ class ProgramEnrollment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+	
+	
+	
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function isEnrolled()
+    {
+        return false;
+    }
+	
 }
