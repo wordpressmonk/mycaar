@@ -48,7 +48,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/su
 								
 								<h4>Course Category</h4>
 								<?php 
-								$data = ArrayHelper::map(Program::find()->all(), 'program_id', 'title');
+								if(Yii::$app->user->can("superadmin"))
+									$data = ArrayHelper::map(Program::find()->all(), 'program_id', 'title');
+								else
+									$data = ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title');
 								echo $form->field($model, 'program_id')->widget(Select2::classname(), [
 									'data' => $data,
 									'options' => ['placeholder' => 'Select Category'],

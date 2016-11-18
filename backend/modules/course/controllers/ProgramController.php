@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\search\SearchModule;
-
+use yii\filters\AccessControl;
 /**
  * ProgramController implements the CRUD actions for Program model.
  */
@@ -27,6 +27,22 @@ class ProgramController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+             'access' => [
+                'class' => AccessControl::className(),
+				'only' => ['index','create','view'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+						'roles' => ['superadmin']
+                    ],
+                    [
+                        'actions' => ['create','view','delete'],
+                        'allow' => true,
+						'roles' => ['company_admin']
+                    ],
+                ],
+            ], 
         ];
     }
 
@@ -44,7 +60,22 @@ class ProgramController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+	
+    /**
+     * Lists all Program models.
+     * @return mixed
+     */
+    public function actionCompanyPrograms()
+    {
+        $searchModel = new SearchProgram();
+        $dataProvider = $searchModel->searchCompanyPrograms(Yii::$app->request->queryParams);
 
+        return $this->render('company_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+	
     /**
      * Displays a single Program model.
      * @param integer $id
@@ -52,13 +83,19 @@ class ProgramController extends Controller
      */
     public function actionView($id)
     {
-        $searchModel = new SearchModule();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+		$model = $this->findModel($id);
+		if (\Yii::$app->user->can('manageProgram', ['post' => $model])) {
+			$searchModel = new SearchModule();
+			$dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
+			return $this->render('view', [
+				'model' => $this->findModel($id),
+				'searchModel' => $model,
+				'dataProvider' => $dataProvider,
+			]);
+		}else{
+					//yii\web\ForbiddenHttpException
+					throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+				}
     }
 
     /**
@@ -87,15 +124,20 @@ class ProgramController extends Controller
      */
     public function actionUpdate($id)
     {
+		
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->program_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+		if (\Yii::$app->user->can('manageProgram', ['post' => $model])) {
+			if ($model->load(Yii::$app->request->post()) && $model->save()) {
+				return $this->redirect(['view', 'id' => $model->program_id]);
+			} else {
+				return $this->render('update', [
+					'model' => $model,
+				]);
+			}
+		}else{
+			//yii\web\ForbiddenHttpException
+			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+		}
     }
 
     /**
@@ -106,9 +148,14 @@ class ProgramController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+		$model = $this->findModel($id);
+		if (\Yii::$app->user->can('manageProgram', ['post' => $model])) {
+			$this->findModel($id)->delete();
+			return $this->redirect(['index']);
+		}else{
+			//yii\web\ForbiddenHttpException
+			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+		}
     }
 
     /**
