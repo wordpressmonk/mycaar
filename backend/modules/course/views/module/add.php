@@ -7,7 +7,7 @@ use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model common\models\Module */
 /* @var $form yii\widgets\ActiveForm */
-$this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/summernote.css?1425218701");
+//$this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/summernote.css?1425218701");
 ?>
 <style>
 	.checkbox.checkbox-styled>label>span:first-of-type {
@@ -46,7 +46,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/su
 								?></p>
 								<?= $form->field($model, 'featured_image')->fileInput(['class'=>'form-control'])->label(false) ?>
 								
-								<h4>Course Category</h4>
+								<h4>Program</h4>
 								<?php 
 								if(Yii::$app->user->can("superadmin"))
 									$data = ArrayHelper::map(Program::find()->all(), 'program_id', 'title');
@@ -156,9 +156,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/su
 
 </div><!--end .section-body -->
 <?php 
-$this->registerJsFile(\Yii::$app->homeUrl."js/libs/summernote/summernote.min.js");
-$this->registerJsFile(\Yii::$app->homeUrl."js/libs/multi-select/jquery.multi-select.js");
-$this->registerJsFile(\Yii::$app->homeUrl."js/libs/bootstrap-datepicker/bootstrap-datepicker.js")
+//$this->registerJsFile(\Yii::$app->homeUrl."js/libs/summernote/summernote.min.js");
+//$this->registerJsFile(\Yii::$app->homeUrl."js/libs/multi-select/jquery.multi-select.js");
+//$this->registerJsFile(\Yii::$app->homeUrl."js/libs/bootstrap-datepicker/bootstrap-datepicker.js")
 ?>
 <script>
 $(document).ready(function(){
