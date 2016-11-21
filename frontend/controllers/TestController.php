@@ -167,20 +167,7 @@ class TestController extends Controller
 			'errors' => false,
         ]);		
 	}
-    /**
-     * Lists all Unit models.
-     * @return mixed
-     */
-    public function actionCpTest($unit_id)
-    {
-        $searchModel = new SearchUnit();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 	public function saveAnswers($answers){
 		foreach($answers as $question=>$answer){				
 			$aw_answer = AwarenessAnswer::find()->where(['user_id'=>\Yii::$app->user->id,'question_id'=>$question])->one();

@@ -23,65 +23,27 @@ $this->params['breadcrumbs'][] = $this->title;
 		}
 		foreach($questions as $question){
 			echo '<div class="small-padding">';
-			switch($question->question_type){
-				//////RADIO GROUP//////
-				case "radio-group":
 					echo "<h3>{$question->question}</h3>";
 					echo "<p>{$question->description}</p>";
 					echo '<div class="form-group">';
-					foreach($question->options as $option){
+					//foreach($question->options as $option){
 						echo 
 						"<div class='radio radio-styled radio-info'>
 							<label>
-							<input type='radio' name='$question->aq_id' value='{$option->option_id}'>
-							<span>{$option->answer}</span>
+							<input type='radio' name='$question->cq_id' value='yes'>
+							<span>Yes</span>
 							</label>
 						</div>";
-					}
+						echo 
+						"<div class='radio radio-styled radio-info'>
+							<label>
+							<input type='radio' name='$question->cq_id' value='no'>
+							<span>No</span>
+							</label>
+						</div>";
+					//}
 					//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
 					echo "</div>";
-					break;
-				/////////CHECKBOX GROUP//////
-				case "checkbox-group":
-					echo "<h3>{$question->question}</h3>";
-					echo "<p>{$question->description}</p>";
-					echo '<div class="form-group">';
-					foreach($question->options as $option){
-						echo 
-						"<div class='checkbox checkbox-styled checkbox-info'>
-							<label>
-							<input type='checkbox' data_q='{$question->aq_id}' name='{$question->aq_id}[]' value='{$option->option_id}'>
-							<span>{$option->answer}</span>
-							</label>
-						</div>";
-					}
-					//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
-					echo '</div>';
-					break;
-				case "fileupload":
-					echo "<h3>{$question->question}</h3>";
-					echo "<p>{$question->description}</p>";
-					echo '<div class="form-group">';
-					echo 
-					"<div class='border-gray small-padding form-group'>
-						<input name='$question->aq_id' type='file' class='form-control'>
-					</div>";
-					//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
-					echo '</div>';
-					break;
-				case "text":
-					echo "<h3>{$question->question}</h3>";
-					echo "<p>{$question->description}</p>";
-					echo '<div class="form-group">';
-					echo
-					"<div class='form-group'>
-						<input name='$question->aq_id' type='text' class='form-control' placeholder='' value=''>
-						<label>Enter Answer here</label>
-					</div>";
-					//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
-					echo '</div>';
-					break;				
-			}
 				
 			echo '</div>';
 		}
@@ -89,7 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php if(!$final) { ?> 
 		<div class="form-group">
 			<input name= "save" type="submit" class="btn btn-lg ink-reaction btn-info" value="Next"/>
-			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save&Exit"/>
 		</div>
 		<?php } else { ?>
 		<div class="form-group">

@@ -13,6 +13,7 @@ use common\models\search\SearchUnit;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * UnitController implements the CRUD actions for Unit model.
@@ -31,6 +32,17 @@ class UnitController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+             'access' => [
+                'class' => AccessControl::className(),
+				'only' => ['create','delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create','delete'],
+                        'allow' => true,
+						'roles' => ['company_admin']
+                    ],
+                ],
+            ], 
         ];
     }
 
@@ -38,7 +50,7 @@ class UnitController extends Controller
      * Lists all Unit models.
      * @return mixed
      */
-    public function actionIndex()
+/*     public function actionIndex()
     {
         $searchModel = new SearchUnit();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -47,7 +59,7 @@ class UnitController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-    }
+    } */
 
     /**
      * Displays a single Unit model.
@@ -56,9 +68,18 @@ class UnitController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+		$program = $model->module->program;
+		if (\Yii::$app->user->can('manageProgram', ['post' => $program])) {
+			return $this->render('view', [
+				'model' => $this->findModel($id),
+			]);			
+		}else
+		{
+			//yii\web\ForbiddenHttpException
+			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+		}
+
     }
 
     /**
@@ -68,11 +89,15 @@ class UnitController extends Controller
      */
     public function actionCreate($m_id)
     {
+		//find model and see if this belongs to the user, else prohobit
+		
         $model = new Unit();
 		$module = Module::find()->where(['module_id'=>$m_id])->one();
 		if(!$module){
-			return false;
+			throw new NotFoundHttpException('The requested page does not exist.');
 		}
+		$program = $module->program;
+		if (\Yii::$app->user->can('manageProgram', ['post' => $program])) {
         if(isset(Yii::$app->request->post()['unit_title'])) {
 			//print_r(Yii::$app->request->post());
 			//$data = json_decode(Yii::$app->request->post()['builder_data']);
@@ -111,6 +136,11 @@ class UnitController extends Controller
 				'module' => $module,
             ]);
         }
+		}else
+		{
+			//yii\web\ForbiddenHttpException
+			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+		}
     }
 
     /**
@@ -123,31 +153,37 @@ class UnitController extends Controller
     {
         $model = $this->findModel($id);
 		$module = Module::find()->where(['module_id'=>$model->module_id])->one();
-		
-        if(isset(Yii::$app->request->post()['unit_title'])) {
-			//print_r(Yii::$app->request->post());
-			//$data = json_decode(Yii::$app->request->post()['builder_data']);
-			//json_decode(stripslashes($_POST['posts']));
-			//print_r($data->html);
-			//$model->module_id = $m_id;
-			$model->title = Yii::$app->request->post()['unit_title'];
-			$model->status = Yii::$app->request->post()['unit_status'];
-			if($model->save()){
-				//save elements as well
-				$element = UnitElement::find()->where(['unit_id'=>$id,'element_type'=>'page'])->one();
-				$element->unit_id = $model->unit_id;
-				$element->element_type = "page";
-				$element->element_order = 1;
-				$element->content = Yii::$app->request->post()['builder_data'];
-				$element->save();
+		$program = $module->program;
+		if (\Yii::$app->user->can('manageProgram', ['post' => $program])) {
+			if(isset(Yii::$app->request->post()['unit_title'])) {
+				//print_r(Yii::$app->request->post());
+				//$data = json_decode(Yii::$app->request->post()['builder_data']);
+				//json_decode(stripslashes($_POST['posts']));
+				//print_r($data->html);
+				//$model->module_id = $m_id;
+				$model->title = Yii::$app->request->post()['unit_title'];
+				$model->status = Yii::$app->request->post()['unit_status'];
+				if($model->save()){
+					//save elements as well
+					$element = UnitElement::find()->where(['unit_id'=>$id,'element_type'=>'page'])->one();
+					$element->unit_id = $model->unit_id;
+					$element->element_type = "page";
+					$element->element_order = 1;
+					$element->content = Yii::$app->request->post()['builder_data'];
+					$element->save();
+				}
+				return $this->redirect(['update', 'id' => $model->unit_id]);
+			} else {
+				return $this->render('update_unit', [
+					'model' => $model,
+					'module' => $module,
+				]);
 			}
-            return $this->redirect(['update', 'id' => $model->unit_id]);
-        } else {
-            return $this->render('update_unit', [
-                'model' => $model,
-				'module' => $module,
-            ]);
-        }
+		}else
+		{
+			//yii\web\ForbiddenHttpException
+			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+		}
     }
 
     /**
