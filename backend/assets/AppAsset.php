@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
 		//'css/theme-default/libs/DataTables/extensions/dataTables.tableTools.css?1423553990',
     ];
     public $jsOptions = [
-		'async' => 'async',
+		//'async' => 'async',
 		'position' => \yii\web\view::POS_HEAD,
     ];
     public $js = [
