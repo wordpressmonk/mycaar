@@ -79,14 +79,12 @@ use kartik\select2\Select2;
 							<?php $form = ActiveForm::begin(); ?>
 								
 									<h4>Featured Video</h4>
-									<p><?php if(!$model->isNewRecord && $model->featured_video_url != ''){ ?>
-										<video width="320" height="240" controls>
-											<source src="<?=Yii::$app->homeUrl.$model->featured_video_url?>" type="video/mp4">
-										</video>
-									<?php } 
+									<p><?php if(!$model->isNewRecord && $model->featured_video_url != ''){ 
+										echo $model->featured_video_url;
+									} 
 									else echo 'This is used on the Course Overview page and will be displayed with the course description.';
 									?></p>
-									<?= $form->field($model, 'featured_video_url')->fileInput(['class'=>'form-control'])->label(false) ?>
+									<?= $form->field($model, 'featured_video_url')->textArea(['class'=>'form-control'])->label(false) ?>
 								
 								
 									<h4>Course Description	</h4>

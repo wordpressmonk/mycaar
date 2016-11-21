@@ -37,9 +37,9 @@ class Module extends \yii\db\ActiveRecord
         return [
             [['program_id', 'title'], 'required'],
             [['program_id', 'status'], 'integer'],
-            [['short_description', 'detailed_description'], 'string'],
+            [['short_description', 'detailed_description','featured_video_url'], 'string'],
 			[['featured_image'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
-			[['featured_video_url'], 'file','extensions' => 'mp4', 'skipOnEmpty' => true],
+			//[['featured_video_url'], 'file','extensions' => 'mp4', 'skipOnEmpty' => true],
             [['title'], 'string', 'max' => 1000],
 			[['language'], 'string', 'max' => 200],
             [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Program::className(), 'targetAttribute' => ['program_id' => 'program_id']],

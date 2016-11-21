@@ -96,13 +96,13 @@ class ModuleController extends Controller
 				//end of saving image
 				
 				//save featured video
-				$model->featured_video_url = UploadedFile::getInstance($model, 'featured_video_url');
+/* 				$model->featured_video_url = UploadedFile::getInstance($model, 'featured_video_url');
 				if(!empty($model->featured_video_url)) {
 					if(!$model->uploadVideo())
 						return;
 				}
 				else
-					$model->featured_video_url = $current_video;
+					$model->featured_video_url = $current_video; */
 				//end of saving video
 				
 				if($model->save())
