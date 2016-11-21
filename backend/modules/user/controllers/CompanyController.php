@@ -187,15 +187,17 @@ class CompanyController extends Controller
 			$profile = new Profile();					
 			$roles = MyCaar::getChildRoles('company_admin');	
 
-		if(\Yii::$app->user->can('company_admin')) {
-			$model->scenario = 'update_by_admin';
-		}
 		
 		if($model->load(Yii::$app->request->post()))  {
+				
 			$model->setPassword($model->password);
 			$model->generateAuthKey();
 			$model->c_id = Yii::$app->user->identity->c_id;
-
+			
+			 if(\Yii::$app->user->can('company_admin')) {
+				$model->scenario = 'update_by_admin';			
+			} 
+	
 			if($model->save())
 			{				
 				//handle the role first				
