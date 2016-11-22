@@ -530,10 +530,7 @@ class CompanyController extends Controller
 							$model2->delete();
 					}								
 			}						
-			 return $this->render('enroll_user', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
-				]);
+			 return $this->redirect(['enroll-user','program_id'=>$post['Program']]);
 		}
         else { 
 				
