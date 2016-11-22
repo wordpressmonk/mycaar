@@ -532,7 +532,7 @@ class CompanyController extends Controller
 			}						
 			 return $this->render('enroll_user', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
+            'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$post['Program']
 				]);
 		}
         else { 
