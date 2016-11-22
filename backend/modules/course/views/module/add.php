@@ -7,7 +7,7 @@ use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model common\models\Module */
 /* @var $form yii\widgets\ActiveForm */
-$this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/summernote.css?1425218701");
+//$this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/summernote.css?1425218701");
 ?>
 <style>
 	.checkbox.checkbox-styled>label>span:first-of-type {
@@ -46,9 +46,12 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/su
 								?></p>
 								<?= $form->field($model, 'featured_image')->fileInput(['class'=>'form-control'])->label(false) ?>
 								
-								<h4>Course Category</h4>
+								<h4>Program</h4>
 								<?php 
-								$data = ArrayHelper::map(Program::find()->all(), 'program_id', 'title');
+								if(Yii::$app->user->can("superadmin"))
+									$data = ArrayHelper::map(Program::find()->all(), 'program_id', 'title');
+								else
+									$data = ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title');
 								echo $form->field($model, 'program_id')->widget(Select2::classname(), [
 									'data' => $data,
 									'options' => ['placeholder' => 'Select Category'],
@@ -76,14 +79,12 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/su
 							<?php $form = ActiveForm::begin(); ?>
 								
 									<h4>Featured Video</h4>
-									<p><?php if(!$model->isNewRecord && $model->featured_video_url != ''){ ?>
-										<video width="320" height="240" controls>
-											<source src="<?=Yii::$app->homeUrl.$model->featured_video_url?>" type="video/mp4">
-										</video>
-									<?php } 
+									<p><?php if(!$model->isNewRecord && $model->featured_video_url != ''){ 
+										echo $model->featured_video_url;
+									} 
 									else echo 'This is used on the Course Overview page and will be displayed with the course description.';
 									?></p>
-									<?= $form->field($model, 'featured_video_url')->fileInput(['class'=>'form-control'])->label(false) ?>
+									<?= $form->field($model, 'featured_video_url')->textArea(['class'=>'form-control'])->label(false) ?>
 								
 								
 									<h4>Course Description	</h4>
@@ -153,9 +154,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/theme-default/libs/summernote/su
 
 </div><!--end .section-body -->
 <?php 
-$this->registerJsFile(\Yii::$app->homeUrl."js/libs/summernote/summernote.min.js");
-$this->registerJsFile(\Yii::$app->homeUrl."js/libs/multi-select/jquery.multi-select.js");
-$this->registerJsFile(\Yii::$app->homeUrl."js/libs/bootstrap-datepicker/bootstrap-datepicker.js")
+//$this->registerJsFile(\Yii::$app->homeUrl."js/libs/summernote/summernote.min.js");
+//$this->registerJsFile(\Yii::$app->homeUrl."js/libs/multi-select/jquery.multi-select.js");
+//$this->registerJsFile(\Yii::$app->homeUrl."js/libs/bootstrap-datepicker/bootstrap-datepicker.js")
 ?>
 <script>
 $(document).ready(function(){
