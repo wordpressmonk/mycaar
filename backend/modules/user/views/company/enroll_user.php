@@ -50,17 +50,17 @@ $this->params['breadcrumbs'][] = $this->title;
 					[	
 					'class' => 'yii\grid\CheckboxColumn',
 					'checkboxOptions' => function ($model, $key, $index, $column){
-						return ['checked' =>($model->enrolled==0)?true:false ,'value'=>$model->id];
+						return ['checked' =>($model->is_enrolled)?true:false ,'value'=>$model->id];
 					}  				
 					],					
 						'username', 								
 					 [
-						'attribute' => 'enrolled',
+						'attribute' => 'is_enrolled',
 						'format' => 'html',
 						'label' => 'Enrolled Status',					
-						'filter' => Html::activeDropDownList($searchModel, 'enrolled', [0=>'Enroll',1=>'UnEnrol'],['class'=>'form-control input-sm','prompt' => '--Enroll Status--']),
+						'filter' => Html::activeDropDownList($searchModel, 'is_enrolled', [1=>'Enroll',0=>'UnEnrol'],['class'=>'form-control input-sm','prompt' => '--Enroll Status--']),
 						'value' => function ($model, $key, $index, $column){
-							return ($model->enrolled==0)?'<i class="fa fa-check text-success"></i>':'<i class="fa fa-close text-danger"></i>';
+							return ($model->is_enrolled)?'<i class="fa fa-check text-success"></i>':'<i class="fa fa-close text-danger"></i>';
 
 						} 
 						

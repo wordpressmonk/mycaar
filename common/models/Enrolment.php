@@ -29,7 +29,7 @@ class Enrolment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['program_id', 'id', 'c_id', 'enrolled'], 'integer'],
+            [['program_id', 'id', 'c_id', 'is_enrolled'], 'integer'],
             [['program_id'], 'required'],
             [['username'], 'string', 'max' => 255],
         ];
@@ -45,7 +45,7 @@ class Enrolment extends \yii\db\ActiveRecord
             'id' => 'ID',
             'username' => 'Username',
             'c_id' => 'C ID',
-            'enrolled' => 'Enrolled',
+            'is_enrolled' => 'is_enrolled',
         ];
     }
 	 
