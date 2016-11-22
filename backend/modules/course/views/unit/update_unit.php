@@ -1,5 +1,6 @@
 <?php 
 
+use yii\helpers\Html;
 use yii\helpers\Url;
 use common\models\UnitElement;
 
@@ -11,9 +12,16 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 ?>
 <div class="section-body contain-lg">
-<h2>Lessons</h2>
+<h2 class="col-md-9">Lessons</h2>
+<?= Html::a('Preview', ['view', 'id' => $model->unit_id], ['class' => 'btn btn-info pull-right']) ?>
+
+
 <div class="row">
+
+		
+
 	<div class="col-lg-12">
+	
 	<div class="card tabs-left style-default-light">
 		<ul class="card-head nav nav-tabs tabs-info" data-toggle="tabs">
 			<?php foreach($module->units as $unit){
@@ -81,10 +89,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 						<div class="card-body">
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
-								//print_r($element);die;
-								//$data = json_decode($element->content);
 								$aw_data = $element->content;
-								//$formdata = str_replace(array("\r", "\n"), '', $formdata);
 							?>
 						<div id="aware_form"></div>
 						</div>
@@ -100,6 +105,10 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 					</div>
 					<div id="capability-test" class="collapse" aria-expanded="false">
 						<div class="card-body">
+							<?php 
+								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'cap_data'])->one();
+								$cp_data = $element->content;
+							?>
 						<div id="capability_form"></div>
 						</div>
 					</div>
@@ -147,7 +156,7 @@ $(document).ready(function(){
 	};
 	var unit_element_editor = $(document.getElementById('build-wrap'));
  	var formData = '<?= $formdata ?>';
-	console.log(formData);
+	//console.log(formData);
 	if (formData) {
 		unit_element_options.formData = formData;
 	}	 
@@ -163,7 +172,7 @@ $(document).ready(function(){
 			$('.field-unit-title').addClass('has-error');
 			return false;
 		}
-		console.log($(unit_element_editor).data('formBuilder').formData);
+		//console.log($(unit_element_editor).data('formBuilder').formData);
 		var builder_data = JSON.stringify({'html':$(unit_element_editor).data('formBuilder').formData});
 		//save to db
 		$.ajax({
@@ -186,7 +195,7 @@ $(document).ready(function(){
 	   controlPosition: 'left'
 	};
  	var aw_data = '<?= $aw_data ?>';
-	console.log(aw_data);
+	//console.log(aw_data);
 	if (aw_data) {
 		awareness_elements.formData = aw_data;
 	}	
@@ -196,31 +205,47 @@ $(document).ready(function(){
 	//SaveAwarenessTest
 	var saveBtn = document.querySelector('#frmb-2-save');
 	saveBtn.onclick = function() {
-	//console.log($("#aware_form").data('formBuilder'));
-	var form_data = $(awareness_editor).data('formBuilder').formData;
-/* 	$.each(form_data,function(){
-		console.log(form_data.attr('class'))
-	}); */
-	var awareness_data = JSON.stringify({'html':form_data});
-	//save to db
-	$.ajax({
-		url:'<?=Url::to(['unit/save-awareness-test'])?>',
-		data: {unit_id:'<?=$model->unit_id?>',awareness_data : awareness_data},
-		type: 'post',
-		dataType : 'json',
-		success : function(data){
-			//console.log(data);
-		}
-	});	
+		var form_data = $(awareness_editor).data('formBuilder').formData;
+		var awareness_data = JSON.stringify({'html':form_data});
+		//save to db
+		$.ajax({
+			url:'<?=Url::to(['unit/save-test','type'=>'aw'])?>',
+			data: {unit_id:'<?=$model->unit_id?>',data : awareness_data},
+			type: 'post',
+			dataType : 'json',
+			success : function(data){
+				//console.log(data);
+			}
+		});	
 	}
 	<!---------- end of awareness elements ------->
 	var cap_elements = {
 	  disableFields: ['autocomplete','button','checkbox','textarea','checkbox-group','hidden','select','header','date','number','file','paragraph','text','img','video','audio','textdisplay','fileupload','filedownload'],
 	   fieldRemoveWarn: true,
-	   controlPosition: 'left'
+	   controlPosition: 'left',
 	};
-	var fbTemplate = document.getElementById('capability_form');
-	$(fbTemplate).formBuilder(cap_elements);
+ 	var cp_data = '<?= $cp_data ?>';
+	//console.log(aw_data);
+	if (aw_data) {
+		cap_elements.formData = cp_data;
+	}	
+	var cap_editor = document.getElementById('capability_form');
+	$(cap_editor).formBuilder(cap_elements);
+	var saveBtn = document.querySelector('#frmb-4-save');
+	saveBtn.onclick = function() {
+		var form_data = $(cap_editor).data('formBuilder').formData;
+		var cap_data = JSON.stringify({'html':form_data});
+		//save to db
+		$.ajax({
+			url:'<?=Url::to(['unit/save-test','type'=>'cp'])?>',
+			data: {unit_id:'<?=$model->unit_id?>',data : cap_data},
+			type: 'post',
+			dataType : 'json',
+			success : function(data){
+				//console.log(data);
+			}
+		});	
+	}
 });
 <!---------- Save file -------------------->
 function saveFile(input){

@@ -20,6 +20,10 @@ use Yii;
  */
 class AwarenessQuestion extends \yii\db\ActiveRecord
 {
+	public $options;
+	public $answers;
+	public $isCorrect;
+
     /**
      * @inheritdoc
      */
