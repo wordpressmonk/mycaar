@@ -20,8 +20,8 @@ class SearchEnrolment extends Enrolment
     public function rules()
     {
         return [
-               [['id','enrolled'], 'integer'],	
-			   [['enrolled','username'], 'string'],
+               [['id','isenrolled'], 'integer'],	
+			   [['username'], 'string'],
 			   [['username'], 'safe'],				   
         ];
     }
@@ -62,7 +62,7 @@ class SearchEnrolment extends Enrolment
         } 
 		$query->andFilterWhere([
             'id' => $this->id,
-            'enrolled' => $this->enrolled,          
+            'isenrolled' => $this->isenrolled,          
            
         ]);
         
