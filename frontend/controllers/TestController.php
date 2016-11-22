@@ -15,6 +15,7 @@ use common\models\UnitReport as Report;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * UnitController implements the CRUD actions for Unit model.
@@ -31,6 +32,17 @@ class TestController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['learn', 'aw-test', 'retake'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+
                 ],
             ],
         ];
@@ -155,20 +167,7 @@ class TestController extends Controller
 			'errors' => false,
         ]);		
 	}
-    /**
-     * Lists all Unit models.
-     * @return mixed
-     */
-    public function actionCpTest($unit_id)
-    {
-        $searchModel = new SearchUnit();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 	public function saveAnswers($answers){
 		foreach($answers as $question=>$answer){				
 			$aw_answer = AwarenessAnswer::find()->where(['user_id'=>\Yii::$app->user->id,'question_id'=>$question])->one();

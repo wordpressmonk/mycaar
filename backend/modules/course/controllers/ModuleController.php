@@ -8,6 +8,7 @@ use common\models\search\SearchModule;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 
 /**
@@ -27,35 +28,21 @@ class ModuleController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+             'access' => [
+                'class' => AccessControl::className(),
+				'only' => ['create','delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create','delete'],
+                        'allow' => true,
+						'roles' => ['company_admin']
+                    ],
+                ],
+            ], 
         ];
     }
 
-    /**
-     * Lists all Module models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new SearchModule();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Module model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
 
     /**
      * Creates a new Module model.
@@ -92,37 +79,43 @@ class ModuleController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-		$current_image = $model->featured_image;
-		$current_video = $model->featured_video_url;
-        if ($model->load(Yii::$app->request->post())) {
-			
-			//Save featured image here
-			$model->featured_image = UploadedFile::getInstance($model, 'featured_image');
-			if(!empty($model->featured_image)) {
-				if(!$model->uploadImage())
-					return;
+		$program = $model->program;
+		if (\Yii::$app->user->can('manageProgram', ['post' => $program])) {
+			$current_image = $model->featured_image;
+			$current_video = $model->featured_video_url;
+			if ($model->load(Yii::$app->request->post())) {
+				
+				//Save featured image here
+				$model->featured_image = UploadedFile::getInstance($model, 'featured_image');
+				if(!empty($model->featured_image)) {
+					if(!$model->uploadImage())
+						return;
+				}
+				else
+					$model->featured_image = $current_image;
+				//end of saving image
+				
+				//save featured video
+/* 				$model->featured_video_url = UploadedFile::getInstance($model, 'featured_video_url');
+				if(!empty($model->featured_video_url)) {
+					if(!$model->uploadVideo())
+						return;
+				}
+				else
+					$model->featured_video_url = $current_video; */
+				//end of saving video
+				
+				if($model->save())
+					return $this->redirect(['update', 'id' => $model->module_id]);
+			} else {
+				return $this->render('add', [
+					'model' => $model,
+				]);
 			}
-			else
-				$model->featured_image = $current_image;
-			//end of saving image
-			
-			//save featured video
-			$model->featured_video_url = UploadedFile::getInstance($model, 'featured_video_url');
-			if(!empty($model->featured_video_url)) {
-				if(!$model->uploadVideo())
-					return;
-			}
-			else
-				$model->featured_video_url = $current_video;
-			//end of saving video
-			
-			if($model->save())
-				return $this->redirect(['update', 'id' => $model->module_id]);
-        } else {
-            return $this->render('add', [
-                'model' => $model,
-            ]);
-        }
+		}else{
+					//yii\web\ForbiddenHttpException
+					throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+				}
     }
 
     /**

@@ -33,7 +33,7 @@ class UserController extends Controller
 				'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view','create','update','delete'],
+                        'actions' => ['index', 'view','create','update','delete','bulk'],
                         'allow' => true,
 						'roles' => ['superadmin']
                     ],
@@ -56,7 +56,9 @@ class UserController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
+	public function actionBulk(){
+		print_R($_POST);
+	}
     /**
      * Displays a single User model.
      * @param integer $id
