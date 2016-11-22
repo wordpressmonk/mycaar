@@ -9,7 +9,7 @@ use common\models\Company;
 /* @var $searchModel common\models\search\SearchProgram */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Programs';
+$this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <h1><?= Html::encode($this->title) ?></h1>
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php print_r($dataProvider->models);?>
+        <?php //print_r($dataProvider->models);?>
     </p>
 	
     <?= GridView::widget([
