@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Enrolment;
 
+
 /**
  * SearchUser represents the model behind the search form about `common\models\Enrolment`.
  */
@@ -19,7 +20,9 @@ class SearchEnrolment extends Enrolment
     public function rules()
     {
         return [
-               [['id'], 'integer'],					
+               [['id','enrolled'], 'integer'],	
+			   [['enrolled','username'], 'string'],
+			   [['username'], 'safe'],				   
         ];
     }
 
@@ -41,43 +44,30 @@ class SearchEnrolment extends Enrolment
      */
     public function search($params)
     {
+		$query = Enrolment::find()->where(['c_id' =>Yii::$app->user->identity->c_id,'program_id'=>isset($params['program_id'])?$params['program_id']:'']);		
 		
-		
-		 if(\Yii::$app->user->can('company manage')) 
-		{
-			 $query = Enrolment::find();
-		} else if(\Yii::$app->user->can('company_admin'))
-		{			
-			 $query = Enrolment::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);
-		}
         // add conditions that should always apply here
 		
-	
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
-				'pageSize' => 10,
-				],
+				'pageSize' => 0,
+			],
         ]);
 			
         $this->load($params);
 
-	
-         if (!$this->validate()) {        
+        if (!$this->validate()) {        
             return $dataProvider;
         } 
-
-		
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'enrolled' => $this->enrolled,
+		$query->andFilterWhere([
+            'id' => $this->id,
+            'enrolled' => $this->enrolled,          
            
-            
         ]);
-
-        $query->andFilterWhere(['like', 'username', $this->username]);
+        
+		$query->andFilterWhere(['like', 'username', $this->username]);	
 		
-        return $dataProvider;
-		
+        return $dataProvider;		
     }
 }
