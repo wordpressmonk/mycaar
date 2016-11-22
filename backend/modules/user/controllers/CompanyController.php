@@ -22,7 +22,7 @@ use common\models\Location;
 use common\models\State;
 use common\models\Program;
 use common\models\QuickEmail;
-//use common\models\ProgramEnrollment as Enrollment2;
+use common\models\ProgramEnrollment;
 use common\models\Enrolment as Enrollment;
 use yii\db\Query;
 use yii\db\Command;
@@ -505,18 +505,18 @@ class CompanyController extends Controller
 		$model = new Enrollment();	
         $searchModel = new SearchEnrolment();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		if($post=Yii::$app->request->post()){
-				
+		if($post=Yii::$app->request->post()){			
 			if(isset($post['Program']) && ($post['action'] === "enrolled") && isset($post['selection']) )
 			{				
 					foreach($post['selection'] as $tmp1)
 					{
-						$check_userid = Enrollment::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp1])->one();
+						$model1 = new ProgramEnrollment();	
+						$check_userid = $model1::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp1])->one();
 						if(!$check_userid)
 						{
-							$model->program_id = $post['Program'];
-							$model->user_id = $tmp1;
-							$model->save();
+							$model1->program_id = $post['Program'];
+							$model1->user_id = $tmp1;
+							$model1->save();
 						} 
 					}				
 			}
@@ -524,7 +524,8 @@ class CompanyController extends Controller
 			{				
 					foreach($post['selection'] as $tmp2)
 					{
-						$model2 = Enrollment::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp2])->one();
+						$model2 = new ProgramEnrollment();	
+						$model2 = $model2::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp2])->one();
 						if($model2)
 							$model2->delete();
 					}								
@@ -534,7 +535,10 @@ class CompanyController extends Controller
             'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
 				]);
 		}
-        else { return $this->render('enroll_user', [
+        else { 
+				
+		
+			return $this->render('enroll_user', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
 			]);

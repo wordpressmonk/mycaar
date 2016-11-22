@@ -30,7 +30,7 @@ class Enrolment extends \yii\db\ActiveRecord
     {
         return [
             [['program_id', 'id', 'c_id', 'enrolled'], 'integer'],
-            [['username'], 'required'],
+            [['program_id'], 'required'],
             [['username'], 'string', 'max' => 255],
         ];
     }
@@ -48,4 +48,5 @@ class Enrolment extends \yii\db\ActiveRecord
             'enrolled' => 'Enrolled',
         ];
     }
+	 
 }
