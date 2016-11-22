@@ -207,7 +207,7 @@ class CompanyController extends Controller
 				$subject = "Verification Mail";
 				$fromemail = "info_notification@gmail.com";
 				$toemail = $model->email;
-				$username = $user->firstname." ".$user->lastname;
+				$username = $model->firstname." ".$model->lastname;
 				$message = "<br><br> Your Password:".$model->password."<br><br>After login, Please Kindly Delete this Message for security.";
 				 $email_status = Yii::$app->mail->compose(['html' => 'passwordSend-text'],['username'=>$username,'message'=>$message])
 				->setFrom($fromemail)
