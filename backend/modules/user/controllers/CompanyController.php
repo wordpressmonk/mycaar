@@ -15,12 +15,15 @@ use common\models\ImportFile;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use common\models\search\SearchUser;
+use common\models\search\SearchEnrolment;
 use common\models\Role;
 use common\models\Division;
 use common\models\Location;
 use common\models\State;
 use common\models\Program;
-use common\models\ProgramEnrollment as Enrollment;
+use common\models\QuickEmail;
+//use common\models\ProgramEnrollment as Enrollment2;
+use common\models\Enrolment as Enrollment;
 use yii\db\Query;
 use yii\db\Command;
 use yii\db\Connection;
@@ -185,19 +188,13 @@ class CompanyController extends Controller
 	public function actionCreateUser(){					
 			$model = new User();
 			$profile = new Profile();					
+			$quickemail = new QuickEmail();					
 			$roles = MyCaar::getChildRoles('company_admin');	
-
-		
-		if($model->load(Yii::$app->request->post()))  {
-				
+			
+		if($model->load(Yii::$app->request->post()))  {				
 			$model->setPassword($model->password);
 			$model->generateAuthKey();
-			$model->c_id = Yii::$app->user->identity->c_id;
-			
-			 if(\Yii::$app->user->can('company_admin')) {
-				$model->scenario = 'update_by_admin';			
-			} 
-	
+			$model->c_id = Yii::$app->user->identity->c_id;						
 			if($model->save())
 			{				
 				//handle the role first				
@@ -206,12 +203,34 @@ class CompanyController extends Controller
 				$auth->assign($authorRole, $model->id); 
 				
 				//$model->sendEmail(); develop this function
+				// Email Function is "Send Email to respective user"
+				$subject = "Verification Mail";
+				$fromemail = "info_notification@gmail.com";
+				$toemail = $model->email;
+				$username = $user->firstname." ".$user->lastname;
+				$message = "<br><br> Your Password:".$model->password."<br><br>After login, Please Kindly Delete this Message for security.";
+				 $email_status = Yii::$app->mail->compose(['html' => 'passwordSend-text'],['username'=>$username,'message'=>$message])
+				->setFrom($fromemail)
+				->setTo($toemail)
+				->setSubject($subject)
+				->send();
 				
 				if($profile->load(Yii::$app->request->post()))
 				{
 				 $profile->user_id = $model->id;			
 				 $profile->save();	
 				}
+				
+				// Email Message is saved in database
+				
+				$quickemail->c_id = Yii::$app->user->identity->c_id;
+				$quickemail->to_email = $toemail;
+				$quickemail->from_email = $fromemail;
+				$quickemail->subject = $subject;
+				$quickemail->message = $message;
+				$quickemail->status = $email_status;			
+				$quickemail->save();	
+				
 				
 				return $this->redirect(['view-user', 'id' => $model->id]);
 			} else
@@ -267,8 +286,9 @@ class CompanyController extends Controller
 			$profile = Profile::find()->where(['user_id'=>$id])->one();				
 			$roles = MyCaar::getChildRoles('company_admin');	
 			$model->role = $model->getRoleName();
+			
 		if(\Yii::$app->user->can('company_admin')) {
-			$model->scenario = 'update_by_admin';
+			$model->scenario = 'update_by_company_admin';
 		}
 		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -333,21 +353,21 @@ class CompanyController extends Controller
 				 {                  				 
 					 $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row,NULL,TRUE,FALSE);				   
 					//save to User  table.
-					 $usertabel = new User();
+					 $usertable = new User();
 					if(\Yii::$app->user->can('company_admin')) {
-						$usertabel->scenario = 'update_by_admin';
+						$usertable->scenario = 'update_by_admin';
 						}						
-						 $profiletabel = new Profile();	 
-						 $usertabel->email = $rowData[0][0];					
-						 $usertabel->username = $usertabel->email;					 
-						 $usertabel->generateAuthKey();
-						 $usertabel->c_id = Yii::$app->user->identity->c_id; 					
-						 $usertabel->role = 'user';	
+						 $profiletable = new Profile();	 
+						 $usertable->email = $rowData[0][0];					
+						 $usertable->username = $usertable->email;					 
+						 $usertable->generateAuthKey();
+						 $usertable->c_id = Yii::$app->user->identity->c_id; 					
+						 $usertable->role = 'user';	
 						 
 		/**  Random Password Generator **/
 		
 						 $random_pwd = sprintf("%06d", mt_rand(1, 999999));						 
-						 $usertabel->password_hash = Yii::$app->security->generatePasswordHash($random_pwd);
+						 $usertable->password_hash = Yii::$app->security->generatePasswordHash($random_pwd);
 						 
 		//***** Role check and Create Function *** //	
 		
@@ -355,15 +375,15 @@ class CompanyController extends Controller
 			$getroleid = array_search(strtolower(trim($rowData[0][1])), array_map('strtolower', $getrolename));
 			  if($getroleid)
 				{
-					$profiletabel->role = $getroleid;
+					$profiletable->role = $getroleid;
 				} else {
 					$rolenew = new Role();	
 					$rolenew->title = trim($rowData[0][1]);
-					$rolenew->company_id = $usertabel->c_id;
+					$rolenew->company_id = $usertable->c_id;
 					$rolenew->save();
 					
 				$newrole = array( $rolenew->role_id =>trim($rowData[0][1]));
-				$profiletabel->role = $rolenew->role_id;
+				$profiletable->role = $rolenew->role_id;
 				$getrolename = $getrolename + $newrole;				
 				}
 				
@@ -373,15 +393,15 @@ class CompanyController extends Controller
 			  $getdivisionid = array_search(strtolower(trim($rowData[0][3])), array_map('strtolower', $getdivisionname));
 			  if($getdivisionid)
 				{
-					$profiletabel->division = $getdivisionid;
+					$profiletable->division = $getdivisionid;
 				} else {
 					$divisionnew = new Division();	
 					$divisionnew->title = trim($rowData[0][3]);
-					$divisionnew->company_id = $usertabel->c_id;
+					$divisionnew->company_id = $usertable->c_id;
 					$divisionnew->save();
 					
 				$newdivision = array( $divisionnew->division_id =>trim($rowData[0][3]));
-				$profiletabel->division = $divisionnew->division_id;
+				$profiletable->division = $divisionnew->division_id;
 				$getdivisionname = $getdivisionname + $newdivision;				
 				}
 				
@@ -390,15 +410,15 @@ class CompanyController extends Controller
 			  $getlocationid = array_search(strtolower(trim($rowData[0][4])), array_map('strtolower', $getlocationname));
 			  if($getlocationid)
 				{
-					$profiletabel->location = $getlocationid;
+					$profiletable->location = $getlocationid;
 				} else {
 					$locationnew = new Location();	
 					$locationnew->name = trim($rowData[0][4]);
-					$locationnew->company_id = $usertabel->c_id;
+					$locationnew->company_id = $usertable->c_id;
 					$locationnew->save();
 					
 				$newlocation = array( $locationnew->location_id =>trim($rowData[0][4]));
-				$profiletabel->location = $locationnew->location_id;
+				$profiletable->location = $locationnew->location_id;
 				$getlocationname = $getlocationname + $newlocation;				
 				}
 				
@@ -408,42 +428,62 @@ class CompanyController extends Controller
 				 $getstateid = array_search(strtolower(trim($rowData[0][7])), array_map('strtolower', $getstatename));
 			  if($getstateid)
 				{
-					$profiletabel->state = $getstateid;
+					$profiletable->state = $getstateid;
 				} else {
 					$statenew = new State();	
 					$statenew->name = trim($rowData[0][7]);
-					$statenew->company_id = $usertabel->c_id;
+					$statenew->company_id = $usertable->c_id;
 					$statenew->save();
 					
 				$newstate = array( $statenew->state_id =>trim($rowData[0][7]));
-				$profiletabel->state = $statenew->state_id;
+				$profiletable->state = $statenew->state_id;
 				$getstatename = $getstatename + $newstate;				
 				}		
 						
 			//////////////////////////////
 			
-						 $profiletabel->employee_number = $rowData[0][2];
-						 $profiletabel->firstname = $rowData[0][5];
-						 $profiletabel->lastname = $rowData[0][6];			
-					 if($usertabel->save())
+						 $profiletable->employee_number = $rowData[0][2];
+						 $profiletable->firstname = $rowData[0][5];
+						 $profiletable->lastname = $rowData[0][6];			
+					 if($usertable->save())
 					 {			 
 						$auth = Yii::$app->authManager;
-						$authorRole = $auth->getRole($usertabel->role);
-						$auth->assign($authorRole, $usertabel->id); 
-						$profiletabel->user_id =  $usertabel->id;							
-					 	$profiletabel->save();  
+						$authorRole = $auth->getRole($usertable->role);
+						$auth->assign($authorRole, $usertable->id); 
+						$profiletable->user_id =  $usertable->id;							
+					 	$profiletable->save();  
 												
 			/******** Send Mail Function to Each User **********/
 				
-	
+				$subject = "Verification Mail";
+				$fromemail = "info_notification@gmail.com";
+				$toemail = $rowData[0][0];
+				$username= $profiletable->firstname." ".$profiletable->lastname;
+				$message = "<br><br> Your Password:".$random_pwd."<br><br>After login, Please Kindly Delete this Message for security.";
+				 $email_status = Yii::$app->mail->compose(['html' => 'passwordSend-text'],['username'=>$username,'message'=>$message])
+				->setFrom($fromemail)
+				->setTo($toemail)
+				->setSubject($subject)
+				->send();
+				
+				// Email Message is saved in database
+				$quickemail = new QuickEmail();	
+				$quickemail->c_id = Yii::$app->user->identity->c_id;
+				$quickemail->to_email = $toemail;
+				$quickemail->from_email = $fromemail;
+				$quickemail->subject = $subject;
+				$quickemail->message = $message;
+				$quickemail->status = $email_status;			
+				$quickemail->save();	
+				
 		   /******** Send Mail Function to Each User **********/		
 		  
 					 } else 
 					 {						
-						 $errors = $usertabel->errors;
+						 $errors = $usertable->errors;
 						 reset($errors);
 						 $listerror = current($errors);
-						 $error_report[] = $usertabel->username." -- ".$listerror[0];
+						 $error_report[] = $usertable->username." -- ".$listerror[0];
 					 }					 
 				 }				
 				if(isset($error_report) && empty($error_report))
@@ -463,7 +503,7 @@ class CompanyController extends Controller
 	public function actionEnrollUser($program_id=false)
     {		
 		$model = new Enrollment();	
-        $searchModel = new SearchUser();
+        $searchModel = new SearchEnrolment();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		if($post=Yii::$app->request->post()){
 				

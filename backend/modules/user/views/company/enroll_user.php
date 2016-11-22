@@ -54,15 +54,20 @@ $this->params['breadcrumbs'][] = $this->title;
 					}
 					],
 					'username', 
-					[
+				 	/* [
 						'format' => 'html',
 						'label' => 'Status',
 					 	'filter'=> Html::dropDownList('enrollcheck','',[''=>'--Status--',0=>'Enroll',1=>'UnEnrol'],['class'=>'form-control input-sm']), 						
 						'value' => function ($model, $key, $index, $column) use ($program_id) {
-							$stat = $model->isEnrolled($program_id);
-						return $model->isEnrolled($program_id)?'<i class="fa fa-check text-success"></i>':'<i class="fa fa-close text-danger"></i>';
-					}
-					],				
+							//$stat = $model->isEnrolled($program_id);
+						//return $model->isEnrolled($program_id)?'<i class="fa fa-check text-success"></i>':'<i class="fa fa-close text-danger"></i>';
+					
+							//return $model->isEnrolled($program_id)?'0':'1';
+					} 
+						
+					],	 */ 
+					'enrolled',
+					'id',
 				],
 				]);  ?>
 		<?php } ?>

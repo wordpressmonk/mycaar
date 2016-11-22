@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+
 /**
  * User model
  *
@@ -57,7 +58,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'email', 'role'], 'required'],
-			[['password'], 'required', 'except' => 'update_by_admin'],
+			[['password'], 'required', 'except' => ['update_by_admin','update_by_company_admin']],
             [['c_id'], 'integer'],           
             [['username', 'email'], 'string', 'max' => 255],
             [['username'], 'unique','targetClass' => '\common\models\User', 'message' => 'This Username has already been taken.'],
@@ -72,6 +73,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $scenarios = parent::scenarios();
         $scenarios['update_by_admin'] = ['role','c_id','username','email'];//Scenario Values Only Accepted
+        $scenarios['update_by_company_admin'] = ['role','c_id','username','email','password'];//Scenario Values Only Accepted
         return $scenarios;
     }
 	  /**
@@ -281,5 +283,5 @@ class User extends ActiveRecord implements IdentityInterface
 		 return false;
 		 
 	 }
-	 
+	 	
 }

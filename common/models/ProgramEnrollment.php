@@ -66,14 +66,4 @@ class ProgramEnrollment extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 	
-	
-	
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function isEnrolled()
-    {
-        return false;
-    }
-	
 }
