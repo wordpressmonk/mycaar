@@ -284,4 +284,7 @@ class User extends ActiveRecord implements IdentityInterface
 		 
 	 }
 	 	
+	 public function getPrograms(){
+		 return ProgramEnrollment::find()->select(['program_id'])->where(['user_id'=>$this->id])->asArray()->all();
+	 }
 }
