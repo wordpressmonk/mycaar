@@ -7,6 +7,8 @@ use common\models\Company;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 /* @var $form yii\widgets\ActiveForm */
+$this->title = 'Import File';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1>Import File</h1>
 <div class="card">
@@ -37,8 +39,6 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 
 	
     <?php $form = ActiveForm::begin( ['options' => ['enctype'=>'multipart/form-data'] ]); ?>
-	
-	<?= $form->errorSummary($model); ?>
 	
 	 <?= $form->field($model, 'upfile')->fileInput(['class'=>'form-control'])->label("Select Import Excel File Only");	?> 
 		

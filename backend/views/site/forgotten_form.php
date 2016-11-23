@@ -7,12 +7,15 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = 'Forgotten';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <p>Please fill out the following fields For Verification:</p>
+
+	
 		<?php 
 $sessioncheck = Yii::$app->session->getFlash('Success');
 if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
@@ -28,31 +31,17 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 <div id="w3-danger-0" class="alert-danger alert fade in">
 <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
 <?= Yii::$app->session->getFlash('Error'); ?>
-<?php 
-	echo "<br>"; 
-	$errordata = Yii::$app->session->getFlash('Error-data'); 
-	print implode(",<br> ", $errordata); 	
-	?>
 </div>
 <?php } ?>
-
-    <p>Please fill out the following fields to login:</p>
 
     <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label("Username / Email ID") ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-				<div class="form-group">				
-						<a  href="<?=Yii::$app->homeUrl;?>site/forgotten">Forgotten?</a>					
-				</div>
-				
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
+                <?= $form->field($model, 'username')->textInput(['autofocus' => true,'value' => ''])->label("Username / Email ID") ?>
+		
                 <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

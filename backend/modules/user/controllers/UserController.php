@@ -82,6 +82,7 @@ class UserController extends Controller
 		$profile = new Profile();
 		$roles = $this->getRoles();
         if ($model->load(Yii::$app->request->post())) {
+			$model->username = $model->email;
 			$model->setPassword($model->password);
 			$model->generateAuthKey();
 			if($model->save())
@@ -93,6 +94,19 @@ class UserController extends Controller
 				//$model->sendEmail(); develop this function
 				$profile->user_id = $model->id;
 				$profile->save();
+				
+				//$model->sendEmail(); develop this function
+				// Email Function is "Send Email to respective user"
+				$subject = "YOUR VERIFIED EMAIL ID";
+				$fromemail = "info_notification@gmail.com";
+				$toemail = $model->email;
+				$username = $model->email;		
+				 $email_status = Yii::$app->mail->compose(['html' => 'passwordSend-text'],['username'=>$username,'model'=>$model])
+				->setFrom($fromemail)
+				->setTo($toemail)
+				->setSubject($subject)
+				->send();
+				
 				return $this->redirect(['view', 'id' => $model->id]);
 			}
             else{
@@ -135,13 +149,20 @@ class UserController extends Controller
 		$model->role = $model->getRoleName();
 		$profile = Profile::find()->where(['user_id'=>$id])->one();
 		$roles = $this->getRoles();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		
+        if ($model->load(Yii::$app->request->post())) {
 			//handle the role first
-			$auth = Yii::$app->authManager;
-			$auth->revokeAll($id);
-			$authorRole = $auth->getRole($model->role);
-			$auth->assign($authorRole, $model->id);
-            return $this->redirect(['view', 'id' => $model->id]);
+			$model->username = $model->email;
+			if($model->save())
+			{
+				$auth = Yii::$app->authManager;
+				$auth->revokeAll($id);
+				$authorRole = $auth->getRole($model->role);
+				$auth->assign($authorRole, $model->id);
+				return $this->redirect(['view', 'id' => $model->id]);
+			} else {
+               return $this->render('update', ['model' => $model,'profile' => $profile,'roles' => $roles,]);
+			}
         } else {
             return $this->render('update', [
                 'model' => $model,

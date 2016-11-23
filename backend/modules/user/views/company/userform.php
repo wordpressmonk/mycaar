@@ -24,9 +24,9 @@ use common\models\Role;
 		
 		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true]) ?>
 		
-		<?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+		<?php /* $form->field($model, 'username')->textInput(['maxlength' => true]) */ ?>
 
-		<?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID") ?>
 
 		<?= $form->field($model, 'password')->passwordInput() ?>
 

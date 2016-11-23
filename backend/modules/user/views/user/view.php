@@ -2,11 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\models\MyCaar;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 
-$this->title = $model->username;
+$this->title = $model->email;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -29,16 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'username',
-            //'auth_key',
-            //'password_hash',
-            //'password_reset_token',
-            'email:email',
-            //'role',
-            //'c_id',
-            //'status',
-            //'created_at',
-            //'updated_at',
+			[
+				 'label'=>'Username / Email ID',
+				 'value' =>$model->email,
+			],
+			[
+				'attribute' => 'role', 
+				'label' => 'User Access Level',
+				'value' => MyCaar::getRoleNameByUserid($model->id),
+			],
         ],
     ]) ?>
 
