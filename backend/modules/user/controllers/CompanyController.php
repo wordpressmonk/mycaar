@@ -191,7 +191,12 @@ class CompanyController extends Controller
 				$auth = Yii::$app->authManager;
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id); 
-				
+				//save user profile
+				if($profile->load(Yii::$app->request->post()))
+				{
+				 $profile->user_id = $model->id;			
+				 $profile->save();	
+				}				
 				//$model->sendEmail(); develop this function
 				// Email Function is "Send Email to respective user"
 				$subject = "YOUR VERIFIED EMAIL ID";
@@ -203,12 +208,6 @@ class CompanyController extends Controller
 				->setTo($toemail)
 				->setSubject($subject)
 				->send();
-				
-				if($profile->load(Yii::$app->request->post()))
-				{
-				 $profile->user_id = $model->id;			
-				 $profile->save();	
-				}
 	
 				return $this->redirect(['view-user', 'id' => $model->id]);
 			} else
