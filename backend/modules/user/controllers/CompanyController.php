@@ -505,7 +505,7 @@ class CompanyController extends Controller
 		$model = new Enrollment();	
         $searchModel = new SearchEnrolment();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		if($post=Yii::$app->request->post()){			
+		if($post=Yii::$app->request->post()){	
 			if(isset($post['Program']) && ($post['action'] === "enrolled") && isset($post['selection']) )
 			{				
 					foreach($post['selection'] as $tmp1)

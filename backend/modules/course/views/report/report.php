@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 use common\models\Program;
 use common\models\User;
@@ -55,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		{
 		echo '<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell-8-col">
-				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : checktest1</h4></span>
+				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4></span>
 			</div>
 		</div>';
 		echo '<div class="horizontal al_cpp_category_16">
@@ -112,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
 														//else echo '<span class="first_heading" style="display: none">Capable</span>';
 														echo "<div name='unit1'>
 
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=''><span class='toolkit'><center>{$progress['cp']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id])."><span class='toolkit'><center>{$progress['cp']}</center></span>
 															</a>
 
 														</div>
@@ -132,17 +133,33 @@ $this->params['breadcrumbs'][] = $this->title;
 			} //if unit count
 		}
 		echo "</div></div>";
+		?>
+		<div class="name_list">
+			<div class="section1" ></div>
+		<?php
 			foreach($users as $user){
 				if($user->user->isEnrolled($program->program_id)){
+					$name = $user->firstname. " ". $user->lastname;
+					if($name == '')
+						$name = $user->user->username;
+					//$progress = 0;
+					$progress = $user->user->getProgramProgress($program->program_id);
 					echo '
 					<div class="mdl-grid" >
 						<div class="mdl-cell mdl-cell--3-col mdl-bar" >
-							<div class="mdl-card--border"><span class="mdl-text">0%</span><span class="mdl-label">Rahul Dravid</span></div>
+							<div class="mdl-card--border"><span class="mdl-text">'.$progress.'%</span><span class="mdl-label">'.$name.'</span></div>
 						</div>
 					</div>';
 				}
 			}
+		?>
+		</div>
+		<?php
 		} //module count && enrollment count
 	}
+	//FOR DEBUG
+ 	foreach($users as $user){
+	$progress = $user->user->getProgramProgress(1);
+	} 
 		?>
 	

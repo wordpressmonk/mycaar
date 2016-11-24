@@ -313,8 +313,41 @@ class User extends ActiveRecord implements IdentityInterface
 	 }	 
 	 
 	 public function getProgramProgress($program_id){
-		 
+		 $program = Program::findOne($program_id);
 		 //total units
+		 $modules = $program->modules;
+		 $total_modules = count($modules);
+		 $modules_completed = [];
+		 foreach($modules as $module){
+			$units = $module->units; 
+			$total_units = count($units);
+			$units_completed = [];
+			foreach($units as $unit)
+			{
+				$capabilty_progress = $awareness_progress = 0;
+				$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
+				$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$this->id])->one();
+				if($report){
+					if(!$c_status)
+						$capabilty_progress = 100;
+					else $capabilty_progress = $report->capability_progress;
+					$awareness_progress = $report->awareness_progress;					
+				}				
+				if($capabilty_progress == 100 && $awareness_progress == 100){
+					
+					$units_completed[] = $unit->unit_id;
+				}
+					
+				
+			}
+			//print_R($units_completed);
+			if(count($units_completed) == $total_units)
+				$modules_completed[] = $module->module_id;
+		 }
+
+		 //print_R($modules_completed);
 		 //total units completed (aw + cp)
+		 $progress =  (count($modules_completed)/$total_modules)*100;
+		 return (int)$progress;
 	 }
 }

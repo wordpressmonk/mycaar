@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					[	
 					'class' => 'yii\grid\CheckboxColumn',
 					'checkboxOptions' => function ($model, $key, $index, $column){
-						return ['checked' =>($model->is_enrolled)?true:false ,'value'=>$model->id];
+						return ['checked' =>false ,'value'=>$model->id];
 					}  				
 					],					
 						'username', 								

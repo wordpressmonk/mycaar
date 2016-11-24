@@ -136,6 +136,7 @@ overflow-y:scroll;
 
     #content{
         background-color: white;
+        margin-bottom: 125px;
     }
     #base{
         background-color: white;
@@ -506,7 +507,7 @@ overflow-y:scroll;
         width: 317px;
         background: #e3e3e3;
         height: 41px;
-        margin-top: -171px;
+        margin-top: -4px;
     }
     .mdl-card--border{
         border: 1px solid #008000;
@@ -515,7 +516,16 @@ overflow-y:scroll;
     }
 
     .mdl-grid{
-        margin-bottom: 31px;
+        margin-bottom: -15px;
+    }
+
+    /*extra section*/
+
+    .section1{
+        width: 317px;
+        background: none;
+        height: 132px;
+        margin-top: -300px;
     }
 
 }
@@ -629,6 +639,7 @@ overflow-y:scroll;
 
     #content {
         background-color: white;
+        margin-bottom: 125px;
     }
     #base {
         background-color: white;
@@ -1005,7 +1016,7 @@ overflow-y:scroll;
         width: 317px;
         background: #e3e3e3;
         height: 41px;
-        margin-top: -171px;
+        margin-top: -4px;
     }
 
     .mdl-card--border{
@@ -1015,10 +1026,16 @@ overflow-y:scroll;
     }
 
     .mdl-grid{
-        margin-bottom: 31px;
+        margin-bottom: -15px;
+    }
+
+    .section1{
+        width: 317px;
+        background: none;
+        height: 132px;
+        margin-top: -300px;
     }
 
 }
-
 
 
