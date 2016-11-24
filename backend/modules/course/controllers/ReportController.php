@@ -44,7 +44,8 @@ class ReportController extends Controller
 		if($param = \Yii::$app->request->post()){	
 			//find program
 			if(isset($param['program']) && $param['program'] !=''){
-				$programs[] = $param['program'];
+				
+				$programs[] = Program::find()->where(['program_id'=>$param['program']])->one();;
 			}else{
 				$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
 			}

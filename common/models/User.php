@@ -287,4 +287,34 @@ class User extends ActiveRecord implements IdentityInterface
 	 public function getPrograms(){
 		 return ProgramEnrollment::find()->select(['program_id'])->where(['user_id'=>$this->id])->asArray()->all();
 	 }
+	 
+	 public function getUnitProgress($unit_id){
+		 
+		 $report = UnitReport::find()->where(['unit_id'=>$unit_id,'student_id'=>$this->id])->one();
+		 $output = ['ap'=>'red','cp'=>'red'];
+		 $c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit_id])->one();
+			 if(!$c_status)
+				 $output['cp'] = 'grey';
+		 if(!$report)
+			 return $output;
+		 else 
+		 {
+			 //setting both to amber first,if capability test exists
+			 if(!$c_status)
+				 $output = ['ap'=>'amber','cp'=>'grey'];
+			 else $output = ['ap'=>'amber','cp'=>''];
+			 //then see the progress
+			 if($report->awareness_progress == 100)
+				 $output['ap'] = 'green';
+			 if($report->capability_progress == 100)
+				 $output['cp'] = 'green';			 
+		 }
+			 return $output; 
+	 }	 
+	 
+	 public function getProgramProgress($program_id){
+		 
+		 //total units
+		 //total units completed (aw + cp)
+	 }
 }
