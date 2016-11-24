@@ -74,4 +74,16 @@ class LoginForm extends Model
         }		
         return $this->_user;
     }
+	
+	
+	 public function Usernamecheck($username)
+    {	
+		if($username)
+		{			
+         $user =  User::findByUsername($username);
+		 return $user;
+		}
+		else 
+		  return false;
+    }
 }

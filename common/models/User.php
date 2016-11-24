@@ -28,6 +28,9 @@ class User extends ActiveRecord implements IdentityInterface
 	public $fullname;
 	public $role;
 	public $password;
+	public $old_password;
+	public $new_password;
+	public $confirm_password;
 
 	
     const STATUS_DELETED = 0;
@@ -57,8 +60,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'email', 'role'], 'required'],
-			[['password'], 'required', 'except' => ['update_by_admin','update_by_company_admin']],
+            [['email', 'role'], 'required','except' => ['apply_changepassword']],
+			['email', 'email'],
+			[['password'], 'required', 'except' => ['update_by_admin','update_by_company_admin','apply_forgotpassword']],
             [['c_id'], 'integer'],           
             [['username', 'email'], 'string', 'max' => 255],
             [['username'], 'unique','targetClass' => '\common\models\User', 'message' => 'This Username has already been taken.'],
@@ -66,14 +70,22 @@ class User extends ActiveRecord implements IdentityInterface
             [['password_reset_token'], 'unique'],			
 			['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+			
+			[['old_password','new_password','confirm_password'],'required','on' => ['apply_changepassword']],
+			[['old_password'],'validateCurrentPassword'],
+			[['new_password','confirm_password'],'string','min'=>6,'max'=>15],
+			[['new_password','confirm_password'],'filter','filter'=>'trim'],
+			[['confirm_password'],'compare','compareAttribute'=>'new_password','message'=>'Password do not match'],
         ];
     }
 	
 	public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['update_by_admin'] = ['role','c_id','username','email'];//Scenario Values Only Accepted
-        $scenarios['update_by_company_admin'] = ['role','c_id','username','email','password'];//Scenario Values Only Accepted
+        $scenarios['update_by_admin'] = ['role','c_id','email'];//Scenario Values Only Accepted
+        $scenarios['update_by_company_admin'] = ['role','c_id','email','password'];//Scenario Values Only Accepted
+        $scenarios['apply_forgotpassword'] = ['email'];//Scenario Values Only Accepted
+        $scenarios['apply_changepassword'] = ['old_password','new_password','confirm_password'];//Scenario Values Only Accepted
         return $scenarios;
     }
 	  /**
@@ -274,15 +286,26 @@ class User extends ActiveRecord implements IdentityInterface
 	}
 	
 
-	 public function isEnrolled($program_id){
-		 if(!$program_id)
-			 return false;
-		 //see if the user is enrolled
-		 if(ProgramEnrollment::find()->where(['user_id'=>$this->id,'program_id'=>$program_id])->one())
-			 return true;
-		 return false;
-		 
-	 }
+	 /**
+     * Validates Current password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validateCurrentPassword()
+    { 
+       if(!$this->verifyPassword($this->old_password))
+	   {
+		   $this->addError('old_password','Current Password Incorrect');
+	   }
+    }
+	
+	 public function verifyPassword($password)
+    {
+       $dbpassword = static::findOne(['username'=>Yii::$app->user->identity->username,'status'=>self::STATUS_ACTIVE])->password_hash;
+	   
+	   return Yii::$app->security->validatePassword($password, $dbpassword);
+    }
 	 	
 	 public function getPrograms(){
 		 return ProgramEnrollment::find()->select(['program_id'])->where(['user_id'=>$this->id])->asArray()->all();

@@ -7,7 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\User;
-use backend\models\SetPassword;
+use common\models\SetPassword;
 
 /**
  * Site controller
@@ -33,11 +33,19 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
 					[
-                        'actions' => ['set-password', 'error'],
+                        'actions' => ['reset-password', 'error'],
                         'allow' => true,
                     ],
 					[
                         'actions' => ['pwdregister', 'error'],
+                        'allow' => true,
+                    ],
+					[
+                        'actions' => ['forgotten', 'error'],
+                        'allow' => true,
+                    ],
+					[
+                        'actions' => ['change-password', 'error'],
                         'allow' => true,
                     ],
                 ],
@@ -103,60 +111,127 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
 	
-	public function actionSetPassword($authkey)
-    {		
-		if(isset($authkey))
-		{
-			$model = new User();
-			$ckuser = User::find()->where(['auth_key'=>$authkey])->one();	
-			//$ckuser = User::find()->where(['auth_key'=>$authkey,'password_hash' =>''])->one();	
+	// Forgot Password Form Generation
+	
+	public function actionForgotten()
+    {
+		$this->layout = "login";
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $model = new LoginForm();		
+        if ($model->load(Yii::$app->request->post())) {					
+			$userdetails = $model->Usernamecheck($model->username);		
+			if($userdetails)
+			{
+			$model2 = User::find()->where(['id'=>$userdetails->id])->one();
 			
-			if(isset($ckuser) && !empty($ckuser))
+			// password_reset_token field is generated
+			$model2->generatePasswordResetToken();	
+			$model2->scenario = 'apply_forgotpassword';		
+			if($model2->save())
 			{	
+				$subject = "Reset-Password Link";
+				$fromemail = "info_notification@gmail.com";
+				$toemail = $userdetails->email;
+				$username = $userdetails->email;		
+				 $email_status = Yii::$app->mail->compose(['html' => 'passwordResetToken-html'],['user'=>$model2])
+				->setFrom($fromemail)
+				->setTo($toemail)
+				->setSubject($subject)
+				->send();
 				
-				$this->layout = "login";
-					$model = new SetPassword();
-				return $this->render('setpassword', ['model' => $model,'user_id'=>$ckuser->id]);
+			   Yii::$app->getSession()->setFlash('Success', 'Reset-Password Link Send to Your Email ID!!!.');
+			   
 			} else {
-				Yii::$app->getSession()->setFlash('Error', 'Already you used it!!!.');	
-				return $this->redirect('login');
+				Yii::$app->getSession()->setFlash('Error', 'Invalid Username Or Email ID, Please Try Again !!!.');
+				 
 			}
-			
-		} else {		
-			Yii::$app->getSession()->setFlash('Error', 'Invalid value !!!.');	
+				return $this->render('forgotten_form', ['model' => $model]);
+			} else {
+				Yii::$app->getSession()->setFlash('Error', 'Invalid Username Or Email ID, Please Try Again !!!.');
+				return $this->render('forgotten_form', ['model' => $model]);
+			}
+        } else {
+            return $this->render('forgotten_form', ['model' => $model]);
+        }
+		
+    }
+	
+	
+	// Email-link through Reset-link
+	
+	public function actionResetPassword($token)
+    {		
+	
+		if($token)
+		{ 
+			$model = new User();
+			$ckuser = User::find()->where(['password_reset_token'=>$token])->one();				
+			if($ckuser)
+			{	
+				$this->layout = "login";
+				$model = new SetPassword();
+				return $this->render('setpassword', ['model' => $model,'user_id'=>$ckuser->id]);
+			} else { 
+				return $this->redirect('login');
+			}			
+		} else { 		
 			return $this->redirect('login');
 		}
-		
-        
-
 	}
+	
+	// Generate New Password For Forgot Link 
 	
  	public function actionPwdregister()
     {		
 		$this->layout = "login";		
-		$model = new SetPassword();			
-        if ($model->load(Yii::$app->request->post())) {	
-			$password = Yii::$app->request->post()['SetPassword']['password_hash'];
-			$userid = Yii::$app->request->post()['SetPassword']['userid'];
-			
-			$password_hash = Yii::$app->security->generatePasswordHash($password);
-			$model2 = User::findOne($userid);
+		$model = new  SetPassword();	
+		$model2 = new User();			
+        if ($model->load(Yii::$app->request->post())) {					
+			$password = $model->password_hash;
+			$userid =  $model->id;			
+			$password_hash = Yii::$app->security->generatePasswordHash($password);							
+			$model2 = User::findOne($userid);		
 			$model2->password_hash = $password_hash;
-			$model2->update();			
-			Yii::$app->getSession()->setFlash('Success', 'Password Set successfully, Please Login Once!!!.');	
-			return $this->redirect('logout');
+			if($model2->password_hash)
+			{ 
+			$model2->password_reset_token = '';
+			$model2->save(false);	
+			 Yii::$app->getSession()->setFlash('Success', 'Password Set successfully, Please Login Once!!!.');	
+			} else {
+			 Yii::$app->getSession()->setFlash('Error', 'Please Try Again!!!.');
+			}
+			return $this->redirect('login');
 		}
-		else{
-			Yii::$app->getSession()->setFlash('Error', 'Please Try Again!!!.');
-			return $this->redirect('logout');
+		else{			
+			return $this->redirect('reset-password');
 		}
 		
-		
-	
 	} 
+	
+	// Change Password Form Generation
+	
+	public function actionChangePassword()
+    {		
+		//$model = new SetPassword();
+		$model = Yii::$app->user->identity;
+		$model->scenario = 'apply_changepassword';
+		 if ($model->load(Yii::$app->request->post())) {			
+			 $model->setPassword($model->new_password);			
+			 if($model->save())
+			 {
+				 Yii::$app->getSession()->setFlash('Success', 'You have successfully change your password !!!.');	
+			 } else {
+				 return $this->render('change_password', ['model' => $model]);				
+			 }
+			 
+			 return $this->refresh();
+		 }
+		return $this->render('change_password', ['model' => $model]);	
+	}
 	
 }

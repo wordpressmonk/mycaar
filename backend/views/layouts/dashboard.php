@@ -254,6 +254,7 @@ AppAsset::register($this);
 								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Location</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">State</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Role</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>site/change-password" ><span class="title">Change Password</span></a></li>
 								
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->

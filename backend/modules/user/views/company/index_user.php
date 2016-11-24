@@ -19,16 +19,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card-body">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create User', ['create-user'], ['class' => 'btn btn-success']) ?>
-		
-		<?php if(\Yii::$app->user->can('company_admin')) { ?>
-		  <?= Html::a('Import User', ['importexcel'], ['class' => 'btn btn-info','style'=>'margin-left:76%']) ?>
-		<?php } ?>
-		 
-    </p>
+ <div class="row">
+		<div class="col-md-6">
+			<?= Html::a('Create User', ['create-user'], ['class' => 'btn btn-success']) ?>
+		</div>	
+		<div class="col-md-6">
+		  <?php if(\Yii::$app->user->can('company_admin')) { ?>
+			<?= Html::a('Import User', ['importuser/importexcel'], ['class' => 'btn btn-info pull-right']) ?>
+		  <?php } ?>
+		</div>	 
+</div>	 
+  
 	
-	
+	<div class="small-padding"></div>
 	  
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -37,8 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
 
-            'username',
-			'email:email',			
+            ['label' => 'Username / Email ID',
+				'attribute' => 'email',			
+			 ],			
 		
 			[
   'class' => 'yii\grid\ActionColumn',

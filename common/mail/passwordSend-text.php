@@ -8,8 +8,12 @@ $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/login']);
 
 Hello <?= $username?>,
 
-<?= $message ?>
+<br>Your Username/Email ID: <?= $model->email ?>
+<br>Your Password: <?= $model->password ?>
 
+<br>After login, Please Kindly Delete this Message for security.
+
+<br>
 Thanks, 
 <br>
 <?= $resetLink ?>

@@ -34,8 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'firstname',
             'lastname',
-            'user.username',
-            'user.email',			
+			[
+				 'label'=>'Username / Email ID',
+				 'value' =>$model->user->email,
+			],
+			
 			[
 				'attribute' => 'role', 
 				'label' => 'User Access Level',
