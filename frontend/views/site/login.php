@@ -15,6 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>Please fill out the following fields to login:</p>
 
+	
+			<?php 
+$sessioncheck = Yii::$app->session->getFlash('success');
+if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
+<div id="w3-success-0" class="alert-success alert fade in">
+<button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+<?= Yii::$app->session->getFlash('success'); ?>
+</div>
+<?php } ?>
+
+<?php 
+$sessioncheck = Yii::$app->session->getFlash('error');
+if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
+<div id="w3-danger-0" class="alert-danger alert fade in">
+<button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+<?= Yii::$app->session->getFlash('error'); ?>
+</div>
+<?php } ?>
+
+
     <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
@@ -25,6 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
+				<div style="color:#999;margin:1em 0">
+                    <?= Html::a('create account', ['site/signup?companyslug='.$companyslug]) ?>
+                </div>
                 <div style="color:#999;margin:1em 0">
                     If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
                 </div>

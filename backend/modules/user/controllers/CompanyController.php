@@ -86,10 +86,11 @@ class CompanyController extends Controller
 			}			
 			if($model->save())
 				return $this->redirect(['view', 'id' => $model->company_id]);
+			else
+				return $this->render('create', ['model' => $model]);
+			
         } else {		
-         return $this->render('create', [
-                'model' => $model
-            ]);
+         return $this->render('create', ['model' => $model]);
         }
     }
 
@@ -130,6 +131,8 @@ class CompanyController extends Controller
 			
 			if($model->save())
 				return $this->redirect(['view', 'id' => $model->company_id]);
+			else 
+				return $this->render('update', ['model' => $model, ]);
 		
         } else {
             return $this->render('update', [
@@ -192,17 +195,8 @@ class CompanyController extends Controller
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id); 
 				
-				//$model->sendEmail(); develop this function
 				// Email Function is "Send Email to respective user"
-				$subject = "YOUR VERIFIED EMAIL ID";
-				$fromemail = "info_notification@gmail.com";
-				$toemail = $model->email;
-				$username = $model->email;		
-				 $email_status = Yii::$app->mail->compose(['html' => 'passwordSend-text'],['username'=>$username,'model'=>$model])
-				->setFrom($fromemail)
-				->setTo($toemail)
-				->setSubject($subject)
-				->send();
+				$model->sendEmail($model->password); 
 				
 				if($profile->load(Yii::$app->request->post()))
 				{

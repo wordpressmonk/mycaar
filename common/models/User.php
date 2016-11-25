@@ -60,7 +60,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['email', 'role'], 'required','except' => ['apply_changepassword']],
+            [['email', 'role'], 'required','except' => ['apply_changepassword','apply_setpassword']],
 			['email', 'email'],
 			[['password'], 'required', 'except' => ['update_by_admin','update_by_company_admin','apply_forgotpassword']],
             [['c_id'], 'integer'],           
@@ -70,6 +70,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['password_reset_token'], 'unique'],			
 			['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+			
 			
 			[['old_password','new_password','confirm_password'],'required','on' => ['apply_changepassword']],
 			[['old_password'],'validateCurrentPassword'],
@@ -85,13 +86,14 @@ class User extends ActiveRecord implements IdentityInterface
         $scenarios['update_by_admin'] = ['role','c_id','email'];//Scenario Values Only Accepted
         $scenarios['update_by_company_admin'] = ['role','c_id','email','password'];//Scenario Values Only Accepted
         $scenarios['apply_forgotpassword'] = ['email'];//Scenario Values Only Accepted
+        $scenarios['apply_setpassword'] = ['password_hash','password_reset_token'];//Scenario Values Only Accepted
         $scenarios['apply_changepassword'] = ['old_password','new_password','confirm_password'];//Scenario Values Only Accepted
         return $scenarios;
     }
 	  /**
      * @inheritdoc
      */
-	   public function attributeLabels()
+	public function attributeLabels()
     {
         return [
             'id' => 'ID',
@@ -306,5 +308,55 @@ class User extends ActiveRecord implements IdentityInterface
 	   
 	   return Yii::$app->security->validatePassword($password, $dbpassword);
     }
-	 	
+	 
+
+ public function sendEmail($password)
+    {
+        /* @var $user User */
+        $user = User::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'email' => $this->email,
+        ]);
+			
+        if (!$user) {
+            return false;
+        }
+        
+        return Yii::$app
+            ->mail
+            ->compose(
+                ['html' => 'passwordSend-text'],
+                ['user' => $user,'password'=>$password]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setTo($this->email)
+            ->setSubject('YOUR VERIFIED EMAIL ID')
+            ->send();
+    }
+
+
+ public function sendEmailForgotPassword()
+    {
+        /* @var $user User */
+        $user = User::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'email' => $this->email,
+        ]);
+			
+        if (!$user) {
+            return false;
+        }
+        
+        return Yii::$app
+            ->mail
+            ->compose(
+                ['html' => 'passwordResetToken-html'],
+                ['user' => $user]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setTo($this->email)
+            ->setSubject('Reset-Password Link')
+            ->send();
+    }	
+	
 }

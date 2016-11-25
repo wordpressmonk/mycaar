@@ -53,6 +53,12 @@ return [
             'rules' => [
             ],
         ],
+		'urlManagerFrontEnd' => [
+            'class' => 'yii\web\urlManager',
+            'baseUrl' => '/mycaar/frontend/web',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+        ],
 
     ],
     'params' => $params,
