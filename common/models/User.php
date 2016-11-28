@@ -348,8 +348,8 @@ class User extends ActiveRecord implements IdentityInterface
 		 }
 			 return $output; 
 	 }	 
-	 
-	 public function getProgramProgress($program_id){
+	 //deprecated, cause the client discarded this logic
+	 public function getProgramProgressDeprecated($program_id){
 		 $program = Program::findOne($program_id);
 		 //total units
 		 $modules = $program->modules;
@@ -388,7 +388,42 @@ class User extends ActiveRecord implements IdentityInterface
 		 return (int)$progress;
 	 }
 	 
+	 public function getProgramProgress($program_id){
+		 $program = Program::findOne($program_id);
+		 //total units
+		 $modules = $program->modules;
+		 $total_tests = 0;
+		 $tests_completed = 0;
+		 foreach($modules as $module){
+			$units = $module->units; 
+			foreach($units as $unit)
+			{
+				$n_tests = 2;
+				$capabilty_progress = $awareness_progress = 0;
+				$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
+				if(!$c_status)
+					$n_tests = 1;
+				$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$this->id])->one();
+				if($report){
+					$capabilty_progress = $report->capability_progress;
+					$awareness_progress = $report->awareness_progress;					
+				}				
+				if($capabilty_progress == 100 )					
+					$tests_completed = $tests_completed+1;
+				if($awareness_progress == 100 )					
+					$tests_completed = $tests_completed+1;
 
+				$total_tests = 	$total_tests + $n_tests;
+				
+			}
+		 }
+
+		 //print_R($modules_completed);
+		 //total units completed (aw + cp)
+		 $progress =  ($tests_completed/$total_tests)*100;
+		 return (int)$progress;
+	 }
+	 
  public function sendEmail($password)
     {
         /* @var $user User */

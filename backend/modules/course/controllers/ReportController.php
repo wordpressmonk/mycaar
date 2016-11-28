@@ -44,12 +44,8 @@ class ReportController extends Controller
         ]);
     }
 
-	public function actionSearch(){
-		
-		//if user
-		
+	public function actionSearch(){		
 		$programs = $users = [];
-		
 		if($param = \Yii::$app->request->post()){	
 			//find program
 			if(isset($param['program']) && $param['program'] !=''){
@@ -58,16 +54,14 @@ class ReportController extends Controller
 			}else{
 				$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
 			}
-			
-			//if any of the user parametr is filled,then search for that users
-			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);
 			$query = UserProfile::find();
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
-			]);
+			]);	
 			$query->joinWith(['user']);
-			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
-			
+			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
+			//if any of the user parametr is filled,then search for that users
+			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);			
  			if(isset($param['user']) && $param['user'] !='')
 				$query->andFilterWhere(['user_id'=>$param['user']]);			
  			if(isset($param['state']) && $param['state'] !='')
@@ -88,16 +82,29 @@ class ReportController extends Controller
 			return $this->render('report', [
 				'programs' => $programs,
 				'users' => $users,
+				'params' => $param
 			]);
 		}
 		
 		/* $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]); */		
-        else return $this->render('report', [
-            'programs' => $programs,
-            'users' => $users,
-        ]);		
+        else {
+			$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
+			$query = UserProfile::find();
+			$dataProvider = new ActiveDataProvider([
+				'query' => $query,
+			]);	
+			$query->joinWith(['user']);
+			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+			$users = $dataProvider->models;			
+			
+		return $this->render('report', [
+					'programs' => $programs,
+					'users' => $users,
+					'params' => false,
+				]);				
+		}	
 	}
 	
 	public function actionResetPrograms(){
