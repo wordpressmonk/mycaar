@@ -164,11 +164,11 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionSignup($companyslug)
+    public function actionSignup($slug)
     {
-	 if($companyslug)
+	 if($slug)
 	  {
-		$check_slug = Company::find()->where(["slug" =>$companyslug])->one();
+		$check_slug = Company::find()->where(["slug" =>$slug])->one();
 		if(!$check_slug)
 			 return $this->redirect('Login');
 		 
