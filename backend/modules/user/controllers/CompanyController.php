@@ -15,6 +15,7 @@ use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use common\models\search\SearchUser;
 use common\models\search\SearchEnrolment;
+use common\models\search\SearchProgramEnrollment;
 use common\models\ProgramEnrollment;
 use common\models\search\SearchProgramEnrollment;
 use common\models\Enrolment as Enrollment;
@@ -195,16 +196,15 @@ class CompanyController extends Controller
 				$auth = Yii::$app->authManager;
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id); 
-				
-				// Email Function is "Send Email to respective user"
-				$model->sendEmail($model->password); 
-				
+				//save profile first
 				if($profile->load(Yii::$app->request->post()))
 				{
 				 $profile->user_id = $model->id;			
 				 $profile->save();	
 				}
-	
+					
+				// Email Function is "Send Email to respective user"
+				$model->sendEmail($model->password); 
 				return $this->redirect(['view-user', 'id' => $model->id]);
 			} else
 			{	
@@ -266,7 +266,7 @@ class CompanyController extends Controller
 		
         if ($model->load(Yii::$app->request->post())) {
 			//handle the role first
-			$model->username = $model->email;
+			$model->username = $model->email;			
 			if($model->save())
 			{
 			$auth = Yii::$app->authManager;
@@ -294,12 +294,14 @@ class CompanyController extends Controller
         }
     }
 
-/* 	public function actionEnrollUser($program_id=false)
+
+	/* public function actionEnrollUser($program_id=false)
+
     {		
 		$model = new Enrollment();	
         $searchModel = new SearchEnrolment();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		if($post=Yii::$app->request->post()){			
+		if($post=Yii::$app->request->post()){	
 			if(isset($post['Program']) && ($post['action'] === "enrolled") && isset($post['selection']) )
 			{				
 					foreach($post['selection'] as $tmp1)
@@ -334,9 +336,9 @@ class CompanyController extends Controller
             'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
 			]);
 			}
-    }
-	 */
+    } */
 	
+
 		public function actionEnrollUser($program_id=false)
     {		
 		$model = new User();	

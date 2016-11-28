@@ -19,11 +19,14 @@ class SearchProgramEnrollment extends User
      * @inheritdoc
      */
 	 
-	 public $enrollcheck;
+
+	public $enrollcheck;
+	
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id','enrollcheck'], 'integer'],
+
 			[['username'], 'safe'],	
         ];
     }
@@ -47,77 +50,26 @@ class SearchProgramEnrollment extends User
     public function search($params)
     {
 
-		if(isset($params['program_id']))
+
+		if(isset($params['program_id']) && !empty($params['program_id']))
+
 			$program_id = $params['program_id'];
 		else
 			$program_id = '';
 		
-		if(isset($params['SearchProgramEnrollment']['username']))
+
+		if(isset($params['SearchProgramEnrollment']['username']) && !empty($params['SearchProgramEnrollment']['username']))
 			$username = $params['SearchProgramEnrollment']['username'];
 		else 
 			$username = '';
-		
-		/* $command = (new \yii\db\Query())
-    ->select(['id', 'email'])
-    ->from('user')
-    ->where(['last_name' => 'Smith'])
-    ->limit(10)
-    ->createCommand();
-	
-	echo $command->sql;
-	exit; */
-		
- /* 		$query = (new Query())->select(['`program`.`program_id` as `program_id`','`user`.`id` AS `id`','`user`.`username` AS `username`','`user`.`c_id` AS `c_id`','if((`program_enrollment`.`e_id` is not null),1,0) AS `is_enrolled` '])
-								->from('user')
-								->join('JOIN','program', 'program.company_id = user.c_id and program.program_id = 1')
-								->join('left join','program_enrollment', 'program_enrollment.program_id = program.program_id and `program_enrollment`.`user_id` = `user`.`id` and user.c_id =3')
-								->createCommand();
-								 */
-		//$rows = $command->queryAll();
-/* 					echo "<pre>";
-print_r($query);
-exit;					
-			echo $query->sql;
-	exit; */
-		
-		/* $query = (new Query())->from('user u, program_enrollment p')->where('p.user_id = u.id and u.c_id => 3 and p.program_id = '.isset($params['program_id'])?$params['program_id']:'' );  */
-		
 
-		/* $query = (new Query())->from('user')->join('JOIN', 'program_enrollment', 'program_enrollment.user_id = user.id and user.c_id => '.Yii::$app->user->identity->c_id.' and program_enrollment.program_id = '.isset($params['program_id'])?$params['program_id']:'' );  */
-
-       // $query = User::find()->select(['id','username'])->where(['c_id'=>Yii::$app->user->identity->c_id]);
-
-			
-        // add conditions that should always apply here
-		
-		
-/* 		$query = [
-    ['id' => 1, 'username' => 'name 1',],
-    ['id' => 2, 'username' => 'name 2', ],
-
-    ['id' => 100, 'username' => 'name 100',],
-]; */
-
-/* $dataProvider = new ArrayDataProvider([
-    'allModels' => $query,
- 
-    'sort' => [
-        'attributes' => ['id', 'username'],
-    ],
-]);
- */
-      /*    $dataProvider = new ActiveDataProvider([
-		
-            'query' => $query,
-			
-			
-			'pagination' => [
-				'pageSize' => 0,
-			],
-        ]);  */
+			if(isset($params['SearchProgramEnrollment']['enrollcheck']) && ($params['SearchProgramEnrollment']['enrollcheck'] != ''))
+			$enroll = "where tmp.is_enrolled = ".$params['SearchProgramEnrollment']['enrollcheck'];
+		else 
+			$enroll = '';
 		
 		$dataProvider = new SqlDataProvider([
-			'sql' => 'select 
+			'sql' => 'select * from ( select 
 	`p`.`program_id` AS `program_id`,
 	`u`.`id` AS `id`,
 	`u`.`username` AS `username`,
@@ -131,47 +83,21 @@ from
    left join 
 		`mycaar_lms`.`program_enrollment` `pe` on(((`pe`.`program_id` = `p`.`program_id`) and (`pe`.`user_id` = `u`.`id`)
 		
-		)))',
-			'params' => [':enrollcheck' => 1],
+		))) ) as tmp '.$enroll,
+	
 
 			'pagination' => [
-				'pageSize' => 20,
+				'pageSize' => 0,
 				],
 			]);
 
 
-/* 
-        $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-		
-		
-	
-            return $dataProvider;
-        } */
-	
-	
 		if (!($this->load($params) && $this->validate())) {
 		
 			return $dataProvider;
 		}
 
-	 	/* if(isset($params['enrollcheck']) && ($params['enrollcheck'] == 0))
-		{		
-			
-		 $query = $query->join('JOIN', 'program_enrollment', 'program_enrollment.user_id = user.id and program_enrollment.program_id = '.isset($params['program_id'])?$params['program_id']:'' );
-		}  */ 
-		
-        // grid filtering conditions
-        /*  $query->andFilterWhere([
-            'id' => $this->id,
-        ]);  */
-
-		//$query->andFilterWhere(['like', 'username', $this->username]); 
-		
-		
 		
         return $dataProvider;
     }

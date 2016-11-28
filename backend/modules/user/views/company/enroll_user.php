@@ -41,7 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 </div>
 <div class="small-padding"></div>
-		<?php if($program_id){ ?>				
+		<?php if($program_id){ 
+		
+		$array = [
+					['id' => '1', 'name' => 'Enroll'],
+					['id' => '0', 'name' => 'UnEnrol'],
+				 ];
+?>				
 				<?=GridView::widget([
 				'dataProvider' => $dataProvider,
 				'filterModel' => $searchModel,
@@ -49,36 +55,23 @@ $this->params['breadcrumbs'][] = $this->title;
 				'columns' => [
 					[	
 					'class' => 'yii\grid\CheckboxColumn',
-					'checkboxOptions' => function ($model, $key, $index, $column) use ($program_id) {
-						return ['checked' =>false];
-					}
+					 'checkboxOptions' => function ($data){
+						return ['checked' =>false,'value'=>$data['id']];
+					}, 
+				
 					],
 				
-					'username', 
-				 /*    'is_enrolled',  */ 
-				/* 	  [
-						'format' => 'html',
-						'label' => 'Status',
-					 	'filter'=> Html::dropDownList('enrollcheck','',[''=>'--Status--',0=>'Enroll',1=>'UnEnrol'],['class'=>'form-control input-sm']), 						
-						'value' => function ($model, $key, $index, $column) use ($program_id) {
-							$stat = $model->isEnrolled($program_id);
-						return $model->isEnrolled($program_id)?'<i class="fa fa-check text-success"></i>':'<i class="fa fa-close text-danger"></i>';
-					}
-					],	  
-					
-					'filter' => Html::activeDropDownList($searchModel, 'company_id', ArrayHelper::map(Company::find()->all(), 'company_id', 'name'),['class'=>'form-control input-sm','prompt' => 'Company Name']), 
-					
-					
-					*/	
-
+					'username', 				
 					[
 						'format' => 'html',
-						'label' => 'Status',
-					 	/* 'filter'=> Html::dropDownList('SearchProgramEnrollment[enrollcheck]','',[''=>'--Status--',0=>'Enroll',1=>'UnEnrol'],['class'=>'form-control input-sm']),  */
+						'label' => 'Status',					 
+						'filter' => Html::activeDropDownList($searchModel, 'enrollcheck', ArrayHelper::map($array, 'id', 'name'),['class'=>'form-control input-sm','prompt' => '--Status--']),
+						//'value' => 'is_enrolled',	
+						 'value' => function ($data){
+						return $data['is_enrolled'];
+						} 
+					
 
-					'filter' => Html::activeDropDownList($searchModel, 'enrollcheck', ArrayHelper::map([0=>'Enroll',1=>'UnEnrol'], 'value', 'tmp'),['class'=>'form-control input-sm','prompt' => '--Status--']),
-						
-						'value' => 'is_enrolled',				
 					],
 					
 				],

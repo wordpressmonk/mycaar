@@ -13,6 +13,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/mycaar.css',
+		//'https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css',
 		'css/theme-default/bootstrap.css?1422792965',
 		'css/theme-default/materialadmin.css?1425466319',
 		'css/theme-default/font-awesome.min.css?1422529194',
@@ -46,6 +47,6 @@ class AppAsset extends AssetBundle
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        //'yii\bootstrap\BootstrapAsset',
     ];
 }

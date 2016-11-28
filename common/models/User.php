@@ -308,6 +308,81 @@ class User extends ActiveRecord implements IdentityInterface
 	   
 	   return Yii::$app->security->validatePassword($password, $dbpassword);
     }
+	 public function isEnrolled($program_id){
+		 if(!$program_id)
+			 return false;
+		 //see if the user is enrolled
+		 if(ProgramEnrollment::find()->where(['user_id'=>$this->id,'program_id'=>$program_id])->one())
+			 return true;
+		 return false;
+		 
+	 }	 	
+	 public function getPrograms(){
+		 return ProgramEnrollment::find()->select(['program_id'])->where(['user_id'=>$this->id])->asArray()->all();
+	 }
+	 
+	 public function getUnitProgress($unit_id){
+		 
+		 $report = UnitReport::find()->where(['unit_id'=>$unit_id,'student_id'=>$this->id])->one();
+		 $output = ['ap'=>'red','cp'=>'red'];
+		 $c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit_id])->one();
+			 if(!$c_status)
+				 $output['cp'] = 'grey';
+		 if(!$report)
+			 return $output;
+		 else 
+		 {
+			 //setting both to amber first,if capability test exists
+			 if(!$c_status)
+				 $output = ['ap'=>'amber','cp'=>'grey'];
+			 else $output = ['ap'=>'amber','cp'=>''];
+			 //then see the progress
+			 if($report->awareness_progress == 100)
+				 $output['ap'] = 'green';
+			 if($report->capability_progress == 100)
+				 $output['cp'] = 'green';			 
+		 }
+			 return $output; 
+	 }	 
+	 
+	 public function getProgramProgress($program_id){
+		 $program = Program::findOne($program_id);
+		 //total units
+		 $modules = $program->modules;
+		 $total_modules = count($modules);
+		 $modules_completed = [];
+		 foreach($modules as $module){
+			$units = $module->units; 
+			$total_units = count($units);
+			$units_completed = [];
+			foreach($units as $unit)
+			{
+				$capabilty_progress = $awareness_progress = 0;
+				$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
+				$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$this->id])->one();
+				if($report){
+					if(!$c_status)
+						$capabilty_progress = 100;
+					else $capabilty_progress = $report->capability_progress;
+					$awareness_progress = $report->awareness_progress;					
+				}				
+				if($capabilty_progress == 100 && $awareness_progress == 100){
+					
+					$units_completed[] = $unit->unit_id;
+				}
+					
+				
+			}
+			//print_R($units_completed);
+			if(count($units_completed) == $total_units)
+				$modules_completed[] = $module->module_id;
+		 }
+
+		 //print_R($modules_completed);
+		 //total units completed (aw + cp)
+		 $progress =  (count($modules_completed)/$total_modules)*100;
+		 return (int)$progress;
+	 }
 	 
 
  public function sendEmail($password)

@@ -41,7 +41,7 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
+            'rules' => [ 'site/signup/<slug>' => 'site/signup'
             ],
         ],
 		

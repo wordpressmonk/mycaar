@@ -110,7 +110,9 @@ class ProgramController extends Controller
     {
         $model = new Program();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
+			$model->company_id = Yii::$app->user->identity->c_id;
+			$model->save();
             return $this->redirect(['view', 'id' => $model->program_id]);
         } else {
             return $this->render('create', [

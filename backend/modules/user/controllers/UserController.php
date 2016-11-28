@@ -85,6 +85,7 @@ class UserController extends Controller
 			$model->username = $model->email;			
 			$model->setPassword($model->password);
 			$model->generateAuthKey();
+			
 			if($model->save())
 			{
 				//handle the role first
