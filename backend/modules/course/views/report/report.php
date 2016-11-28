@@ -161,9 +161,10 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php
 		} //module count && enrollment count
 	}
+	
 	//FOR DEBUG
- 	foreach($users as $user){
+	foreach($users as $user){
 	$progress = $user->user->getProgramProgress(1);
 	} 
-		?>
+	?>
 	
