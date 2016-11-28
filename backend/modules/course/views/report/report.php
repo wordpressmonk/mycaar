@@ -59,8 +59,27 @@ $this->params['breadcrumbs'][] = $this->title;
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4></span>
 			</div>
 		</div>';
-		echo '<div class="horizontal al_cpp_category_16">
-                <div class="all_course al_pragram_width ">';
+		echo '<div class="horizontal al_cpp_category_16">';
+		echo '<ul class="name_list" >';
+		
+			foreach($users as $user){
+				if($user->user->isEnrolled($program->program_id)){
+					$name = $user->firstname. " ". $user->lastname;
+					if($name == '')
+						$name = $user->user->username;
+					//$progress = 0;
+					$progress = $user->user->getProgramProgress($program->program_id);
+					echo '
+					<li><div class="mdl-grid" >
+						<div class="mdl-cell mdl-cell--3-col mdl-bar" >
+							<div class="mdl-card--border"><span class="mdl-text">'.$progress.'%</span><span class="mdl-label">'.$name.'</span></div>
+						</div>
+					</div></li>';
+				}
+			}
+	
+		echo '</ul>';
+        echo'<div class="all_course al_pragram_width ">';
 		foreach($modules as $p_key=>$module)
 		{
 			$units = $module->units;
@@ -111,9 +130,12 @@ $this->params['breadcrumbs'][] = $this->title;
 														//if(!$key)
 															echo "<span class='first_heading'>Capable</span>";
 														//else echo '<span class="first_heading" style="display: none">Capable</span>';
+														$href= 'javascript:void(0);';
+														if($progress['cp'] != 'grey')
+															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id]);
 														echo "<div name='unit1'>
 
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id])."><span class='toolkit'><center>{$progress['cp']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href."><span class='toolkit'><center>{$progress['cp']}</center></span>
 															</a>
 
 														</div>
@@ -134,26 +156,8 @@ $this->params['breadcrumbs'][] = $this->title;
 		}
 		echo "</div></div>";
 		?>
-		<div class="name_list">
-			<div class="section1" ></div>
-		<?php
-			foreach($users as $user){
-				if($user->user->isEnrolled($program->program_id)){
-					$name = $user->firstname. " ". $user->lastname;
-					if($name == '')
-						$name = $user->user->username;
-					//$progress = 0;
-					$progress = $user->user->getProgramProgress($program->program_id);
-					echo '
-					<div class="mdl-grid" >
-						<div class="mdl-cell mdl-cell--3-col mdl-bar" >
-							<div class="mdl-card--border"><span class="mdl-text">'.$progress.'%</span><span class="mdl-label">'.$name.'</span></div>
-						</div>
-					</div>';
-				}
-			}
-		?>
-		</div>
+
+
 		<?php
 		} //module count && enrollment count
 	}

@@ -27,6 +27,9 @@ overflow-y:scroll;
 
 
    
+
+
+
 /*For Chrome */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 
@@ -515,18 +518,19 @@ overflow-y:scroll;
         height:27px;
     }
 
+
+    /*progress Bar*/
+
     .mdl-grid{
         margin-bottom: -15px;
     }
 
-    /*extra section*/
-
-    .section1{
-        width: 317px;
-        background: none;
-        height: 132px;
-        margin-top: -300px;
+    .name_list{
+        float: left;
+        bottom: -157px;
+        position: relative;"
     }
+
 
 }
 
@@ -1025,17 +1029,21 @@ overflow-y:scroll;
         height:27px;
     }
 
+/*progress bar*/
+
     .mdl-grid{
         margin-bottom: -15px;
     }
 
-    .section1{
-        width: 317px;
-        background: none;
-        height: 132px;
-        margin-top: -300px;
+    .name_list{
+        float: left;
+        bottom: -157px;
+        position: relative;"
     }
 
 }
+
+
+
 
 
