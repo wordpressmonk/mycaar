@@ -195,7 +195,7 @@ AppAsset::register($this);
 					<div class="expanded">
 
 						<a href="<?=\Yii::$app->homeUrl;?>">
-							<span class="text-lg text-bold text-primary ">MATERIAL&nbsp;ADMIN</span>
+							<span class="text-lg text-bold text-primary ">MY&nbsp;CAAR</span>
 						</a>
 					</div>
 				</div>

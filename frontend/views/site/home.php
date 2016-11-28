@@ -16,8 +16,13 @@ $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <h1><?= Html::encode($this->title) ?></h1>
-
+	<?php if(Yii::$app->session->getFlash('error')!='') {?>
+	<div class="alert alert-danger" role="alert">
+		<strong>Oh snap!</strong> <?= Yii::$app->session->getFlash('error'); ?>.
+	</div>
+	
 	<?php 
+	}
 	$username ='';
 	foreach($programs as $program)
 	{

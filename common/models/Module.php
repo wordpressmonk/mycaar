@@ -85,7 +85,7 @@ class Module extends \yii\db\ActiveRecord
      */
     public function getUnits()
     {
-        return $this->hasMany(Unit::className(), ['module_id' => 'module_id']);
+        return $this->hasMany(Unit::className(), ['module_id' => 'module_id'])->orderBy(['unit_id' => SORT_ASC]);;
     }
 	
 	public function uploadImage(){
