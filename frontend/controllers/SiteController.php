@@ -81,7 +81,7 @@ class SiteController extends Controller
 		//render the report of the user here
 		$user = User::findOne(\Yii::$app->user->id);
 		$enrolled = $user->getPrograms();
-		$prgrams = [];
+		$programs = [];
 		foreach($enrolled as $program){
 			$programs[] = Program::findOne($program->program_id);
 		}
@@ -98,7 +98,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogin()
+    public function actionLogin($companyslug=false)
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -109,7 +109,7 @@ class SiteController extends Controller
             return $this->goBack();
         } else {
             return $this->render('login', [
-                'model' => $model,
+                'model' => $model,'companyslug'=>$companyslug
             ]);
         }
     }
@@ -164,21 +164,20 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionSignup($slug)
-    {	
-	 if($slug)
+    public function actionSignup($companyslug)
+    {
+	 if($companyslug)
 	  {
-		$check_slug = Company::find()->where(["slug" =>$slug])->one();
-	 	if(!$check_slug)
-			 return $this->redirect('login'); 
+		$check_slug = Company::find()->where(["slug" =>$companyslug])->one();
+		if(!$check_slug)
+			 return $this->redirect('Login');
 		 
 		
         $model = new SignupForm();
 		$profile = new Profile();	
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) { 
 			
-        if ($model->load(Yii::$app->request->post())) {  
-				
-            if ($user = $model->signup()) { 			
 				$auth = Yii::$app->authManager;
 				$authorRole = $auth->getRole($user->role);
 				$auth->assign($authorRole, $user->id); 
@@ -191,16 +190,16 @@ class SiteController extends Controller
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
-            } else { 
-				 	return $this->render('signup', ['model' => $model,'profile'=>$profile,"company_id"=>$check_slug->company_id]); 			
+            } else {
+					return $this->render('signup', ['model' => $model,'profile'=>$profile,"company_id"=>$check_slug->company_id]);
 			} 
         }
 
-         return $this->render('signup', [
-            'model' => $model,'profile'=>$profile,"company_id"=>$check_slug->company_id ]); 
-			//return $this->refresh();
+        return $this->render('signup', [
+            'model' => $model,'profile'=>$profile,"company_id"=>$check_slug->company_id
+        ]);
 	  } else {
-		  return $this->redirect('login');
+		  return $this->redirect('Login');
 	  }
     }
 
