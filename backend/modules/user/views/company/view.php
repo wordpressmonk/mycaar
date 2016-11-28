@@ -40,9 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
 				'companyAdmin.email',
 				
 			[
-                'attribute'=>'slug',
-				//'value'=>Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['asdasd']),						
-				'value'=>Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/login','companyslug' => $model->slug]),						
+                'attribute'=>'slug',					
+				'value'=>Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/signup/'.$model->slug]),						
             ],	
 				
         ],

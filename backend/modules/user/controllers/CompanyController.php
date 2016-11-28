@@ -264,7 +264,7 @@ class CompanyController extends Controller
 		
         if ($model->load(Yii::$app->request->post())) {
 			//handle the role first
-			$model->username = $model->email;
+			$model->username = $model->email;			
 			if($model->save())
 			{
 			$auth = Yii::$app->authManager;

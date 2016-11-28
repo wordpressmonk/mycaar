@@ -15,7 +15,6 @@ class SignupForm extends Model
     public $confirm_password;
     public $company_id;
 
-
     /**
      * @inheritdoc
      */
@@ -65,17 +64,22 @@ class SignupForm extends Model
      */
     public function signup()
     {
-        if (!$this->validate()) {
+         if (!$this->validate()) { 
             return null;
-        }
-        
+        }       
         $user = new User();
         $user->username = $this->email;
         $user->email = $this->email;
-        $user->c_id = $this->company_id;
-        $user->role = 'user';      
-        $user->setPassword($this->password);
+        $user->c_id = $this->company_id; 		
+        $user->role = 'user'; 		
+        $user->password = $this->password;		
+        $user->setPassword($user->password);
         $user->generateAuthKey();
-        return $user->save() ? $user : null;
+		
+		if($user->save())
+		 return $user;
+		else
+		 return null;
+       // return $user->save()?$user:null;
     }
 }

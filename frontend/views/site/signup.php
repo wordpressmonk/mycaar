@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			  
              <?= $form->field($model, 'email')->textInput()->label("Username / Email ID") ?>
 			
-			 <?= $form->field($model, 'company_id')->hiddenInput(['value'=>$company_id])->label(false) ?>
-		
+			 <?= $form->field($model, 'company_id')->hiddenInput(['value'=>$company_id])->label(false)  ?>
+			
 			<?php
 				$role = ArrayHelper::map(Role::find()->where(['company_id' =>$company_id])->all(), 'role_id', 'title');
 					echo $form->field($profile, 'role')->dropDownList(
@@ -68,8 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				
                 <?= $form->field($model, 'confirm_password')->passwordInput()?>
 				
-                <?php /* $form->field($model, 'password')->passwordInput()->label("Confirm Password") */ ?>
-
                 <div class="form-group">
                     <?= Html::submitButton('Register', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>
