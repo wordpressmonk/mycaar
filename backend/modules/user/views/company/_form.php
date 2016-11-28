@@ -40,6 +40,9 @@ use kartik\select2\Select2;
 			
 		}  ?> 
 		
+		
+		<?= $form->field($model, 'slug')->textInput(['maxlength' => 100]) ?>
+		
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
@@ -66,6 +69,36 @@ use kartik\select2\Select2;
 				});
 
 		  });
+		 $("#company-name").change(function() {
+				var slugval1 = $(this).val();
+				var	slugval2 = toCamelCase(slugval1);
+				var slugval3 = slugify(slugval2);	
+				$("#company-slug").val(slugval3);				
+		 });		 
+		  
+		function toCamelCase(str) {
+			  // Lower cases the string
+			  return str.toLowerCase()
+				// Replaces any - or _ characters with a space 
+				.replace( /[-_]+/g, ' ')
+				// Removes any non alphanumeric characters 
+				.replace( /[^\w\s]/g, '')
+				// Uppercases the first character in each group immediately following a space 
+				// (delimited by spaces) 
+				.replace( / (.)/g, function($1) { return $1.toUpperCase(); })
+			   
+			}
+
+		function slugify(text){
+			  return text.toString()
+				.replace(/\s+/g, '-')           // Replace spaces with -
+				.replace(/[^\u0100-\uFFFF\w\-]/g,'-') // Remove all non-word chars ( fix for UTF-8 chars )
+				.replace(/\-\-+/g, '-')         // Replace multiple - with single -
+				.replace(/^-+/, '')             // Trim - from start of text
+				.replace(/-+$/, '');            // Trim - from end of text
+		}
+
+	
  });
 </script>
 

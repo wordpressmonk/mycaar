@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\Company;
+use common\models\UserProfile as Profile;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -81,7 +83,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogin()
+    public function actionLogin($companyslug=false)
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -92,7 +94,7 @@ class SiteController extends Controller
             return $this->goBack();
         } else {
             return $this->render('login', [
-                'model' => $model,
+                'model' => $model,'companyslug'=>$companyslug
             ]);
         }
     }
@@ -147,20 +149,43 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionSignup()
+    public function actionSignup($companyslug)
     {
+	 if($companyslug)
+	  {
+		$check_slug = Company::find()->where(["slug" =>$companyslug])->one();
+		if(!$check_slug)
+			 return $this->redirect('Login');
+		 
+		
         $model = new SignupForm();
+		$profile = new Profile();	
         if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+            if ($user = $model->signup()) { 
+			
+				$auth = Yii::$app->authManager;
+				$authorRole = $auth->getRole($user->role);
+				$auth->assign($authorRole, $user->id); 
+				
+				if($profile->load(Yii::$app->request->post()))
+				{
+				  $profile->user_id = $user->id;			
+				  $profile->save();	
+				}			
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
-            }
+            } else {
+					return $this->render('signup', ['model' => $model,'profile'=>$profile,"company_id"=>$check_slug->company_id]);
+			} 
         }
 
         return $this->render('signup', [
-            'model' => $model,
+            'model' => $model,'profile'=>$profile,"company_id"=>$check_slug->company_id
         ]);
+	  } else {
+		  return $this->redirect('Login');
+	  }
     }
 
     /**
@@ -170,20 +195,19 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+		
         $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post())) {
+			
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
 
                 return $this->goHome();
-            } else {
+            } else { 
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
-            }
-        }
-
-        return $this->render('requestPasswordResetToken', [
-            'model' => $model,
-        ]);
+            }			   
+        } 
+        return $this->render('requestPasswordResetToken', ['model' => $model,]);
     }
 
     /**
@@ -211,4 +235,22 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+	
+	public function actionChangePassword()
+    {		
+		$model = Yii::$app->user->identity;
+		$model->scenario = 'apply_changepassword';
+		 if ($model->load(Yii::$app->request->post())) {			
+			 $model->setPassword($model->new_password);			
+			 if($model->save())
+			 {
+				 Yii::$app->getSession()->setFlash('Success', 'You have successfully change your password !!!.');	
+			 } else {
+				 return $this->render('change_password', ['model' => $model]);				
+			 }
+			 
+			 return $this->refresh();
+		 }
+		return $this->render('change_password', ['model' => $model]);	
+	}
 }

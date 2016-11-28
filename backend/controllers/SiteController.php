@@ -134,16 +134,8 @@ class SiteController extends Controller
 			$model2->scenario = 'apply_forgotpassword';		
 			if($model2->save())
 			{	
-				$subject = "Reset-Password Link";
-				$fromemail = "info_notification@gmail.com";
-				$toemail = $userdetails->email;
-				$username = $userdetails->email;		
-				 $email_status = Yii::$app->mail->compose(['html' => 'passwordResetToken-html'],['user'=>$model2])
-				->setFrom($fromemail)
-				->setTo($toemail)
-				->setSubject($subject)
-				->send();
-				
+			  // Email Function is "Send Email to respective user"
+			   $model2->sendEmailForgotPassword();				
 			   Yii::$app->getSession()->setFlash('Success', 'Reset-Password Link Send to Your Email ID!!!.');
 			   
 			} else {
@@ -165,11 +157,9 @@ class SiteController extends Controller
 	// Email-link through Reset-link
 	
 	public function actionResetPassword($token)
-    {		
-	
+    {			
 		if($token)
 		{ 
-			$model = new User();
 			$ckuser = User::find()->where(['password_reset_token'=>$token])->one();				
 			if($ckuser)
 			{	
@@ -189,19 +179,20 @@ class SiteController extends Controller
  	public function actionPwdregister()
     {		
 		$this->layout = "login";		
-		$model = new  SetPassword();	
-		$model2 = new User();			
+		$model = new  SetPassword();			
         if ($model->load(Yii::$app->request->post())) {					
-			$password = $model->password_hash;
-			$userid =  $model->id;			
-			$password_hash = Yii::$app->security->generatePasswordHash($password);							
-			$model2 = User::findOne($userid);		
-			$model2->password_hash = $password_hash;
-			if($model2->password_hash)
+			$userid =  $model->id;									
+			$model2 = User::findOne($userid);					
+			if($model2)
 			{ 
-			$model2->password_reset_token = '';
-			$model2->save(false);	
-			 Yii::$app->getSession()->setFlash('Success', 'Password Set successfully, Please Login Once!!!.');	
+			$model2->setPassword($model->password_hash);				
+			$model2->removePasswordResetToken();	
+			$model2->scenario = 'apply_setpassword';
+			
+			if($model2->save())
+				Yii::$app->getSession()->setFlash('Success', 'Password Set successfully, Please Login Once!!!.');
+			else 
+				Yii::$app->getSession()->setFlash('Error', 'Please Try Again!!!.');	
 			} else {
 			 Yii::$app->getSession()->setFlash('Error', 'Please Try Again!!!.');
 			}

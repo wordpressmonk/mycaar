@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
+
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Company */
@@ -36,6 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
 				
             ],	
 				'companyAdmin.email',
+				
+			[
+                'attribute'=>'slug',
+				//'value'=>Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['asdasd']),						
+				'value'=>Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/login','companyslug' => $model->slug]),						
+            ],	
 				
         ],
     ]) ?>

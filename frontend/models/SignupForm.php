@@ -12,6 +12,8 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $confirm_password;
+    public $company_id;
 
 
     /**
@@ -21,7 +23,6 @@ class SignupForm extends Model
     {
         return [
             ['username', 'trim'],
-            ['username', 'required'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
@@ -31,10 +32,31 @@ class SignupForm extends Model
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
 
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            [['password','confirm_password'], 'required'],
+            ['company_id', 'required'],
+            [['password','confirm_password'], 'string', 'min' => 6,'max'=>15],
+			[['password','confirm_password'],'filter','filter'=>'trim'],
+			[['confirm_password'],'compare','compareAttribute'=>'password','message'=>'Password do not match'],
         ];
     }
+	
+	public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'auth_key' => 'Auth Key',
+            'password' => 'Password',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'role' => 'Role',
+            'c_id' => 'Company',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+	
 
     /**
      * Signs user up.
@@ -48,11 +70,12 @@ class SignupForm extends Model
         }
         
         $user = new User();
-        $user->username = $this->username;
+        $user->username = $this->email;
         $user->email = $this->email;
+        $user->c_id = $this->company_id;
+        $user->role = 'user';      
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        
         return $user->save() ? $user : null;
     }
 }

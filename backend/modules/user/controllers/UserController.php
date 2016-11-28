@@ -82,7 +82,7 @@ class UserController extends Controller
 		$profile = new Profile();
 		$roles = $this->getRoles();
         if ($model->load(Yii::$app->request->post())) {
-			$model->username = $model->email;
+			$model->username = $model->email;			
 			$model->setPassword($model->password);
 			$model->generateAuthKey();
 			if($model->save())
@@ -91,22 +91,13 @@ class UserController extends Controller
 				$auth = Yii::$app->authManager;
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id);
-				//$model->sendEmail(); develop this function
-				$profile->user_id = $model->id;
-				$profile->save();
 				
-				//$model->sendEmail(); develop this function
+		        $profile->user_id = $model->id;
+		        $profile->save();
+				
+				$model->sendEmail($model->password); 
 				// Email Function is "Send Email to respective user"
-				$subject = "YOUR VERIFIED EMAIL ID";
-				$fromemail = "info_notification@gmail.com";
-				$toemail = $model->email;
-				$username = $model->email;		
-				 $email_status = Yii::$app->mail->compose(['html' => 'passwordSend-text'],['username'=>$username,'model'=>$model])
-				->setFrom($fromemail)
-				->setTo($toemail)
-				->setSubject($subject)
-				->send();
-				
+			
 				return $this->redirect(['view', 'id' => $model->id]);
 			}
             else{

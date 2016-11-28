@@ -20,7 +20,7 @@ return [
             'password' => 'arivuilan',
             'port' => '587',
             'encryption' => 'tls', 
-                        ],
+                        ], 
     ],
     
 	
