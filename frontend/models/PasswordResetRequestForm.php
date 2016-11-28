@@ -42,20 +42,21 @@ class PasswordResetRequestForm extends Model
             'status' => User::STATUS_ACTIVE,
             'email' => $this->email,
         ]);
-
+			
         if (!$user) {
             return false;
         }
         
         if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
             $user->generatePasswordResetToken();
-            if (!$user->save()) {
+			$user->scenario = 'apply_forgotpassword';	
+            if (!$user->save()) { 
                 return false;
             }
         }
 
         return Yii::$app
-            ->mailer
+            ->mail
             ->compose(
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
                 ['user' => $user]

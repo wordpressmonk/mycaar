@@ -133,8 +133,10 @@ AppAsset::register($this);
 										<small><?= $user_role_name = Yii::$app->user->identity->role;?></small>
 									</span>
 								</a>
+									
 								<ul class="dropdown-menu animation-dock">
 									<!--<li><a href="<?=\Yii::$app->homeUrl?>site/logout"><i class="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>-->
+									<li><a href="<?=\Yii::$app->homeUrl?>site/change-password"><i class="fa fa-fw fa-key text-danger"></i> Change Password</a></li>	
 									<li><?= Html::beginForm(['/site/logout'], 'post')
 										. Html::submitButton(
 											'Logout',

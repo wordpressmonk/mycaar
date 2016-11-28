@@ -34,20 +34,21 @@ class Company extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'admin'], 'required'],          
+            [['name', 'admin','slug'], 'required'],          
             [['about_us', 'logo'], 'required','on' => 'update_by_company_admin'],          
             [['about_us'], 'string'],
 			[['logo'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
             [['admin'], 'integer'],
             [['name'], 'string', 'max' => 200],
             [['admin'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['admin' => 'id']],
+			[['slug'], 'unique','targetClass' => '\common\models\Company', 'message' => 'This Slug Url has already been taken.'],
         ];
     }
 
 	public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['update_by_company_admin'] = ['name','about_us','logo']; //Scenario Values Only Accepted
+        $scenarios['update_by_company_admin'] = ['name','about_us','logo','slug']; //Scenario Values Only Accepted
         return $scenarios;
     } 
 	
@@ -63,6 +64,7 @@ class Company extends \yii\db\ActiveRecord
             'logo' => 'Logo',
             'admin' => 'Admin',
             'upfile' => 'Upfile',
+            'slug' => 'Slug Url',
         ];
     }
 
