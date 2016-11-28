@@ -359,4 +359,14 @@ class User extends ActiveRecord implements IdentityInterface
             ->send();
     }	
 	
+	
+	 public function isEnrolled($program_id){
+		 if(!$program_id)
+			 return false;
+		 //see if the user is enrolled
+		 if(ProgramEnrollment::find()->where(['user_id'=>$this->id,'program_id'=>$program_id])->one())
+			 return true;
+		 return false;
+		 
+	 }
 }
