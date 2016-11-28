@@ -59,7 +59,13 @@ class CapabilityAnswer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(CapabilityQuestion::className(), ['cq_id' => 'question_id']);
     }
-
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCapability_question()
+    {
+        return $this->hasOne(CapabilityQuestion::className(), ['cq_id' => 'question_id']);
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -5,12 +5,12 @@ namespace common\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Unit;
+use common\models\UnitReport;
 
 /**
- * SearchUnit represents the model behind the search form about `common\models\Unit`.
+ * SearchUserProfile represents the model behind the search form about `common\models\UserProfile`.
  */
-class SearchUnit extends Unit
+class SearchUnitReport extends UnitReport
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class SearchUnit extends Unit
     public function rules()
     {
         return [
-            [['unit_id', 'module_id', 'status'], 'integer'],
-            [['title'], 'safe'],
+            [['unit_id','student_id'], 'integer'],
+          //  [['firstname', 'lastname'], 'safe'],
         ];
     }
 
@@ -39,11 +39,10 @@ class SearchUnit extends Unit
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$m_id=null)
+    public function search($params,$unit_id)
     {
-        $query = Unit::find();
-		if($m_id)
-			$query = Unit::find()->where(['module_id'=>$m_id]);
+        $query = UnitReport::find()->where(['unit_id'=>$unit_id]);
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -61,11 +60,10 @@ class SearchUnit extends Unit
         // grid filtering conditions
         $query->andFilterWhere([
             'unit_id' => $this->unit_id,
-            'module_id' => $this->module_id,
-            'status' => $this->status,
+            'student_id' => $this->student_id,
+         //   'location' => $this->location,
+         //   'state' => $this->state,
         ]);
-
-        $query->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
     }

@@ -16,37 +16,7 @@ $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <h1><?= Html::encode($this->title) ?></h1>
-	<div class="card">
-		<div class ="card-body">
-			<div class="program-search">
-				<form method="post">
-					<div class="form-group">
-						<label class="control-label" for="searchreport-user_id">User ID</label>
-						<?= Html::dropDownList('user', '',ArrayHelper::map(User::find()->where(['c_id'=>\Yii::$app->user->identity->c_id])->all(), 'id', 'username'),['prompt'=>'--Select--','class'=>'form-control']) ?>
-						<div class="help-block"></div>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="searchreport-unit_id">Unit ID</label>
-						<?= Html::dropDownList('program', '',ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
-						<div class="help-block"></div>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="searchreport-c_id">First Name</label>
-						<input type="text" class="form-control" name="firstname">
-						<div class="help-block"></div>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="searchreport-c_id">Last Name</label>
-						<input type="text" class="form-control" name="lastname">
-						<div class="help-block"></div>
-					</div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-primary">Search</button>           
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+
 	<?php 
 	$username ='';
 	foreach($programs as $program)
@@ -119,9 +89,9 @@ $this->params['breadcrumbs'][] = $this->title;
 														echo '<span class="first_heading">Aware</span>';
 													else echo '<span class="first_heading" style="display: none">Aware</span>';
 													$progress = $user->user->getUnitProgress($unit->unit_id);
-													//print_r($progress);
+													$url = Url::to(['test/aw-test','u_id'=>$unit->unit_id]);
 													echo "<div name='unit1'>
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href=''><span class='tooltiptext'><center>{$progress['ap']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$url'><span class='tooltiptext'><center>{$progress['ap']}</center></span>
 															</a>
 														</div>
 
@@ -132,9 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 															echo "<span class='first_heading'>Capable</span>";
 														//else echo '<span class="first_heading" style="display: none">Capable</span>';
 														$href= 'javascript:void(0);';
-														if($progress['cp'] != 'grey')
-															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id]);
-														echo "<div name='unit1' id='{$progress['cp']}'>
+														echo "<div name='unit1'>
 
 															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href."><span class='toolkit'><center>{$progress['cp']}</center></span>
 															</a>

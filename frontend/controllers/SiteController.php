@@ -7,9 +7,13 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+
+use common\models\User;
 use common\models\LoginForm;
 use common\models\Company;
 use common\models\UserProfile as Profile;
+use common\models\Program;
+
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -74,7 +78,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+		//render the report of the user here
+		$user = User::findOne(\Yii::$app->user->id);
+		$enrolled = $user->getPrograms();
+		$prgrams = [];
+		foreach($enrolled as $program){
+			$programs[] = Program::findOne($program->program_id);
+		}
+		$users[] = Profile::find()->where(['user_id'=>\Yii::$app->user->id])->one();	 
+        return $this->render('home', [
+            'programs' => $programs,
+            'users' => $users,
+        ]);
     }
 
     /**

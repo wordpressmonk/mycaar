@@ -318,7 +318,7 @@ class User extends ActiveRecord implements IdentityInterface
 		 
 	 }	 	
 	 public function getPrograms(){
-		 return ProgramEnrollment::find()->select(['program_id'])->where(['user_id'=>$this->id])->asArray()->all();
+		 return ProgramEnrollment::find()->where(['user_id'=>$this->id])->all();
 	 }
 	 
 	 public function getUnitProgress($unit_id){
@@ -335,7 +335,11 @@ class User extends ActiveRecord implements IdentityInterface
 			 //setting both to amber first,if capability test exists
 			 if(!$c_status)
 				 $output = ['ap'=>'amber','cp'=>'grey'];
-			 else $output = ['ap'=>'amber','cp'=>''];
+			 else {
+				 if($report->capability_progress == NULL)
+					 $output = ['ap'=>'amber','cp'=>'red'];
+				 else $output = ['ap'=>'amber','cp'=>'amber'];
+			 }
 			 //then see the progress
 			 if($report->awareness_progress == 100)
 				 $output['ap'] = 'green';

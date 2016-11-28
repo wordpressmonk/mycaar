@@ -72,4 +72,24 @@ class Program extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Company::className(), ['company_id' => 'company_id']);
     }
+	public function resetProgram(){
+		foreach($this->modules as $module){
+			$units = $module->units;
+			foreach($units as $unit){
+				$reports = UnitReport::find()->where(['unit_id'=>$unit->unit_id])->all();
+				foreach($reports as $report){
+					$report->delete();
+				}
+				//delete awareness answers and cap answers also
+				$a_answers = AwarenessAnswer::find()->joinWith(['awareness_question'])->where(['awareness_question.unit_id'=>$unit->unit_id])->all();
+				foreach($a_answers as $answer){
+					$answer->delete();
+				}
+				$c_answers = CapabilityAnswer::find()->joinWith(['capability_question'])->where(['capability_question.unit_id'=>$unit->unit_id])->all();
+				foreach($c_answers as $answer){
+					$answer->delete();
+				}
+			}
+		}
+	}
 }

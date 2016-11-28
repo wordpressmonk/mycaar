@@ -12,8 +12,17 @@ use yii\data\ActiveDataProvider;
 use common\models\Report;
 use common\models\search\SearchReport;
 use common\models\Program;
+use common\models\search\SearchProgram;
 use common\models\UserProfile;
 
+use common\models\Module;
+use common\models\search\SearchModule;
+
+use common\models\Unit;
+use common\models\search\SearchUnit;
+
+use common\models\UnitReport;
+use common\models\search\SearchUnitReport;
 /**
  * UnitController implements the CRUD actions for Unit model.
  */
@@ -89,6 +98,78 @@ class ReportController extends Controller
             'programs' => $programs,
             'users' => $users,
         ]);		
+	}
+	
+	public function actionResetPrograms(){
+		
+        $searchModel = new SearchProgram();
+        $dataProvider = $searchModel->searchCompanyPrograms(Yii::$app->request->queryParams);
+		if($post = \Yii::$app->request->post()){
+			foreach($post['selection'] as $program){
+				Program::findOne($program)->resetProgram();
+			}
+			return $this->redirect('reset-programs');
+		}
+        else return $this->render('reset_programs', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);		
+	}
+	public function actionResetModules($p_id){
+
+		
+        $searchModel = new SearchModule();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$p_id);
+		if($post = \Yii::$app->request->post()){
+			foreach($post['selection'] as $module){
+				Module::findOne($module)->resetModule();
+			}
+			return $this->redirect(['reset-modules','p_id'=>$p_id]);
+		}
+        else return $this->render('reset_modules', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+			'p_id' => $p_id,
+        ]);				
+		
+		
+	}
+	public function actionResetUnits($m_id){
+		
+        $searchModel = new SearchUnit();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$m_id);
+		if($post = \Yii::$app->request->post()){
+			foreach($post['selection'] as $unit){
+				Unit::findOne($unit)->resetUnit();
+			}
+			return $this->redirect(['reset-units','m_id'=>$m_id]);
+		}
+        else return $this->render('reset_units', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+			'm_id' => $m_id,
+        ]);					
+	}
+	public function actionResetUsers($u_id){
+        $searchModel = new SearchUnitReport();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$u_id);
+		if($post = \Yii::$app->request->post()){
+			//print_r($post);
+			foreach($post['selection'] as $report){
+				$rep = UnitReport::findOne($report);
+				if($rep != null){
+					$rep->resetUser();
+					$rep->delete();				
+				}
+			}
+			return $this->redirect(['reset-users','u_id'=>$u_id]);
+		}
+        else return $this->render('reset_users', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+			'u_id' => $u_id,
+        ]);				
+		
 	}
     /**
      * Finds the Unit model based on its primary key value.
