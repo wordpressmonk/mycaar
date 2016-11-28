@@ -191,7 +191,6 @@ class ImportuserController extends Controller
 				// Email Message is saved in database
 				$quickemail = new QuickEmail();	
 				$quickemail->c_id = Yii::$app->user->identity->c_id;
-				$quickemail->user_id = $usertable->id;
 				$quickemail->to_email = $rowData[0][0];
 				$quickemail->from_email = "info_notification@gmail.com";
 				$quickemail->subject = "YOUR VERIFIED EMAIL ID";

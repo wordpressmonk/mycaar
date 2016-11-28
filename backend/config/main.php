@@ -1,10 +1,14 @@
 <?php
+use \yii\web\Request;
+
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
+
+$frontEndBaseUrl = str_replace('/backend/web', '/frontend/web', (new Request)->getBaseUrl());
 
 return [
     'id' => 'app-backend',
@@ -53,12 +57,12 @@ return [
             'rules' => [
             ],
         ],
-		'urlManagerFrontEnd' => [
+		 'urlManagerFrontEnd' => [
             'class' => 'yii\web\urlManager',
-            'baseUrl' => '/mycaar/frontend/web',
+            'baseUrl' => $frontEndBaseUrl,
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-        ],
+        ], 
 
     ],
     'params' => $params,

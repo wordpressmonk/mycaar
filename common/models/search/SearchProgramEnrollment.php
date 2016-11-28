@@ -5,7 +5,6 @@ namespace common\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-//use common\models\ProgramEnrollment;
 use common\models\User;
 use yii\data\ArrayDataProvider;
 use yii\data\SqlDataProvider;
@@ -91,13 +90,9 @@ from
 				],
 			]);
 
-
-
-		if (!($this->load($params) && $this->validate())) {
-		
+		if (!($this->load($params) && $this->validate())) {		
 			return $dataProvider;
 		}
-
 		
         return $dataProvider;
     }

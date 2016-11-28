@@ -66,14 +66,10 @@ $this->params['breadcrumbs'][] = $this->title;
 						'format' => 'html',
 						'label' => 'Status',					 
 						'filter' => Html::activeDropDownList($searchModel, 'enrollcheck', ArrayHelper::map($array, 'id', 'name'),['class'=>'form-control input-sm','prompt' => '--Status--']),
-						//'value' => 'is_enrolled',	
 						 'value' => function ($data){
-						return $data['is_enrolled'];
-						} 
-					
-
-					],
-					
+						return ($data['is_enrolled']==1)?'<i class="fa fa-check text-success"></i>':'<i class="fa fa-close text-danger"></i>';
+						} 					
+					],					
 				],
 				]);  ?>
 		<?php } ?>

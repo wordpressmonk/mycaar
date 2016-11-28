@@ -17,7 +17,6 @@ use common\models\search\SearchUser;
 use common\models\search\SearchEnrolment;
 use common\models\search\SearchProgramEnrollment;
 use common\models\ProgramEnrollment;
-use common\models\search\SearchProgramEnrollment;
 use common\models\Enrolment as Enrollment;
 
 
@@ -294,12 +293,10 @@ class CompanyController extends Controller
         }
     }
 
-
-	/* public function actionEnrollUser($program_id=false)
-
+	public function actionEnrollUser($program_id=false)
     {		
-		$model = new Enrollment();	
-        $searchModel = new SearchEnrolment();
+		$model = new User();	
+        $searchModel = new SearchProgramEnrollment();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		if($post=Yii::$app->request->post()){	
 			if(isset($post['Program']) && ($post['action'] === "enrolled") && isset($post['selection']) )
@@ -326,29 +323,9 @@ class CompanyController extends Controller
 							$model2->delete();
 					}								
 			}						
-			return $this->redirect(['enroll-user','program_id'=>$post['Program']]);
+			return $this->redirect(['enroll-user','program_id'=>$post['Program']]);			
 		}
         else { 
-				
-		
-			return $this->render('enroll_user', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
-			]);
-			}
-    } */
-	
-
-		public function actionEnrollUser($program_id=false)
-    {		
-		$model = new User();	
-        $searchModel = new SearchProgramEnrollment();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		if($post=Yii::$app->request->post()){						
-		}
-        else { 
-				
-		
 			return $this->render('enroll_user', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id

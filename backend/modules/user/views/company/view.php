@@ -37,11 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => ['image',['width'=>'150px','height'=>'150px']],
 				
             ],	
-				'companyAdmin.email',
-				
+				'companyAdmin.email',				
 			[
                 'attribute'=>'slug',					
-				'value'=>Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/signup/'.$model->slug]),						
+				'value'=>Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/signup/'.$model->slug]),					
             ],	
 				
         ],
