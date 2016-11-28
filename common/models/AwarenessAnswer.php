@@ -62,7 +62,13 @@ class AwarenessAnswer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(AwarenessQuestion::className(), ['aq_id' => 'question_id']);
     }
-
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAwareness_question()
+    {
+        return $this->hasOne(AwarenessQuestion::className(), ['aq_id' => 'question_id']);
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

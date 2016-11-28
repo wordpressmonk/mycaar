@@ -57,7 +57,24 @@ class TestController extends Controller
      * @return mixed
      */
     public function actionAwTest($u_id)
-    {		
+    {	
+		$current_unit = Unit::findOne($u_id);
+		if($current_unit == null)
+			throw new NotFoundHttpException('The requested page does not exist.');
+		$previous_unit = Unit::find()->where(['and', "unit_id<$u_id", "module_id=$current_unit->module_id"])->orderBy('unit_id DESC')->one();
+		//
+
+		if($previous_unit){
+			//print_r($current_unit);die;
+			$previous_unit_report = Report::find()->where(['unit_id'=>$previous_unit->unit_id,'student_id'=>\Yii::$app->user->id])->one();
+			if($previous_unit->unit_id != $u_id && (!$previous_unit_report || $previous_unit_report->awareness_progress != 100)){
+				\Yii::$app->getSession()->setFlash('error', 'Please complete the previous unit/s');
+				return $this->redirect(['site/index']);
+			}
+							
+		}
+
+		//if previous unit is completed
 		$session = Yii::$app->session;
 		$attempted = Report::find()->where(['unit_id'=>$u_id,'student_id'=>\Yii::$app->user->id])->one();
 		if($attempted && !isset($session[$u_id."_".\Yii::$app->user->id]))

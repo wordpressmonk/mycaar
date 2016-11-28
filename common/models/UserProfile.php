@@ -22,6 +22,7 @@ use Yii;
  */
 class UserProfile extends \yii\db\ActiveRecord
 {
+	//public $fullname;
     /**
      * @inheritdoc
      */
@@ -63,7 +64,10 @@ class UserProfile extends \yii\db\ActiveRecord
             'employee_number' => 'Employee Number',
         ];
     }
-
+	
+	public function getFullname(){
+		 return $this->firstname. " ". $this->lastname;
+	}
     /**
      * @return \yii\db\ActiveQuery
      */

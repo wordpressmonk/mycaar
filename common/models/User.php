@@ -310,7 +310,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 	
 	 public function getPrograms(){
-		 return ProgramEnrollment::find()->select(['program_id'])->where(['user_id'=>$this->id])->asArray()->all();
+		 return ProgramEnrollment::find()->where(['user_id'=>$this->id])->all();
 	 }
 	 
 	 public function getUnitProgress($unit_id){
@@ -327,7 +327,11 @@ class User extends ActiveRecord implements IdentityInterface
 			 //setting both to amber first,if capability test exists
 			 if(!$c_status)
 				 $output = ['ap'=>'amber','cp'=>'grey'];
-			 else $output = ['ap'=>'amber','cp'=>''];
+			 else {
+				 if($report->capability_progress == NULL)
+					 $output = ['ap'=>'amber','cp'=>'red'];
+				 else $output = ['ap'=>'amber','cp'=>'amber'];
+			 }
 			 //then see the progress
 			 if($report->awareness_progress == 100)
 				 $output['ap'] = 'green';
@@ -336,8 +340,8 @@ class User extends ActiveRecord implements IdentityInterface
 		 }
 			 return $output; 
 	 }	 
-	 
-	 public function getProgramProgress($program_id){
+	 //deprecated, cause the client discarded this logic
+	 public function getProgramProgressDeprecated($program_id){
 		 $program = Program::findOne($program_id);
 		 //total units
 		 $modules = $program->modules;
@@ -376,7 +380,42 @@ class User extends ActiveRecord implements IdentityInterface
 		 return (int)$progress;
 	 }
 	 
+	 public function getProgramProgress($program_id){
+		 $program = Program::findOne($program_id);
+		 //total units
+		 $modules = $program->modules;
+		 $total_tests = 0;
+		 $tests_completed = 0;
+		 foreach($modules as $module){
+			$units = $module->units; 
+			foreach($units as $unit)
+			{
+				$n_tests = 2;
+				$capabilty_progress = $awareness_progress = 0;
+				$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
+				if(!$c_status)
+					$n_tests = 1;
+				$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$this->id])->one();
+				if($report){
+					$capabilty_progress = $report->capability_progress;
+					$awareness_progress = $report->awareness_progress;					
+				}				
+				if($capabilty_progress == 100 )					
+					$tests_completed = $tests_completed+1;
+				if($awareness_progress == 100 )					
+					$tests_completed = $tests_completed+1;
 
+				$total_tests = 	$total_tests + $n_tests;
+				
+			}
+		 }
+
+		 //print_R($modules_completed);
+		 //total units completed (aw + cp)
+		 $progress =  ($tests_completed/$total_tests)*100;
+		 return (int)$progress;
+	 }
+	 
  public function sendEmail($password)
     {
         /* @var $user User */
