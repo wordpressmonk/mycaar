@@ -15,6 +15,7 @@ use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use common\models\search\SearchUser;
 use common\models\search\SearchEnrolment;
+use common\models\search\SearchProgramEnrollment;
 use common\models\ProgramEnrollment;
 use common\models\Enrolment as Enrollment;
 
@@ -292,7 +293,7 @@ class CompanyController extends Controller
         }
     }
 
-	public function actionEnrollUser($program_id=false)
+	/* public function actionEnrollUser($program_id=false)
     {		
 		$model = new Enrollment();	
         $searchModel = new SearchEnrolment();
@@ -323,6 +324,23 @@ class CompanyController extends Controller
 					}								
 			}						
 			return $this->redirect(['enroll-user','program_id'=>$post['Program']]);
+		}
+        else { 
+				
+		
+			return $this->render('enroll_user', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
+			]);
+			}
+    } */
+	
+		public function actionEnrollUser($program_id=false)
+    {		
+		$model = new User();	
+        $searchModel = new SearchProgramEnrollment();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		if($post=Yii::$app->request->post()){						
 		}
         else { 
 				

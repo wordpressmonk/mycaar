@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use common\models\MyCaar;
 use common\models\Program;
-use yii\widgets\Pjax;
+use common\models\Enrolment;
 
 
 /* @var $this yii\web\View */
@@ -41,13 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 </div>
 <div class="small-padding"></div>
-		<?php if($program_id){ 
-		
-		$array = [
-					['id' => '1', 'name' => 'Enroll'],
-					['id' => '0', 'name' => 'UnEnrol'],
-				 ];
-?>				
+		<?php if($program_id){ ?>				
 				<?=GridView::widget([
 				'dataProvider' => $dataProvider,
 				'filterModel' => $searchModel,
@@ -55,23 +49,21 @@ $this->params['breadcrumbs'][] = $this->title;
 				'columns' => [
 					[	
 					'class' => 'yii\grid\CheckboxColumn',
-					 'checkboxOptions' => function ($data){
-						return ['checked' =>false,'value'=>$data['id']];
-					}, 
-				
-					],
-				
-					'username', 				
-					[
+					'checkboxOptions' => function ($model, $key, $index, $column){
+						return ['checked' =>false ,'value'=>$model->id];
+					}  				
+					],					
+						'username', 								
+					 [
+						'attribute' => 'is_enrolled',
 						'format' => 'html',
-						'label' => 'Status',					 
-						'filter' => Html::activeDropDownList($searchModel, 'enrollcheck', ArrayHelper::map($array, 'id', 'name'),['class'=>'form-control input-sm','prompt' => '--Status--']),
-						//'value' => 'is_enrolled',	
-						 'value' => function ($data){
-						return $data['is_enrolled'];
+						'label' => 'Enrolled Status',					
+						'filter' => Html::activeDropDownList($searchModel, 'is_enrolled', [1=>'Enroll',0=>'UnEnrol'],['class'=>'form-control input-sm','prompt' => '--Enroll Status--']),
+						'value' => function ($model, $key, $index, $column){
+							return ($model->is_enrolled)?'<i class="fa fa-check text-success"></i>':'<i class="fa fa-close text-danger"></i>';
+
 						} 
-					
-										
+						
 					],
 					
 				],

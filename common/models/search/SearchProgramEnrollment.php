@@ -5,20 +5,27 @@ namespace common\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\ProgramEnrollment;
-
+//use common\models\ProgramEnrollment;
+use common\models\User;
+use yii\data\ArrayDataProvider;
+use yii\data\SqlDataProvider;
+use yii\db\Query;
 /**
  * SearchProgramEnrollment represents the model behind the search form about `common\models\ProgramEnrollment`.
  */
-class SearchProgramEnrollment extends ProgramEnrollment
+class SearchProgramEnrollment extends User
 {
     /**
      * @inheritdoc
      */
+	 
+	public $enrollcheck;
+	
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
+            [['id','enrollcheck'], 'integer'],
+			[['username'], 'safe'],	
         ];
     }
 
@@ -40,33 +47,51 @@ class SearchProgramEnrollment extends ProgramEnrollment
      */
     public function search($params)
     {
-        $query = ProgramEnrollment::find();
 
-        // add conditions that should always apply here
+		if(isset($params['program_id']) && !empty($params['program_id']))
+			$program_id = $params['program_id'];
+		else
+			$program_id = '';
+		
+		if(isset($params['SearchProgramEnrollment']['username']) && !empty($params['SearchProgramEnrollment']['username']))
+			$username = $params['SearchProgramEnrollment']['username'];
+		else 
+			$username = '';
+		
+			if(isset($params['SearchProgramEnrollment']['enrollcheck']) && ($params['SearchProgramEnrollment']['enrollcheck'] != ''))
+			$enroll = "where tmp.is_enrolled = ".$params['SearchProgramEnrollment']['enrollcheck'];
+		else 
+			$enroll = '';
+		
+		$dataProvider = new SqlDataProvider([
+			'sql' => 'select * from ( select 
+	`p`.`program_id` AS `program_id`,
+	`u`.`id` AS `id`,
+	`u`.`username` AS `username`,
+	`u`.`c_id` AS `c_id`,
+	if((`pe`.`e_id` is not null),1,0) AS `is_enrolled` 
+from 
+	((`mycaar_lms`.`program` `p` 
+	join 
+		`mycaar_lms`.`user` `u` FORCE INDEX (`c_id`) on((`u`.`c_id` = `p`.`company_id` and u.`c_id` = '.Yii::$app->user->identity->c_id.' and p.program_id = '.$program_id.' and  (u.username like "%'.$username.'%")
+		))) 
+   left join 
+		`mycaar_lms`.`program_enrollment` `pe` on(((`pe`.`program_id` = `p`.`program_id`) and (`pe`.`user_id` = `u`.`id`)
+		
+		))) ) as tmp '.$enroll,
+	
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
 			'pagination' => [
 				'pageSize' => 0,
-			],
-        ]);
+				],
+			]);
 
-        $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'user_id' => $this->user_id
-           
-        ]);
-
-		$query->andFilterWhere(['like', 'user_id', $this->user_id]);
-
+		if (!($this->load($params) && $this->validate())) {
+		
+			return $dataProvider;
+		}
 
         return $dataProvider;
     }
