@@ -130,7 +130,7 @@ AppAsset::register($this);
 
 						<!-- BEGIN DASHBOARD -->
 						<li>
-							<a href="<?=\Yii::$app->homeUrl;?>" >
+							<a id="db" href="<?=\Yii::$app->homeUrl;?>#db">
 								<div class="gui-icon"><i class="md md-home"></i></div>
 								<span class="title">Dashboard</span>
 							</a>
@@ -145,7 +145,7 @@ AppAsset::register($this);
 							</a>
 							<!--start submenu -->
 							<ul>
-								<li><a href="<?=\Yii::$app->homeUrl?>admin/role" ><span class="title">Roles</span></a></li>
+								<li><a id="sys_role" href="<?=\Yii::$app->homeUrl?>admin/role#sys_role" ><span class="title">Roles</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>admin/permission" ><span class="title">Permissions</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>admin/assignment" ><span class="title">Assignments</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>admin/rule" ><span class="title">Rules</span></a></li>
@@ -163,11 +163,11 @@ AppAsset::register($this);
 							<ul>
 
 							<?php if(\Yii::$app->user->can('superadmin')){ ?>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/user" ><span class="title">All Users</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/user/create" ><span class="title">Add User</span></a></li>
+								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/user#all_usrs" ><span class="title">All Users</span></a></li>
+								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/user/create#add_usr" ><span class="title">Add User</span></a></li>
 							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index-user" ><span class="title">Users</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/company/create-user" ><span class="title">Add User</span></a></li>
+								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-user#all_usrs" ><span class="title">Users</span></a></li>
+								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/company/create-user#add_usr" ><span class="title">Add User</span></a></li>
 							<?php } ?>																			
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
@@ -179,9 +179,9 @@ AppAsset::register($this);
 							</a>
 							<ul>
 							<!--start submenu -->
-								<li><a href="<?=\Yii::$app->homeUrl?>course/program/company-programs" ><span class="title">Programs</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>course/module/create" ><span class="title">Add Lessons</span></a></li>								
+								<li><a id="alpgs" href="<?=\Yii::$app->homeUrl?>course/program/company-programs#alpgs" ><span class="title">Programs</span></a></li>
+								<li><a id="add_pgm" href="<?=\Yii::$app->homeUrl?>course/program/create#add_pgm" ><span class="title">Add Program</span></a></li>
+								<li><a id="add_lsn" href="<?=\Yii::$app->homeUrl?>course/module/create#add_lsn" ><span class="title">Add Lessons</span></a></li>								
 							</ul>
 						</li>						
 						<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
@@ -193,11 +193,11 @@ AppAsset::register($this);
 							</a>
 							<ul>
 							<!--start submenu -->
-								<li><a href="<?=\Yii::$app->homeUrl?>course/program/company-programs" ><span class="title">Programs</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/company/enroll-user" ><span class="title">Enroll User</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>course/report/search" ><span class="title">Reports</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>course/report/reset-programs" ><span class="title">Reset Programs</span></a></li>
+								<li><a id="alpgs" href="<?=\Yii::$app->homeUrl?>course/program/company-programs#alpgs" ><span class="title">Programs</span></a></li>
+								<li><a id="add_pgm" href="<?=\Yii::$app->homeUrl?>course/program/create#add_pgm"><span class="title">Add Program</span></a></li>
+								<li><a id="enrl" href="<?=\Yii::$app->homeUrl?>user/company/enroll-user#enrl" ><span class="title">Enroll User</span></a></li>
+								<li><a id="sr" href="<?=\Yii::$app->homeUrl?>course/report/search#sr" ><span class="title">Reports</span></a></li>
+								<li><a id="reset" href="<?=\Yii::$app->homeUrl?>course/report/reset-programs#reset" ><span class="title">Reset Programs</span></a></li>
 							
 							</ul>
 						</li>
@@ -213,12 +213,12 @@ AppAsset::register($this);
 								<span class="title">Company Management</span>
 							</a>
 							<ul>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index"><span class="title">All Companies</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/company/create" ><span class="title">Add Company</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Roles</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Locations</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Divisions</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">States</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index#alcmp" id="alcmp"><span class="title">All Companies</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/create#addcmp" id="addcmp"><span class="title">Add Company</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/role#role" id="role"><span class="title">Roles</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/location#loc" id="loc"><span class="title">Locations</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/division#div" id="div"><span class="title">Divisions</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/state#st" id="st"><span class="title">States</span></a></li>
 								
 							</ul>
 						</li>
@@ -230,11 +230,11 @@ AppAsset::register($this);
 							</a>
 							<!--start submenu -->
 							<ul>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/company/view?id=<?= Yii::$app->user->identity->c_id;?>"><span class="title">Company Profile</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Role</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Location</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Division</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">State</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/view?id=<?= Yii::$app->user->identity->c_id;?>#view_com" id="view_com"><span class="title">Company Profile</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/role#role" id="role"><span class="title">Role</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/location#loc" id="loc"><span class="title">Location</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/division#div" id="div"><span class="title">Division</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/state#st" id="st"><span class="title">State</span></a></li>
 								
 							</ul>
 						</li>
@@ -242,7 +242,7 @@ AppAsset::register($this);
 						<!--end /menu-li -->
 						<!-- END Company -->
 						<li>
-							<a href="<?=\Yii::$app->homeUrl?>site/change-password" >
+							<a href="<?=\Yii::$app->homeUrl?>site/change-password#pwd" id="pwd">
 								<div class="gui-icon"><i class="md md-input"></i></div>
 								<span class="title">Change Password</span>
 							</a>
@@ -268,7 +268,22 @@ AppAsset::register($this);
 
 		</div><!--end #base-->
 		<!-- END BASE -->
-
+		<!-- Menu Script -->
+		<script>
+/* 		$('.gui-controls a').on("click",function(){
+			console.log("clicked");
+			$(this).addClass("active");
+		}) */
+		var hash = window.location.hash;
+		hash = hash.replace('#', '');
+		console.log(hash);
+		$("#"+hash).addClass("active");
+/* 		switch(hash){
+			case("#db"):
+				$("$"+hash).addClass("active");
+				break;
+		} */
+		</script>
 
 	</body>
 <?php $this->endBody() ?>
