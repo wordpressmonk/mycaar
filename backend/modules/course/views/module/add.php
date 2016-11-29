@@ -62,7 +62,7 @@ use kartik\select2\Select2;
 									$data = ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title');
 								echo $form->field($model, 'program_id')->widget(Select2::classname(), [
 									'data' => $data,
-									'options' => ['placeholder' => 'Select Category'],
+									'options' => ['placeholder' => 'Select Category','disabled'=>$disabled],
 								])->label(false);	
 								?>	
 								<?= $form->field($model, 'language')->textInput(['maxlength' => true,'class'=>'form-control']) ?>								
