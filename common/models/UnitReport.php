@@ -75,7 +75,15 @@ class UnitReport extends \yii\db\ActiveRecord
     {
         return $this->hasOne(UserProfile::className(), ['user_id' => 'student_id']);
     }
-		
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAssessor()
+    {
+        return $this->hasOne(UserProfile::className(), ['user_id' => 'cap_done_by']);
+			
+    }
+				
 	public function resetUser(){
 			//delete awareness answers and cap answers also
 			$a_answers = AwarenessAnswer::find()->joinWith(['awareness_question'])->where(['awareness_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();

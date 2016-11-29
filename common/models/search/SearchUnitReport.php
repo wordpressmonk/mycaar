@@ -39,16 +39,19 @@ class SearchUnitReport extends UnitReport
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$unit_id)
+    public function search($params)
     {
-        $query = UnitReport::find()->where(['unit_id'=>$unit_id]);
+        $query = UnitReport::find()->where(['not',['cap_done_by'=>NULL]]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+		$query->joinWith(['user_profile.user']);
+		//$query->joinWith(['program']);
+		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+		
         $this->load($params);
 
         if (!$this->validate()) {

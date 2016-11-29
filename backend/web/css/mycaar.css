@@ -24,8 +24,23 @@ ul::-webkit-scrollbar-track {
 height:350px;
 overflow-y:scroll;
 }
-
-
+a{
+	outline:none !important;
+}
+.td-green {
+    background-color: green;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+}
+.td-amber {
+    background-color: #ffc000;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+}
    
 
 

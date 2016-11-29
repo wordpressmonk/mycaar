@@ -40,7 +40,7 @@ class ReportController extends Controller
 				'only' => ['search','reset-programs','reset-modules','reset-units','reset-users'],
                 'rules' => [
                     [
-                        'actions' => ['search'],
+                        'actions' => ['search','assessor-report'],
                         'allow' => true,
 						'roles' => ['assessor']
                     ],
@@ -116,7 +116,15 @@ class ReportController extends Controller
 				]);				
 		}	
 	}
-	
+	public function actionAssessorReport(){
+        $searchModel = new SearchUnitReport();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);		
+	}
 	public function actionResetPrograms(){
 		
         $searchModel = new SearchProgram();
