@@ -41,6 +41,7 @@ use kartik\select2\Select2;
 		}  ?> 
 		
 		
+		
 		<?= $form->field($model, 'slug')->textInput(['maxlength' => 100]) ?>
 		
     <div class="form-group">
@@ -54,6 +55,7 @@ use kartik\select2\Select2;
 
 <script>
  $(document).ready(function () {
+	 
 		  $(".removelogo").click(function() {
 			 var company_id = $(this).attr('id');
 				

@@ -16,6 +16,7 @@ use common\models\Division;
 use common\models\Location;
 use common\models\State;
 use common\models\QuickEmail;
+use common\models\Mycaar;
 use yii\helpers\ArrayHelper;
 
 
@@ -68,6 +69,7 @@ class ImportuserController extends Controller
 		        $model->upfile = UploadedFile::getInstance($model, 'upfile');				
 				$inputFiles = $model->upfile->tempName ;					
 				  try{
+					 $objPHPExcel = new \PHPExcel();
 					 $inputFileType = \PHPExcel_IOFactory::identify($inputFiles);
 					 $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
 					 $objPHPExcel = $objReader->load($inputFiles);
@@ -96,15 +98,15 @@ class ImportuserController extends Controller
 						 $usertable->generateAuthKey();
 						 $usertable->c_id = Yii::$app->user->identity->c_id; 					
 						 $usertable->role = 'user';	
-						 
+
 		/**  Random Password Generator **/
-		
-						 $random_pwd = sprintf("%06d", mt_rand(1, 999999));						 
-						 $usertable->password_hash = Yii::$app->security->generatePasswordHash($random_pwd);
-						 
+				
+				//Random Password Generation For Mycaar Common models
+
+			 $usertable->password = Mycaar::getRandomPassword();
+			 $usertable->setPassword($usertable->password);	 
 		//***** Role check and Create Function *** //	
 		
-
 			$getroleid = array_search(strtolower(trim($rowData[0][1])), array_map('strtolower', $getrolename));
 			  if($getroleid)
 				{
@@ -194,7 +196,7 @@ class ImportuserController extends Controller
 				$quickemail->to_email = $rowData[0][0];
 				$quickemail->from_email = "info_notification@gmail.com";
 				$quickemail->subject = "YOUR VERIFIED EMAIL ID";
-				$quickemail->message = "<br><br> Your Password:".$random_pwd."<br><br>After login, Please Kindly Delete this Message for security.";
+				$quickemail->message = "<br><br> Your Password:".$usertable->password."<br><br>After login, Please Kindly Delete this Message for security.";
 				$quickemail->status = 0;			
 				$quickemail->save();	
 				

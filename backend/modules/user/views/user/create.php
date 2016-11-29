@@ -9,6 +9,7 @@ use yii\helpers\Html;
 $this->title = 'Add User';
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="user-create">
 
@@ -18,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
 		'profile'=>$profile,
 		'roles' => $roles,
+		'checkpage'=>"Create",
     ]) ?>
 
 </div>

@@ -20,16 +20,16 @@ use common\models\Role;
 
 		<?php $form = ActiveForm::begin(); ?>
 
-		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true]) ?>
+		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("Firstname *") ?>
 		
-		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true]) ?>
+		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Lastname *") ?>
 		
-		<?php /* $form->field($model, 'username')->textInput(['maxlength' => true]) */ ?>
+		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID *") ?>
 
-		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID") ?>
-
-		<?= $form->field($model, 'password')->passwordInput() ?>
-
+		<?php if($checkpage == "Create"){ ?>
+		<?= $form->field($model, 'password')->passwordInput()->label("Password (Optional)") ?>
+		<?php } ?>
+		
 			<?= $form->field($model, 'role')->dropDownList(
             $roles,           // Flat array ('id'=>'label')
             ['prompt'=>'--Access Level--']    // options

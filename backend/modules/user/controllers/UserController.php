@@ -4,6 +4,7 @@ namespace backend\modules\user\controllers;
 
 use Yii;
 use common\models\User;
+use common\models\Mycaar;
 use common\models\UserProfile as Profile;
 use common\models\search\SearchUser;
 use yii\web\Controller;
@@ -81,10 +82,15 @@ class UserController extends Controller
         $model = new User();
 		$profile = new Profile();
 		$roles = $this->getRoles();
-        if ($model->load(Yii::$app->request->post())) {
-			$model->username = $model->email;			
+        if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
+			$model->username = $model->email;
+			//Random Password Generation For Mycaar Common models
+			if(empty($model->password));
+			 $model->password = Mycaar::getRandomPassword();
+			 
 			$model->setPassword($model->password);
 			$model->generateAuthKey();
+			$model->generatePasswordResetToken();
 			
 			if($model->save())
 			{
@@ -99,7 +105,7 @@ class UserController extends Controller
 				$model->sendEmail($model->password); 
 				// Email Function is "Send Email to respective user"
 			
-				return $this->redirect(['view', 'id' => $model->id]);
+				return $this->redirect(['index']);
 			}
             else{
 				  return $this->render('create', [
@@ -142,7 +148,7 @@ class UserController extends Controller
 		$profile = Profile::find()->where(['user_id'=>$id])->one();
 		$roles = $this->getRoles();
 		
-        if ($model->load(Yii::$app->request->post())) {
+        if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
 			//handle the role first
 			$model->username = $model->email;
 			if($model->save())
@@ -151,7 +157,7 @@ class UserController extends Controller
 				$auth->revokeAll($id);
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id);
-				return $this->redirect(['view', 'id' => $model->id]);
+				return $this->redirect(['index']);
 			} else {
                return $this->render('update', ['model' => $model,'profile' => $profile,'roles' => $roles,]);
 			}

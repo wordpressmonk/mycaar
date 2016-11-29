@@ -86,17 +86,15 @@ class CompanyController extends Controller
 					return;
 			}			
 			if($model->save())
-			{	
-			 if(\Yii::$app->user->can('company manage')){ 			
+			{				
 				$user = User::findOne($model->admin);
 				$user->c_id = $model->company_id;								
-				$user->save(false);	
-			 }				
+				$user->save(false);					
 				return $this->redirect(['view', 'id' => $model->company_id]);			
 			} else
 				return $this->render('create', ['model' => $model]);
 			
-        } else {		
+        } else {	 	
          return $this->render('create', ['model' => $model]);
         }
     }
@@ -117,7 +115,7 @@ class CompanyController extends Controller
 			$model->scenario = 'update_by_company_admin';
 		}
 			
-        if ($model->load(Yii::$app->request->post())) {	
+        if (($model->load(Yii::$app->request->post()))) {	 
 			/**		Company Logo Image Uploaded for Update function Line 
 			**/
 			$model->logo = UploadedFile::getInstance($model, 'logo');			
@@ -126,26 +124,21 @@ class CompanyController extends Controller
 						return;
 				}else
 					$model->logo = $current_image;
-					
+			
 			if($model->save())
-			{
-				
+			{			
 			/**		Company admin User can Change by Superadmin and System admin Line 
-			**/
-			 if(\Yii::$app->user->can('company manage')){ 				
+			**/			 			
 					$user = User::findOne($model->admin);
 					$user->c_id = $model->company_id;								
 					$user->save(false); 								
-				} 
-			
+				
 				return $this->redirect(['view', 'id' => $model->company_id]);			
 			}else 
-				return $this->render('update', ['model' => $model, ]);
+				return $this->render('update', ['model' => $model]);
 		
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            return $this->render('update', ['model' => $model]);
         }
     }
 
@@ -190,9 +183,13 @@ class CompanyController extends Controller
 			$model = new User();
 			$profile = new Profile();									
 			$roles = MyCaar::getChildRoles('company_admin');	
-			
-		if($model->load(Yii::$app->request->post()))  {	
-			$model->username = $model->email;		
+			$profile->scenario = 'company_admin_user';
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
+			$model->username = $model->email;
+		if(empty($model->password));
+			 $model->password = Mycaar::getRandomPassword();
+			 
+			$model->generatePasswordResetToken();
 			$model->setPassword($model->password);
 			$model->generateAuthKey();
 			$model->c_id = Yii::$app->user->identity->c_id;						
@@ -213,14 +210,11 @@ class CompanyController extends Controller
 				$model->sendEmail($model->password); 
 				return $this->redirect(['view-user', 'id' => $model->id]);
 			} else
-			{	
-				return $this->render('create_user', ['model' => $model,'profile'=>$profile,'roles'=>$roles,]);
+			{					
+				return $this->render('create_user', ['model' =>$model,'profile'=>$profile,'roles'=>$roles]);
 			}			
-        } else {
-			
-            return $this->render('create_user', [
-                'model' => $model,'profile'=>$profile,'roles'=>$roles,
-            ]);	
+        } else {			
+            return $this->render('create_user', ['model' => $model,'profile'=>$profile,'roles'=>$roles]);	
 		}		
 	}	
 	
@@ -270,7 +264,8 @@ class CompanyController extends Controller
 			$model->scenario = 'update_by_company_admin';
 		}
 		
-        if ($model->load(Yii::$app->request->post())) {
+        $profile->scenario = 'company_admin_user';
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {
 			//handle the role first
 			$model->username = $model->email;			
 			if($model->save())

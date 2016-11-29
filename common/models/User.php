@@ -62,7 +62,8 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['email', 'role'], 'required','except' => ['apply_changepassword','apply_setpassword']],
 			['email', 'email'],
-			[['password'], 'required', 'except' => ['update_by_admin','update_by_company_admin','apply_forgotpassword']],
+			['password','string'],
+			//[['password'], 'required', 'except' => ['update_by_admin','update_by_company_admin','apply_forgotpassword']],
             [['c_id'], 'integer'],           
             [['username', 'email'], 'string', 'max' => 255],
             [['username'], 'unique','targetClass' => '\common\models\User', 'message' => 'This Username has already been taken.'],
@@ -436,7 +437,7 @@ class User extends ActiveRecord implements IdentityInterface
                 ['html' => 'passwordSend-text'],
                 ['user' => $user,'password'=>$password]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
             ->setTo($this->email)
             ->setSubject('YOUR VERIFIED EMAIL ID')
             ->send();
@@ -461,7 +462,7 @@ class User extends ActiveRecord implements IdentityInterface
                 ['html' => 'passwordResetToken-html'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
             ->setTo($this->email)
             ->setSubject('Reset-Password Link')
             ->send();

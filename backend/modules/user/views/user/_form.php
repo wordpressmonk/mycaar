@@ -16,14 +16,16 @@ use common\models\Company;
 
 		<?php /* $form->field($model, 'username')->textInput(['maxlength' => true]) */ ?>
 
-		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID") ?>
+		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID *") ?>
 
-		<?= $form->field($model, 'password')->passwordInput() ?>
+		<?php if($checkpage == "Create"){ ?>
+		<?= $form->field($model, 'password')->textInput()->label("Password (Optional)") ?>
+		<?php } ?>
 		
 		<?= $form->field($model, 'role')->dropDownList(
             $roles,           // Flat array ('id'=>'label')
             ['prompt'=>'--Access Level--']    // options
-        ); ?>
+        )->label("Role *"); ?>
 
 		<?php
 		$companies = ArrayHelper::map(Company::find()->all(), 'company_id', 'name');

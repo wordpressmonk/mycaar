@@ -37,7 +37,8 @@ class UserProfile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'required'],
+            [['user_id'], 'required','except' => ['company_admin_user'] ],
+			[['firstname', 'lastname'], 'required','on' => ['company_admin_user']],
             [['user_id', 'division', 'location', 'state','role'], 'integer'],
             [['firstname', 'lastname','employee_number'], 'string', 'max' => 100],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -47,6 +48,15 @@ class UserProfile extends \yii\db\ActiveRecord
         ];
     }
 
+	
+	
+	public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['company_admin_user'] = ['firstname','lastname'];//Scenario Values Only Accepted
+        return $scenarios;
+    }
+	
     /**
      * @inheritdoc
      */

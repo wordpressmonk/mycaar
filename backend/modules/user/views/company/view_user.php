@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update-user', 'id' => $model->user_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Edit', ['update-user', 'id' => $model->user_id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete-user', 'id' => $model->user_id], [
             'class' => 'btn btn-danger',
             'data' => [

@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
 		'profile'=>$profile,
 		'roles' => $roles,
+		'checkpage'=>"Create",
     ]) ?>
 
 </div>

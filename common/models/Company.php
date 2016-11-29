@@ -48,7 +48,7 @@ class Company extends \yii\db\ActiveRecord
 	public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['update_by_company_admin'] = ['name','about_us','logo','slug']; //Scenario Values Only Accepted
+        $scenarios['update_by_company_admin'] = ['name','about_us','logo','slug','admin']; //Scenario Values Only Accepted
         return $scenarios;
     } 
 	
