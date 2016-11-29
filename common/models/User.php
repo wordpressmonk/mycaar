@@ -412,6 +412,8 @@ class User extends ActiveRecord implements IdentityInterface
 
 		 //print_R($modules_completed);
 		 //total units completed (aw + cp)
+		 if($total_tests == 0)
+			 return 0;
 		 $progress =  ($tests_completed/$total_tests)*100;
 		 return (int)$progress;
 	 }

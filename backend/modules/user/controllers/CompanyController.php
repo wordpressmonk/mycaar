@@ -86,8 +86,14 @@ class CompanyController extends Controller
 					return;
 			}			
 			if($model->save())
-				return $this->redirect(['view', 'id' => $model->company_id]);
-			else
+			{	
+			 if(\Yii::$app->user->can('company manage')){ 			
+				$user = User::findOne($model->admin);
+				$user->c_id = $model->company_id;								
+				$user->save(false);	
+			 }				
+				return $this->redirect(['view', 'id' => $model->company_id]);			
+			} else
 				return $this->render('create', ['model' => $model]);
 			
         } else {		
@@ -120,19 +126,20 @@ class CompanyController extends Controller
 						return;
 				}else
 					$model->logo = $current_image;
-		
+					
+			if($model->save())
+			{
+				
 			/**		Company admin User can Change by Superadmin and System admin Line 
 			**/
-		 if(\Yii::$app->user->can('company manage')){ 
-				$cmpyadmin_id = Yii::$app->request->post('Company')['admin'];
-				$user = User::findOne($cmpyadmin_id);
-				$user->c_id = $model->company_id;								
-				$user->save(false); 								
-			} 
+			 if(\Yii::$app->user->can('company manage')){ 				
+					$user = User::findOne($model->admin);
+					$user->c_id = $model->company_id;								
+					$user->save(false); 								
+				} 
 			
-			if($model->save())
-				return $this->redirect(['view', 'id' => $model->company_id]);
-			else 
+				return $this->redirect(['view', 'id' => $model->company_id]);			
+			}else 
 				return $this->render('update', ['model' => $model, ]);
 		
         } else {
