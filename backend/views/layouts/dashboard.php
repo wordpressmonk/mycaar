@@ -157,17 +157,17 @@ AppAsset::register($this);
 						<li class="gui-folder">
 							<a>
 								<div class="gui-icon"><i class="md md-settings"></i></div>
-								<span class="title">Admin</span>
+								<span class="title">Users</span>
 							</a>
 							<!--start submenu -->
 							<ul>
 
 							<?php if(\Yii::$app->user->can('superadmin')){ ?>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/user" ><span class="title">Users</span></a></li>
-
+								<li><a href="<?=\Yii::$app->homeUrl?>user/user" ><span class="title">All Users</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/user/create" ><span class="title">Add User</span></a></li>
 							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index-user" ><span class="title">Users</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/company/enroll-user" ><span class="title">Enroll User</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/create-user" ><span class="title">Add User</span></a></li>
 							<?php } ?>																			
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
@@ -195,6 +195,7 @@ AppAsset::register($this);
 							<!--start submenu -->
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program/company-programs" ><span class="title">Programs</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/enroll-user" ><span class="title">Enroll User</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>course/report/search" ><span class="title">Reports</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>course/report/reset-programs" ><span class="title">Reset Programs</span></a></li>
 							
