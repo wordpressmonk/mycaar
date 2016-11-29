@@ -132,11 +132,14 @@ class ReportController extends Controller
             'dataProvider' => $dataProvider,
         ]);		
 	}
-	public function actionResetModules($p_id){
+	public function actionResetModules($p_id=null){
 
 		
         $searchModel = new SearchModule();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$p_id);
+		if($p_id)
+			$dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams,$p_id);
+		else $dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
+		
 		if($post = \Yii::$app->request->post()){
 			foreach($post['selection'] as $module){
 				Module::findOne($module)->resetModule();
@@ -151,10 +154,22 @@ class ReportController extends Controller
 		
 		
 	}
-	public function actionResetUnits($m_id){
+	public function actionResetUnits($m_id=null){
+		$searchModel = new SearchUnit();	
+		if($m_id){
+			$module = Module::findOne($m_id);
+			if($module == null)
+				throw new NotFoundHttpException('The requested page does not exist.');			
+			$dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams,$m_id);
+			$p_id = $module->program_id;
+		}
+			
+		else {
+			$dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
+			$p_id = null;
+		}
+        
 		
-        $searchModel = new SearchUnit();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$m_id);
 		if($post = \Yii::$app->request->post()){
 			foreach($post['selection'] as $unit){
 				Unit::findOne($unit)->resetUnit();
@@ -165,12 +180,38 @@ class ReportController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
 			'm_id' => $m_id,
+			'p_id' => $p_id,
         ]);					
 	}
-	public function actionResetUsers($u_id){
-        $searchModel = new SearchUnitReport();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$u_id);
-		if($post = \Yii::$app->request->post()){
+	public function actionResetUsers($u_id=null){
+		$searchModel = new SearchUnitReport();
+		if($u_id){
+			$unit = Unit::findOne($u_id);
+			if($unit == null)
+				throw new NotFoundHttpException('The requested page does not exist.');
+			$m_id = $unit->module->module_id;
+			$p_id = $unit->module->program_id;
+			
+			if(isset(\Yii::$app->request->post()['custom_search'])){
+				$params = \Yii::$app->request->post()['custom_search'];		
+				$dataProvider = $searchModel->searchCustom($params,$u_id);
+			}
+			else $dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams,$u_id);
+		}
+		else
+		{
+			$m_id = null;
+			$p_id = null;	
+			if(isset(\Yii::$app->request->post()['custom_search'])){
+				$params = \Yii::$app->request->post()['custom_search'];	
+				$dataProvider = $searchModel->searchCustom($params);				
+			}
+			else $dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
+		}   
+		$params = false;
+
+		
+		if($post = \Yii::$app->request->post() && isset($post['selection'])){
 			//print_r($post);
 			foreach($post['selection'] as $report){
 				$rep = UnitReport::findOne($report);
@@ -185,8 +226,35 @@ class ReportController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
 			'u_id' => $u_id,
+			'm_id'=> $m_id,
+			'p_id' => $p_id,
+			'params' => $params
         ]);				
 		
+	}
+	
+	public function actionGetModules($p_id){
+		$mods = Module::find()->where(['program_id'=>$p_id])->all();
+		 if(count($mods)>0){
+			foreach($mods as $mod){
+				echo "<option value='".$mod->module_id."'>".$mod->title."</option>";
+			}
+		}
+		else{
+			echo "<option value=''>-</option>";
+		}
+	}
+	
+	public function actionGetUnits($m_id){
+		$mods = Unit::find()->where(['module_id'=>$m_id])->all();
+		 if(count($mods)>0){
+			foreach($mods as $mod){
+				echo "<option value='".$mod->unit_id."'>".$mod->title."</option>";
+			}
+		}
+		else{
+			echo "<option value=''>-</option>";
+		}
 	}
     /**
      * Finds the Unit model based on its primary key value.

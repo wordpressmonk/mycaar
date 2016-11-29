@@ -67,4 +67,34 @@ class SearchUnitReport extends UnitReport
 
         return $dataProvider;
     }
+
+	public function searchCustom($param,$unit_id=null)
+	{
+		if($unit_id)
+			$query = UnitReport::find()->where(['unit_id'=>$unit_id]);
+		else $query = UnitReport::find();
+        // add conditions that should always apply here
+		//print_R($param);die;
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+		$query->joinWith(['user_profile.user']);
+		//$query->joinWith(['program']);
+		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+			if(isset($param['user_id']) && $param['user_id'] !='')
+				$query->andFilterWhere(['user_id'=>$param['user_id']]);					
+ 			if(isset($param['state']) && $param['state'] !='')
+				$query->andFilterWhere(['state'=>$param['state']]);
+			if(isset($param['role']) && $param['role'] !='')
+				$query->andFilterWhere(['role'=>$param['role']]);
+			if(isset($param['location']) && $param['location'] !='')
+				$query->andFilterWhere(['location'=>$param['location']]);
+			if(isset($param['division']) && $param['division'] !='')
+				$query->andFilterWhere(['division'=>$param['division']]); 
+			if(isset($param['firstname']) && $param['firstname'] !='')
+				$query->andFilterWhere(['like', 'firstname',$param['firstname']]);
+			if(isset($param['lastname']) && $param['lastname'] !='')
+				$query->andFilterWhere(['like', 'lastname', $param['lastname']]);	
+		return $dataProvider;
+	}
 }

@@ -73,4 +73,43 @@ class SearchModule extends Module
 
         return $dataProvider;
     }
+	
+    public function searchCustom($params,$program_id=null)
+    {
+		
+        $query = Module::find();
+		if($program_id)
+			$query = Module::find()->where(['program_id'=>$program_id]);
+        // add conditions that should always apply here
+		else{
+			$query->joinWith(['program']);
+			$query->andFilterWhere(['company_id'=>\Yii::$app->user->identity->c_id]);			
+		}
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'module_id' => $this->module_id,
+            //'program_id' => $this->program_id,
+            'status' => $this->status,
+        ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'short_description', $this->short_description])
+            ->andFilterWhere(['like', 'featured_video_url', $this->featured_video_url])
+            ->andFilterWhere(['like', 'detailed_description', $this->detailed_description]);
+
+        return $dataProvider;
+    }
 }
