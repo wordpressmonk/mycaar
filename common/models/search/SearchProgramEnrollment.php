@@ -75,12 +75,12 @@ class SearchProgramEnrollment extends User
 	`u`.`c_id` AS `c_id`,
 	if((`pe`.`e_id` is not null),1,0) AS `is_enrolled` 
 from 
-	((`mycaar_lms`.`program` `p` 
+	((`program` `p` 
 	join 
-		`mycaar_lms`.`user` `u` FORCE INDEX (`c_id`) on((`u`.`c_id` = `p`.`company_id` and u.`c_id` = '.Yii::$app->user->identity->c_id.' and p.program_id = '.$program_id.' and  (u.username like "%'.$username.'%")
+		`user` `u` FORCE INDEX (`c_id`) on((`u`.`c_id` = `p`.`company_id` and u.`c_id` = '.Yii::$app->user->identity->c_id.' and p.program_id = '.$program_id.' and  (u.username like "%'.$username.'%")
 		))) 
    left join 
-		`mycaar_lms`.`program_enrollment` `pe` on(((`pe`.`program_id` = `p`.`program_id`) and (`pe`.`user_id` = `u`.`id`)
+		`program_enrollment` `pe` on(((`pe`.`program_id` = `p`.`program_id`) and (`pe`.`user_id` = `u`.`id`)
 		
 		))) ) as tmp '.$enroll,
 	
@@ -89,7 +89,7 @@ from
 				'pageSize' => 0,
 				],
 			]);
-
+			
 		if (!($this->load($params) && $this->validate())) {		
 			return $dataProvider;
 		}
