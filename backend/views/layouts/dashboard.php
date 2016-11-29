@@ -216,8 +216,8 @@ AppAsset::register($this);
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index"><span class="title">All Companies</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/create" ><span class="title">Add Company</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Roles</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Divisions</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Locations</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Divisions</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">States</span></a></li>
 								
 							</ul>
@@ -232,8 +232,8 @@ AppAsset::register($this);
 							<ul>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/view?id=<?= Yii::$app->user->identity->c_id;?>"><span class="title">Company Profile</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Role</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Division</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Location</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Division</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">State</span></a></li>
 								
 							</ul>
