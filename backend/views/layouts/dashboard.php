@@ -130,7 +130,6 @@ AppAsset::register($this);
 
 						<!-- BEGIN DASHBOARD -->
 						<li>
-
 							<a href="<?=\Yii::$app->homeUrl;?>" >
 								<div class="gui-icon"><i class="md md-home"></i></div>
 								<span class="title">Dashboard</span>
@@ -169,46 +168,89 @@ AppAsset::register($this);
 							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index-user" ><span class="title">Users</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/enroll-user" ><span class="title">Enroll User</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>course/report/search" ><span class="title">Reports</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>course/report/reset-programs" ><span class="title">Reset Programs</span></a></li>
-		
-						<?php } ?>							
-								<li><a href="<?=\Yii::$app->homeUrl?>course/program/company-programs" ><span class="title">Programs</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
-								
-								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Division</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Location</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">State</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Role</span></a></li>
-								<li><a href="<?=\Yii::$app->homeUrl?>site/change-password" ><span class="title">Change Password</span></a></li>
-								
+							<?php } ?>																			
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
-
+						<?php if(\Yii::$app->user->can('company manage')){ ?>
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="md md-view-list"></i></div>
+								<span class="title">Program Management</span>
+							</a>
+							<ul>
+							<!--start submenu -->
+								<li><a href="<?=\Yii::$app->homeUrl?>course/program/company-programs" ><span class="title">Programs</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>course/module/create" ><span class="title">Add Lessons</span></a></li>								
+							</ul>
+						</li>						
+						<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
+						<!-- For company admin -->
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="md md-view-list"></i></div>
+								<span class="title">Program Management</span>
+							</a>
+							<ul>
+							<!--start submenu -->
+								<li><a href="<?=\Yii::$app->homeUrl?>course/program/company-programs" ><span class="title">Programs</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>course/program/create" ><span class="title">Add Program</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>course/report/search" ><span class="title">Reports</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>course/report/reset-programs" ><span class="title">Reset Programs</span></a></li>
+							
+							</ul>
+						</li>
 						<!-- END Admin -->
+						<?php } ?>	
 						<!-- BEGIN Company -->
 						<!-- <li class="gui-folder"> -->
 						
 						<?php if(\Yii::$app->user->can('company manage')){ ?>
-						<li>
-							<a href="<?=\Yii::$app->homeUrl?>user/company/index"  >
-								<div class="gui-icon"><i class="fa fa-user"></i></div>
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="md md-work"></i></div>
 								<span class="title">Company Management</span>
-							</a>						
+							</a>
+							<ul>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index"><span class="title">All Companies</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/create" ><span class="title">Add Company</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Divisions</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Locations</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">States</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Roles</span></a></li>
+							</ul>
 						</li>
 						<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
-						
-						<li>
-							<a href="<?=\Yii::$app->homeUrl?>user/company/view?id=<?= Yii::$app->user->identity->c_id;?>"  >
-								<div class="gui-icon"><i class="fa fa-user"></i></div>
-								<span class="title">Company Details</span>
-							</a>						
+						<li class="gui-folder">
+							<a>
+								<div class="gui-icon"><i class="md md-work"></i></div>
+								<span class="title">Company</span>
+							</a>
+							<!--start submenu -->
+							<ul>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/company/view?id=<?= Yii::$app->user->identity->c_id;?>"><span class="title">Company Profile</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/division" ><span class="title">Division</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/location" ><span class="title">Location</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/state" ><span class="title">State</span></a></li>
+								<li><a href="<?=\Yii::$app->homeUrl?>user/role" ><span class="title">Role</span></a></li>
+							</ul>
 						</li>
-						<?php } ?>
-						
+						<?php } ?>						
 						<!--end /menu-li -->
 						<!-- END Company -->
-
+						<li>
+							<a href="<?=\Yii::$app->homeUrl?>site/change-password" >
+								<div class="gui-icon"><i class="md md-input"></i></div>
+								<span class="title">Change Password</span>
+							</a>
+						</li><!--end /menu-li -->
+						<li><?= Html::beginForm(['/site/logout'], 'post')
+										. Html::submitButton(
+											'Logout',
+											['class' => 'btn btn-link logout']
+										)
+										. Html::endForm()
+										?> </li>
 					</ul><!--end .main-menu -->
 					<!-- END MAIN MENU -->
 
