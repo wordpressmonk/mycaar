@@ -195,6 +195,7 @@ AppAsset::register($this);
 							<!--start submenu -->
 								<li><a id="alpgs" href="<?=\Yii::$app->homeUrl?>course/program/company-programs#alpgs" ><span class="title">Programs</span></a></li>
 								<li><a id="add_pgm" href="<?=\Yii::$app->homeUrl?>course/program/create#add_pgm"><span class="title">Add Program</span></a></li>
+								<li><a id="add_course" href="<?=\Yii::$app->homeUrl?>course/module/create#add_course"><span class="title">Add Course</span></a></li>
 								<li><a id="enrl" href="<?=\Yii::$app->homeUrl?>user/company/enroll-user#enrl" ><span class="title">Enroll User</span></a></li>
 								<li><a id="sr" href="<?=\Yii::$app->homeUrl?>course/report/search#sr" ><span class="title">Reports</span></a></li>
 								<li><a id="reset" href="<?=\Yii::$app->homeUrl?>course/report/reset-programs#reset" ><span class="title">Reset Programs</span></a></li>
