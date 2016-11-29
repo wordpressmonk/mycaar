@@ -35,7 +35,7 @@ use kartik\select2\Select2;
 			$data = ArrayHelper::map(MyCaar::getUserAllByrole("company_admin"), 'id', 'email');			
 			echo $form->field($model, 'admin')->widget(Select2::classname(), [
 				'data' => $data,
-				'options' => ['placeholder' => 'Select Company Admin'],
+				'options' => ['placeholder' => 'Select Company Admin','newOption'=>true],
 			]);	
 			
 		}  ?> 

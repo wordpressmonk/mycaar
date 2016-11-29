@@ -14,6 +14,7 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+	'defaultRoute' => 'course/report/search',
     'bootstrap' => ['log'],
     'layout' => 'dashboard',
     'modules' => [

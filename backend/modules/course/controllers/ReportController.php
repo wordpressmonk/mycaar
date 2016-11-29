@@ -28,21 +28,31 @@ use common\models\search\SearchUnitReport;
  */
 class ReportController extends Controller
 {
-    
-	/**
-     * Lists all Program models.
-     * @return mixed
+     /**
+     * @inheritdoc
      */
-    public function actionIndex()
+    public function behaviors()
     {
-        $searchModel = new SearchReport();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return [
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+             'access' => [
+                'class' => AccessControl::className(),
+				'only' => ['search','reset-programs','reset-modules','reset-units','reset-users'],
+                'rules' => [
+                    [
+                        'actions' => ['search'],
+                        'allow' => true,
+						'roles' => ['assessor']
+                    ],
+                    [
+                        'actions' => ['reset-programs','reset-modules','reset-units','reset-users'],
+                        'allow' => true,
+						'roles' => ['company_admin']
+                    ],
+                ],
+            ], 
+        ];
+    }   
 
 	public function actionSearch(){		
 		$programs = $users = [];
