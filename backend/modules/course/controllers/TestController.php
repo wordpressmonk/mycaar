@@ -97,7 +97,7 @@ class TestController extends Controller
 			$this->saveProgress($user_id,$unit_id);
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				$session->remove($unit_id."_cp_".$user_id);
-				return $this->redirect(["site/index"]);
+				return $this->goHome();
 			}else
 			return $this->redirect(["cp-test","user_id"=>$user_id,"unit_id"=>$unit_id]);
 			
@@ -139,6 +139,7 @@ class TestController extends Controller
 			$report = new Report();
 		$report->unit_id = $unit_id;
 		$report->student_id = $user_id;
+		$report->cap_done_by = \Yii::$app->user->id;
 		$report->capability_progress = $progress;
 		$report->save(false);
 		return (int)$progress;

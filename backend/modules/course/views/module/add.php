@@ -17,7 +17,15 @@ use kartik\select2\Select2;
 <div class="section-body contain-lg">
 	<div class="row">
 		<div class="col-lg-12">
-			<h1>Course</h1>
+			<div class="col-lg-10">
+				<h1>Course</h1>
+			</div>
+			<div class="col-lg-2">
+				<h1><?php
+				if(!$model->isNewRecord )
+				echo Html::a('Add Unit', ['unit/create','m_id'=>$model->module_id], ['class' => 'btn btn-info pull-right']) ?>
+			</h1>
+			</div>
 		</div><!--end .col -->
 		<div class="col-lg-12">
 			<div class="panel-group" id="accordion7">
@@ -28,7 +36,7 @@ use kartik\select2\Select2;
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
-					<div id="accordion7-1" class="collapse">
+					<div id="accordion7-1" class="collapse in">
 						<div class="card-body">
 							<?php $form = ActiveForm::begin([
 											'options' => ['enctype'=>'multipart/form-data']
@@ -54,7 +62,7 @@ use kartik\select2\Select2;
 									$data = ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title');
 								echo $form->field($model, 'program_id')->widget(Select2::classname(), [
 									'data' => $data,
-									'options' => ['placeholder' => 'Select Category'],
+									'options' => ['placeholder' => 'Select Category','disabled'=>$disabled],
 								])->label(false);	
 								?>	
 								<?= $form->field($model, 'language')->textInput(['maxlength' => true,'class'=>'form-control']) ?>								

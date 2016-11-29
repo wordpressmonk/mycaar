@@ -4,6 +4,7 @@ namespace backend\modules\course\controllers;
 
 use Yii;
 use common\models\Module;
+use common\models\Program;
 use common\models\search\SearchModule;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -49,10 +50,17 @@ class ModuleController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($p_id=null)
     {
-        $model = new Module();
-
+		$model = new Module();
+		if($p_id){
+			$program = Program::findOne($p_id);
+			if($program == null)
+				throw new NotFoundHttpException('The requested page does not exist.');
+			$model->program_id = $p_id;
+			$disabled = true;
+		}      
+		else $disabled = false;
         if ($model->load(Yii::$app->request->post())) {
 			//save image here
 			//print_r(Yii::$app->request->post());die;
@@ -66,6 +74,7 @@ class ModuleController extends Controller
         } else {
             return $this->render('add', [
                 'model' => $model,
+				'disabled' => $disabled,
             ]);
         }
     }
@@ -78,6 +87,7 @@ class ModuleController extends Controller
      */
     public function actionUpdate($id)
     {
+		$disabled = false;
         $model = $this->findModel($id);
 		$program = $model->program;
 		if (\Yii::$app->user->can('manageProgram', ['post' => $program])) {
@@ -110,6 +120,7 @@ class ModuleController extends Controller
 			} else {
 				return $this->render('add', [
 					'model' => $model,
+					'disabled' => $disabled,
 				]);
 			}
 		}else{
