@@ -71,7 +71,8 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'page'])->one();
 								$data = json_decode($element->content);
 								$formdata = $data->html;
-								$formdata = str_replace(array("\r", "\n","'"), '', $formdata);
+								$formdata = str_replace("'", "\'", $formdata);
+								$formdata = str_replace(array("\r", "\n"), '', $formdata);
 								//echo $formdata;die;
 							?>
 							<div id="build-wrap"></div>
@@ -91,7 +92,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
 								$aw_data = $element->content;
-								$aw_data = str_replace(array("\r", "\n","'"), '', $aw_data);
+								$aw_data = str_replace("'", "\'", $aw_data);
 							?>
 						<div id="aware_form"></div>
 						</div>
@@ -110,7 +111,8 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'cap_data'])->one();
 								$cp_data = $element->content;
-								$cp_data = str_replace(array("\r", "\n","'"), '', $cp_data);
+								$cp_data = str_replace("'", "\'", $cp_data);
+								$cp_data = str_replace(array("\r", "\n"), '', $cp_data);
 							?>
 						<div id="capability_form"></div>
 						</div>
