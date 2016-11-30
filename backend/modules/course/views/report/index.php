@@ -26,8 +26,32 @@ $this->params['breadcrumbs'][] = $this->title;
 				['class' => 'yii\grid\SerialColumn'],
 
 				//'unit_id',
-				'unit.title',
-				'student.fullname',
+				//'unit.title',
+				[
+					'label' => 'Module',
+					'attribute' => 'module_id',
+					'value' => 'unit.module.title',
+				
+				],
+				[
+					'label' => 'Unit',
+					'attribute' => 'unit_id',
+					'value' => 'unit.title',
+				
+				],
+				[
+					'label' => 'Assessed By',
+					'attribute' => 'cap_done_by',
+					'value' => 'assessor.fullname',
+				
+				],
+				//'assessor.fullname',
+				[
+					'label' => 'Student',
+					'attribute' => 'student_id',
+					'value' => 'student.fullname',
+				
+				],
 				[
 					'attribute' => 'capability_progress',
 					'format' => 'raw',
@@ -43,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					}
 				],
 				//'capability_progress',
-				'assessor.fullname'
+				
 
 				//['class' => 'yii\grid\ActionColumn'],
 			],

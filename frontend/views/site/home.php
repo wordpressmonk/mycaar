@@ -80,9 +80,9 @@ $this->params['breadcrumbs'][] = $this->title;
 					else 
 						echo '<li class="margin" style="margin-left: -307px">';
 						echo 
-							'<div class="single_unit_title">
+							'<div class="single_unit_title"><a href="'.Url::to(['test/learn','u_id'=>$unit->unit_id]).'">
                                         '.$unit->title.'
-                            </div>
+                            </a></div>
 							<div class="course_types">';
 							foreach($users as $key => $user){
 								if($user->user->isEnrolled($program->program_id))
