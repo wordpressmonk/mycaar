@@ -4,7 +4,7 @@ namespace backend\modules\user\controllers;
 
 use Yii;
 use common\models\User;
-use common\models\Mycaar;
+use common\models\MyCaar;
 use common\models\UserProfile as Profile;
 use common\models\search\SearchUser;
 use yii\web\Controller;
@@ -85,8 +85,8 @@ class UserController extends Controller
         if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
 			$model->username = $model->email;
 			//Random Password Generation For Mycaar Common models
-			if(empty($model->password));
-			 $model->password = Mycaar::getRandomPassword();
+			if(empty($model->password))
+			  $model->password = Mycaar::getRandomPassword();
 			 
 			$model->setPassword($model->password);
 			$model->generateAuthKey();

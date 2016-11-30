@@ -90,7 +90,7 @@ class CompanyController extends Controller
 				$user = User::findOne($model->admin);
 				$user->c_id = $model->company_id;								
 				$user->save(false);					
-				return $this->redirect(['view', 'id' => $model->company_id]);			
+				return $this->redirect(['index']);			
 			} else
 				return $this->render('create', ['model' => $model]);
 			
@@ -133,7 +133,7 @@ class CompanyController extends Controller
 					$user->c_id = $model->company_id;								
 					$user->save(false); 								
 				
-				return $this->redirect(['view', 'id' => $model->company_id]);			
+				return $this->redirect(['index']);			
 			}else 
 				return $this->render('update', ['model' => $model]);
 		
@@ -186,7 +186,7 @@ class CompanyController extends Controller
 			$profile->scenario = 'company_admin_user';
 		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
 			$model->username = $model->email;
-		if(empty($model->password));
+		if(empty($model->password))
 			 $model->password = Mycaar::getRandomPassword();
 			 
 			$model->generatePasswordResetToken();
