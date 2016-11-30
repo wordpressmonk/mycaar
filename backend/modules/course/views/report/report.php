@@ -192,7 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
 													$progress = $user->user->getUnitProgress($unit->unit_id);
 													//print_r($progress);
 													$str.= "<div name='unit1'>
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='javascript:void(0);'><span class='tooltiptext'><center>{$progress['ap']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='javascript:void(0);'><span class='toolkit'><center>{$progress['ap']}</center></span>
 															</a>
 														</div>
 

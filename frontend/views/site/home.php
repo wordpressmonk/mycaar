@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
 													$progress = $user->user->getUnitProgress($unit->unit_id);
 													$url = Url::to(['test/aw-test','u_id'=>$unit->unit_id]);
 													echo "<div name='unit1'>
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$url'><span class='tooltiptext'><center>{$progress['ap']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$url'><span class='toolkit'><center>{$progress['ap']}</center></span>
 															</a>
 														</div>
 
