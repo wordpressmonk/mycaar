@@ -71,7 +71,8 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'page'])->one();
 								$data = json_decode($element->content);
 								$formdata = $data->html;
-								$formdata = str_replace(array("\r", "\n"), '', $formdata);
+								$formdata = str_replace(array("\r", "\n","'"), '', $formdata);
+								//echo $formdata;die;
 							?>
 							<div id="build-wrap"></div>
 						</div>
