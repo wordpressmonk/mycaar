@@ -90,7 +90,7 @@ class TestController extends Controller
 		else $page = $session[$u_id."_".\Yii::$app->user->id] = 0;
 		/////////////////////////
 		//die;
-		$limit = 2;
+		$limit = 25;
 		$offset = $page*$limit;
 		$model = $this->findModel($u_id);
 		$final = false;

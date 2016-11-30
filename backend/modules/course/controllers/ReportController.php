@@ -249,7 +249,7 @@ class ReportController extends Controller
 		switch($type){			
 			case("cp"):
 				$rep->resetCpTest();
-				$rep->capability_progress = 0;
+				$rep->capability_progress = NULL;
 				break;
 			case("aw"):
 				//delete all aware questions

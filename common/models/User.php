@@ -328,9 +328,9 @@ class User extends ActiveRecord implements IdentityInterface
 				 $output = ['ap'=>'amber','cp'=>'amber'];
 				 if(!$c_status) //if no capability tests for the unit
 					$output['cp'] = 'grey';
-				 else if($report->capability_progress == NULL)
+				 else if(is_null($report->capability_progress))
 					 $output['cp'] = 'red';
-				 if($report->awareness_progress==NULL)
+				 if(is_null($report->awareness_progress))
 					 $output['ap'] = 'red';
 			// }
 			 //then see the progress
