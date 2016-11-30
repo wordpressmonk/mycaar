@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			if($p_key == 0)
 				echo '<div class="course_listing al_single_course_width units-present-4">';
 			else 
-				echo '<div class="course_listing al_single_course_width units-present-4"  style="margin-left: -7px">'
+				echo '<div class="course_listing al_single_course_width units-present-4" >'
 			;
 					echo '<div class="course_name">
                             <h2>
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					if($k==0)
 							echo "<li>";
 					else 
-						echo '<li class="margin" style="margin-left: -307px">';
+						echo '<li class="margin" style="margin-left: -304px">';
 						echo 
 							'<div class="single_unit_title"><a href="'.Url::to(['test/learn','u_id'=>$unit->unit_id]).'">
                                         '.$unit->title.'
