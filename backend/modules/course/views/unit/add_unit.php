@@ -12,7 +12,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 <div class="row">
 	<div class="col-lg-12">
-		<h2>Add Lesson</h2>
+		<h2>Add Unit</h2>
 	</div><!--end .col -->
 	<div class="col-lg-12">
 	<div class="card tabs-left style-default-light">
@@ -23,7 +23,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 				else */
 					echo '<li><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.$unit->title.'</a></li>';
 			}?>
-			<li class="active"><a class="unit_view" data-unit_id="new" href="#tab2">Add New Lesson</a></li>
+			<li class="active text-info small-padding"><h4>ADD NEW</h4></li>
 		</ul>
 		<div class="card-body tab-content style-default-bright">
 		<div class="tab-pane active" id="tab1">

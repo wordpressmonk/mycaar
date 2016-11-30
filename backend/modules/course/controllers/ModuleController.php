@@ -53,6 +53,7 @@ class ModuleController extends Controller
     public function actionCreate($p_id=null)
     {
 		$model = new Module();
+		$model->language = "English";
 		if($p_id){
 			$program = Program::findOne($p_id);
 			if($program == null)

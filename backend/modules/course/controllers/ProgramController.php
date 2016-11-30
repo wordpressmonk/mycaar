@@ -155,8 +155,10 @@ class ProgramController extends Controller
     {
 		$model = $this->findModel($id);
 		if (\Yii::$app->user->can('manageProgram', ['post' => $model])) {
-			$this->findModel($id)->delete();
-			return $this->redirect(['index']);
+			$this->findModel($id)->deleteProgram();
+			if (\Yii::$app->user->can('super_admin'))
+				return $this->redirect(['index']);
+			else return $this->redirect(['company-programs']);
 		}else{
 			//yii\web\ForbiddenHttpException
 			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');

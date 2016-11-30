@@ -42,7 +42,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
-					<div id="unit_details" class="collapse in" aria-expanded="true">
+					<div id="unit_details" class="collapse" aria-expanded="true">
 						<div class="card-body">
 							
 							<div class="checkbox checkbox-styled checkbox-info  pull-right">
