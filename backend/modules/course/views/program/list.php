@@ -32,11 +32,12 @@ $homeUrl = Yii::$app->homeUrl;
 					<?php foreach($dataProvider->models as $program){
 						echo 					
 						"<li class='dd-item tile' data-id='$program->program_id'>
-							<div class='btn btn-primary-light'><i class='fa fa-list'></i> $program->title
+							<div class='btn btn-primary'><i class='fa fa-list'></i> $program->title
 							<span class='pull-right text-default'>
-								<a href='{$homeUrl}course/program/view?id={$program->program_id}' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
-								<a href='{$homeUrl}course/program/update?id={$program->program_id}' style='padding-right:3px'><span class='glyphicon glyphicon-pencil'></span></a>
-								<a href='{$homeUrl}course/program/delete?id={$program->program_id}' data-confirm='Are you sure you want to delete this item?' data-method='post' style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
+								<a href='{$homeUrl}course/program/view?id={$program->program_id}' title='View Program' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
+								<a href='{$homeUrl}course/program/update?id={$program->program_id}' title='Update Program' style='padding-right:3px'><span class='glyphicon glyphicon-pencil'></span></a>
+								<a href='{$homeUrl}course/module/create?p_id={$program->program_id}' title='Add Course' style='padding-right:3px'><span class='glyphicon glyphicon-plus'></span></a>
+								<a href='{$homeUrl}course/program/delete?id={$program->program_id}' title='Delete Program' data-confirm='Are you sure you want to delete this item?' data-method='post' style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
 							</span>
 							</div>
 						";
@@ -48,8 +49,9 @@ $homeUrl = Yii::$app->homeUrl;
 									<li class='dd-item' data-id='$module->module_id'>
 										<div class='btn btn-default'>$module->title
 											<span class='pull-right text-primary'>
-												<a href='{$homeUrl}course/module/update?id={$module->module_id}' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
-												<a href='{$homeUrl}course/module/delete?id={$module->module_id}' data-confirm='Are you sure you want to delete this item?' data-method='post'  style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
+												<a href='{$homeUrl}course/module/update?id={$module->module_id}' title='Update Course' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
+												<a href='{$homeUrl}course/unit/create?m_id={$module->module_id}' title='Add Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-plus'></span></a>
+												<a href='{$homeUrl}course/module/delete?id={$module->module_id}' title='Delete Course' data-confirm='Are you sure you want to delete this item?' data-method='post'  style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
 											</span>										
 										</div>
 									";
@@ -61,8 +63,8 @@ $homeUrl = Yii::$app->homeUrl;
 									<li class='dd-item' data-id='$unit->unit_id'>
 										<div class='btn btn-default-bright'>$unit->title
 											<span class='pull-right text-primary-dark'>
-												<a href='{$homeUrl}course/unit/update?id={$unit->unit_id}' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
-												<a href='{$homeUrl}course/unit/delete?id={$unit->unit_id}' data-confirm='Are you sure you want to delete this item?' data-method='post' style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
+												<a href='{$homeUrl}course/unit/update?id={$unit->unit_id}' title='View Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
+												<a href='{$homeUrl}course/unit/delete?id={$unit->unit_id}' title='Delete Lesson' data-confirm='Are you sure you want to delete this item?' data-method='post' style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
 											</span>											
 										</div>
 									</li>";
