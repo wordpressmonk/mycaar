@@ -34,6 +34,8 @@ class Division extends \yii\db\ActiveRecord
             [['company_id'], 'integer'],
             [['title'], 'string', 'max' => 200],
             [['description'], 'string', 'max' => 1000],
+			
+			[['title'],'validateCompanyWiseDivisionName'],
         ];
     }
 
@@ -64,4 +66,17 @@ class Division extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Company::className(), ['company_id' => 'company_id']);
     }
+	
+	// Validation For Company Wise with Database By Arivazhagan
+	
+	public function validateCompanyWiseDivisionName()
+    { 		
+	   $checkCompanyWise = static::findOne(['title'=>$this->title,'company_id'=>$this->company_id]);
+       if($checkCompanyWise)
+	   {
+		 $this->addError('title','Already Added This Division Name');
+	   } 
+    }
+	
+	
 }

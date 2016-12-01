@@ -35,6 +35,8 @@ class Role extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['title'], 'string', 'max' => 1000],
             [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Company::className(), 'targetAttribute' => ['company_id' => 'company_id']],
+			
+			[['title'],'validateCompanyWiseRoleName'],
         ];
     }
 
@@ -57,5 +59,15 @@ class Role extends \yii\db\ActiveRecord
     public function getCompany()
     {
         return $this->hasOne(Company::className(), ['company_id' => 'company_id']);
+    }
+	
+	// Validation For Company Wise with Database By Arivazhagan
+	public function validateCompanyWiseRoleName()
+    { 		
+	   $checkCompanyWise = static::findOne(['title'=>$this->title,'company_id'=>$this->company_id]);
+       if($checkCompanyWise)
+	   {
+		 $this->addError('title','Already Added This Role Name');
+	   } 
     }
 }
