@@ -12,9 +12,10 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 <div class="row">
 	<div class="col-lg-12">
-		<h2>Add Unit</h2>
+		<h2>Add Lesson</h2>
 	</div><!--end .col -->
 	<div class="col-lg-12">
+	<h4 class="small-padding">[ Program: <a href="<?= Url::to(['program/view','id'=>$module->program->program_id])?>"><?=$module->program->title?></a> , Module: <a href="<?= Url::to(['module/update','id'=>$module->module_id])?>"><?=$module->title?> ]</a></h4>
 	<div class="card tabs-left style-default-light">
 		<ul class="card-head nav nav-tabs tabs-info" data-toggle="tabs">
 			<?php foreach($module->units as $unit){

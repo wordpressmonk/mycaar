@@ -12,16 +12,17 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 ?>
 <div class="section-body contain-lg">
-<h2 class="col-md-9">Lessons</h2>
+<h2 class="col-md-9">Update Lesson: <?=$model->title?></h2>
+
 <?= Html::a('Preview', ['view', 'id' => $model->unit_id], ['class' => 'btn btn-info pull-right']) ?>
 
 
 <div class="row">
 
 		
-
-	<div class="col-lg-12">
 	
+	<div class="col-lg-12">
+	<h4 class="small-padding">[ Program: <a href="<?= Url::to(['program/view','id'=>$module->program->program_id])?>"><?=$module->program->title?></a> , Module: <a href="<?= Url::to(['module/update','id'=>$module->module_id])?>"><?=$module->title?> ]</a></h4>
 	<div class="card tabs-left style-default-light">
 		<ul class="card-head nav nav-tabs tabs-info" data-toggle="tabs">
 			<?php foreach($module->units as $unit){

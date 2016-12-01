@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						[
 						 'id' => 'program_select', 
 						 'class' => 'form-control',
-						 'prompt' => '--Select--',
+						 'prompt' => '--Select Program--',
 						 'onchange'=>'$.post( "'.Yii::$app->urlManager->createUrl('course/report/get-modules?p_id=').'"+$(this).val(), function( data ) {
 							$( "select#module_select" ).html( data ).change();
 							
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						[
 						 'id' => 'module_select',
 						 'class' => 'form-control',
-						 'prompt' => '--Select--',
+						 'prompt' => '--Select Course--',
 						 'onchange'=>'$.post( "'.Yii::$app->urlManager->createUrl('course/report/get-units?m_id=').'"+$(this).val(), function( data ) {
 							$( "select#unit_select" ).html( data ).change();
 							
@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						$u_id,
 						ArrayHelper::map(common\models\Unit::find()->where(['module_id' =>$m_id])->all(),'unit_id', 'title'),
 						[
-						 'id' => 'unit_select','prompt' => '--Select--', 'class' => 'form-control']
+						 'id' => 'unit_select','prompt' => '--Select Lesson--', 'class' => 'form-control']
 					);?>
 				</div>
 				<div class="col-md-2" >
@@ -150,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'columns' => [
 				['class' => 'yii\grid\CheckboxColumn'],
 				[
-					'label'	=> 'Unit',
+					'label'	=> 'Lesson',
 					'value' => 'unit.title',
 				],
 				[

@@ -28,13 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				//'unit_id',
 				//'unit.title',
 				[
-					'label' => 'Module',
+					'label' => 'Course',
 					'attribute' => 'module_id',
 					'value' => 'unit.module.title',
 				
 				],
 				[
-					'label' => 'Unit',
+					'label' => 'Lesson',
 					'attribute' => 'unit_id',
 					'value' => 'unit.title',
 				

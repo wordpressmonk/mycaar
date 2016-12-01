@@ -45,7 +45,15 @@ class ProgramController extends Controller
             ], 
         ];
     }
+	public function actionProgramList(){
+        $searchModel = new SearchProgram();
+        $dataProvider = $searchModel->searchCompanyPrograms(Yii::$app->request->queryParams);
 
+        return $this->render('list', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);		
+	}
     /**
      * Lists all Program models.
      * @return mixed
@@ -70,10 +78,17 @@ class ProgramController extends Controller
 		if (\Yii::$app->user->can('superadmin')) {
 			return $this->redirect(['index']);
 		}
-        $searchModel = new SearchProgram();
+/*         $searchModel = new SearchProgram();
         $dataProvider = $searchModel->searchCompanyPrograms(Yii::$app->request->queryParams);
 
         return $this->render('company_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]); */
+        $searchModel = new SearchProgram();
+        $dataProvider = $searchModel->searchCompanyPrograms(Yii::$app->request->queryParams);
+
+        return $this->render('list', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

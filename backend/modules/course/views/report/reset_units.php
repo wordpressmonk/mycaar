@@ -11,7 +11,7 @@ use common\models\Module;
 /* @var $searchModel common\models\search\SearchProgram */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Units';
+$this->title = 'Lessons';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <h1><?= Html::encode($this->title) ?></h1>
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						[
 						 'id' => 'program_select', 
 						 'class' => 'form-control',
-						 'prompt'=>'--Select--',
+						 'prompt'=>'--Select Program--',
 						 'onchange'=>'$.post( "'.Yii::$app->urlManager->createUrl('course/report/get-modules?p_id=').'"+$(this).val(), function( data ) {
 							$( "select#module_select" ).html( data ).change();
 							
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						$m_id,
 						ArrayHelper::map(Module::find()->where(['program_id' =>$p_id])->all(),'module_id', 'title'),
 						[
-						 'id' => 'module_select','prompt' => '--Select--','class' => 'form-control','required'=>'required']
+						 'id' => 'module_select','prompt' => '--Select Course--','class' => 'form-control','required'=>'required']
 					);?>
 				</div>
 				<div class="col-md-2" >

@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use common\models\Program;
@@ -18,7 +19,8 @@ use kartik\select2\Select2;
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="col-lg-10">
-				<h1>Course</h1>
+				<h1><?=$model->isNewRecord ?"Add New Course":"Update: ".$model->title;?></h1>
+				<h4>[ Program: <a href="<?=Url::to(['program/view','id'=>$model->isNewRecord ?$program->program_id:$model->program->program_id])?>" ><?=$model->isNewRecord ?$program->title:$model->program->title;?> ]</a></h4>
 			</div>
 			<div class="col-lg-2">
 				<h1><?php

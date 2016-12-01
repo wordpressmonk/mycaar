@@ -53,6 +53,7 @@ class ModuleController extends Controller
     public function actionCreate($p_id=null)
     {
 		$model = new Module();
+		$program = false;
 		$model->language = "English";
 		if($p_id){
 			$program = Program::findOne($p_id);
@@ -76,6 +77,7 @@ class ModuleController extends Controller
             return $this->render('add', [
                 'model' => $model,
 				'disabled' => $disabled,
+				'program' => $program
             ]);
         }
     }

@@ -9,7 +9,7 @@ use common\models\Program;
 /* @var $searchModel common\models\search\SearchProgram */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Lessons';
+$this->title = 'Courses';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <h1><?= Html::encode($this->title) ?></h1>
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					[
 					 'id' => 'program_select', 
 					 'class' => 'form-control',
-					 'prompt'=>'--Select--'
+					 'prompt'=>'--Select Program--'
 					 ]
 				);?>
 			</div>
