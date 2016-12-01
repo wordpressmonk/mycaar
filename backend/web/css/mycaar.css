@@ -21,7 +21,7 @@ ul::-webkit-scrollbar-track {
    background-color: #eee;
 }
 #aware_form .stage-wrap>ul, #capability_form .stage-wrap>ul{
-height:350px;
+height:650px;
 overflow-y:scroll;
 }
 a{

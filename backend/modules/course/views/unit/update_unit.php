@@ -198,7 +198,8 @@ $(document).ready(function(){
 	var awareness_elements = {
 	  disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','img','video','audio','paragraph','textdisplay','filedownload'],
 	   fieldRemoveWarn: true ,
-	   controlPosition: 'left'
+	   controlPosition: 'left',
+	   editOnAdd: true,
 	};
  	var aw_data = '<?= $aw_data ?>';
 	//console.log(aw_data);
@@ -229,6 +230,7 @@ $(document).ready(function(){
 	  disableFields: ['autocomplete','button','checkbox','textarea','checkbox-group','hidden','select','header','date','number','file','paragraph','text','img','video','audio','textdisplay','fileupload','filedownload'],
 	   fieldRemoveWarn: true,
 	   controlPosition: 'left',
+	   editOnAdd: true,
 	};
  	var cp_data = '<?= $cp_data ?>';
 	//console.log(aw_data);
