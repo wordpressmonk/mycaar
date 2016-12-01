@@ -84,8 +84,8 @@ class SearchUnit extends Unit
 			$query = Unit::find()->where(['module_id'=>$m_id]);
         // add conditions that should always apply here
 		else{
-			$query->joinWith(['module.program']);
-			$query->andFilterWhere(['company_id'=>\Yii::$app->user->identity->c_id]);
+			$query->joinWith(['module.program as p']);
+			$query->andFilterWhere(['p.company_id'=>\Yii::$app->user->identity->c_id]);
 		}
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -106,7 +106,7 @@ class SearchUnit extends Unit
             'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'unit.title', $this->title]);
 
         return $dataProvider;
     }

@@ -159,7 +159,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			if($p_key == 0)
 				$str.= '<div class="course_listing al_single_course_width units-present-4">';
 			else 
-				$str.= '<div class="course_listing al_single_course_width units-present-4"  style="margin-left: -7px">'
+				$str.= '<div class="course_listing al_single_course_width units-present-4">'
 			;
 					$str.= '<div class="course_name">
                             <h2>
@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					if($k==0)
 						$str.= "<li>";
 					else 
-						$str.= '<li class="margin" style="margin-left: -307px">';
+						$str.= '<li class="margin" style="margin-left: -304px">';
 						$str.= 
 							'<div class="single_unit_title">
                                         '.$unit->title.'
@@ -192,7 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
 													$progress = $user->user->getUnitProgress($unit->unit_id);
 													//print_r($progress);
 													$str.= "<div name='unit1'>
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='javascript:void(0);'><span class='tooltiptext'><center>{$progress['ap']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='javascript:void(0);'><span class='toolkit'><center>{$progress['ap']}</center></span>
 															</a>
 														</div>
 

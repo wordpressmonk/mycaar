@@ -160,7 +160,29 @@ $this->params['breadcrumbs'][] = $this->title;
 							return $model['firstname'].'-'.$model['lastname'];
 						}),['class'=>'form-control input-sm','prompt' => '--Search--']),
 				],
+				[
+					'attribute' => 'Progress(Awareness/Capability)',
+					'format' => 'raw',
+					'value' => function($data){
+						$user = common\models\User::findOne($data->student_id);
+						$progress = $user->getUnitProgress($data->unit_id);
+						$url = Url::to(['report/reset-test','type'=>'aw','r_id'=>$data->report_id]);
+						$output = "<div name='unit1'>
+									<a class='circle circle-{$progress['ap']}' href='$url'><span class='toolkit'>{$progress['ap']}</span>
+									</a>
+								";
+						if($progress['cp'] == 'grey')
+							$url = "javascript::void(0)";
+						else $url = Url::to(['report/reset-test','type'=>'cp','r_id'=>$data->report_id]);
+						$output .= "
+									<a class='circle circle-{$progress['cp']}' href='$url'><span class='toolkit'>{$progress['cp']}</span>
+									</a>
+								</div>";								
+						return $output;
 
+					},
+					 'contentOptions' => ['style' => 'text-align:center; width:250px;  min-width:100px;  '],
+				],
 			],
 		]); ?>
 		<?= Html::endForm();?> 

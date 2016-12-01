@@ -2636,7 +2636,7 @@ function formBuilderEventsFn() {
             type: optionInputType[prop] || 'text',
             'class': 'option-' + prop,
             value: optionData[prop],
-            name: name + '-option',
+            name: name,
           };
 
           if (opts.messages.placeholders[prop]) {

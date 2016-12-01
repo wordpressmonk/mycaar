@@ -77,7 +77,7 @@ class TestController extends Controller
 		//if previous unit is completed
 		$session = Yii::$app->session;
 		$attempted = Report::find()->where(['unit_id'=>$u_id,'student_id'=>\Yii::$app->user->id])->one();
-		if($attempted && !isset($session[$u_id."_".\Yii::$app->user->id]))
+		if($attempted && !is_null($attempted->awareness_progress) && !isset($session[$u_id."_".\Yii::$app->user->id]))
 			return $this->redirect(['retake','u_id'=>$u_id]); 
 		//
 		
@@ -90,7 +90,7 @@ class TestController extends Controller
 		else $page = $session[$u_id."_".\Yii::$app->user->id] = 0;
 		/////////////////////////
 		//die;
-		$limit = 2;
+		$limit = 25;
 		$offset = $page*$limit;
 		$model = $this->findModel($u_id);
 		$final = false;

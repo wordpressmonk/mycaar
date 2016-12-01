@@ -36,7 +36,11 @@ use kartik\select2\Select2;
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
 					</div>
+					<?php if($model->isNewRecord ) {?>
 					<div id="accordion7-1" class="collapse in">
+					<?php } else {?>
+					<div id="accordion7-1" class="collapse">
+					<?php } ?>
 						<div class="card-body">
 							<?php $form = ActiveForm::begin([
 											'options' => ['enctype'=>'multipart/form-data']

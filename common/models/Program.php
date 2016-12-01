@@ -92,4 +92,28 @@ class Program extends \yii\db\ActiveRecord
 			}
 		}
 	}
+	public function deleteProgram(){
+			$modules = $this->modules;
+			foreach($modules as $module){
+				$units = Module::findOne($module->module_id)->units;
+				foreach($units as $unit){
+					foreach($unit->awarenessQuestions as $question){
+							AwarenessOption::deleteAll(['question_id'=>$question->aq_id]);
+							AwarenessAnswer::deleteAll(['question_id'=>$question->aq_id]);
+					}
+					foreach($unit->capabilityQuestions as $question){
+							CapabilityAnswer::deleteAll(['question_id'=>$question->cq_id]);
+					}
+					AwarenessQuestion::deleteAll(['unit_id'=>$unit->unit_id]);
+					CapabilityQuestion::deleteAll(['unit_id'=>$unit->unit_id]);
+					UnitReport::deleteAll(['unit_id'=>$unit->unit_id]);
+					UnitElement::deleteAll(['unit_id'=>$unit->unit_id]);
+				}
+				Unit::deleteAll(['module_id'=>$module->module_id]);
+			}
+			ProgramEnrollment::deleteAll(['program_id'=>$this->program_id]);
+			Module::deleteAll(['program_id'=>$this->program_id]);
+			$this->delete();
+			return true;
+	}
 }

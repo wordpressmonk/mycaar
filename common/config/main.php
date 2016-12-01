@@ -29,5 +29,13 @@ return [
 		'admin' => [
             'class' => 'mdm\admin\Module',
         ],
-	]
+	],
+    'on beforeRequest'  => function ($event) {
+        Yii::$container->set('yii\grid\DataColumn', [
+            'filterInputOptions' => [
+                'class'       => 'form-control',
+                'placeholder' => '--Search--'
+            ]
+        ]);
+    },
 ];

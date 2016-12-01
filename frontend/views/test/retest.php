@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	}
 	?>
 	<div class="form-group">
-		<input name= "save" type="submit" class="btn btn-lg ink-reaction btn-info" value="Next"/>
+		<input name= "save" type="submit" class="btn btn-lg ink-reaction btn-info" value="SUBMIT"/>
 		<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save&Exit"/>
 	</div>
 	</form>

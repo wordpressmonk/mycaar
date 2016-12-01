@@ -12,14 +12,15 @@ use common\models\UnitReport;
  */
 class SearchUnitReport extends UnitReport
 {
-    /**
+    public $module_id;
+	/**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['unit_id','student_id'], 'integer'],
-          //  [['firstname', 'lastname'], 'safe'],
+          //  [['unit_id'], 'integer'],
+            [['cap_done_by','student_id','unit_id','module_id'], 'string'],
         ];
     }
 
@@ -48,7 +49,11 @@ class SearchUnitReport extends UnitReport
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-		$query->joinWith(['user_profile.user']);
+		$query->joinWith(['unit as u']);
+		$query->joinWith(['unit.module as m']);
+		$query->joinWith(['user_profile as profile']);
+		$query->joinWith(['assessor as assr']);
+		$query->joinWith(['assessor.user']);
 		//$query->joinWith(['program']);
 		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
 		
@@ -59,14 +64,15 @@ class SearchUnitReport extends UnitReport
             // $query->where('0=1');
             return $dataProvider;
         }
+		$query->andFilterWhere(['like', 'assr.firstname', $this->cap_done_by])
+			->orFilterWhere(['like', 'assr.lastname', $this->cap_done_by]);
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'unit_id' => $this->unit_id,
-            'student_id' => $this->student_id,
-         //   'location' => $this->location,
-         //   'state' => $this->state,
-        ]);
+		$query->andFilterWhere(['like', 'profile.firstname', $this->student_id])
+			->orFilterWhere(['like', 'profile.lastname', $this->student_id]);				
+
+		$query->andFilterWhere(['like', 'u.title', $this->unit_id]);
+		$query->andFilterWhere(['like', 'm.title', $this->module_id]);
+		//}
 
         return $dataProvider;
     }

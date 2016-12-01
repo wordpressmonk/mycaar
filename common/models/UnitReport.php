@@ -85,14 +85,27 @@ class UnitReport extends \yii\db\ActiveRecord
     }
 				
 	public function resetUser(){
-			//delete awareness answers and cap answers also
-			$a_answers = AwarenessAnswer::find()->joinWith(['awareness_question'])->where(['awareness_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();
-			foreach($a_answers as $answer){
-				$answer->delete();
-			}
-			$c_answers = CapabilityAnswer::find()->joinWith(['capability_question'])->where(['capability_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();
-			foreach($c_answers as $answer){
-				$answer->delete();
-			}		
+		
+		//delete awareness answers and cap answers also
+		$a_answers = AwarenessAnswer::find()->joinWith(['awareness_question'])->where(['awareness_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();
+		foreach($a_answers as $answer){
+			$answer->delete();
+		}
+		$c_answers = CapabilityAnswer::find()->joinWith(['capability_question'])->where(['capability_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();
+		foreach($c_answers as $answer){
+			$answer->delete();
+		}		
+	}
+	public function resetAwTest(){
+		$a_answers = AwarenessAnswer::find()->joinWith(['awareness_question'])->where(['awareness_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();
+		foreach($a_answers as $answer){
+			$answer->delete();
+		}		
+	}
+	public function resetCpTest(){
+		$c_answers = CapabilityAnswer::find()->joinWith(['capability_question'])->where(['capability_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();
+		foreach($c_answers as $answer){
+			$answer->delete();
+		}			
 	}
 }

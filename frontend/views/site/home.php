@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			if($p_key == 0)
 				echo '<div class="course_listing al_single_course_width units-present-4">';
 			else 
-				echo '<div class="course_listing al_single_course_width units-present-4"  style="margin-left: -7px">'
+				echo '<div class="course_listing al_single_course_width units-present-4" >'
 			;
 					echo '<div class="course_name">
                             <h2>
@@ -78,11 +78,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					if($k==0)
 							echo "<li>";
 					else 
-						echo '<li class="margin" style="margin-left: -307px">';
+						echo '<li class="margin" style="margin-left: -304px">';
 						echo 
-							'<div class="single_unit_title">
+							'<div class="single_unit_title"><a href="'.Url::to(['test/learn','u_id'=>$unit->unit_id]).'">
                                         '.$unit->title.'
-                            </div>
+                            </a></div>
 							<div class="course_types">';
 							foreach($users as $key => $user){
 								if($user->user->isEnrolled($program->program_id))
@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
 													$progress = $user->user->getUnitProgress($unit->unit_id);
 													$url = Url::to(['test/aw-test','u_id'=>$unit->unit_id]);
 													echo "<div name='unit1'>
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$url'><span class='tooltiptext'><center>{$progress['ap']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$url'><span class='toolkit'><center>{$progress['ap']}</center></span>
 															</a>
 														</div>
 

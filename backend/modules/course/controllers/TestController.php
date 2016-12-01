@@ -82,7 +82,7 @@ class TestController extends Controller
 			$page = $session[$unit_id."_cp_".$user_id];
 		}			
 		else $page = $session[$unit_id."_".$user_id] = 0;
-		$limit = 2;
+		$limit = 25;
 		$offset = $page*$limit;
 		
 		$final = false;

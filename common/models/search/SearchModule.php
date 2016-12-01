@@ -82,8 +82,8 @@ class SearchModule extends Module
 			$query = Module::find()->where(['program_id'=>$program_id]);
         // add conditions that should always apply here
 		else{
-			$query->joinWith(['program']);
-			$query->andFilterWhere(['company_id'=>\Yii::$app->user->identity->c_id]);			
+			$query->joinWith(['program as p']);
+			$query->andFilterWhere(['p.company_id'=>\Yii::$app->user->identity->c_id]);			
 		}
 
         $dataProvider = new ActiveDataProvider([
@@ -105,7 +105,7 @@ class SearchModule extends Module
             'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
+        $query->andFilterWhere(['like', 'module.title', $this->title])
             ->andFilterWhere(['like', 'short_description', $this->short_description])
             ->andFilterWhere(['like', 'featured_video_url', $this->featured_video_url])
             ->andFilterWhere(['like', 'detailed_description', $this->detailed_description]);

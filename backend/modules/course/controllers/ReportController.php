@@ -23,6 +23,7 @@ use common\models\search\SearchUnit;
 
 use common\models\UnitReport;
 use common\models\search\SearchUnitReport;
+
 /**
  * UnitController implements the CRUD actions for Unit model.
  */
@@ -240,7 +241,25 @@ class ReportController extends Controller
         ]);				
 		
 	}
-	
+	public function actionResetTest($type,$r_id){
+		
+		$rep = UnitReport::findOne($r_id);
+		if($rep == null)
+			throw new NotFoundHttpException('The requested page does not exist.');
+		switch($type){			
+			case("cp"):
+				$rep->resetCpTest();
+				$rep->capability_progress = NULL;
+				break;
+			case("aw"):
+				//delete all aware questions
+				$rep->resetAwTest();			
+				$rep->awareness_progress = NULL;
+				break;
+		}
+		$rep->save(false);
+		return $this->redirect(['report/reset-users','u_id'=>$rep->unit_id]);
+	}
 	public function actionGetModules($p_id){
 		$mods = Module::find()->where(['program_id'=>$p_id])->all();
 		 if(count($mods)>0){
