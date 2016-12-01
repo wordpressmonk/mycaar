@@ -77,9 +77,9 @@ class CompanyController extends Controller
     {
         $model = new Company();
         if ($model->load(Yii::$app->request->post())) {	
-		/**		Company Logo Image Uploaded for Created function Line --- Connected with "Company Module"
-			**/
-			
+
+			/**		Company Logo Image Uploaded for Created function Line --- Connected with "Company Module"
+			**/			
 			$model->logo = UploadedFile::getInstance($model, 'logo');			
 			if(!empty($model->logo)) { 
 				if(!$model->uploadImage())
@@ -111,7 +111,9 @@ class CompanyController extends Controller
 		$current_image = $model->logo;
 		/**		Company admin User Edit Validation Rule is changed  Line --- Connected with "Company Module"
 		**/
-		if(\Yii::$app->user->can('company_admin')) {
+		 if(\Yii::$app->user->can('superadmin')) { 
+		}
+		else if(\Yii::$app->user->can('company_admin')) {
 			$model->scenario = 'update_by_company_admin';
 		}
 			
@@ -187,7 +189,7 @@ class CompanyController extends Controller
 		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
 			$model->username = $model->email;
 		if(empty($model->password))
-			 $model->password = Mycaar::getRandomPassword();
+			 $model->password = MyCaar::getRandomPassword();
 			 
 			$model->generatePasswordResetToken();
 			$model->setPassword($model->password);
@@ -208,7 +210,7 @@ class CompanyController extends Controller
 					
 				// Email Function is "Send Email to respective user"
 				$model->sendEmail($model->password); 
-				return $this->redirect(['view-user', 'id' => $model->id]);
+				return $this->redirect(['index-user']);
 			} else
 			{					
 				return $this->render('create_user', ['model' =>$model,'profile'=>$profile,'roles'=>$roles]);
@@ -281,7 +283,7 @@ class CompanyController extends Controller
 				 $profile->save();	
 				}
 				
-             return $this->redirect(['view-user', 'id' => $model->id]); 
+             return $this->redirect(['index-user']);
 			
 			} else {
             return $this->render('update_user', ['model' => $model,'profile' => $profile,'roles' => $roles,]);
@@ -333,6 +335,36 @@ class CompanyController extends Controller
             'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
 			]);
 			}
+    }
+	
+	
+	 /** Company Logo Remove Function Through AJAX Call 
+     **/	 	 
+	public function actionAjaxNewUser()
+    {       
+		$model = new User();	
+		$profile = new Profile();	
+		$model->email = Yii::$app->request->post()['emailid'];
+		$model->username = $model->email;
+		$model->role = 'company_admin';
+		$model->password = MyCaar::getRandomPassword();
+		$model->setPassword($model->password);
+	    $model->generateAuthKey();
+	
+		if($model->save()){				
+				$auth = Yii::$app->authManager;
+				$authorRole = $auth->getRole($model->role);
+				$auth->assign($authorRole, $model->id);				
+		        $profile->user_id = $model->id;
+		        $profile->save();				
+				$model->sendEmail($model->password); 
+			
+			echo "<option value=".$model->id.">".$model->email."</option>";
+				
+		} else {
+			echo "false";
+		}
+			
     }
 	
 }

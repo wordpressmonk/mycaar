@@ -45,7 +45,7 @@ class Division extends \yii\db\ActiveRecord
         return [
             'division_id' => 'Division ID',
             'company_id' => 'Company Name',
-            'title' => 'Title',
+            'title' => 'Division Name',
             'description' => 'Description',
         ];
     }

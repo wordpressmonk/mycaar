@@ -11,6 +11,7 @@ use kartik\select2\Select2;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+
 <div class="card">
 	<div class="card-body">
 
@@ -29,19 +30,20 @@ use kartik\select2\Select2;
 	<?php } else {
 					echo $form->field($model, 'logo')->fileInput(['class'=>'form-control']);
 			} 
-	
-		if(\Yii::$app->user->can('company manage')) 
-		{
-			$data = ArrayHelper::map(MyCaar::getUserAllByrole("company_admin"), 'id', 'email');			
-			echo $form->field($model, 'admin')->widget(Select2::classname(), [
-				'data' => $data,
-				'options' => ['placeholder' => 'Select Company Admin','newOption'=>true],
-			]);	
+	?>	
+	<?php
+		  if(\Yii::$app->user->can('company manage')) 
+		 { ?>	 
+	 <a id="newuser" name="newuser" style="cursor:pointer" data-toggle="modal" data-target="#newuserreq" >[ New-User ]</a>	 
+	 <?php
+			  $data = ArrayHelper::map(MyCaar::getUserAllByrole("company_admin"), 'id', 'email');			
+			 echo $form->field($model, 'admin')->widget(Select2::classname(), [
+				 'data' => $data,
+				 'options' => ['placeholder' => 'Select Company Admin'],
+			 ]);	
+			 
+		 }  ?> 
 			
-		}  ?> 
-		
-		
-		
 		<?= $form->field($model, 'slug')->textInput(['maxlength' => 100]) ?>
 		
     <div class="form-group">
@@ -53,9 +55,86 @@ use kartik\select2\Select2;
 	</div>
 </div>
 
+
+
+<!-- New User style pop up -->
+	<!-- Modal -->
+<!-- BEGIN FORM MODAL MARKUP -->
+
+<div class="modal fade" id="newuserreq" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="z-index: 9999 !important;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="formModalLabel">Add New Company Admin User</h4>
+			</div>
+			<form class="form-horizontal" role="form" >
+				<div class="modal-body">
+					<div class="form-group">
+						<div class="col-sm-12">
+							<label for="email1" class="control-label">Username / Email *</label>
+						</div>
+						<div class="col-sm-12">
+							<input type="email" name="newemail_id" id="newemail_id" class="form-control" required placeholder="Email">
+						</div>
+						<div style="color:red;margin-left:20px" class="error-msg error-email"> </div>
+					</div>						
+				</div>
+				<div class="modal-footer">
+					<!--<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>-->
+					<button type="button" id="addnewuser" name="addnewuser" class="btn btn-primary">Add New User</button>
+				</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- END FORM MODAL MARKUP -->
+<!-- New User style pop up -->
+
+<style>
+
+</style>
 <script>
  $(document).ready(function () {
-	 
+	function validateEmail($email) {
+		var emailReg =  /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+		return emailReg.test( $email );
+		}
+
+ $("#newuser").click(function() { 
+	 $("#newemail_id").val('');
+	 $(".error-email").html("");
+ });
+ 
+	  $("#addnewuser").click(function() {			
+			var useremail = $('#newemail_id').val();
+			if( !validateEmail(useremail)) { 
+				$(".error-email").html("Invalid email Address!!!."); 
+				return false;
+			} else {
+				$(".error-email").html("");
+			}
+			$(this).attr("disabled","disabled");
+				 $.ajax({
+				   url: '<?=Yii::$app->homeUrl."user/company/ajax-new-user"?>',
+				   type: 'POST',
+				   data: {  emailid: useremail,
+				   },
+				   success: function(data) {												
+						if($.trim(data) == 'false')
+						{
+							$(".error-email").html("This Email Id has already used!!!.");
+							$("#addnewuser").removeAttr('disabled');
+							return false;
+						} else {
+							$("#company-admin").append(data);
+							$( ".close" ).trigger( "click" );
+						}
+				   }
+
+				}); 			
+		  });
+		  
 		  $(".removelogo").click(function() {
 			 var company_id = $(this).attr('id');
 				

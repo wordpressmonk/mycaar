@@ -20,6 +20,7 @@ class ImportFile extends \yii\db\ActiveRecord
 {
 	
   public $upfile;
+  public $company_id;
 		
 
   	/**
@@ -28,7 +29,7 @@ class ImportFile extends \yii\db\ActiveRecord
   public function rules()
     {
         return [
-            [['upfile'], 'required'],                  			
+            [['company_id','upfile'], 'required'],                  			
 			[['upfile'], 'file','extensions' => 'xlsx,xls'],           
         ];
     }
@@ -37,6 +38,7 @@ class ImportFile extends \yii\db\ActiveRecord
    public function attributeLabels()
     {
         return [
+            'company_id' => 'Company Name',          
             'upfile' => 'Upload File',          
         ];
     }
