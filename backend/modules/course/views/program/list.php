@@ -23,7 +23,7 @@ $homeUrl = Yii::$app->homeUrl;
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Add Program', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Add Program', ['create'], ['class' => 'btn btn-default']) ?>
     </p>
 	<div class='row'>
 		<div class='col-lg-12'>
