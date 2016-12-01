@@ -16,9 +16,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card-body">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+	 <div class="row">
+		<div class="col-md-6">
+			<?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+		</div>	
+		<div class="col-md-6">
+		  <?php if(\Yii::$app->user->can('company_admin')) { ?>
+			<?= Html::a('Import User', ['importuser/importexcel'], ['class' => 'btn btn-info pull-right']) ?>
+		  <?php } ?>
+		</div>	 
+</div>	 
+  
+	
+	<div class="small-padding"></div>
+	
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

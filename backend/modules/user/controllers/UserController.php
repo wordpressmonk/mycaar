@@ -84,9 +84,9 @@ class UserController extends Controller
 		$roles = $this->getRoles();
         if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
 			$model->username = $model->email;
-			//Random Password Generation For Mycaar Common models
+			//Random Password Generation For MyCaar Common models
 			if(empty($model->password))
-			  $model->password = Mycaar::getRandomPassword();
+			  $model->password = MyCaar::getRandomPassword();
 			 
 			$model->setPassword($model->password);
 			$model->generateAuthKey();

@@ -16,7 +16,7 @@ use common\models\Division;
 use common\models\Location;
 use common\models\State;
 use common\models\QuickEmail;
-use common\models\Mycaar;
+use common\models\MyCaar;
 use yii\helpers\ArrayHelper;
 
 
@@ -54,15 +54,17 @@ class ImportuserController extends Controller
 			   $model = new ImportFile();			  
 			 if($model->load(Yii::$app->request->post())){
 				 
+				 //$company_id = $model->company_id;
+				
 		///GET VAlues and Stored in Array with Key //////	 
 		
-			$getlocationname = ArrayHelper::map(Location::find()->select(['location_id','name'])->where(['company_id'=>Yii::$app->user->identity->c_id])->asArray()->all(), 'location_id', 'name');
+			$getlocationname = ArrayHelper::map(Location::find()->select(['location_id','name'])->where(['company_id'=>$model->company_id])->asArray()->all(), 'location_id', 'name');
 			 
-			$getdivisionname = ArrayHelper::map(Division::find()->select(['division_id','title'])->where(['company_id'=>Yii::$app->user->identity->c_id])->asArray()->all(), 'division_id', 'title');
+			$getdivisionname = ArrayHelper::map(Division::find()->select(['division_id','title'])->where(['company_id'=>$model->company_id])->asArray()->all(), 'division_id', 'title');
 			 
-			$getrolename = ArrayHelper::map(Role::find()->select(['role_id','title'])->where(['company_id'=>Yii::$app->user->identity->c_id])->asArray()->all(), 'role_id', 'title');
+			$getrolename = ArrayHelper::map(Role::find()->select(['role_id','title'])->where(['company_id'=>$model->company_id])->asArray()->all(), 'role_id', 'title');
 			 
-			$getstatename = ArrayHelper::map(State::find()->select(['state_id','name'])->where(['company_id'=>Yii::$app->user->identity->c_id])->asArray()->all(), 'state_id', 'name');
+			$getstatename = ArrayHelper::map(State::find()->select(['state_id','name'])->where(['company_id'=>$model->company_id])->asArray()->all(), 'state_id', 'name');
 			
 				/// Upload Excel File Read The File Function  
 				
@@ -96,14 +98,14 @@ class ImportuserController extends Controller
 						 $usertable->email = $rowData[0][0];					
 						 $usertable->username = $usertable->email;					 
 						 $usertable->generateAuthKey();
-						 $usertable->c_id = Yii::$app->user->identity->c_id; 					
+						 $usertable->c_id = $model->company_id; 					
 						 $usertable->role = 'user';	
 
 		/**  Random Password Generator **/
 				
-				//Random Password Generation For Mycaar Common models
+				//Random Password Generation For MyCaar Common models
 
-			 $usertable->password = Mycaar::getRandomPassword();
+			 $usertable->password = MyCaar::getRandomPassword();
 			 $usertable->setPassword($usertable->password);	 
 		//***** Role check and Create Function *** //	
 		
@@ -192,7 +194,7 @@ class ImportuserController extends Controller
 				
 				// Email Message is saved in database
 				$quickemail = new QuickEmail();	
-				$quickemail->c_id = Yii::$app->user->identity->c_id;
+				$quickemail->c_id = $model->company_id;
 				$quickemail->to_email = $rowData[0][0];
 				$quickemail->from_email = "info_notification@gmail.com";
 				$quickemail->subject = "YOUR VERIFIED EMAIL ID";
@@ -218,7 +220,8 @@ class ImportuserController extends Controller
 					 Yii::$app->getSession()->setFlash('Error', 'User Details Failed To Imported Following Reasons !!!.');
 					 Yii::$app->getSession()->setFlash('Error-data', $error_report); 
 				}				
-				return $this->render('upload_form', ['model' => $model]);						
+				//return $this->render('upload_form', ['model' => $model]);
+				return $this->refresh();				
 		}else {
 				return $this->render('upload_form', ['model' => $model ]);
 			  }
