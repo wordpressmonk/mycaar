@@ -22,7 +22,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 /* 				if($unit->unit_id == $model->unit_id)
 					echo '<li class="active"><a href="#tab1">'.$unit->title.'</a></li>';
 				else */
-					echo '<li><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.$unit->title.'</a></li>';
+					echo '<li><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.substr($unit->title,0,12).'..</a></li>';
 			}?>
 			<li class="active text-info small-padding"><h4>ADD NEW</h4></li>
 		</ul>

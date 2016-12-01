@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 		</div>
 		<div class='col-lg-2'>
 			<div class="form-group">
-				<?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+				<?= Html::submitButton('Search', ['class' => 'btn btn-primary pull-right']) ?>
 			</div>		
 		</div>
 	</div>

@@ -27,9 +27,9 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 		<ul class="card-head nav nav-tabs tabs-info" data-toggle="tabs">
 			<?php foreach($module->units as $unit){
 				if($unit->unit_id == $model->unit_id)
-					echo '<li class="active"><a href="#tab1">'.$unit->title.'</a></li>';
+					echo '<li class="active"><a href="#tab1">'.substr($unit->title,0,12).'..</a></li>';
 				else
-					echo '<li><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.$unit->title.'</a></li>';
+					echo '<li><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.substr($unit->title,0,12).'..</a></li>';
 			}?>
 			<li><a class="unit_view" data-unit_id="new" href="#tab2">Add New Lesson</a></li>
 		</ul>
