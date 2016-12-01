@@ -32,8 +32,8 @@ $homeUrl = Yii::$app->homeUrl;
 					<?php foreach($dataProvider->models as $program){
 						echo 					
 						"<li class='dd-item tile' data-id='$program->program_id'>
-							<div class='btn btn-default-dark'><i class='fa fa-list'></i> $program->title
-							<span class='pull-right text-primary-light'>
+							<div class='btn btn-primary-light'><i class='fa fa-list'></i> $program->title
+							<span class='pull-right text-default'>
 								<a href='{$homeUrl}course/program/view?id={$program->program_id}' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
 								<a href='{$homeUrl}course/program/update?id={$program->program_id}' style='padding-right:3px'><span class='glyphicon glyphicon-pencil'></span></a>
 								<a href='{$homeUrl}course/program/delete?id={$program->program_id}' data-confirm='Are you sure you want to delete this item?' data-method='post' style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
