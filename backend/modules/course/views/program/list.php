@@ -20,7 +20,7 @@ $homeUrl = Yii::$app->homeUrl;
 	<div class ="card-body">
 
 
-    <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Add Program', ['create'], ['class' => 'btn btn-default']) ?>

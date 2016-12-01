@@ -11,22 +11,20 @@ use yii\widgets\ActiveForm;
 <div class="program-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'action' => ['program-list'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'program_id') ?>
-
-    <?= $form->field($model, 'title') ?>
-
-    <?= $form->field($model, 'company_id') ?>
-
-    <?= $form->field($model, 'description') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-    </div>
+	<div class='row'>
+		<div class='col-lg-10'>
+			<?= $form->field($model, 'title',['inputOptions'=>['class'=>'form-control','placeholder'=>'Search Program here']])->label(false) ?>
+		</div>
+		<div class='col-lg-2'>
+			<div class="form-group">
+				<?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+			</div>		
+		</div>
+	</div>
 
     <?php ActiveForm::end(); ?>
 
