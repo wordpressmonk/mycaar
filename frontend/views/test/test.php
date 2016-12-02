@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div  class="card">
 <div class="card-body">
 	<form class="form" method="post">
-		<?php 
+		<?php
 		if($errors){
 			echo '<div class="alert alert-danger" role="alert">
 					<strong>Oh wait!</strong> All questions are mandatory.
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					echo "<p>{$question->description}</p>";
 					echo '<div class="form-group">';
 					foreach($question->options as $option){
-						echo 
+						echo
 						"<div class='radio radio-styled radio-info'>
 							<label>
 							<input type='radio' name='$question->aq_id' value='{$option->option_id}'>
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					echo "<p>{$question->description}</p>";
 					echo '<div class="form-group">';
 					foreach($question->options as $option){
-						echo 
+						echo
 						"<div class='checkbox checkbox-styled checkbox-info'>
 							<label>
 							<input type='checkbox' data_q='{$question->aq_id}' name='{$question->aq_id}[]' value='{$option->option_id}'>
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					echo "<h3>{$question->question}</h3>";
 					echo "<p>{$question->description}</p>";
 					echo '<div class="form-group">';
-					echo 
+					echo
 					"<div class='border-gray small-padding form-group'>
 						<input name='$question->aq_id' type='file' class='form-control'>
 					</div>";
@@ -80,21 +80,22 @@ $this->params['breadcrumbs'][] = $this->title;
 					</div>";
 					//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
 					echo '</div>';
-					break;				
+					break;
 			}
-				
+
 			echo '</div>';
 		}
 		?>
-		<?php if(!$final) { ?> 
+		<?php if(!$final) { ?>
 		<div class="form-group">
 			<input name= "save" type="submit" class="btn btn-lg ink-reaction btn-info" value="Next"/>
 			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save&Exit"/>
 		</div>
 		<?php } else { ?>
 		<div class="form-group">
+			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save&Exit"/>
 			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Finish"/>
-		</div>		
+		</div>
 		<?php } ?>
 	</form>
 </div>
@@ -106,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		//console.log(answers);
 		$(answers).each(function(i,val){
 			$.each(val,function(k,v){
-				//console.log(k+" : "+ v);  
+				//console.log(k+" : "+ v);
 				if(v !== ''){
 					var qstn = $("input[name="+k+"]") ;
 					if(!qstn.length || qstn.length == 0)
@@ -116,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					switch(type){
 						case "checkbox":
 							$.each(v, function(p,q){
-								//console.log(p+" : "+ q);  
+								//console.log(p+" : "+ q);
 								var qstn = $("input[data_q="+k+"][value="+q+"]");
 								qstn.attr("checked",true);
 							});
@@ -129,13 +130,13 @@ $this->params['breadcrumbs'][] = $this->title;
 						case "text":
 							qstn.val(v);
 							break;
-						
+
 					}
 				}else{
 					$("#help_"+k).html("Please answer this question dude");
 				}
 			});
-		});		
+		});
 	}
 
 </script>

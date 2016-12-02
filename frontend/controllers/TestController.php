@@ -50,14 +50,14 @@ class TestController extends Controller
 	public function actionLearn($u_id){
         return $this->render('view', [
             'model' => $this->findModel($u_id),
-        ]);		
+        ]);
 	}
     /**
      * Lists all Unit models.
      * @return mixed
      */
     public function actionAwTest($u_id)
-    {	
+    {
 		$current_unit = Unit::findOne($u_id);
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
@@ -71,22 +71,22 @@ class TestController extends Controller
 				\Yii::$app->getSession()->setFlash('error', 'Please complete the previous unit/s');
 				return $this->redirect(['site/index']);
 			}
-							
+
 		}
 
 		//if previous unit is completed
 		$session = Yii::$app->session;
 		$attempted = Report::find()->where(['unit_id'=>$u_id,'student_id'=>\Yii::$app->user->id])->one();
 		if($attempted && !is_null($attempted->awareness_progress) && !isset($session[$u_id."_".\Yii::$app->user->id]))
-			return $this->redirect(['retake','u_id'=>$u_id]); 
+			return $this->redirect(['retake','u_id'=>$u_id]);
 		//
-		
+
 		//initialise here
-		
+
 		//$session->remove($u_id."_".\Yii::$app->user->id);die;
 		if(isset($session[$u_id."_".\Yii::$app->user->id])){
 			$page = $session[$u_id."_".\Yii::$app->user->id];
-		}			
+		}
 		else $page = $session[$u_id."_".\Yii::$app->user->id] = 0;
 		/////////////////////////
 		//die;
@@ -112,6 +112,14 @@ class TestController extends Controller
 			//print_r(Yii::$app->request->post());die;
 			$count_qstns = count($questions);
 			$ans_qstns = count($answers)-1;
+      if(isset(Yii::$app->request->post()['save_n_exit'])){
+        $this->saveAnswers($answers);
+        $this->saveProgress(\Yii::$app->user->id,$u_id);
+        if(Yii::$app->request->post()['save_n_exit'] == 'Save&Exit'){
+          $session->remove($u_id."_".\Yii::$app->user->id);
+          return $this->redirect(["site/index"]);
+        }
+      }
 			if( in_array("", $answers, true) || $count_qstns > $ans_qstns){
 				return $this->render('test', [
 					'model' => $model,
@@ -119,7 +127,7 @@ class TestController extends Controller
 					'answers' => json_encode($answers),
 					'errors' => true,
 					'final'=> $final,
-				]);				
+				]);
 			}
 			$this->saveAnswers($answers);
 			$session[$u_id."_".\Yii::$app->user->id] = $page+1;
@@ -135,12 +143,12 @@ class TestController extends Controller
 				if(Yii::$app->request->post()['save_n_exit'] == 'Save&Exit'){
 					//$session->remove($u_id."_".\Yii::$app->user->id);
 					return $this->redirect(["site/index"]);
-				}					
+				}
 			}
-			
+
 			return $this->redirect(["aw-test","u_id"=>$u_id]);
 		}
-		
+
 		else return $this->render('test', [
             'model' => $model,
 			'questions' => $questions,
@@ -149,11 +157,11 @@ class TestController extends Controller
 			'final'=> $final,
         ]);
     }
-	
+
 	public function actionRetake($u_id)
 	{
 		//see if any new questions are added to the unit here
-		
+
 /* 		$this->isAnyChange($u_id,\Yii::$app->user->id);
 		die; */
 		$model = $this->findModel($u_id);
@@ -165,8 +173,8 @@ class TestController extends Controller
 			if($questions[$key]['answers']['answer'] == $quest->answer){
 				$questions[$key]['isCorrect']  = true;
 			}
-				
-		}	
+
+		}
 		//print_r($questions);die;
 		if($answers = Yii::$app->request->post()){
 			$this->saveAnswers($answers);
@@ -176,46 +184,46 @@ class TestController extends Controller
 				return $this->redirect(['retake','u_id'=>$u_id]);
 			//redirect to next page or homepage
 			return $this->redirect(["site/index"]);
-		}		
+		}
 		else return $this->render('retest', [
             'model' => $model,
 			'questions' => $questions,
 			'answers' => false,
 			'errors' => false,
-        ]);		
+        ]);
 	}
 
 	public function saveAnswers($answers){
-		foreach($answers as $question=>$answer){				
+		foreach($answers as $question=>$answer){
 			$aw_answer = AwarenessAnswer::find()->where(['user_id'=>\Yii::$app->user->id,'question_id'=>$question])->one();
 			if(!$aw_answer)
 				$aw_answer = new AwarenessAnswer();
-			
+
 			$aw_answer->user_id = \Yii::$app->user->id;
 			$aw_answer->question_id = $question;
 			if(is_array($answer)){
-				sort($answer);	
+				sort($answer);
 				$answer = implode('_',$answer);
-			}			
+			}
 			$aw_answer->answer = $answer;
-			$aw_answer->save();				
-		}		
+			$aw_answer->save();
+		}
 	}
 	public function isAnyChange($unit_id,$user_id){
 		$query = new \yii\db\Query;
  		$query->select('question.aq_id , answer.question_id')
 				->from('awareness_question question')
-				->leftJoin('awareness_answer answer', 'answer.question_id = question.aq_id AND answer.user_id='.$user_id)  
-				->where("question.unit_id=$unit_id"); 
+				->leftJoin('awareness_answer answer', 'answer.question_id = question.aq_id AND answer.user_id='.$user_id)
+				->where("question.unit_id=$unit_id");
 
 		$command = $query->createCommand();
 		$resp = $command->queryAll();
 		print_r($resp);
-		//foreach()	
+		//foreach()
 	}
 	public function saveProgress($user_id,$unit_id){
 		/**
-		SELECT count(question.aq_id) as questions, count(answer.aa_id) as right_answer FROM `awareness_question` as question 
+		SELECT count(question.aq_id) as questions, count(answer.aa_id) as right_answer FROM `awareness_question` as question
 		LEFT JOIN awareness_answer as answer
 		on (answer.question_id = question.aq_id and answer.answer = question.answer)
 		WHERE question.unit_id=1 AND (question.question_type = 'radio-group' OR question.question_type = 'checkbox-group')
@@ -223,7 +231,7 @@ class TestController extends Controller
 		$query = new \yii\db\Query;
 		$query->select('count(question.aq_id) as questions, count(answer.aa_id) as right_answer')
 				->from('awareness_question question')
-				->leftJoin('awareness_answer answer', 'answer.question_id = question.aq_id AND answer.answer = question.answer AND answer.user_id='.$user_id)  
+				->leftJoin('awareness_answer answer', 'answer.question_id = question.aq_id AND answer.answer = question.answer AND answer.user_id='.$user_id)
 				->where("question.unit_id=$unit_id AND (question.question_type = 'radio-group' OR question.question_type = 'checkbox-group')");
 		$command = $query->createCommand();
 		$resp = $command->queryOne();
@@ -240,7 +248,7 @@ class TestController extends Controller
 		return (int)$progress;
 		//print_R($resp);
 		//get total answered by the user and validate the right ones
-		
+
 		//progress is right/total*100
 	}
     /**
@@ -258,6 +266,6 @@ class TestController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-	
+
 
 }
