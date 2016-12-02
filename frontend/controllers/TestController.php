@@ -113,9 +113,11 @@ class TestController extends Controller
 			$count_qstns = count($questions);
 			$ans_qstns = count($answers)-1;
       if(isset(Yii::$app->request->post()['save_n_exit'])){
-        $this->saveAnswers($answers);
-        $this->saveProgress(\Yii::$app->user->id,$u_id);
         if(Yii::$app->request->post()['save_n_exit'] == 'Save&Exit'){
+          if($ans_qstns > 0){
+            $this->saveAnswers($answers);
+            $this->saveProgress(\Yii::$app->user->id,$u_id);
+          }
           $session->remove($u_id."_".\Yii::$app->user->id);
           return $this->redirect(["site/index"]);
         }
