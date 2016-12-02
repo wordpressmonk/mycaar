@@ -32,6 +32,8 @@ class Location extends \yii\db\ActiveRecord
             [['company_id', 'name'], 'required'],
             [['company_id'], 'integer'],
             [['name'], 'string', 'max' => 200],
+			
+			[['name'],'validateCompanyWiseLocationName'],
         ];
     }
 
@@ -61,5 +63,15 @@ class Location extends \yii\db\ActiveRecord
     public function getCompany()
     {
         return $this->hasOne(Company::className(), ['company_id' => 'company_id']);
+    }
+	
+	// Validation For Company Wise with Database By Arivazhagan
+	public function validateCompanyWiseLocationName()
+    { 		
+	   $checkCompanyWise = static::findOne(['name'=>$this->name,'company_id'=>$this->company_id]);
+       if($checkCompanyWise)
+	   {
+		 $this->addError('name','Already Added This Location Name');
+	   } 
     }
 }

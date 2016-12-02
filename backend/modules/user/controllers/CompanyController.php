@@ -201,12 +201,10 @@ class CompanyController extends Controller
 				$auth = Yii::$app->authManager;
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id); 
-				//save profile first
-				if($profile->load(Yii::$app->request->post()))
-				{
+				//save profile first				
 				 $profile->user_id = $model->id;			
 				 $profile->save();	
-				}
+				
 					
 				// Email Function is "Send Email to respective user"
 				$model->sendEmail($model->password); 
@@ -272,17 +270,15 @@ class CompanyController extends Controller
 			$model->username = $model->email;			
 			if($model->save())
 			{
+			//handle the role first		
 			$auth = Yii::$app->authManager;
 			$auth->revokeAll($id);
 			$authorRole = $auth->getRole($model->role);
 			$auth->assign($authorRole, $model->id);
-			
-			if($profile->load(Yii::$app->request->post()))
-				{
-				 $profile->user_id = $model->id;			
-				 $profile->save();	
-				}
-				
+			//save profile first			
+			$profile->user_id = $model->id;			
+			$profile->save();	
+								
              return $this->redirect(['index-user']);
 			
 			} else {
