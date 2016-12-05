@@ -119,9 +119,9 @@ class TestController extends Controller
 			//print_r(Yii::$app->request->post());die;
 			$count_qstns = count($questions);
 			$ans_qstns = count($answers)-1;
-			print_r(Yii::$app->request->post());die;
+			//print_r(Yii::$app->request->post());die;
 			  if(isset(Yii::$app->request->post()['save_n_exit'])){
-				if(Yii::$app->request->post()['save_n_exit'] == 'Save&Exit'){
+				if(Yii::$app->request->post()['save_n_exit'] == 'Save & Return to Dashboard'){
 				  if($ans_qstns > 0){
 					$this->saveAnswers($answers);
 					$this->saveProgress(\Yii::$app->user->id,$u_id);
@@ -150,7 +150,7 @@ class TestController extends Controller
 					$session->remove($u_id."_".\Yii::$app->user->id);
 					return $this->redirect(["site/index"]);
 				}
-				if(Yii::$app->request->post()['save_n_exit'] == 'Save&Exit'){
+				if(Yii::$app->request->post()['save_n_exit'] == 'Save & Return to Dashboard'){
 					//$session->remove($u_id."_".\Yii::$app->user->id);
 					return $this->redirect(["site/index"]);
 				}
