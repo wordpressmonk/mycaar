@@ -61,7 +61,7 @@ class TestController extends Controller
 		$current_unit = Unit::findOne($u_id);
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
-		$previous_unit = Unit::find()->where(['and', "unit_id<$u_id", "module_id=$current_unit->module_id"])->orderBy('unit_id DESC')->one();
+		$previous_unit = Unit::find()->where(['and', "unit_id<$u_id", "module_id=$current_unit->module_id","status"=1])->orderBy('unit_id DESC')->one();
 		//
 
 		if($previous_unit){
@@ -112,16 +112,16 @@ class TestController extends Controller
 			//print_r(Yii::$app->request->post());die;
 			$count_qstns = count($questions);
 			$ans_qstns = count($answers)-1;
-      if(isset(Yii::$app->request->post()['save_n_exit'])){
-        if(Yii::$app->request->post()['save_n_exit'] == 'Save&Exit'){
-          if($ans_qstns > 0){
-            $this->saveAnswers($answers);
-            $this->saveProgress(\Yii::$app->user->id,$u_id);
-          }
-          $session->remove($u_id."_".\Yii::$app->user->id);
-          return $this->redirect(["site/index"]);
-        }
-      }
+			  if(isset(Yii::$app->request->post()['save_n_exit'])){
+				if(Yii::$app->request->post()['save_n_exit'] == 'Save&Exit'){
+				  if($ans_qstns > 0){
+					$this->saveAnswers($answers);
+					$this->saveProgress(\Yii::$app->user->id,$u_id);
+				  }
+				  $session->remove($u_id."_".\Yii::$app->user->id);
+				  return $this->redirect(["site/index"]);
+				}
+			  }
 			if( in_array("", $answers, true) || $count_qstns > $ans_qstns){
 				return $this->render('test', [
 					'model' => $model,
@@ -237,7 +237,7 @@ class TestController extends Controller
 				->where("question.unit_id=$unit_id AND (question.question_type = 'radio-group' OR question.question_type = 'checkbox-group')");
 		$command = $query->createCommand();
 		$resp = $command->queryOne();
-		//print_R($resp);die;
+		print_R($resp);die;
 		$progress = ($resp['right_answer']/$resp['questions'])*100;//die;
 		//save progress to DB
 		$report = Report::find()->where(['unit_id'=>$unit_id,'student_id'=>$user_id])->one();
