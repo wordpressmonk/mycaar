@@ -49,6 +49,12 @@ class TestController extends Controller
         ];
     }
 	public function actionLearn($u_id){
+		$element = UnitElement::find()->where(['unit_id'=>$u_id])->one();
+		$data = json_decode($element->content);
+		$formdata = $data->html;
+		$len = strlen($formdata);
+		if($len < 55)
+			return $this->redirect(['aw-test','u_id'=>$u_id]);
         return $this->render('view', [
             'model' => $this->findModel($u_id),
         ]);
