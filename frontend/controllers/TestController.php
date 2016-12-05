@@ -237,10 +237,11 @@ class TestController extends Controller
 				->where("question.unit_id=$unit_id AND (question.question_type = 'radio-group' OR question.question_type = 'checkbox-group')");
 		$command = $query->createCommand();
 		$resp = $command->queryOne();
-		print_R($resp);die;
+		//print_R($resp);die;
 		$progress = ($resp['right_answer']/$resp['questions'])*100;//die;
 		//save progress to DB
 		$report = Report::find()->where(['unit_id'=>$unit_id,'student_id'=>$user_id])->one();
+		print_R($report);die;
 		if(!$report)
 			$report = new Report();
 		$report->unit_id = $unit_id;
