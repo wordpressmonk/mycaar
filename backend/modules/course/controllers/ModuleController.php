@@ -141,8 +141,8 @@ class ModuleController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+		return $this->redirect(['program/program-list']);
+        //return $this->redirect(['index']);
     }
 
     /**

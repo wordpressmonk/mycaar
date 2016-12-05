@@ -179,7 +179,7 @@ class ProgramController extends Controller
 			$this->findModel($id)->deleteProgram();
 			if (\Yii::$app->user->can('super_admin'))
 				return $this->redirect(['index']);
-			else return $this->redirect(['company-programs']);
+			else return $this->redirect(['program-list']);
 		}else{
 			//yii\web\ForbiddenHttpException
 			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
