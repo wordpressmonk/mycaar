@@ -20,8 +20,6 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 <div class="section-body contain-lg">
 <h2 class="col-md-9">Update Lesson: <?=$model->title?></h2>
 
-<?= Html::a('Preview', ['view', 'id' => $model->unit_id], ['class' => 'btn btn-info pull-right']) ?>
-
 
 <div class="row">
 
@@ -104,7 +102,9 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
 								$aw_data = $element->content;
+								$aw_data = html_entity_decode($aw_data);
 								$aw_data = str_replace("'", "\'", $aw_data);
+								//$aw_data = str_replace('"', '&quot;', $aw_data);
 							?>
 						<div id="aware_form"></div>
 						</div>
@@ -173,6 +173,7 @@ $(document).ready(function(){
 	};
 	var unit_element_editor = $(document.getElementById('build-wrap'));
  	var formData = '<?= $formdata ?>';
+	//formData.replace(/"/g,"\\\"");
 	//console.log(formData);
 	if (formData) {
 		unit_element_options.formData = formData;
@@ -212,8 +213,9 @@ $(document).ready(function(){
 	   controlPosition: 'left',
 	   editOnAdd: true,
 	};
- 	var aw_data = '<?= html_entity_decode($aw_data) ?>';
-	//console.log(aw_data);
+ 	var aw_data = '<?=$aw_data?>';
+	//aw_data.replace(/"/g,"&quot;");
+	console.log(aw_data);
 	if (aw_data) {
 		awareness_elements.formData = aw_data;
 	}	

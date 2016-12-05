@@ -316,7 +316,7 @@ class UnitController extends Controller
 				$label = $quest['question'][0][1];
 				if(isset($quest['description'][0][1]))
 					$description = $quest['description'][0][1];
-				$html .= '<field type="'.$type.'" description="'.$description.'" label="'.$label.'" class="'.$class.'" name="'.$name.'" src="false">';					
+				$html .= "<field type='$type' description='$description' label='$label' class='$class' name='$name' src='false'>";					
 				//////////////
 				if(!empty($quest['options'])){
 					foreach($quest['options'] as $opt){
@@ -327,12 +327,12 @@ class UnitController extends Controller
 						$awareness_option->question_id =  $awareness_question->aq_id;
 						$awareness_option->answer = $opt[1];
 						$awareness_option->save();
-						$opt_string = '<option option_id="'.$awareness_option->option_id.'" label="'.$opt[1].'" value="'.$opt[1].'">'.$opt[1].'</option>';
+						$opt_string = "<option option_id='{$awareness_option->option_id}' label='{$opt[1]}' value='{$opt[1]}'>'{$opt[1]}'</option>";
 							if(!empty($quest['answer'])){
 								foreach($quest['answer'] as $ans){
 									if($ans[1] == $awareness_option->answer){
 										$answer .= $awareness_option->option_id."_";
-										$opt_string = '<option option_id="'.$awareness_option->option_id.'" label="'.$opt[1].'" value="'.$opt[1].'" selected="true">'.$opt[1].'</option>';
+										$opt_string = "<option option_id='{$awareness_option->option_id}' label='{$opt[1]}' value='{$opt[1]}' selected='true'>'{$opt[1]}'</option>";
 									}
 									 
 								}
@@ -404,16 +404,16 @@ class UnitController extends Controller
 				$label = $quest['question'][0][1];
 				if(isset($quest['description'][0][1]))
 					$description = $quest['description'][0][1];
-				$html .= '<field type="'.$type.'" description="'.$description.'" label="'.$label.'" class="'.$class.'" name="'.$name.'" src="false">';					
+				$html .= "<field type='$type' description='$description' label='$label' class='$class' name='$name' src='false'>";					
 				//////////////
 				if(!empty($quest['options'])){
 					foreach($quest['options'] as $opt){
-						$opt_string = '<option  label="'.$opt[1].'" value="'.$opt[1].'">'.$opt[1].'</option>';
+						$opt_string = "<option  label='$opt[1]' value='$opt[1]'>'$opt[1]'</option>";
 							if(!empty($quest['answer'])){
 								foreach($quest['answer'] as $ans){
 									if($ans[1] === $opt[1]){
 										$answer = $opt[1];
-										$opt_string = '<option label="'.$opt[1].'" value="'.$opt[1].'" selected="true">'.$opt[1].'</option>';
+										$opt_string = "<option label='$opt[1]' value='$opt[1]' selected='true'>'$opt[1]'</option>";
 									}
 									 
 								}
@@ -445,31 +445,5 @@ class UnitController extends Controller
 		}		
 		
 	}
-function decodeHtmlEnt($str) {
-    $ret = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
-    $p2 = -1;
-    for(;;) {
-        $p = strpos($ret, '&#', $p2+1);
-        if ($p === FALSE)
-            break;
-        $p2 = strpos($ret, ';', $p);
-        if ($p2 === FALSE)
-            break;
-            
-        if (substr($ret, $p+2, 1) == 'x')
-            $char = hexdec(substr($ret, $p+3, $p2-$p-3));
-        else
-            $char = intval(substr($ret, $p+2, $p2-$p-2));
-            
-        //echo "$char\n";
-        $newchar = iconv(
-            'UCS-4', 'UTF-8',
-            chr(($char>>24)&0xFF).chr(($char>>16)&0xFF).chr(($char>>8)&0xFF).chr($char&0xFF) 
-        );
-        //echo "$newchar<$p<$p2<<\n";
-        $ret = substr_replace($ret, $newchar, $p, 1+$p2-$p);
-        $p2 = $p + strlen($newchar);
-    }
-    return $ret;
-}
+
 }
