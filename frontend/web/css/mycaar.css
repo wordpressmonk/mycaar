@@ -21,14 +21,72 @@ ul::-webkit-scrollbar-track {
    background-color: #eee;
 }
 #aware_form .stage-wrap>ul, #capability_form .stage-wrap>ul{
-height:350px;
+height:650px;
 overflow-y:scroll;
 }
+a{
+	outline:none !important;
+}
+.td-green {
+    background-color: #008000;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+}
+.td-amber {
+    background-color: #ffc000;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+}
+a.circle {
+    display: inline-block;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    text-align: -webkit-center;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 28px;
+}
+a.circle>span{
+	display:none;
+} 
+a.circle:hover  span{
+	display:block;
+}
+a.circle:hover {
+    border-radius: 15px;
+    width: 50px;
+	color:#fff;
+	text-decoration:none;
+	overflow: hidden;
+    position: relative;
+}  
+a.circle-green {
+    background-color: #008000;
+	color: white;
+}
+a.circle-amber {
+    background-color: #ffc000;
+}
+a.circle-grey {
+    background-color: #81889a;
+}
+a.circle-red {
+    background-color: #c10001;
+	color: white;
+}
 
-
-   
-
-
+.w3-progress-container{
+height: 25px !important;
+}
+.w3-progressbar{
+padding-left: 12px !important;
+background-color: lightgreen;
+}
 
 /*For Chrome */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -64,7 +122,12 @@ overflow-y:scroll;
         margin-top: 0px;
         border-radius: 10px;
     }
-
+	.mdl-hover-amber:hover .toolkit{
+	visibility: visible;
+	color: black;
+	font-size: 14px;
+	text-transform: capitalize;
+	}
     .mdl-hover-red:hover{
         background: #c10001 !important;
         height:25px !important;

@@ -79,6 +79,15 @@ a.circle-red {
     background-color: #c10001;
 	color: white;
 }
+
+.w3-progress-container{
+height: 25px !important;
+}
+.w3-progressbar{
+padding-left: 12px !important;
+background-color: lightgreen;
+}
+
 /*For Chrome */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 

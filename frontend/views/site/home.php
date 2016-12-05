@@ -14,6 +14,7 @@ use common\models\User;
 
 $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 ?>
     <h1><?= Html::encode($this->title) ?></h1>
 	<?php if(Yii::$app->session->getFlash('error')!='') {?>
@@ -47,9 +48,13 @@ $this->params['breadcrumbs'][] = $this->title;
 					echo '
 					<li><div class="mdl-grid" >
 						<div class="mdl-cell mdl-cell--3-col mdl-bar" >
-							<div class="mdl-card--border"><span class="mdl-text">'.$progress.'%</span><span class="mdl-label">'.$name.'</span></div>
+							<div class="mdl-card--border">
+								<div class="w3-progress-container">
+									<div class="w3-progressbar" style="width:'.$progress.'%">'.$progress.'%</div><span class="mdl-label">'.$name.'</span></div>
+								</div>
+							</div>
 						</div>
-					</div></li>';
+					</li>';
 				}
 			}
 	
