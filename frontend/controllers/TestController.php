@@ -246,9 +246,9 @@ class TestController extends Controller
 			$report = new Report();
 		$report->unit_id = $unit_id;
 		$report->student_id = $user_id;
-		$report->awareness_progress = $progress;
+		$report->awareness_progress = (int)$progress;
 		$report->save();
-		print_R($report);die;
+		//print_R($report);die;
 		return (int)$progress;
 		//print_R($resp);
 		//get total answered by the user and validate the right ones
