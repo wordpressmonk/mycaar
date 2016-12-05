@@ -32,7 +32,7 @@ class UnitReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['unit_id', 'student_id', 'awareness_progress'], 'required'],
+            [['unit_id', 'student_id'], 'required'],
             [['unit_id', 'student_id', 'awareness_progress', 'capability_progress'], 'integer'],
             [['updated_at'], 'safe'],
             [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['student_id' => 'id']],
