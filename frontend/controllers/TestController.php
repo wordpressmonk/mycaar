@@ -241,13 +241,14 @@ class TestController extends Controller
 		$progress = ($resp['right_answer']/$resp['questions'])*100;//die;
 		//save progress to DB
 		$report = Report::find()->where(['unit_id'=>$unit_id,'student_id'=>$user_id])->one();
-		print_R($report);die;
+		
 		if(!$report)
 			$report = new Report();
 		$report->unit_id = $unit_id;
 		$report->student_id = $user_id;
 		$report->awareness_progress = $progress;
 		$report->save();
+		print_R($report);die;
 		return (int)$progress;
 		//print_R($resp);
 		//get total answered by the user and validate the right ones
