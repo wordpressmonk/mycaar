@@ -119,6 +119,7 @@ class TestController extends Controller
 			//print_r(Yii::$app->request->post());die;
 			$count_qstns = count($questions);
 			$ans_qstns = count($answers)-1;
+			print_r(Yii::$app->request->post());die;
 			  if(isset(Yii::$app->request->post()['save_n_exit'])){
 				if(Yii::$app->request->post()['save_n_exit'] == 'Save&Exit'){
 				  if($ans_qstns > 0){
