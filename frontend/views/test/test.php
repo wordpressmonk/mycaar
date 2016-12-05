@@ -89,11 +89,11 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php if(!$final) { ?>
 		<div class="form-group">
 			<input name= "save" type="submit" class="btn btn-lg ink-reaction btn-info" value="Next"/>
-			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save&Exit"/>
+			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save & Return to Dashboard"/>
 		</div>
 		<?php } else { ?>
 		<div class="form-group">
-			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save&Exit"/>
+			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save & Return to Dashboard"/>
 			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Finish"/>
 		</div>
 		<?php } ?>

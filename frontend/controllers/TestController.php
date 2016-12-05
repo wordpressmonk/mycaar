@@ -9,6 +9,7 @@ use common\models\AwarenessQuestion;
 use common\models\CapabilityQuestion;
 use common\models\AwarenessOption;
 use common\models\Unit;
+use common\models\User;
 use common\models\UnitElement;
 use common\models\search\SearchUnit;
 use common\models\UnitReport as Report;
@@ -63,8 +64,8 @@ class TestController extends Controller
 			throw new NotFoundHttpException('The requested page does not exist.');
 		$previous_unit = Unit::find()->where(['and', "unit_id<$u_id", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_id DESC')->one();
 		//
-
-		if($previous_unit){
+		$user = User::findOne(\Yii::$app->user->id);
+		if($previous_unit && $user->getRoleName() == 'user' ){
 			//print_r($current_unit);die;
 			$previous_unit_report = Report::find()->where(['unit_id'=>$previous_unit->unit_id,'student_id'=>\Yii::$app->user->id])->one();
 			if($previous_unit->unit_id != $u_id && (!$previous_unit_report || $previous_unit_report->awareness_progress != 100)){
