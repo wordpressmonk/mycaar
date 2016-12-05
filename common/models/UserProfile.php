@@ -53,7 +53,7 @@ class UserProfile extends \yii\db\ActiveRecord
 	public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['company_admin_user'] = ['firstname','lastname'];//Scenario Values Only Accepted
+        $scenarios['company_admin_user'] = ['firstname','lastname','division','location','state','role','employee_number'];//Scenario Values Only Accepted
         return $scenarios;
     }
 	
