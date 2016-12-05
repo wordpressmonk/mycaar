@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	$username ='';
 	foreach($programs as $program)
 	{
-		$modules = $program->modules;
+		$modules = $program->publishedModules;
 		if(count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
 		echo '<div class="mdl-grid">
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo'<div class="all_course al_pragram_width ">';
 		foreach($modules as $p_key=>$module)
 		{
-			$units = $module->units;
+			$units = $module->publishedUnits;
 			if(count($units) > 0)
 			{
 			//echo $p_key;
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			else 
 				echo '<div class="course_listing al_single_course_width units-present-4" >'
 			;
-					echo '<div class="course_name">
+					echo '<div class="course_name" style="position:relative">
                             <h2>
                                 <strong>'.$module->title.'</strong>
                             </h2>

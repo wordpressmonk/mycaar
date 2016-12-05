@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->program_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Update', ['update', 'id' => $model->program_id], ['class' => 'btn btn-primary']) ?>		
         <?= Html::a('Delete', ['delete', 'id' => $model->program_id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+		<?= Html::a('All Programs', ['program-list'], ['class' => 'btn btn-info']) ?>
     </p>
 
     <?= DetailView::widget([

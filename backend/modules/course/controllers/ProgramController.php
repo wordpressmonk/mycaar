@@ -47,7 +47,10 @@ class ProgramController extends Controller
     }
 	public function actionProgramList(){
         $searchModel = new SearchProgram();
-        $dataProvider = $searchModel->searchCompanyPrograms(Yii::$app->request->queryParams);
+		if (\Yii::$app->user->can('superadmin')) {
+			$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		}
+        else $dataProvider = $searchModel->searchCompanyPrograms(Yii::$app->request->queryParams);
 
         return $this->render('list', [
             'searchModel' => $searchModel,
@@ -111,8 +114,8 @@ class ProgramController extends Controller
 				'dataProvider' => $dataProvider,
 			]);
 		}else{
-					//yii\web\ForbiddenHttpException
-					throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+			//yii\web\ForbiddenHttpException
+			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
 		}
     }
 
@@ -128,7 +131,10 @@ class ProgramController extends Controller
         if ($model->load(Yii::$app->request->post()) ) {
 			$model->company_id = Yii::$app->user->identity->c_id;
 			$model->save();
-            return $this->redirect(['view', 'id' => $model->program_id]);
+			if (\Yii::$app->user->can('superadmin')) {
+					return $this->redirect(['index']);
+			}
+            return $this->redirect(['program-list']);
         } else {
             return $this->render('create', [
                 'model' => $model,

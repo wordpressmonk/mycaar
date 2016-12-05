@@ -51,8 +51,12 @@ $homeUrl = Yii::$app->homeUrl;
 											<span class='pull-right text-primary'>
 												<a href='{$homeUrl}course/module/update?id={$module->module_id}' title='Update Course' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
 												<a href='{$homeUrl}course/unit/create?m_id={$module->module_id}' title='Add Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-plus'></span></a>
-												<a href='{$homeUrl}course/module/delete?id={$module->module_id}' title='Delete Course' data-confirm='Are you sure you want to delete this item?' data-method='post'  style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
-											</span>										
+												<a href='{$homeUrl}course/module/delete?id={$module->module_id}' title='Delete Course' data-confirm='Are you sure you want to delete this item?' data-method='post'  style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>";
+										if($module->status)
+											echo "<span class='glyphicon glyphicon-ok' title='published'></span>";
+										else
+											echo "<span class='glyphicon glyphicon-remove' title='unpublished'></span>";
+										echo "</span>										
 										</div>
 									";
 								$units = $module->units;
@@ -64,8 +68,14 @@ $homeUrl = Yii::$app->homeUrl;
 										<div class='btn btn-default-bright'>$unit->title
 											<span class='pull-right text-primary-dark'>
 												<a href='{$homeUrl}course/unit/update?id={$unit->unit_id}' title='View Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
-												<a href='{$homeUrl}course/unit/delete?id={$unit->unit_id}' title='Delete Lesson' data-confirm='Are you sure you want to delete this item?' data-method='post' style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
-											</span>											
+												<a href='{$homeUrl}course/unit/delete?id={$unit->unit_id}' title='Delete Lesson' data-confirm='Are you sure you want to delete this item?' data-method='post' style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>";
+												
+										if($unit->status)
+											echo "<span class='glyphicon glyphicon-ok' title='published'></span>";
+										else
+											echo "<span class='glyphicon glyphicon-remove' title='unpublished'></span>";
+										
+										echo "</span>											
 										</div>
 									</li>";
 									}

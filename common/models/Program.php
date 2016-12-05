@@ -57,7 +57,11 @@ class Program extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Module::className(), ['program_id' => 'program_id']);
     }
-
+	public function getPublishedModules()
+	{
+		return $this->hasMany(Module::className(), ['program_id' => 'program_id'])
+		->andOnCondition(['status' => 1]);
+	}
     /**
      * @return \yii\db\ActiveQuery
      */

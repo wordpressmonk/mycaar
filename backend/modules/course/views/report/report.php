@@ -118,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	$username ='';
 	foreach($programs as $program)
 	{
-		$modules = $program->modules;
+		$modules = $program->publishedModules;
 		if(count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
 		echo '<div class="mdl-grid">
@@ -152,7 +152,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		{
 			$no_user_enrolled = true;
 			$str = '';
-			$units = $module->units;
+			$units = $module->publishedUnits;
 			if(count($units) > 0)
 			{
 			//$str.= $p_key;

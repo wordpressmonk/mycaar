@@ -8,6 +8,11 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/form-render.js");
 $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 ?>
+<style>
+button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
+	display:none;
+}
+</style>
 <div class="section-body contain-lg">
 
 <div class="row">
@@ -204,20 +209,24 @@ function saveFile(input){
     formData= new FormData();
 	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx"){
 		formData.append("media", file);
+		  $.ajax({
+			url: "<?=Url::to(['unit/upload'])?>",
+			type: "POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data){
+				alert('success');
+				$(input).attr('src', data);
+			}
+		  });
+	}else{
+		alert("Extension not supported");
+		return false;
 	}
 
     //if(!!file.type.match(/image.*/)){
-      $.ajax({
-        url: "<?=Url::to(['unit/upload'])?>",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(data){
-            alert('success');
-			$(input).attr('src', data);
-        }
-      });
+
     }
 }
 <!---------- End of save file ------------->

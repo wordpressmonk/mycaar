@@ -87,7 +87,13 @@ class Module extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Unit::className(), ['module_id' => 'module_id'])->orderBy(['unit_id' => SORT_ASC]);;
     }
-	
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPublishedUnits()
+    {
+        return $this->hasMany(Unit::className(), ['module_id' => 'module_id'])->orderBy(['unit_id' => SORT_ASC])->andOnCondition(['status' => 1]);
+    }	
 	public function uploadImage(){
 		if($this->validate()) {
 			$this->featured_image->saveAs('uploads/' . $this->featured_image->baseName . '.' .$this->featured_image->extension);

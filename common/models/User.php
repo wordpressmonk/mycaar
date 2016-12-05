@@ -349,30 +349,32 @@ class User extends ActiveRecord implements IdentityInterface
 		 $total_modules = count($modules);
 		 $modules_completed = [];
 		 foreach($modules as $module){
+		 if($module->status){ //if module published
 			$units = $module->units; 
 			$total_units = count($units);
 			$units_completed = [];
 			foreach($units as $unit)
 			{
-				$capabilty_progress = $awareness_progress = 0;
-				$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
-				$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$this->id])->one();
-				if($report){
-					if(!$c_status)
-						$capabilty_progress = 100;
-					else $capabilty_progress = $report->capability_progress;
-					$awareness_progress = $report->awareness_progress;					
-				}				
-				if($capabilty_progress == 100 && $awareness_progress == 100){
-					
-					$units_completed[] = $unit->unit_id;
-				}
-					
-				
+				if($unit->status){ //if unit published
+					$capabilty_progress = $awareness_progress = 0;
+					$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
+					$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$this->id])->one();
+					if($report){
+						if(!$c_status)
+							$capabilty_progress = 100;
+						else $capabilty_progress = $report->capability_progress;
+						$awareness_progress = $report->awareness_progress;					
+					}				
+					if($capabilty_progress == 100 && $awareness_progress == 100){
+						
+						$units_completed[] = $unit->unit_id;
+					}					
+				}// if unit published
 			}
 			//print_R($units_completed);
 			if(count($units_completed) == $total_units)
 				$modules_completed[] = $module->module_id;
+			}//module published
 		 }
 
 		 //print_R($modules_completed);
@@ -384,31 +386,33 @@ class User extends ActiveRecord implements IdentityInterface
 	 public function getProgramProgress($program_id){
 		 $program = Program::findOne($program_id);
 		 //total units
-		 $modules = $program->modules;
+		 $modules = $program->publishedModules;
 		 $total_tests = 0;
 		 $tests_completed = 0;
 		 foreach($modules as $module){
-			$units = $module->units; 
-			foreach($units as $unit)
-			{
-				$n_tests = 2;
-				$capabilty_progress = $awareness_progress = 0;
-				$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
-				if(!$c_status)
-					$n_tests = 1;
-				$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$this->id])->one();
-				if($report){
-					$capabilty_progress = $report->capability_progress;
-					$awareness_progress = $report->awareness_progress;					
-				}				
-				if($capabilty_progress == 100 )					
-					$tests_completed = $tests_completed+1;
-				if($awareness_progress == 100 )					
-					$tests_completed = $tests_completed+1;
+//			if($module->status){ //if module published 
+				$units = $module->publishedUnits; 
+ 				foreach($units as $unit){
+//					if($unit->status){ //if unit published
+						$n_tests = 2;
+						$capabilty_progress = $awareness_progress = 0;
+						$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
+						if(!$c_status)
+							$n_tests = 1;
+						$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$this->id])->one();
+						if($report){
+							$capabilty_progress = $report->capability_progress;
+							$awareness_progress = $report->awareness_progress;					
+						}				
+						if($capabilty_progress == 100 )					
+							$tests_completed = $tests_completed+1;
+						if($awareness_progress == 100 )					
+							$tests_completed = $tests_completed+1;
 
-				$total_tests = 	$total_tests + $n_tests;
-				
-			}
+						$total_tests = 	$total_tests + $n_tests;
+//					}//unit status
+				}
+//			}//module status
 		 }
 
 		 //print_R($modules_completed);

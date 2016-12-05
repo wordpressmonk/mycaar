@@ -8,9 +8,15 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/form-builder.css");
 $this->registerCssFile(\Yii::$app->homeUrl."css/custom/form-render.css");
 $this->registerJsFile(\Yii::$app->homeUrl."js/custom/form-builder.js");
 $this->registerJsFile(\Yii::$app->homeUrl."js/custom/form-render.js");
+$this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 ?>
+<style>
+button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
+	display:none;
+}
+</style>
 <div class="section-body contain-lg">
 <h2 class="col-md-9">Update Lesson: <?=$model->title?></h2>
 
@@ -48,7 +54,12 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 							
 							<div class="checkbox checkbox-styled checkbox-info  pull-right">
 								<label>
-									<input id="unit_status" type="checkbox" checked="<?=$model->status ?>">
+								<?php 
+									if($model->status )
+										$checked = "checked";
+									else $checked = "";
+								?>
+									<input id="unit_status" type="checkbox" <?=$checked?>>
 									<span>Publish</span>
 								</label>
 							</div>
@@ -261,22 +272,28 @@ function saveFile(input){
 	file = input.files[0];
 	var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
 	if(file != undefined){
+		waitingDialog.show('I\'m waiting');
 	formData= new FormData();
 	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx"){
 		formData.append("media", file);
+		$.ajax({
+			url: "<?=Url::to(['unit/upload'])?>",
+			type: "POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data){
+				waitingDialog.hide();
+				$(input).attr('src', data);
+			}
+		});
+	}else{
+		alert("Extension not supported");
+		$(input).val("");
+		return false;
 	}
 
-	$.ajax({
-		url: "<?=Url::to(['unit/upload'])?>",
-		type: "POST",
-		data: formData,
-		processData: false,
-		contentType: false,
-		success: function(data){
-			alert('success');
-			$(input).attr('src', data);
-		}
-		});
+
 	}
 }
 <!---------- End of save file ------------->

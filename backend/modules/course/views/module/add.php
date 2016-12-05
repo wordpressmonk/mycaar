@@ -47,9 +47,12 @@ use kartik\select2\Select2;
 							<?php $form = ActiveForm::begin([
 											'options' => ['enctype'=>'multipart/form-data']
 							]); ?>
+								<h4>Course Status</h4>
+								<?= $form->field($model, 'status',['options'=>['class'=>'form-group']])->checkbox(['class'=>'form-control'])->label(false) ?>
+							
 								<?= $form->field($model, 'title')->textInput(['maxlength' => true,'class'=>'form-control']) ?>
 								
-								<h4>Course Excerpt / Short Overview	</h4>
+								
 								<?= $form->field($model, 'short_description')->textarea(['id'=>'course_shortdesc']) ?>
 								
 								<h4>Listing Image</h4>
@@ -183,5 +186,39 @@ $('#start_date').datepicker({
 	format: 'yyyy-mm-dd'
 });
 $('#start_enroll_date').datepicker({autoclose: true, todayHighlight: true,format: 'yyyy-mm-dd'});
+	//handle the date fields
+	if($('#module-is_course_open_anytime').is(":checked")){
+		$("#module-course_start_date").prop('disabled', true);
+		$("#module-course_end_date").prop('disabled', true);
+		console.log("checked");
+	}
+	if($('#module-is_enrlmnt_open_anytime').is(":checked")){
+		$("#module-enrl_start_date").prop('disabled', true);
+		$("#module-enrl_end_date").prop('disabled', true);
+		console.log("checked");
+	}
+});
+
+$('#module-is_course_open_anytime').on('click',function(){
+	if($(this).is(":checked")){
+		$("#module-course_start_date").prop('disabled', true);
+		$("#module-course_end_date").prop('disabled', true);
+		console.log("checked");
+	}else{
+		$("#module-course_start_date").prop('disabled', false);
+		$("#module-course_end_date").prop('disabled', false);		
+	}
+	
+});
+$('#module-is_enrlmnt_open_anytime').on('click',function(){
+	if($(this).is(":checked")){
+		$("#module-enrl_start_date").prop('disabled', true);
+		$("#module-enrl_end_date").prop('disabled', true);
+		console.log("checked");
+	}else{
+		$("#module-enrl_start_date").prop('disabled', false);
+		$("#module-enrl_end_date").prop('disabled', false);		
+	}
+	
 });
 </script>
