@@ -220,9 +220,10 @@ class UnitController extends Controller
 	 * Return the path
 	 */
 	public function actionUpload(){
+		$name = uniqid();
 		$dir = "uploads/media/";
-		move_uploaded_file($_FILES["media"]["tmp_name"], $dir. $_FILES["media"]["name"]);
-		return \Yii::$app->homeUrl.$dir. $_FILES["media"]["name"];
+		move_uploaded_file($_FILES["media"]["tmp_name"], $dir. $name);
+		return \Yii::$app->homeUrl.$dir. $name;
 	}
 	
 	/**
