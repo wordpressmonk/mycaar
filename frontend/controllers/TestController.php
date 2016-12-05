@@ -180,8 +180,11 @@ class TestController extends Controller
 		//print_r($questions);die;
 		if($answers = Yii::$app->request->post()){
 			$this->saveAnswers($answers);
-			if(isset(Yii::$app->request->post()['save_n_exit']))
+			if(isset(Yii::$app->request->post()['save_n_exit'])){
+				$this->saveProgress(\Yii::$app->user->id,$u_id);
 				return $this->redirect(["site/index"]);
+			}
+				
 			if($this->saveProgress(\Yii::$app->user->id,$u_id)!= 100)
 				return $this->redirect(['retake','u_id'=>$u_id]);
 			//redirect to next page or homepage

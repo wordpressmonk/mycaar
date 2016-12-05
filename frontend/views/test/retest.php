@@ -135,6 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script>
 	var answers = '<?=$answers ?>';
+	console.log(answers);
 	if(answers){
 		var answers = $.parseJSON(answers);
 		//console.log(answers);

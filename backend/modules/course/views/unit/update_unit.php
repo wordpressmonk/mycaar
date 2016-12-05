@@ -212,7 +212,7 @@ $(document).ready(function(){
 	   controlPosition: 'left',
 	   editOnAdd: true,
 	};
- 	var aw_data = '<?= $aw_data ?>';
+ 	var aw_data = '<?= html_entity_decode($aw_data) ?>';
 	//console.log(aw_data);
 	if (aw_data) {
 		awareness_elements.formData = aw_data;
@@ -243,7 +243,7 @@ $(document).ready(function(){
 	   controlPosition: 'left',
 	   editOnAdd: true,
 	};
- 	var cp_data = '<?= $cp_data ?>';
+ 	var cp_data = '<?= html_entity_decode($cp_data) ?>';
 	//console.log(aw_data);
 	if (aw_data) {
 		cap_elements.formData = cp_data;
