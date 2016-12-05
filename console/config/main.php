@@ -21,8 +21,6 @@ return [
             ],
         ],
 		
-
-   'mailer' => require(__DIR__ . '/mailer.php'),
    
     ],
     'params' => $params,

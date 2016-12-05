@@ -121,4 +121,24 @@ class RoleController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+	
+	
+	/**
+     * Multiple Deletes an existing Division model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+	 
+	 public function actionMultiDelete()
+    {    
+		$role_id = Yii::$app->request->post()['role_id'];
+		if($role_id)
+		{
+			 foreach($role_id as $tmp)
+			  $this->findModel($tmp)->delete(); 
+		} 
+			
+    }
+	
 }

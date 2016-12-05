@@ -195,10 +195,11 @@ class ImportuserController extends Controller
 				// Email Message is saved in database
 				$quickemail = new QuickEmail();	
 				$quickemail->c_id = $model->company_id;
+				$quickemail->user_id = $usertable->id;
 				$quickemail->to_email = $rowData[0][0];
 				$quickemail->from_email = "info_notification@gmail.com";
 				$quickemail->subject = "YOUR VERIFIED EMAIL ID";
-				$quickemail->message = "<br><br> Your Password:".$usertable->password."<br><br>After login, Please Kindly Delete this Message for security.";
+				$quickemail->message = $usertable->password;
 				$quickemail->status = 0;			
 				$quickemail->save();	
 				
