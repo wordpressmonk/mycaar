@@ -1,7 +1,6 @@
 <?php
 
 namespace common\models;
-use common\models\User;
 use Yii;
 
 /**
@@ -57,27 +56,5 @@ class QuickEmail extends \yii\db\ActiveRecord
         ];
     }
 	
- 	 public function sendEmail($userid,$password,$to_email)
-    {		
-        /* @var $user User */
-        $user = User::findOne([
-            'status' => User::STATUS_ACTIVE,
-            'id' => $userid,
-        ]);		
-        if (!$user) {
-            return false;
-        }
-        
-        return Yii::$app
-            ->mail
-            ->compose(
-                ['text' => 'passwordSend-text'],
-                ['user' => $user,'password'=>$password]
-            )
-            ->setFrom('arivu.ilan@gmail.com')
-            ->setTo($to_email)
-            ->setSubject('YOUR VERIFIED EMAIL ID')
-            ->send();
-    } 
-	
+ 	
 }

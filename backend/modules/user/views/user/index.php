@@ -24,7 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
 		  <?php if(\Yii::$app->user->can('company_admin')) { ?>
 			<?= Html::a('Import User', ['importuser/importexcel'], ['class' => 'btn btn-info pull-right']) ?>
 		  <?php } ?>
-		</div>	 
+		
+			<a class="btn btn-danger pull-right" style="margin-right: 10px;" id="multi_delete" name="multi_delete" >Multi Delete</a>
+		</div>
+		
 </div>	 
   
 	
@@ -36,6 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+			[	
+					'class' => 'yii\grid\CheckboxColumn',
+					 'checkboxOptions' => function ($data){
+						return ['checked' =>false,'value'=>$data['id']];
+					}, 
+				
+			],
+			
              ['label' => 'Username / Email ID',
 				'attribute' => 'email',			
 			 ],
@@ -45,3 +56,33 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 	</div>
 </div>
+
+
+
+ <script type = "text/javascript">
+ 
+     $(document).ready(function(){	
+	 
+		$("#multi_delete").click(function(){				 
+		    var r = confirm("Are you Sure To Delete!");
+		    if (r == true) {
+				var user_id = $.map($('input[name="selection[]"]:checked'), function(c){return c.value; })
+				if($.trim(user_id) === "")
+				 {
+					alert("Please Select the Checkbox to Delete!!!.");
+					return false;
+				  }				
+				 $.ajax({
+				   url: '<?=Yii::$app->homeUrl."user/user/multi-delete"?>',
+				   type: 'POST',
+				   data: {  user_id: user_id,
+				   },
+				   success: function(data) {												
+						location.reload();
+				   }
+				 }); 
+				}		
+			 });			 			 
+	});
+		 
+      </script> 
