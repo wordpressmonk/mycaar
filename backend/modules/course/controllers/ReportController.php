@@ -220,22 +220,23 @@ class ReportController extends Controller
 		
 
 		
-			if($post = \Yii::$app->request->post() && isset($post['selection'])){
-				//print_r($post);
+			if(\Yii::$app->request->post() && isset(\Yii::$app->request->post()['selection'])){
+				$post = \Yii::$app->request->post();
 				foreach($post['selection'] as $report){
 					$rep = UnitReport::findOne($report);
 					if($rep != null){
 						$rep->resetUser();
-						$rep->delete();				
+						$rep->save();
+						//$rep->delete();				
 					}
 				}
 				return $this->redirect(['reset-users']);
 			}
-        else return $this->render('reset_users', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-			'params' => $params
-        ]);				
+			else return $this->render('reset_users', [
+				'searchModel' => $searchModel,
+				'dataProvider' => $dataProvider,
+				'params' => $params
+			]);				
 		
 	}
 	public function actionResetTest($type,$r_id){

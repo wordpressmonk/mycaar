@@ -32,14 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 		<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-		<?=Html::beginForm(['report/reset-users'],'post');?>
-		<p>
-			<div class="row">
-				<div class="col-md-2" >
-					<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
-				</div>
-			</div>
-		<p>
+
 		<div class="card card-collapse">
 			<div class="card-head style-default">
 				<div class="tools">
@@ -150,6 +143,12 @@ $this->params['breadcrumbs'][] = $this->title;
 				</div>
 			</div><!--end .card-body -->
 		</div><!--end .card -->		
+		<?=Html::beginForm(['report/reset-users'],'post');?>
+		<p>
+
+					<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
+
+		<p>
 		<?= GridView::widget([
 			'dataProvider' => $dataProvider,
 		//	'filterModel' => $searchModel,

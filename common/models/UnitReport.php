@@ -94,7 +94,9 @@ class UnitReport extends \yii\db\ActiveRecord
 		$c_answers = CapabilityAnswer::find()->joinWith(['capability_question'])->where(['capability_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();
 		foreach($c_answers as $answer){
 			$answer->delete();
-		}		
+		}	
+		$this->capability_progress = NULL;
+		$this->awareness_progress = NULL;
 	}
 	public function resetAwTest(){
 		$a_answers = AwarenessAnswer::find()->joinWith(['awareness_question'])->where(['awareness_question.unit_id'=>$this->unit_id,'user_id'=>$this->student_id])->all();
