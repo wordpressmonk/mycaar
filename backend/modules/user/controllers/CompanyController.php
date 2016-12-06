@@ -38,7 +38,22 @@ class CompanyController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-			
+			'access' => [
+				'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index-role-user','view-role-user','enroll-user'],
+                        'allow' => true,
+						'roles' => ['assessor']
+                    ],
+					 [
+                        'actions' => ['index','create','view','update','delete','index-user','create-user','view-user','update-user','delete-user','enroll-user','multi-delete','multi-delete-user','ajax-new-user'],
+                        'allow' => true,
+						'roles' => ['company_admin']
+                    ],
+				],
+			],
+						
         ];
     }
 
