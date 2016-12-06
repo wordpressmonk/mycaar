@@ -208,11 +208,20 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 															$str.= "<span class='first_heading'>Capable</span>";
 														//else $str.= '<span class="first_heading" style="display: none">Capable</span>';
 														$href= 'javascript:void(0);';
+														$onClick = '';
 														if($progress['cp'] != 'grey')
 															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id]);
+														if($user->user_id == \Yii::$app->user->id){
+															$onClick = "popUpNotAllowed();";
+															$href= 'javascript:void(0);';
+														}
+														if($progress['cp'] == 'green'){
+															$onClick = "popUpCompleted();";
+															$href= 'javascript:void(0);';
+														}	
 														$str.= "<div name='unit1' id='{$progress['cp']}'>
 
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href."><span class='toolkit'><center>{$progress['cp']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href." onClick=".$onClick."><span class='toolkit'><center>{$progress['cp']}</center></span>
 															</a>
 
 														</div>
@@ -247,8 +256,14 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	} 
 	?>
 	<script>
-	$('.card-head .tools .btn-collapse').on('click', function (e) {
-		var card = $(e.currentTarget).closest('.card');
-		materialadmin.AppCard.toggleCardCollapse(card);
-	});
+		$('.card-head .tools .btn-collapse').on('click', function (e) {
+			var card = $(e.currentTarget).closest('.card');
+			materialadmin.AppCard.toggleCardCollapse(card);
+		});
+		function popUpNotAllowed(){
+			alert("Sorry, you're not able to complete your own capability test!");
+		}
+		function popUpCompleted(){
+			alert("Sorry you can't able to attend this capability test, it is already completed!");
+		}
 	</script>

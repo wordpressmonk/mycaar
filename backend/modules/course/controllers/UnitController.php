@@ -314,25 +314,25 @@ class UnitController extends Controller
 				//reformat the form data
 				$name = $quest['type'][0][1]."-".$awareness_question->aq_id; //change this to primary key
 				$type = $class = $quest['type'][0][1];
-				$label = $quest['question'][0][1];
+				$label = htmlentities($quest['question'][0][1], ENT_QUOTES, 'UTF-8');
 				if(isset($quest['description'][0][1]))
-					$description = $quest['description'][0][1];
+					$description = htmlentities($quest['description'][0][1], ENT_QUOTES, 'UTF-8');
 				$html .= "<field type='$type' description='$description' label='$label' class='$class' name='$name' src='false'>";					
 				//////////////
 				if(!empty($quest['options'])){
 					foreach($quest['options'] as $opt){
-						$optn = htmlspecialchars($opt[1]);
+						$optn = htmlentities($opt[1], ENT_QUOTES, 'UTF-8');
 						$option_id = $opt[2][0][1];
 						$awareness_option = AwarenessOption::findOne($option_id);
 						if (!$awareness_option) 
 							$awareness_option = new AwarenessOption();
 						$awareness_option->question_id =  $awareness_question->aq_id;
-						$awareness_option->answer = $opt[1];
+						$awareness_option->answer = $optn;
 						$awareness_option->save();
 						$opt_string = "<option option_id='{$awareness_option->option_id}'  label='$optn ' value='$optn '>'$optn '</option>";
 							if(!empty($quest['answer'])){
 								foreach($quest['answer'] as $ans){
-									if($ans[1] == $awareness_option->answer){
+									if($ans[1] == $opt[1]){
 										$answer .= $awareness_option->option_id."_";
 										$opt_string = "<option option_id='{$awareness_option->option_id}' label='$optn ' value='$optn ' selected='true'>'$optn'</option>";
 									}
@@ -358,7 +358,7 @@ class UnitController extends Controller
 		$element->unit_id = $unit_id;
 		$element->element_type = "aw_data";
 		$element->element_order = 1;
-		$element->content = htmlentities($html);
+		$element->content = $html;
 		$element->save();
 		//delete the elements
 		$deleted=array_diff($from_update,$to_update);
@@ -403,20 +403,20 @@ class UnitController extends Controller
 				//reformat the form data
 				$name = $quest['type'][0][1]."-".$cap_question->cq_id; //change this to primary key
 				$type = $class = $quest['type'][0][1];
-				$label = $quest['question'][0][1];
+				$label = htmlentities($quest['question'][0][1], ENT_QUOTES, 'UTF-8');
 				if(isset($quest['description'][0][1]))
-					$description = $quest['description'][0][1];
+					$description = htmlentities($quest['description'][0][1], ENT_QUOTES, 'UTF-8');
 				$html .= "<field type='$type' description='$description' label='$label' class='$class' name='$name' src='false'>";					
 				//////////////
 				if(!empty($quest['options'])){
 					foreach($quest['options'] as $opt){
-						$optn = htmlspecialchars($opt[1]);
+						$optn = htmlentities($opt[1], ENT_QUOTES, 'UTF-8');
 						$opt_string = "<option  label='$optn' value='$optn'>'$optn'</option>";
 							if(!empty($quest['answer'])){
 								foreach($quest['answer'] as $ans){
 									if($ans[1] === $opt[1]){
-										$answer = $opt[1];
-										$optn = htmlspecialchars($opt[1]);
+										$answer = $optn;
+										//$optn = htmlspecialchars($opt[1]);
 										$opt_string = "<option label='{$optn}' value='$optn' selected='true'>'$optn'</option>";
 									}
 									 
@@ -440,7 +440,7 @@ class UnitController extends Controller
 		$element->unit_id = $unit_id;
 		$element->element_type = "cap_data";
 		$element->element_order = 1;
-		$element->content = htmlentities($html);
+		$element->content = $html;
 		$element->save();
 		//delete the elements
 		$deleted=array_diff($from_update,$to_update);
