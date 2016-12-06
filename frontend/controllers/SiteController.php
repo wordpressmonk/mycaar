@@ -171,22 +171,20 @@ class SiteController extends Controller
 		$check_slug = Company::find()->where(["slug" =>$slug])->one();
 		if(!$check_slug)
 			 return $this->redirect('Login');
-		 
-		
+		 		
         $model = new SignupForm();
-		$profile = new Profile();	
-        if ($model->load(Yii::$app->request->post())) {
+		$profile = new Profile();
+		$profile->scenario = 'company_admin_user';		
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
             if ($user = $model->signup()) { 
 			
 				$auth = Yii::$app->authManager;
 				$authorRole = $auth->getRole($user->role);
-				$auth->assign($authorRole, $user->id); 
+				$auth->assign($authorRole, $user->id); 		
 				
-				if($profile->load(Yii::$app->request->post()))
-				{
-				  $profile->user_id = $user->id;			
-				  $profile->save();	
-				}			
+				$profile->user_id = $user->id;			
+				$profile->save();	
+							
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }

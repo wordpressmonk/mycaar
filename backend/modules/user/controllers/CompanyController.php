@@ -41,15 +41,16 @@ class CompanyController extends Controller
 			'access' => [
 				'class' => AccessControl::className(),
                 'rules' => [
-                    [
-                        'actions' => ['index-role-user','view-role-user','enroll-user'],
-                        'allow' => true,
-						'roles' => ['assessor']
-                    ],
+                   
 					 [
                         'actions' => ['index','create','view','update','delete','index-user','create-user','view-user','update-user','delete-user','enroll-user','multi-delete','multi-delete-user','ajax-new-user'],
                         'allow' => true,
 						'roles' => ['company_admin']
+                    ],
+					 [
+                        'actions' => ['index-role-user','view-role-user','enroll-user','my-profile','update-my-profile'],
+                        'allow' => true,
+						'roles' => ['assessor']
                     ],
 				],
 			],
@@ -380,7 +381,7 @@ class CompanyController extends Controller
 	
 	
 	/**
-     * Multiple Deletes an existing Division model.
+     * Multiple Deletes an existing Company model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -397,6 +398,13 @@ class CompanyController extends Controller
 			
     }
 	
+	/**
+     * Multiple Deletes an existing User for company admin model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+	 
 	 public function actionMultiDeleteUser()
     {    
 		$user_id = Yii::$app->request->post()['user_id'];	
@@ -410,6 +418,7 @@ class CompanyController extends Controller
 		}  			
     }
 	
+	// Index User Page of All User  for the Assessor Role User
 	
 	public function actionIndexRoleUser()
     {
@@ -422,7 +431,9 @@ class CompanyController extends Controller
         ]);
     }
 	
-	 public function actionViewRoleUser($id)
+	// View User Page of All User  for the Assessor Role User
+	
+	public function actionViewRoleUser($id)
     {		
 	  if (($model = User::findOne($id)) !== null) {           
 		  $profile = Profile::findOne(['user_id'=>$id]);
@@ -434,4 +445,55 @@ class CompanyController extends Controller
             'model' =>$profile,
         ]); 
     }
+	
+	// My Profile Page for the Assessor Role User
+	
+	public function actionMyProfile()
+    {		
+		$id = Yii::$app->user->identity->id;
+	   if (($model = User::findOne($id)) !== null) {           
+		  $profile = Profile::findOne(['user_id'=>$id]);
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        } 		
+          return $this->render('view_my_profile', [
+            'model' =>$profile,
+        ]); 
+    }
+	
+	
+	
+	public function actionUpdateMyProfile()
+    {       
+		$id = Yii::$app->user->identity->id;
+		 if (($model = User::findOne($id)) !== null) {           
+		  $profile = Profile::findOne(['user_id'=>$id]);
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        } 
+		
+		$model->role = $model->getRoleName();
+			
+		if(\Yii::$app->user->can('company_admin')) {
+			$model->scenario = 'update_by_company_admin';
+		}
+		
+        $profile->scenario = 'company_admin_user';
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {
+			//handle the role first
+			$model->username = $model->email;			
+			if($model->save())
+			{					
+			$profile->user_id = $model->id;			
+			$profile->save();									
+             return $this->redirect(['my-profile']);
+			
+			} else {
+            return $this->render('update_my_profile', ['model' => $model,'profile' => $profile,]);
+			}
+        } else {
+            return $this->render('update_my_profile', ['model' => $model,'profile' => $profile,]);
+        }
+    }
+	
 }
