@@ -169,7 +169,8 @@ AppAsset::register($this);
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-user#all_usrs" ><span class="title">Users</span></a></li>
 								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/company/create-user#add_usr" ><span class="title">Add User</span></a></li>
 							<?php } else if(\Yii::$app->user->can('assessor')) { ?>
-								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-role-user#all_usrs" ><span class="title">Users</span></a></li>						
+								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-role-user#all_usrs" ><span class="title">Users</span></a></li>
+								<li><a id="my_profile" href="<?=\Yii::$app->homeUrl?>user/company/my-profile#my_profile" ><span class="title">My Profile</span></a></li>								
 							<?php } ?>																		
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
@@ -216,7 +217,8 @@ AppAsset::register($this);
 							</a>
 							<ul>
 							<!--start submenu -->
-								<li><a id="ar" href="<?=\Yii::$app->homeUrl?>course/report/assessor-report#ar" ><span class="title">Assessor Reports</span></a></li>
+							<li><a id="enrl" href="<?=\Yii::$app->homeUrl?>user/company/enroll-user#enrl" ><span class="title">Enroll User</span></a></li>
+							<li><a id="ar" href="<?=\Yii::$app->homeUrl?>course/report/assessor-report#ar" ><span class="title">Assessor Reports</span></a></li>
 							</ul>
 						</li>						
 						<?php } ?>
