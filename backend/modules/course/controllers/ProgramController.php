@@ -29,7 +29,7 @@ class ProgramController extends Controller
             ],
              'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['index','create','view'],
+				'only' => ['index','create','view','dashboard'],
                 'rules' => [
                     [
                         'actions' => ['index'],
@@ -40,6 +40,11 @@ class ProgramController extends Controller
                         'actions' => ['create','view','delete'],
                         'allow' => true,
 						'roles' => ['company_admin']
+                    ],
+                    [
+                        'actions' => ['dashboard'],
+                        'allow' => true,
+						'roles' => ['assessor']
                     ],
                 ],
             ], 
@@ -71,7 +76,12 @@ class ProgramController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-	
+	public function actionDashboard(){
+		$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
+		return $this->render('dashboard', [
+			'programs' => $programs,
+		]);
+	}
     /**
      * Lists all Program models.
      * @return mixed

@@ -55,7 +55,7 @@ class ReportController extends Controller
         ];
     }   
 
-	public function actionSearch(){		
+	public function actionSearch($p_id=null){		
 		$programs = $users = [];
 		if($param = \Yii::$app->request->post()){	
 			//find program
@@ -101,7 +101,9 @@ class ReportController extends Controller
             'query' => $query,
         ]); */		
         else {
-			$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
+		 if($p_id)
+			$programs[] = Program::find()->where(['program_id'=>$p_id])->one();
+		 else $programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
 			$query = UserProfile::find();
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
