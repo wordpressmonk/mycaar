@@ -255,15 +255,36 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	$progress = $user->user->getProgramProgress(1);
 	} 
 	?>
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header style-primary">
+          <h4 class="modal-title text-bold text-xxl">Sorry!</h4>
+        </div>
+        <div class="modal-body text-medium">
+          <p>The <strong>show</strong> method shows the modal and the <strong>hide</strong> method hides the modal.</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
 	<script>
 		$('.card-head .tools .btn-collapse').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
 		});
 		function popUpNotAllowed(){
-			alert("Sorry, you're not able to complete your own capability test!");
+			$(".modal-body").html("Sorry, you're not able to complete your own capability test!");
+			$("#myModal").modal("show");
+			//alert("Sorry, you're not able to complete your own capability test!");
 		}
 		function popUpCompleted(){
-			alert("Sorry you can't able to attend this capability test, it is already completed!");
+			$(".modal-body").html("Sorry you can't able to attend this capability test, it is already completed!");
+			$("#myModal").modal("show");
+			//alert("Sorry you can't able to attend this capability test, it is already completed!");
 		}
 	</script>
