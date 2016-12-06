@@ -182,6 +182,8 @@ AppAsset::register($this);
 			<!-- END CONTENT -->
 		</div>
 		<!-- END BASE -->
+
+
 	</body>
 <?php $this->endBody() ?>
 </body>

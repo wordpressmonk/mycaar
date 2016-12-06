@@ -45,7 +45,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							</li>
 						</ul>
 					</div>
-				</div>
+	</div>
 
 		<div class="card card-collapse card-collapsed">
 			<div class="card-head style-default">

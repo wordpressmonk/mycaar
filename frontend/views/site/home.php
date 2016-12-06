@@ -16,7 +16,27 @@ $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 ?>
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="mdl-grid mdl-home">
+					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
+						<h1 class="mdl-sidebar"><strong>Home Page</strong></h1>
+					</div>
+					<div class="mdl-cell mdl-cell-4-col mdl-section">
+						<ul style="width: 1000px;">
+							<li>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelyellow mdl-yellow" data-upgraded=",MaterialButton"> Amber</button><span class="mdl-complete">In Progress</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelred mdl-darkred" data-upgraded=",MaterialButton">Red</button><span class="mdl-complete">- Not Commenced</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgrey mdl-lightgrey" data-upgraded=",MaterialButton">Grey</button><span class="mdl-complete">- Not applicable</span>
+							</li>
+						</ul>
+					</div>
+	</div>
+		<div class="mdl-grid">
+				<div class="mdl-cell mdl-cell-8-col">
+					<span class="mdl-welcome"><h3>Welcome <?=\Yii::$app->user->identity->fullname?></h3></span>
+					<span class="mdl-current"><h3>Current Programs :</h3></span>
+				</div>
+		</div>
 	<?php if(Yii::$app->session->getFlash('error')!='') {?>
 	<div class="alert alert-danger" role="alert">
 		<strong>Oh snap!</strong> <?= Yii::$app->session->getFlash('error'); ?>.
@@ -117,7 +137,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														$href= 'javascript:void(0);';
 														echo "<div name='unit1'>
 
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href."><span class='toolkit'><center>{$progress['cp']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href." onClick='popUpNotAllowed()'><span class='toolkit'><center>{$progress['cp']}</center></span>
 															</a>
 
 														</div>
@@ -149,4 +169,31 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	$progress = $user->user->getProgramProgress(1);
 	} 
 	?>
-	
+
+		<!-- Modal -->
+			<div class="modal fade" id="myModal" role="dialog">
+				<div class="modal-dialog">
+				
+				  <!-- Modal content-->
+				  <div class="modal-content">
+					<div class="modal-header style-primary">
+					  <h4 class="modal-title text-bold text-xxl">Sorry!</h4>
+					</div>
+					<div class="modal-body text-medium">
+					  <p>Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!</p>
+					</div>
+				  </div>
+				  
+				</div>
+			</div>
+		<!-- Modal -->
+
+	<script>
+		function popUpNotAllowed(){
+			//$(".modal-body").html("Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!");
+			//$("#myModal").modal("show");
+			alert("Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!");
+		}
+
+	</script>
+
