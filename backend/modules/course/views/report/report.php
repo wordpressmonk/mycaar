@@ -35,16 +35,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
 						<h1 class="mdl-sidebar"><strong>Dashboard & Search</strong></h1>
 					</div>
-					<div class="mdl-cell mdl-cell-4-col mdl-section">
-						<ul style="width: 1000px;">
-							<li>
-								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
-								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelyellow mdl-yellow" data-upgraded=",MaterialButton"> Amber</button><span class="mdl-complete">In Progress</span>
-								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelred mdl-darkred" data-upgraded=",MaterialButton">Red</button><span class="mdl-complete">- Not Commenced</span>
-								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgrey mdl-lightgrey" data-upgraded=",MaterialButton">Grey</button><span class="mdl-complete">- Not applicable</span>
-							</li>
-						</ul>
-					</div>
+
 	</div>
 
 		<div class="card card-collapse card-collapsed">
@@ -147,6 +138,16 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4></span>
 			</div>
 		</div>';
+		echo '<div class="mdl-cell mdl-cell-4-col mdl-section">
+						<ul style="width: 1000px;">
+							<li>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelyellow mdl-yellow" data-upgraded=",MaterialButton"> Amber</button><span class="mdl-complete">In Progress</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelred mdl-darkred" data-upgraded=",MaterialButton">Red</button><span class="mdl-complete">- Not Commenced</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgrey mdl-lightgrey" data-upgraded=",MaterialButton">Grey</button><span class="mdl-complete">- Not applicable</span>
+							</li>
+						</ul>
+					</div>';
 		echo '<div class="horizontal al_cpp_category_16">';
 		echo '<ul class="name_list" >';
 		
