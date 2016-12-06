@@ -26,8 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
 		switch($question->question_type){
 			//////RADIO GROUP//////
 			case "radio-group":
-				echo "<h3>{$question->question}</h3>";
-				echo "<p>{$question->description}</p>";
+				$q = html_entity_decode($question->question);
+				$description = html_entity_decode($question->description);
+				echo "<h3>{$q}</h3>";
+				echo "<p>{$description}</p>";
 				
 				
 				$disabled = "";
@@ -62,8 +64,10 @@ $this->params['breadcrumbs'][] = $this->title;
 				break;
 			/////////CHECKBOX GROUP//////
 			case "checkbox-group":
-				echo "<h3>{$question->question}</h3>";
-				echo "<p>{$question->description}</p>";
+				$q = html_entity_decode($question->question);
+				$description = html_entity_decode($question->description);
+				echo "<h3>{$q}</h3>";
+				echo "<p>{$description}</p>";
 				$disabled = "";
 				if($question->isCorrect){
 					$disabled = "disabled";			
@@ -99,8 +103,10 @@ $this->params['breadcrumbs'][] = $this->title;
 				}
 				break;
 			case "fileupload":
-				echo "<h3>{$question->question}</h3>";
-				echo "<p>{$question->description}</p>";
+				$q = html_entity_decode($question->question);
+				$description = html_entity_decode($question->description);
+				echo "<h3>{$q}</h3>";
+				echo "<p>{$description}</p>";
 				echo '<div class="form-group">';
 				echo 
 				"<div class='border-gray small-padding form-group'>
@@ -110,8 +116,10 @@ $this->params['breadcrumbs'][] = $this->title;
 				echo '</div>';
 				break;
 			case "text":
-				echo "<h3>{$question->question}</h3>";
-				echo "<p>{$question->description}</p>";
+				$q = html_entity_decode($question->question);
+				$description = html_entity_decode($question->description);
+				echo "<h3>{$q}</h3>";
+				echo "<p>{$description}</p>";
 				echo '<div class="form-group">';
 				echo
 				"<div class='form-group'>

@@ -102,7 +102,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
 								$aw_data = $element->content;
-								//$aw_data = html_entity_decode($aw_data);
+								$aw_data = html_entity_decode($aw_data);
 								$aw_data = str_replace("'", "\'", $aw_data);
 								//$aw_data = str_replace('"', '&quot;', $aw_data);
 							?>
@@ -123,8 +123,9 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'cap_data'])->one();
 								$cp_data = $element->content;
+								$cp_data = html_entity_decode($cp_data);
 								$cp_data = str_replace("'", "\'", $cp_data);
-								$cp_data = str_replace(array("\r", "\n"), '', $cp_data);
+								//$cp_data = str_replace(array("\r", "\n"), '', $cp_data);
 							?>
 						<div id="capability_form"></div>
 						</div>

@@ -309,7 +309,7 @@ class UnitController extends Controller
 			$answer = "";
 			$description = $awareness_question->description  = '';
 			if(isset($quest['description'][0][1]))
-					$awareness_question->description  = $quest['description'][0][1];
+					$awareness_question->description  = htmlentities($quest['description'][0][1], ENT_QUOTES, 'UTF-8');
 			if($awareness_question->save(false)){
 				//reformat the form data
 				$name = $quest['type'][0][1]."-".$awareness_question->aq_id; //change this to primary key
@@ -398,7 +398,7 @@ class UnitController extends Controller
 			$answer = "";
 			$description = $cap_question->description  = '';
 			if(isset($quest['description'][0][1]))
-					$cap_question->description  = $quest['description'][0][1];
+					$cap_question->description  = htmlentities($quest['description'][0][1], ENT_QUOTES, 'UTF-8');
 			if($cap_question->save(false)){
 				//reformat the form data
 				$name = $quest['type'][0][1]."-".$cap_question->cq_id; //change this to primary key

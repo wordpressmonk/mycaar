@@ -31,9 +31,24 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 //}
 ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="mdl-grid mdl-home">
+					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
+						<h1 class="mdl-sidebar"><strong>Home Page</strong></h1>
+					</div>
+					<div class="mdl-cell mdl-cell-4-col mdl-section">
+						<ul style="width: 1000px;">
+							<li>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelyellow mdl-yellow" data-upgraded=",MaterialButton"> Amber</button><span class="mdl-complete">In Progress</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelred mdl-darkred" data-upgraded=",MaterialButton">Red</button><span class="mdl-complete">- Not Commenced</span>
+								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgrey mdl-lightgrey" data-upgraded=",MaterialButton">Grey</button><span class="mdl-complete">- Not applicable</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+
 		<div class="card card-collapse card-collapsed">
-			<div class="card-head style-primary">
+			<div class="card-head style-default">
 				<div class="tools">
 					<div class="btn-group">
 						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapse"><i class="fa fa-angle-down"></i></a>
@@ -114,7 +129,12 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				</div>
 			</div><!--end .card-body -->
 		</div><!--end .card -->
-
+		<div class="mdl-grid">
+				<div class="mdl-cell mdl-cell-8-col">
+					<span class="mdl-welcome"><h3>Welcome <?=\Yii::$app->user->identity->fullname?></h3></span>
+					<span class="mdl-current"><h3>Current Programs :</h3></span>
+				</div>
+			</div>
 	<?php 
 	$username ='';
 	foreach($programs as $program)
