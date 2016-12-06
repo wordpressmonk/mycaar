@@ -20,6 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	$selected_division = isset($params['division'])?$params['division']:'';
 	$selected_location = isset($params['location'])?$params['location']:'';
 	$selected_state = isset($params['state'])?$params['state']:'';
+	$u_id = isset($params['unit'])?$params['unit']:'';
+	$m_id = isset($params['module'])?$params['module']:'';
+	$p_id = isset($params['program'])?$params['program']:'';
 ?>
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,50 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 		<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-		<?=Html::beginForm(['report/reset-users','u_id'=>$u_id],'post');?>
+		<?=Html::beginForm(['report/reset-users'],'post');?>
 		<p>
 			<div class="row">
-				<div class="col-md-3" >
-					<?=Html::dropDownList(
-						'Program',
-						$p_id,
-						ArrayHelper::map(common\models\Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->all(),'program_id', 'title'),
-						[
-						 'id' => 'program_select', 
-						 'class' => 'form-control',
-						 'prompt' => '--Select Program--',
-						 'onchange'=>'$.post( "'.Yii::$app->urlManager->createUrl('course/report/get-modules?p_id=').'"+$(this).val(), function( data ) {
-							$( "select#module_select" ).html( data ).change();
-							
-						});'
-						]
-					);?>
-				</div>
-				<div class="col-md-3" >
-					<?=Html::dropDownList(
-						'module',
-						$m_id,
-						ArrayHelper::map(common\models\Module::find()->where(['program_id' =>$p_id])->all(),'module_id', 'title'),
-						[
-						 'id' => 'module_select',
-						 'class' => 'form-control',
-						 'prompt' => '--Select Course--',
-						 'onchange'=>'$.post( "'.Yii::$app->urlManager->createUrl('course/report/get-units?m_id=').'"+$(this).val(), function( data ) {
-							$( "select#unit_select" ).html( data ).change();
-							
-						});'
-						 ]
-					);?>
-				</div>
-				<div class="col-md-3" >
-					<?=Html::dropDownList(
-						'module',
-						$u_id,
-						ArrayHelper::map(common\models\Unit::find()->where(['module_id' =>$m_id])->all(),'unit_id', 'title'),
-						[
-						 'id' => 'unit_select','prompt' => '--Select Lesson--', 'class' => 'form-control']
-					);?>
-				</div>
 				<div class="col-md-2" >
 					<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
 				</div>
@@ -90,6 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="card-body">
 				<div class="program-search">
 					<form method="post">
+
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group">
@@ -104,6 +67,49 @@ $this->params['breadcrumbs'][] = $this->title;
 									<input type="text" class="form-control" name="custom_search[lastname]" value="<?=$lastname?>">
 									<div class="help-block"></div>
 								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4" >
+								<?=Html::dropDownList(
+									'custom_search[program]',
+									$p_id,
+									ArrayHelper::map(common\models\Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->all(),'program_id', 'title'),
+									[
+									 'id' => 'program_select', 
+									 'class' => 'form-control',
+									 'prompt' => '--Select Program--',
+									 'onchange'=>'$.post( "'.Yii::$app->urlManager->createUrl('course/report/get-modules?p_id=').'"+$(this).val(), function( data ) {
+										$( "select#module_select" ).html( data ).change();
+										
+									});'
+									]
+								);?>
+							</div>
+							<div class="col-md-4" >
+								<?=Html::dropDownList(
+									'custom_search[module]',
+									$m_id,
+									ArrayHelper::map(common\models\Module::find()->where(['program_id' =>$p_id])->all(),'module_id', 'title'),
+									[
+									 'id' => 'module_select',
+									 'class' => 'form-control',
+									 'prompt' => '--Select Course--',
+									 'onchange'=>'$.post( "'.Yii::$app->urlManager->createUrl('course/report/get-units?m_id=').'"+$(this).val(), function( data ) {
+										$( "select#unit_select" ).html( data ).change();
+										
+									});'
+									 ]
+								);?>
+							</div>
+							<div class="col-md-4" >
+								<?=Html::dropDownList(
+									'custom_search[unit]',
+									$u_id,
+									ArrayHelper::map(common\models\Unit::find()->where(['module_id' =>$m_id])->all(),'unit_id', 'title'),
+									[
+									 'id' => 'unit_select','prompt' => '--Select Lesson--', 'class' => 'form-control']
+								);?>
 							</div>
 						</div>
 						<div class="row">
@@ -150,6 +156,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			'columns' => [
 				['class' => 'yii\grid\CheckboxColumn'],
 				[
+					'label'	=> 'Program',
+					'value' => 'unit.module.program.title',
+				],
+				[
+					'label'	=> 'Course',
+					'value' => 'unit.module.title',
+				],
+				[
 					'label'	=> 'Lesson',
 					'value' => 'unit.title',
 				],
@@ -189,12 +203,16 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 	<script>
-	$('.card-head .tools .btn-collapse').on('click', function (e) {
+/* 	$('.card-head .tools .btn-collapse').on('click', function (e) {
 		var card = $(e.currentTarget).closest('.card');
 		materialadmin.AppCard.toggleCardCollapse(card);
 	});
+	$( "#module_select" ).change(function() {					
+		var mod_id = $(this).val();				
+		window.location.href = "<?=Yii::$app->homeUrl;?>course/report/reset-users?type=m&u_id="+mod_id;
+	});
 	$( "#unit_select" ).change(function() {					
 		var mod_id = $(this).val();				
-		window.location.href = "<?=Yii::$app->homeUrl;?>course/report/reset-users?u_id="+mod_id;
-	});
+		window.location.href = "<?=Yii::$app->homeUrl;?>course/report/reset-users?type=unit&u_id="+mod_id;
+	}); */
 	</script>

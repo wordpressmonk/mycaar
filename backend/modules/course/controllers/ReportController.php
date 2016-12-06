@@ -192,9 +192,9 @@ class ReportController extends Controller
 			'p_id' => $p_id,
         ]);					
 	}
-	public function actionResetUsers($u_id=null){
+	public function actionResetUsers(){
 		$searchModel = new SearchUnitReport();
-		if($u_id){
+/* 		if($u_id){
 			$unit = Unit::findOne($u_id);
 			if($unit == null)
 				throw new NotFoundHttpException('The requested page does not exist.');
@@ -208,35 +208,32 @@ class ReportController extends Controller
 			else $dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams,$u_id);
 		}
 		else
-		{
-			$m_id = null;
-			$p_id = null;	
+		{ */
+			$params = false;
 			if(isset(\Yii::$app->request->post()['custom_search'])){
 				$params = \Yii::$app->request->post()['custom_search'];	
+				//print_r($params);die;
 				$dataProvider = $searchModel->searchCustom($params);				
 			}
 			else $dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
-		}   
-		$params = false;
+		//}   
+		
 
 		
-		if($post = \Yii::$app->request->post() && isset($post['selection'])){
-			//print_r($post);
-			foreach($post['selection'] as $report){
-				$rep = UnitReport::findOne($report);
-				if($rep != null){
-					$rep->resetUser();
-					$rep->delete();				
+			if($post = \Yii::$app->request->post() && isset($post['selection'])){
+				//print_r($post);
+				foreach($post['selection'] as $report){
+					$rep = UnitReport::findOne($report);
+					if($rep != null){
+						$rep->resetUser();
+						$rep->delete();				
+					}
 				}
+				return $this->redirect(['reset-users']);
 			}
-			return $this->redirect(['reset-users','u_id'=>$u_id]);
-		}
         else return $this->render('reset_users', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-			'u_id' => $u_id,
-			'm_id'=> $m_id,
-			'p_id' => $p_id,
 			'params' => $params
         ]);				
 		
@@ -263,6 +260,7 @@ class ReportController extends Controller
 	public function actionGetModules($p_id){
 		$mods = Module::find()->where(['program_id'=>$p_id])->all();
 		 if(count($mods)>0){
+			echo "<option value=''>--Select Course--</option>";
 			foreach($mods as $mod){
 				echo "<option value='".$mod->module_id."'>".$mod->title."</option>";
 			}
@@ -275,6 +273,7 @@ class ReportController extends Controller
 	public function actionGetUnits($m_id){
 		$mods = Unit::find()->where(['module_id'=>$m_id])->all();
 		 if(count($mods)>0){
+			echo "<option value=''>--Select Lesson--</option>";
 			foreach($mods as $mod){
 				echo "<option value='".$mod->unit_id."'>".$mod->title."</option>";
 			}

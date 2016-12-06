@@ -49,6 +49,21 @@ class TestController extends Controller
         ];
     }
 	public function actionLearn($u_id){
+		$current_unit = Unit::findOne($u_id);
+		if($current_unit == null)
+			throw new NotFoundHttpException('The requested page does not exist.');
+		$previous_unit = Unit::find()->where(['and', "unit_id<$u_id", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_id DESC')->one();
+		//
+		$user = User::findOne(\Yii::$app->user->id);
+		if($previous_unit && $user->getRoleName() == 'user' ){
+			//print_r($current_unit);die;
+			$previous_unit_report = Report::find()->where(['unit_id'=>$previous_unit->unit_id,'student_id'=>\Yii::$app->user->id])->one();
+			if($previous_unit->unit_id != $u_id && (!$previous_unit_report || $previous_unit_report->awareness_progress != 100)){
+				\Yii::$app->getSession()->setFlash('error', 'This Unit is not available at the moment. Please check back later (or) Please Complete The Pervious Unit');
+				return $this->redirect(['site/index']);
+			}
+
+		}
 		$element = UnitElement::find()->where(['unit_id'=>$u_id])->one();
 		$data = json_decode($element->content);
 		$formdata = $data->html;
@@ -75,7 +90,7 @@ class TestController extends Controller
 			//print_r($current_unit);die;
 			$previous_unit_report = Report::find()->where(['unit_id'=>$previous_unit->unit_id,'student_id'=>\Yii::$app->user->id])->one();
 			if($previous_unit->unit_id != $u_id && (!$previous_unit_report || $previous_unit_report->awareness_progress != 100)){
-				\Yii::$app->getSession()->setFlash('error', 'Please complete the previous unit/s');
+				\Yii::$app->getSession()->setFlash('error', 'This Unit is not available at the moment. Please check back later (or) Please Complete The Pervious Unit');
 				return $this->redirect(['site/index']);
 			}
 

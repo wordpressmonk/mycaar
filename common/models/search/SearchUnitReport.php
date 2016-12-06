@@ -77,19 +77,30 @@ class SearchUnitReport extends UnitReport
         return $dataProvider;
     }
 
-	public function searchCustom($param,$unit_id=null)
+	public function searchCustom($param)
 	{
-		if($unit_id)
-			$query = UnitReport::find()->where(['unit_id'=>$unit_id]);
-		else $query = UnitReport::find();
+		 $query = UnitReport::find();
         // add conditions that should always apply here
 		//print_R($param);die;
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 		$query->joinWith(['user_profile.user']);
+		$query->joinWith(['unit as u']);
+		$query->joinWith(['unit.module as m']);
+		//$query->joinWith(['unit.module.program as p']);
 		//$query->joinWith(['program']);
 		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+/* 		if($type == "module")
+			$query->andFilterWhere(['m.module_id'=>$unit_id]);
+		if($type == "program")
+			$query->andFilterWhere(['p.program_id'=>$unit_id]);	 */	
+			if(isset($param['program']) && $param['program'] !='')
+				$query->andFilterWhere(['m.program_id'=>$param['program']]);	
+			if(isset($param['module']) && $param['module'] !='')
+				$query->andFilterWhere(['m.module_id'=>$param['module']]);
+			if(isset($param['unit']) && $param['unit'] !='')
+				$query->andFilterWhere(['u.unit_id'=>$param['unit']]);			
 			if(isset($param['user_id']) && $param['user_id'] !='')
 				$query->andFilterWhere(['user_id'=>$param['user_id']]);					
  			if(isset($param['state']) && $param['state'] !='')
