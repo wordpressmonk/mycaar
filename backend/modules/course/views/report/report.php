@@ -33,7 +33,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 
     <div class="mdl-grid mdl-home">
 					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
-						<h1 class="mdl-sidebar"><strong>Home Page</strong></h1>
+						<h1 class="mdl-sidebar"><strong>Dashboard & Search</strong></h1>
 					</div>
 					<div class="mdl-cell mdl-cell-4-col mdl-section">
 						<ul style="width: 1000px;">
@@ -134,7 +134,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					<span class="mdl-welcome"><h3>Welcome <?=\Yii::$app->user->identity->fullname?></h3></span>
 					<span class="mdl-current"><h3>Current Programs :</h3></span>
 				</div>
-			</div>
+		</div>
 	<?php 
 	$username ='';
 	foreach($programs as $program)
