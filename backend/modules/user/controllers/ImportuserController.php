@@ -98,6 +98,7 @@ class ImportuserController extends Controller
 						 $usertable->email = $rowData[0][0];					
 						 $usertable->username = $usertable->email;					 
 						 $usertable->generateAuthKey();
+						 $usertable->generatePasswordResetToken();						 
 						 $usertable->c_id = $model->company_id; 					
 						 $usertable->role = 'user';	
 
@@ -195,10 +196,15 @@ class ImportuserController extends Controller
 				// Email Message is saved in database
 				$quickemail = new QuickEmail();	
 				$quickemail->c_id = $model->company_id;
+				$quickemail->user_id = $usertable->id;
 				$quickemail->to_email = $rowData[0][0];
 				$quickemail->from_email = "info_notification@gmail.com";
 				$quickemail->subject = "YOUR VERIFIED EMAIL ID";
-				$quickemail->message = "<br><br> Your Password:".$usertable->password."<br><br>After login, Please Kindly Delete this Message for security.";
+				$loginLink = Yii::$app->urlManager->createAbsoluteUrl(['site/login']);
+				$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $usertable->password_reset_token]);
+				$arr = array('password' => $usertable->password, 'loginLink' => $loginLink, 'resetLink' => $resetLink);
+				$quickemail->message = json_encode($arr);
+				//$quickemail->message = $usertable->password;
 				$quickemail->status = 0;			
 				$quickemail->save();	
 				

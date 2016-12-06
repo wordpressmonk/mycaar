@@ -363,4 +363,60 @@ class CompanyController extends Controller
 			
     }
 	
+	
+	/**
+     * Multiple Deletes an existing Division model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+	 
+	 public function actionMultiDelete()
+    {    
+		$role_id = Yii::$app->request->post()['role_id'];
+		if($role_id)
+		{
+			 foreach($role_id as $tmp)
+			  $this->findModel($tmp)->delete(); 
+		} 
+			
+    }
+	
+	 public function actionMultiDeleteUser()
+    {    
+		$user_id = Yii::$app->request->post()['user_id'];	
+		if($user_id)
+		{
+			 foreach($user_id as $tmp)
+			 {	
+			    Profile::findOne(['user_id'=>$tmp])->delete();			  
+				User::findOne($tmp)->delete();     
+			 }
+		}  			
+    }
+	
+	
+	public function actionIndexRoleUser()
+    {
+        $searchModel = new SearchUser();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index_role_user', [
+            'searchModel' => $searchModel,
+             'dataProvider' => $dataProvider, 
+        ]);
+    }
+	
+	 public function actionViewRoleUser($id)
+    {		
+	  if (($model = User::findOne($id)) !== null) {           
+		  $profile = Profile::findOne(['user_id'=>$id]);
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        } 
+		
+          return $this->render('view_role_user', [
+            'model' =>$profile,
+        ]); 
+    }
 }

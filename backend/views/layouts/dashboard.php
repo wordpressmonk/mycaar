@@ -168,7 +168,9 @@ AppAsset::register($this);
 							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-user#all_usrs" ><span class="title">Users</span></a></li>
 								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/company/create-user#add_usr" ><span class="title">Add User</span></a></li>
-							<?php } ?>																			
+							<?php } else if(\Yii::$app->user->can('assessor')) { ?>
+								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-role-user#all_usrs" ><span class="title">Users</span></a></li>						
+							<?php } ?>																		
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
 						<?php if(\Yii::$app->user->can('company manage')){ ?>

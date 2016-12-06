@@ -1,7 +1,6 @@
 <?php
 
 namespace common\models;
-
 use Yii;
 
 /**
@@ -32,8 +31,8 @@ class QuickEmail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['c_id', 'to_email', 'from_email', 'subject', 'message'], 'required'],
-            [['c_id', 'status'], 'integer'],
+            [['c_id', 'user_id', 'to_email', 'from_email', 'subject', 'message'], 'required'],
+            [['c_id', 'user_id','status'], 'integer'],
             [['message'], 'string'],
             [['to_email', 'from_email', 'subject'], 'string', 'max' => 255],
         ];
@@ -47,6 +46,7 @@ class QuickEmail extends \yii\db\ActiveRecord
         return [
             'q_id' => 'Q ID',
             'c_id' => 'C ID',
+            'user_id' => 'User ID',
             'to_email' => 'To Email',
             'from_email' => 'From Email',
             'subject' => 'Subject',
@@ -55,4 +55,6 @@ class QuickEmail extends \yii\db\ActiveRecord
             'datetime' => 'Datetime',
         ];
     }
+	
+ 	
 }

@@ -48,7 +48,7 @@ class SearchUser extends User
 		 if(\Yii::$app->user->can('company manage')) 
 		{
 			 $query = User::find();
-		} else if(\Yii::$app->user->can('company_admin'))
+		} else if((\Yii::$app->user->can('company_admin')) ||(\Yii::$app->user->can('assessor')))
 		{			
 			 $query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);
 		}

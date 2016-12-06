@@ -19,14 +19,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="card">
 	<div class="card-body">
-    <p>
-        <?= Html::a('Create State', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+	
+	<div class="row">		
+		<div class="col-md-6" >
+			<?= Html::a('Create State', ['create'], ['class' => 'btn btn-success']) ?>
+		</div>
+		<div class="col-md-6" >
+			<a class="btn btn-danger pull-right" id="multi_delete" name="multi_delete" >Multi Delete</a>
+		</div>
+    </div>
+	
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+			
+			[	
+					'class' => 'yii\grid\CheckboxColumn',
+					 'checkboxOptions' => function ($data){
+						return ['checked' =>false,'value'=>$data['state_id']];
+					}, 
+				
+			],
 			
 			[
 				'attribute' => 'company_id',
@@ -42,4 +57,34 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 	</div>
 </div>
+
+
+
+ <script type = "text/javascript">
+ 
+     $(document).ready(function(){	
+	 
+		$("#multi_delete").click(function(){				 
+		    var r = confirm("Are you Sure To Delete!");
+		    if (r == true) {
+				var state_id = $.map($('input[name="selection[]"]:checked'), function(c){return c.value; })
+				if($.trim(state_id) === "")
+				 {
+					alert("Please Select the Checkbox to Delete!!!.");
+					return false;
+				  }				
+				 $.ajax({
+				   url: '<?=Yii::$app->homeUrl."user/state/multi-delete"?>',
+				   type: 'POST',
+				   data: {  state_id: state_id,
+				   },
+				   success: function(data) {												
+						location.reload();
+				   }
+				 }); 
+				}		
+			 });			 			 
+	});
+		 
+      </script> 
 

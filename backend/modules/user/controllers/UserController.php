@@ -34,7 +34,7 @@ class UserController extends Controller
 				'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view','create','update','delete','bulk'],
+                        'actions' => ['index', 'view','create','update','delete','bulk','multi-delete'],
                         'allow' => true,
 						'roles' => ['superadmin']
                     ],
@@ -178,6 +178,8 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
+
+		Profile::findOne(['user_id'=>$tmp])->delete();		
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -197,5 +199,25 @@ class UserController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+	
+	/**
+     * Multiple Deletes an existing Division model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+	 
+	 public function actionMultiDelete()
+    {    
+		$user_id = Yii::$app->request->post()['user_id'];	
+		if($user_id)
+		{
+			 foreach($user_id as $tmp)
+			 {			
+			  Profile::findOne(['user_id'=>$tmp])->delete();
+			  $this->findModel($tmp)->delete(); 
+			 }
+		}  			
     }
 }
