@@ -46,7 +46,7 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 							
 							<div class="checkbox checkbox-styled checkbox-info  pull-right">
 								<label>
-									<input id="unit_status" type="checkbox" value="">
+									<input id="unit_status" type="checkbox" value="" checked>
 									<span>Publish</span>
 								</label>
 							</div>
