@@ -135,21 +135,21 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					<span class="mdl-current"><h3>Current Programs :</h3></span>
 				</div>
 		</div>
-		<div class="mdl-grid">
-		<div class="mdl-cell mdl-cell-8-col">
-	<?php 
+		<div class="row small-padding">
 
-		foreach($programs as $program)
-		{
-			//echo "$program->title";
-			$url = Url::to(['report/search','p_id'=>$program->program_id]);
-			echo "<h3 class='text-bold'>$program->title : <a class='text-medium' href='{$url}'>View Report</a></h3>";
+			<?php 
 
-		}
-		$url = Url::to(['report/search']);
-		echo "<h3><a class='text-ultra-bold' href='{$url}'>View All Reports</a></h3>";
-	?>
-</div></div>
+				foreach($programs as $program)
+				{
+					//echo "$program->title";
+					$url = Url::to(['report/search','p_id'=>$program->program_id]);
+					echo "<h3 class='text-bold'>$program->title : <a class='text-medium' href='{$url}'>View Report</a></h3>";
+
+				}
+				$url = Url::to(['report/search']);
+				echo "<h3><a class='text-ultra-bold' href='{$url}'>View All Reports</a></h3>";
+			?>
+		</div>
 	<script>
 		$('.card-head .tools .btn-collapse').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
