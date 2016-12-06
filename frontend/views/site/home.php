@@ -39,7 +39,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		</div>
 	<?php if(Yii::$app->session->getFlash('error')!='') {?>
 	<div class="alert alert-danger" role="alert">
-		<strong>Oh snap!</strong> <?= Yii::$app->session->getFlash('error'); ?>.
+		<strong> <?= Yii::$app->session->getFlash('error'); ?>.</strong>
 	</div>
 	
 	<?php 
