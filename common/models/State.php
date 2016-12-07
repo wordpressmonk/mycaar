@@ -69,7 +69,17 @@ class State extends \yii\db\ActiveRecord
 	
 	public function validateCompanyWiseStateName()
     { 		
-	   $checkCompanyWise = static::findOne(['name'=>$this->name,'company_id'=>$this->company_id]);
+		if($this->state_id)
+		{
+		  $checkCompanyWise = static::find()
+		  ->andWhere(['name'=>$this->name])
+		  ->andWhere(['company_id'=>$this->company_id])
+		  ->andWhere(['<>','state_id',$this->state_id])->one();
+		}else 
+		{	
+			$checkCompanyWise = static::findOne(['name'=>$this->name,'company_id'=>$this->company_id]);
+		}
+		
        if($checkCompanyWise)
 	   {
 		 $this->addError('name','Already Added This State Name');

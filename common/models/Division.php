@@ -71,7 +71,16 @@ class Division extends \yii\db\ActiveRecord
 	
 	public function validateCompanyWiseDivisionName()
     { 		
-	   $checkCompanyWise = static::findOne(['title'=>$this->title,'company_id'=>$this->company_id]);
+		if($this->division_id)
+		{
+		  $checkCompanyWise = static::find()
+		  ->andWhere(['title'=>$this->title])
+		  ->andWhere(['company_id'=>$this->company_id])
+		  ->andWhere(['<>','division_id',$this->division_id])->one();
+		}else 
+		{
+			$checkCompanyWise = static::findOne(['title'=>$this->title,'company_id'=>$this->company_id]);
+		}
        if($checkCompanyWise)
 	   {
 		 $this->addError('title','Already Added This Division Name');
