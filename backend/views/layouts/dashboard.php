@@ -249,6 +249,7 @@ AppAsset::register($this);
 								<span class="title">Company</span>
 							</a>
 							<!--start submenu -->
+
 							<ul>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/view?id=<?= Yii::$app->user->identity->c_id;?>#view_com" id="view_com"><span class="title">Company Profile</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/role#role" id="role"><span class="title">Role</span></a></li>
