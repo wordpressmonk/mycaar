@@ -37,5 +37,8 @@ class MycronController extends Controller {
 			}
 		}		     		
     }
+	public function actionTest(){
+		echo "Running..";
+	}
 
 }
