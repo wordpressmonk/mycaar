@@ -43,7 +43,7 @@ class CompanyController extends Controller
                 'rules' => [
                    
 					 [
-                        'actions' => ['index','create','view','update','delete','index-user','create-user','view-user','update-user','delete-user','enroll-user','multi-delete','multi-delete-user','ajax-new-user'],
+                        'actions' => ['index','create','view','update','delete','index-user','create-user','view-user','update-user','delete-user','enroll-user','multi-delete','multi-delete-user','ajax-new-user','removelogo'],
                         'allow' => true,
 						'roles' => ['company_admin']
                     ],
@@ -262,8 +262,14 @@ class CompanyController extends Controller
 	
 	
 	 public function actionDeleteUser($id)
-    {		
-		Profile::findOne(['user_id'=>$id])->delete();
+    {	
+		if($profile = Profile::findOne(['user_id'=>$id]))
+			$profile->delete();		
+		/* if($company = Company::findOne(['admin'=>$id]))
+			$company->delete(); */
+		if($company = Company::findOne(['admin'=>$id]))
+			$company->delete();
+		
         User::findOne($id)->delete();
         return $this->redirect(['index-user']);
     }
@@ -412,7 +418,9 @@ class CompanyController extends Controller
 		{
 			 foreach($user_id as $tmp)
 			 {	
-			    Profile::findOne(['user_id'=>$tmp])->delete();			  
+				if($profile = Profile::findOne(['user_id'=>$tmp]))
+				   $profile->delete();	
+			    		  
 				User::findOne($tmp)->delete();     
 			 }
 		}  			
@@ -461,7 +469,7 @@ class CompanyController extends Controller
         ]); 
     }
 	
-	
+		// Update My Profile Page for the Assessor Role User
 	
 	public function actionUpdateMyProfile()
     {       

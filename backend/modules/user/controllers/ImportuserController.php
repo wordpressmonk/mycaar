@@ -42,6 +42,11 @@ class ImportuserController extends Controller
                         'allow' => true,
 						'roles' => ['company_admin']
                     ],
+					   [
+                        'actions' => ['emportexcel'],
+                        'allow' => true,
+						'roles' => ['assessor']
+                    ],
 				],
 			]
 			
@@ -233,4 +238,9 @@ class ImportuserController extends Controller
 			  }
     }	
 
+	public function actionEmportexcel()
+    {	
+		//echo "Export Excel Download Working";
+		echo "sdfsdfsd";
+	}
 }
