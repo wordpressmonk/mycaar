@@ -151,7 +151,11 @@ class CompanyController extends Controller
 					$user->c_id = $model->company_id;								
 					$user->save(false); 								
 				
-				return $this->redirect(['index']);			
+				 if(\Yii::$app->user->can('superadmin')) 
+					return $this->redirect(['index']);	
+				else if(\Yii::$app->user->can('company_admin')) 
+					return $this->redirect(['view','id'=>$model->company_id]);	
+				
 			}else 
 				return $this->render('update', ['model' => $model]);
 		

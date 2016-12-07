@@ -48,7 +48,7 @@ class Role extends \yii\db\ActiveRecord
         return [
             'role_id' => 'Role ID',
             'company_id' => 'Company ID',
-            'title' => 'Title',
+            'title' => 'Role Name',
             'description' => 'Description',
         ];
     }
