@@ -224,5 +224,13 @@ class SiteController extends Controller
 		 }
 		return $this->render('change_password', ['model' => $model]);	
 	}
-	
+	public function actionTestMail(){
+		\Yii::$app
+					->mail
+					->compose()
+					->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
+					->setTo('dency@abacies.com')
+					->setSubject('YOUR VERIFIED EMAIL ID')
+					->send();		
+	}
 }
