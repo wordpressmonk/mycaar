@@ -13,7 +13,6 @@ use Yii;
 class MycronController extends Controller {
 
     public function actionIndex() {	
-	echo "runnig..";
 		$quickemail = QuickEmail::find()->where(['status'=>0])->all();
 		if($quickemail)
 		{		
@@ -37,8 +36,6 @@ class MycronController extends Controller {
 			}
 		}		     		
     }
-	public function actionTest(){
-		echo "Running..";
-	}
+
 
 }
