@@ -178,10 +178,10 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-
-		Profile::findOne(['user_id'=>$tmp])->delete();		
+		if($profile = Profile::findOne(['user_id'=>$id]))
+			$profile->delete();
+			
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -214,8 +214,10 @@ class UserController extends Controller
 		if($user_id)
 		{
 			 foreach($user_id as $tmp)
-			 {			
-			  Profile::findOne(['user_id'=>$tmp])->delete();
+			 {
+			  if($profile = Profile::findOne(['user_id'=>$tmp]))
+			    $profile->delete();				 
+			
 			  $this->findModel($tmp)->delete(); 
 			 }
 		}  			
