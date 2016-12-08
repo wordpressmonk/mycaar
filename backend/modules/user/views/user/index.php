@@ -46,7 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
 					}, 
 				
 			],
-			
+			'userProfile.firstname',
+			'userProfile.lastname',
+			'roleName',
              ['label' => 'Username / Email ID',
 				'attribute' => 'email',			
 			 ],

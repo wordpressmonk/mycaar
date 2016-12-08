@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\User;
+use common\models\UserProfile as Profile;
 
 
 /**
@@ -17,11 +18,14 @@ class SearchUser extends User
      * @inheritdoc
      */
 	 
+	public $firstname;
+	public $lastname;
+	 
     public function rules()
     {
         return [
             [['id', 'role', 'c_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email'], 'safe'],					
+            [['username','firstname','lastname', 'auth_key', 'password_hash', 'password_reset_token', 'email'], 'safe'],					
         ];
     }
 
@@ -45,10 +49,15 @@ class SearchUser extends User
     {
 		
 		
-		 if(\Yii::$app->user->can('company manage')) 
+		if(\Yii::$app->user->can('sysadmin')) 
 		{
-			 $query = User::find()->where(['status'=>10])->orderBy('email ASC');
-		} else if((\Yii::$app->user->can('company_admin')) ||(\Yii::$app->user->can('assessor')))
+			 $query = User::find()->where(['status'=>10])->orderBy('email ASC');			 			 
+		} 
+		else if(\Yii::$app->user->can('superadmin')) 
+		{
+			 $query = User::find()->where(['status'=>10])->orderBy('email ASC');	 
+		} 
+		else if((\Yii::$app->user->can('company_admin')) ||(\Yii::$app->user->can('assessor')))
 		{			
 			 $query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id,'status'=>10])->orderBy('email ASC');
 		}
@@ -56,10 +65,10 @@ class SearchUser extends User
 		
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            
         ]);
-
+		$query->joinWith(['userProfile']);		
         $this->load($params);
-
 	
          if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -82,7 +91,9 @@ class SearchUser extends User
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
-            ->andFilterWhere(['like', 'email', $this->email]);
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'userProfile.firstname', $this->firstname])
+            ->andFilterWhere(['like', 'userProfile.lastname', $this->lastname]);          
 		
         return $dataProvider;
 		

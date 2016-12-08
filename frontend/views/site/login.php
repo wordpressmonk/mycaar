@@ -46,7 +46,7 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
                 <div style="color:#999;margin:1em 0">
-                    If you Forgotten Password? you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
+                    Forgotten Password? reset it <?= Html::a('here', ['site/request-password-reset']) ?>.
                 </div>
 
                 <div class="form-group">

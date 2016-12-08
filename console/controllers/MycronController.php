@@ -19,7 +19,8 @@ class MycronController extends Controller {
 			foreach($quickemail as $tmp)
 			{					
 			$obj = json_decode($tmp->message,true);	
-		  Yii::$app
+			
+		  $message=Yii::$app
             ->mail
             ->compose(
                 ['html' => 'passwordCron'],
@@ -27,8 +28,12 @@ class MycronController extends Controller {
             )
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
             ->setTo($tmp->to_email)
-            ->setSubject($tmp->subject)
-            ->send();
+            ->setSubject($tmp->subject);
+            
+		 $message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
+		 $message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
+		 $message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
+		 $message->send();	
 					
 			  $model = QuickEmail::findOne($tmp->q_id);
 			  $model->status = 1;

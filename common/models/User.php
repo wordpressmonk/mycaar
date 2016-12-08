@@ -302,6 +302,13 @@ class User extends ActiveRecord implements IdentityInterface
 		   $this->addError('old_password','Current Password Incorrect');
 	   }
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserProfile()
+    {
+        return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
+    }
 	
 	 public function verifyPassword($password)
     {
@@ -435,7 +442,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
         
-        return Yii::$app
+        $message = Yii::$app
             ->mail
             ->compose(
                 ['html' => 'passwordSend-text'],
@@ -443,8 +450,13 @@ class User extends ActiveRecord implements IdentityInterface
             )
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
             ->setTo($this->email)
-            ->setSubject('YOUR VERIFIED EMAIL ID')
-            ->send();
+            ->setSubject('Please Verified your Email');
+       
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
+		
+		return $message->send();
     }
 
 
@@ -460,16 +472,51 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
         
-        return Yii::$app
+        $message = Yii::$app
             ->mail
             ->compose(
                 ['html' => 'passwordResetToken-html'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
             ->setTo($this->email)
-            ->setSubject('Reset-Password Link')
-            ->send();
+            ->setSubject('Please Reset Your Password');
+       	
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
+		
+		return $message->send();
+    }	
+	
+	
+	public function sendEmailChangePassword()
+    {
+        /* @var $user User */
+        $user = User::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'email' => $this->email,
+        ]);
+			
+        if (!$user) {
+            return false;
+        }
+        
+        $message = Yii::$app
+            ->mail
+            ->compose(
+                ['html' => 'changepasswordSuccessMessage-html'],
+                ['user' => $user]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
+            ->setTo($this->email)
+            ->setSubject('Please Reset Your Password');
+       	
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
+		
+		return $message->send();
     }	
 	
 	
@@ -483,10 +530,9 @@ class User extends ActiveRecord implements IdentityInterface
 		 
 	 }
 	 
-	 public function deleteUser(){
-		 
+	 public function deleteUser(){		 
 		 $this->status = User::STATUS_DELETED;
-		 $this->save(false);
-		 
+		 $this->save(false);		 
 	 }	 
+	 
 }

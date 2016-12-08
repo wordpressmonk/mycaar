@@ -84,14 +84,19 @@ class ResetPasswordForm extends Model
             }
         }
 		
-        return Yii::$app
+       $message = Yii::$app
             ->mail
             ->compose(
                 ['html' => 'passwordResetSuccessMessage-html'],['user'=>$user]               
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
+            ->setFrom([Yii::$app->params['supportEmail'] => ' MyCaar'])
             ->setTo($userdetails->email)
-            ->setSubject('Reset-Password Success')
-            ->send();
+            ->setSubject('MyCaar Reset-Password Success');
+          			
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
+		
+		return $message->send();
     }	
 }

@@ -24,8 +24,11 @@ use common\models\Role;
 		
 		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Lastname *") ?>
 		
+		<?php if($model->isNewRecord){ ?>
 		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID *") ?>
-
+		<?php } else { ?>
+		<?= $form->field($model, 'email')->textInput(['maxlength' => true,'readonly'=>'readonly'])->label("Username / Email ID *") ?>
+		<?php } ?>
 		<?php if($checkpage == "Create"){ ?>
 		<?= $form->field($model, 'password')->passwordInput()->label("Password (Optional)") ?>
 		<?php } ?>

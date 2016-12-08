@@ -186,6 +186,7 @@ class SiteController extends Controller
 				
 				$profile->user_id = $user->id;			
 				$profile->save();	
+				$model->sendEmail();
 							
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
@@ -259,7 +260,8 @@ class SiteController extends Controller
 			 $model->setPassword($model->new_password);			
 			 if($model->save())
 			 {
-				 Yii::$app->getSession()->setFlash('Success', 'You have successfully change your password !!!.');	
+				 Yii::$app->getSession()->setFlash('Success', 'You have successfully change your password !!!.');
+				$model->sendEmailChangePassword();					 
 			 } else {
 				 return $this->render('change_password', ['model' => $model]);				
 			 }

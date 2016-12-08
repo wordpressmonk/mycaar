@@ -41,12 +41,7 @@ class ImportuserController extends Controller
                         'actions' => ['importexcel'],
                         'allow' => true,
 						'roles' => ['company_admin']
-                    ],
-					   [
-                        'actions' => ['emportexcel'],
-                        'allow' => true,
-						'roles' => ['assessor']
-                    ],
+                    ],					 
 				],
 			]
 			
@@ -204,7 +199,7 @@ class ImportuserController extends Controller
 				$quickemail->user_id = $usertable->id;
 				$quickemail->to_email = $rowData[0][0];
 				$quickemail->from_email = "info_notification@gmail.com";
-				$quickemail->subject = "YOUR VERIFIED EMAIL ID";
+				$quickemail->subject = "Please Verified your Email";
 				$loginLink = Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/login']);
 				$resetLink = Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/reset-password', 'token' => $usertable->password_reset_token]);
 				$arr = array('password' => $usertable->password, 'loginLink' => $loginLink, 'resetLink' => $resetLink);
@@ -225,7 +220,7 @@ class ImportuserController extends Controller
 				 }				
 				if(isset($error_report) && empty($error_report))
 				{
-					 Yii::$app->getSession()->setFlash('Success', 'Upload the User Details Sucessfully!!!.');
+					 Yii::$app->getSession()->setFlash('Success', 'Import User added Sucessfully!!!.');
 				}
 				else{
 					 Yii::$app->getSession()->setFlash('Error', 'User Details Failed To Imported Following Reasons !!!.');
@@ -238,9 +233,4 @@ class ImportuserController extends Controller
 			  }
     }	
 
-	public function actionEmportexcel()
-    {	
-		//echo "Export Excel Download Working";
-		echo "sdfsdfsd";
-	}
 }

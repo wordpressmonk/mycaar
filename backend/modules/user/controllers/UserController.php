@@ -90,7 +90,9 @@ class UserController extends Controller
         $model = new User();
 		$profile = new Profile();
 		$roles = $this->getRoles();
-        if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
+		$profile->scenario = 'company_admin_user';
+       // if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
 			$model->username = $model->email;
 			//Random Password Generation For MyCaar Common models
 			if(empty($model->password))
@@ -156,7 +158,10 @@ class UserController extends Controller
 		$profile = Profile::find()->where(['user_id'=>$id])->one();
 		$roles = $this->getRoles();
 		
-        if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
+		 $profile->scenario = 'company_admin_user';
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {
+			
+      //  if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
 			//handle the role first
 			$model->username = $model->email;
 			if($model->save())
@@ -165,6 +170,9 @@ class UserController extends Controller
 				$auth->revokeAll($id);
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id);
+				$profile->user_id = $model->id;			
+				$profile->save();
+			
 				return $this->redirect(['index']);
 			} else {
                return $this->render('update', ['model' => $model,'profile' => $profile,'roles' => $roles,]);
