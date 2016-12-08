@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					}, 
 				
 					],
-				
+					['class' => 'yii\grid\SerialColumn'],
 					'username', 				
 					[
 						'format' => 'html',
@@ -81,8 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
 
 
-			$( "#program_select" ).change(function() {		
-console.log("changing");			
+			$( "#program_select" ).change(function() {					
 				var programid = $(this).val();				
 					window.location.href = "<?=Yii::$app->homeUrl;?>user/company/enroll-user?program_id="+programid;
 			});
