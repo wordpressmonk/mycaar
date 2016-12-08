@@ -186,30 +186,9 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-	/* 	if($profile = Profile::findOne(['user_id'=>$id]))
-				    $profile->delete();
-				if($company = Company::findOne(['admin'=>$id]))
-				{
-				
-				if($division = Division::findOne(['company_id'=>$company->company_id]))
-					$division->delete();
-				if($location = Location::findOne(['company_id'=>$company->company_id]))
-					$location->delete();
-				if($state = State::findOne(['company_id'=>$company->company_id]))
-					$state->delete();
-				if($role = Role::findOne(['company_id'=>$company->company_id]))
-					$role->delete();
-				
-				$company->delete();
-				}
-				if($enrollment = ProgramEnrollment::findOne(['user_id'=>$id]))
-					$enrollment->delete();
-				if($capanswer = CapabilityAnswer::findOne(['user_id'=>$id]))
-					$capanswer->delete();
-				if($awarenessanswer = AwarenessAnswer::findOne(['user_id'=>$id]))
-					$awarenessanswer->delete();
-			 */
-        $this->findModel($id)->delete();
+		$user = $this->findModel($id);
+		if(\Yii::$app->user->can($user->getRoleName()) && \Yii::$app->user->id != $user->id)
+			$user->delete();
         return $this->redirect(['index']);
     }
 
