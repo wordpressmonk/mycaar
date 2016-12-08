@@ -42,7 +42,7 @@ AppAsset::register($this);
 						<li class="header-nav-brand" >
 							<div class="brand-holder">
 								<a href="<?=\Yii::$app->homeUrl;?>">
-									<span class="text-lg text-bold text-primary">MY CAAR</span>
+									<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl;?>/img/CAAR-Logo2.png" />
 								</a>
 							</div>
 						</li>
@@ -55,102 +55,25 @@ AppAsset::register($this);
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="headerbar-right">
+
 					<ul class="header-nav header-nav-options">
-						<li>
-							<!-- Search form -->
-							<form class="navbar-search" role="search">
-								<div class="form-group">
-									<input type="text" class="form-control" name="headerSearch" placeholder="Enter your keyword">
-								</div>
-								<button type="submit" class="btn btn-icon-toggle ink-reaction"><i class="fa fa-search"></i></button>
-							</form>
-						</li>
-						<li class="dropdown hidden-xs">
-							<a href="javascript:void(0);" class="btn btn-icon-toggle btn-default" data-toggle="dropdown">
-								<i class="fa fa-bell"></i><sup class="badge style-danger">4</sup>
-							</a>
-							<ul class="dropdown-menu animation-expand">
-								<li class="dropdown-header">Today's messages</li>
-								<li>
-									<a class="alert alert-callout alert-warning" href="javascript:void(0);">
-										<img class="pull-right img-circle dropdown-avatar" src="<?=Yii::$app->homeUrl;?>img/avatar2.jpg?1404026449" alt="" />
-										<strong>Alex Anistor</strong><br/>
-										<small>Testing functionality...</small>
-									</a>
-								</li>
-								<li>
-									<a class="alert alert-callout alert-info" href="javascript:void(0);">
-										<img class="pull-right img-circle dropdown-avatar" src="<?=Yii::$app->homeUrl;?>img/avatar3.jpg?1404026799" alt="" />
-										<strong>Alicia Adell</strong><br/>
-										<small>Reviewing last changes...</small>
-									</a>
-								</li>
-								<li class="dropdown-header">Options</li>
-								<li><a href="../../html/pages/login.html">View all messages <span class="pull-right"><i class="fa fa-arrow-right"></i></span></a></li>
-								<li><a href="../../html/pages/login.html">Mark as read <span class="pull-right"><i class="fa fa-arrow-right"></i></span></a></li>
-							</ul><!--end .dropdown-menu -->
-						</li><!--end .dropdown -->
-						<li class="dropdown hidden-xs">
-							<a href="javascript:void(0);" class="btn btn-icon-toggle btn-default" data-toggle="dropdown">
-								<i class="fa fa-area-chart"></i>
-							</a>
-							<ul class="dropdown-menu animation-expand">
-								<li class="dropdown-header">Server load</li>
-								<li class="dropdown-progress">
-									<a href="javascript:void(0);">
-										<div class="dropdown-label">
-											<span class="text-light">Server load <strong>Today</strong></span>
-											<strong class="pull-right">93%</strong>
-										</div>
-										<div class="progress"><div class="progress-bar progress-bar-danger" style="width: 93%"></div></div>
-									</a>
-								</li><!--end .dropdown-progress -->
-								<li class="dropdown-progress">
-									<a href="javascript:void(0);">
-										<div class="dropdown-label">
-											<span class="text-light">Server load <strong>Yesterday</strong></span>
-											<strong class="pull-right">30%</strong>
-										</div>
-										<div class="progress"><div class="progress-bar progress-bar-success" style="width: 30%"></div></div>
-									</a>
-								</li><!--end .dropdown-progress -->
-								<li class="dropdown-progress">
-									<a href="javascript:void(0);">
-										<div class="dropdown-label">
-											<span class="text-light">Server load <strong>Lastweek</strong></span>
-											<strong class="pull-right">74%</strong>
-										</div>
-										<div class="progress"><div class="progress-bar progress-bar-warning" style="width: 74%"></div></div>
-									</a>
-								</li><!--end .dropdown-progress -->
-							</ul><!--end .dropdown-menu -->
-						</li><!--end .dropdown -->
-					</ul><!--end .header-nav-options -->
-					<?php if(!\Yii::$app->user->isGuest){ ?>					
-						<ul class="header-nav header-nav-profile">
-							<li class="dropdown">
-								<a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
+						<li class="header-nav-brand" >
+							<div class="brand-holder">
+								<a href="<?=\Yii::$app->homeUrl;?>">
+									<?php if(!\Yii::$app->user->isGuest && !\Yii::$app->user->can('superadmin')){ 
+										$company = common\models\Company::findOne(\Yii::$app->user->identity->c_id);
+										if($company){										
+									?>
 									
-									<span class="profile-info">
-										 <?php echo Yii::$app->user->identity->fullname;?>
-										<small><?= $user_role_name = Yii::$app->user->identity->role;?></small>
-									</span>
+										<img src="<?= Yii::$app->urlManagerBackEnd->baseUrl."/".$company->logo;?>" />
+									<?php }} else{ ?>
+										<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl;?>/img/CAAR-Logo2.png" />
+									<?php }?>
 								</a>
-									
-								<ul class="dropdown-menu animation-dock">
-									<!--<li><a href="<?=\Yii::$app->homeUrl?>site/logout"><i class="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>-->
-									<li><a href="<?=\Yii::$app->homeUrl?>site/change-password"><i class="fa fa-fw fa-key text-danger"></i> Change Password</a></li>	
-									<li><?= Html::beginForm(['/site/logout'], 'post')
-										. Html::submitButton(
-											'Logout',
-											['class' => 'btn btn-link logout']
-										)
-										. Html::endForm()
-										?> </li>
-								</ul><!--end .dropdown-menu -->
-							</li><!--end .dropdown -->
-						</ul><!--end .header-nav-profile -->
-					<?php } ?>
+							</div>
+						</li>
+
+					</ul>
 					<ul class="header-nav header-nav-toggle">
 						<li>
 							<a class="btn btn-icon-toggle btn-default" href="#offcanvas-search" data-toggle="offcanvas" data-backdrop="false">
@@ -182,8 +105,41 @@ AppAsset::register($this);
 			<!-- END CONTENT -->
 		</div>
 		<!-- END BASE -->
+		
+		<?php if(!\Yii::$app->user->isGuest ){ ?>
+			<div class="offcanvas">
 
-
+				<!-- BEGIN OFFCANVAS SEARCH -->
+				<div id="offcanvas-search" class="offcanvas-pane width-6">
+					<div class="offcanvas-head">
+						<span class="text-medium">									
+							<small><?php echo Yii::$app->user->identity->fullname;?></small>
+							<small>[ <?= $user_role_name = Yii::$app->user->identity->role;?> ]</small>
+						</span>
+						<div class="offcanvas-tools">
+							<a class="btn btn-icon-toggle btn-default-light pull-right" data-dismiss="offcanvas">
+								<i class="md md-close"></i>
+							</a>
+						</div>
+					</div>
+					<div class="offcanvas-body no-padding">
+					
+					<div class="small-padding">
+					<?php if(\Yii::$app->user->can("assessor")) {?>
+					<a href="<?=Yii::$app->urlManagerBackEnd->baseUrl?>" target="blank">DASHBOARD </a>
+					<?php } ?>
+					<?= Html::beginForm(['/site/logout'], 'post')
+										. Html::submitButton(
+											'Logout',
+											['class' => 'btn btn-link logout']
+										)
+										. Html::endForm()
+										?> </div>
+					</div>
+				</div>
+				
+			</div>
+		<?php } ?>
 	</body>
 <?php $this->endBody() ?>
 </body>

@@ -42,7 +42,7 @@ AppAsset::register($this);
 						<li class="header-nav-brand" >
 							<div class="brand-holder">
 								<a href="<?=\Yii::$app->homeUrl;?>">
-									<span class="text-lg text-bold text-primary">MY CAAR</span>
+									<img src="<?=\Yii::$app->homeUrl;?>/img/CAAR-Logo2.png" />
 								</a>
 							</div>
 						</li>
@@ -55,31 +55,25 @@ AppAsset::register($this);
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="headerbar-right">
-
-					<?php if(!\Yii::$app->user->isGuest){ ?>					
-						<ul class="header-nav header-nav-profile">
-							<li class="dropdown">
-								<a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
+					<ul class="header-nav header-nav-options">
+						<li class="header-nav-brand" >
+							<div class="brand-holder">
+								<a href="<?=\Yii::$app->homeUrl;?>">
+									<?php if(!\Yii::$app->user->can('superadmin')){ 
+										$company = common\models\Company::findOne(\Yii::$app->user->identity->c_id);
+										if($company){										
+									?>
 									
-									<span class="profile-info">
-										 <?php echo Yii::$app->user->identity->fullname;?>
-										<small><?= $user_role_name = Yii::$app->user->identity->role;?></small>
-									</span>
+										<img src="<?= \Yii::$app->homeUrl.$company->logo;?>" />
+									<?php }} else{ ?>
+										<img src="<?=\Yii::$app->homeUrl;?>/img/CAAR-Logo2.png" />
+									<?php }?>
 								</a>
-								<ul class="dropdown-menu animation-dock">
+							</div>
+						</li>
 
-									<li><?= Html::beginForm(['/site/logout'], 'post')
-										. Html::submitButton(
-											'Logout',
-											['class' => 'btn btn-link logout']
-										)
-										. Html::endForm()
-										?> </li>
+					</ul>
 
-								</ul><!--end .dropdown-menu -->
-							</li><!--end .dropdown -->
-						</ul><!--end .header-nav-profile -->
-					<?php } ?>
 					<ul class="header-nav header-nav-toggle">
 						<li>
 							<a class="btn btn-icon-toggle btn-default" href="#offcanvas-search" data-toggle="offcanvas" data-backdrop="false">
@@ -285,7 +279,36 @@ AppAsset::register($this);
 				</div><!--end .menubar-scroll-panel-->
 			</div><!--end #menubar-->
 			<!-- END MENUBAR -->
+			<!-- BEGIN OFFCANVAS RIGHT -->
+			<div class="offcanvas">
 
+				<!-- BEGIN OFFCANVAS SEARCH -->
+				<div id="offcanvas-search" class="offcanvas-pane width-6">
+					<div class="offcanvas-head">
+						<span class="text-medium">									
+							<small><?php echo Yii::$app->user->identity->fullname;?></small>
+							<small>[ <?= $user_role_name = Yii::$app->user->identity->role;?> ]</small>
+						</span>
+						<div class="offcanvas-tools">
+							<a class="btn btn-icon-toggle btn-default-light pull-right" data-dismiss="offcanvas">
+								<i class="md md-close"></i>
+							</a>
+						</div>
+					</div>
+					<div class="offcanvas-body no-padding">
+					<div class="small-padding">
+					<a href="<?=Yii::$app->urlManagerFrontEnd->baseUrl?>" target="blank">HOME PAGE</a>
+					<?= Html::beginForm(['/site/logout'], 'post')
+										. Html::submitButton(
+											'Logout',
+											['class' => 'btn btn-link logout']
+										)
+										. Html::endForm()
+										?> </div>
+					</div>
+				</div>
+				
+			</div>
 		</div><!--end #base-->
 		<!-- END BASE -->
 		<!-- Menu Script -->

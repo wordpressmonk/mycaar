@@ -24,7 +24,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error','test-mail'],
+                        'actions' => ['login','error','test-mail'],
                         'allow' => true,
                     ],
                     [
@@ -88,7 +88,8 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-		$this->layout = "login";
+		return $this->redirect(Yii::$app->urlManagerFrontEnd->baseUrl);
+/* 		$this->layout = "login";
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -100,7 +101,7 @@ class SiteController extends Controller
             return $this->render('login', [
                 'model' => $model,
             ]);
-        }
+        } */
     }
 
     /**
@@ -111,7 +112,8 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-        return $this->goHome();
+		return $this->redirect(Yii::$app->urlManagerFrontEnd->baseUrl);
+        //return $this->goHome();
     }
 	
 	// Forgot Password Form Generation

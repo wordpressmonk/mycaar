@@ -106,7 +106,9 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+			if(\Yii::$app->user->can("superadmin"))
+				return $this->redirect(Yii::$app->urlManagerBackEnd->baseUrl);
+            else return $this->goBack();
         } else {
             return $this->render('login', [
                 'model' => $model,'companyslug'=>$companyslug

@@ -24,6 +24,7 @@ use common\models\search\SearchUnit;
 use common\models\UnitReport;
 use common\models\search\SearchUnitReport;
 
+use \moonland\phpexcel\Excel;
 /**
  * UnitController implements the CRUD actions for Unit model.
  */
@@ -300,4 +301,5 @@ class ReportController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }
