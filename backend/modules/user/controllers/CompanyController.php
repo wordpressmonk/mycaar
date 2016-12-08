@@ -445,8 +445,7 @@ class CompanyController extends Controller
 				$current_user = User::findOne(\Yii::$app->user->id);
 				$current_role = $current_user->getRoleName();
 				 foreach($user_id as $tmp)
-				 {
-					
+				 {					
 					$user = User::findOne($tmp);
 					if(\Yii::$app->user->can($user->getRoleName()) && $current_role != $user->getRoleName() && $current_user->id != $user->id)
 						$user->deleteUser(); 

@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use Yii;
 use yii\base\Model;
 use yii\base\InvalidParamException;
 use common\models\User;
@@ -58,7 +59,39 @@ class ResetPasswordForm extends Model
         $user = $this->_user;
         $user->setPassword($this->password);
         $user->removePasswordResetToken();
-
         return $user->save(false);
     }
+	
+	public function sendEmailResetSuccess()
+    {  
+	
+		$userdetails = $this->_user;
+		
+	 $user = User::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'email' => $userdetails->email,
+        ]);
+			
+        if (!$user) {
+            return false;
+        }
+        
+        if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
+            $user->generatePasswordResetToken();
+			$user->scenario = 'apply_forgotpassword';	
+            if (!$user->save()) { 
+                return false;
+            }
+        }
+		
+        return Yii::$app
+            ->mail
+            ->compose(
+                ['html' => 'passwordResetSuccessMessage-html'],['user'=>$user]               
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
+            ->setTo($userdetails->email)
+            ->setSubject('Reset-Password Success')
+            ->send();
+    }	
 }

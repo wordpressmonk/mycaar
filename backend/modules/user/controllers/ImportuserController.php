@@ -205,8 +205,8 @@ class ImportuserController extends Controller
 				$quickemail->to_email = $rowData[0][0];
 				$quickemail->from_email = "info_notification@gmail.com";
 				$quickemail->subject = "YOUR VERIFIED EMAIL ID";
-				$loginLink = Yii::$app->urlManager->createAbsoluteUrl(['site/login']);
-				$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $usertable->password_reset_token]);
+				$loginLink = Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/login']);
+				$resetLink = Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/reset-password', 'token' => $usertable->password_reset_token]);
 				$arr = array('password' => $usertable->password, 'loginLink' => $loginLink, 'resetLink' => $resetLink);
 				$quickemail->message = json_encode($arr);
 				//$quickemail->message = $usertable->password;

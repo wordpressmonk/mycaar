@@ -239,10 +239,10 @@ class SiteController extends Controller
         } catch (InvalidParamException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
-
+			
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password was saved.');
-
+            Yii::$app->session->setFlash('success', 'New password was saved.');			
+			$model->sendEmailResetSuccess();			
             return $this->goHome();
         }
 

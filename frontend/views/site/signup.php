@@ -79,11 +79,14 @@ $this->params['breadcrumbs'][] = $this->title;
 		
 		<div class="col-lg-1"> </div>
 		<div class="col-lg-5">
+			
 			<h1><?= ucwords($company->name) ?></h1>
-			<div class="row small-padding">
-			 <?php if(!empty($company->logo)){ ?>		
-				<img style="width:300px; height:250px;" src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl([''])?><?= $company->logo ?>"/>
-			  <?php } ?>
+			<div class="row small-padding">		
+			 <?php if((file_exists(Yii::getAlias('@backend').'/web/'.$company->logo)) && (!empty($company->logo))){ ?>		
+				<img style="height:100px;" src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl([$company->logo])?>"/>
+			  <?php } else { ?>
+				 <img style="height:100px;" src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl(['uploads/company_logo/default_logo.jpg'])?>"/> 
+			  <?php } ?>	
 			<div>
 			<div class="row small-padding">
 			  <?php if(!empty($company->about_us)){ ?>
