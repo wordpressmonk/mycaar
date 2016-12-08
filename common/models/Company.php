@@ -76,7 +76,11 @@ class Company extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'admin']);
     }
 	
-
+	public function getPrograms(){
+		
+		return $this->hasMany(Program::className(), ['company_id' => 'company_id']);
+		
+	}
 	/**
      * Upload the Company Logo On Particular Folder Structure
      */
@@ -90,5 +94,15 @@ class Company extends \yii\db\ActiveRecord
 			return false;
 		}	 	
 	}	
-	
+	public function deleteCompany(){
+		Division::deleteAll(['company_id'=>$this->company_id]);
+		Location::deleteAll(['company_id'=>$this->company_id]);
+		State::deleteAll(['company_id'=>$this->company_id]);
+		Role::deleteAll(['company_id'=>$this->company_id]);
+		$programs = $company->programs;
+		foreach($programs as $program){
+			$program->deleteProgram();
+		}
+		$this->delete();		
+	}
 }

@@ -438,42 +438,22 @@ class CompanyController extends Controller
      */
 	 
 	 public function actionMultiDeleteUser()
-    {    
-		$user_id = Yii::$app->request->post()['user_id'];	
-		if($user_id)
-		{
-			 foreach($user_id as $tmp)
-			 {	
-				if($profile = Profile::findOne(['user_id'=>$tmp]))
-				    $profile->delete();
-				
-				if($company = Company::findOne(['admin'=>$tmp]))
-				{
-				
-				if($division = Division::findOne(['company_id'=>$company->company_id]))
-					$division->delete();
-				if($location = Location::findOne(['company_id'=>$company->company_id]))
-					$location->delete();
-				if($state = State::findOne(['company_id'=>$company->company_id]))
-					$state->delete();
-				if($role = Role::findOne(['company_id'=>$company->company_id]))
-					$role->delete();
-				
-				 $company->delete();
-				}
-				
-				if($enrollment = ProgramEnrollment::findOne(['user_id'=>$tmp]))
-					$enrollment->delete();
-				if($capanswer = CapabilityAnswer::findOne(['user_id'=>$tmp]))
-					$capanswer->delete();
-				if($awarenessanswer = AwarenessAnswer::findOne(['user_id'=>$tmp]))
-					$awarenessanswer->delete();
-						
-			    		  
-				User::findOne($tmp)->delete();     
-			 }
-		}  			
-    }
+	 {    
+			$user_id = Yii::$app->request->post()['user_id'];	
+			if($user_id)
+			{
+				$current_user = User::findOne(\Yii::$app->user->id);
+				$current_role = $current_user->getRoleName();
+				 foreach($user_id as $tmp)
+				 {
+					
+					$user = User::findOne($tmp);
+					if(\Yii::$app->user->can($user->getRoleName()) && $current_role != $user->getRoleName() && $current_user->id != $user->id)
+						$user->deleteUser(); 
+				 }
+			}  			
+		}
+
 	
 	// Index User Page of All User  for the Assessor Role User
 	

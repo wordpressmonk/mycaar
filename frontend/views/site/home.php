@@ -165,9 +165,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	}
 	
 	//FOR DEBUG
-	foreach($users as $user){
-	$progress = $user->user->getProgramProgress(1);
-	} 
+	//foreach($users as $user){
+	//$progress = $user->user->getProgramProgress(1);
+	//} 
 	?>
 
 		<!-- Modal -->

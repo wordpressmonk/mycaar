@@ -135,7 +135,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		{
 		echo '<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell-8-col">
-				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4></span>
+				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
+				<button type="button" class="btn ink-reaction btn-raised btn-xs btn-primary">Download Report</button>
+				</span>
+			
 			</div>
 		</div>';
 		echo '<div class="mdl-cell mdl-cell-4-col mdl-section">

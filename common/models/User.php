@@ -33,7 +33,7 @@ class User extends ActiveRecord implements IdentityInterface
 	public $confirm_password;
 
 	
-    const STATUS_DELETED = 0;
+    const STATUS_DELETED = 12;
     const STATUS_ACTIVE = 10;
 
 
@@ -448,7 +448,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
 
- public function sendEmailForgotPassword()
+	public function sendEmailForgotPassword()
     {
         /* @var $user User */
         $user = User::findOne([
@@ -480,6 +480,13 @@ class User extends ActiveRecord implements IdentityInterface
 		 if(ProgramEnrollment::find()->where(['user_id'=>$this->id,'program_id'=>$program_id])->one())
 			 return true;
 		 return false;
+		 
+	 }
+	 
+	 public function deleteUser(){
+		 
+		 $this->status = User::STATUS_DELETED;
+		 $this->save(false);
 		 
 	 }
 }
