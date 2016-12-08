@@ -47,10 +47,10 @@ class SearchUser extends User
 		
 		 if(\Yii::$app->user->can('company manage')) 
 		{
-			 $query = User::find();
+			 $query = User::find()->orderBy('email ASC');
 		} else if((\Yii::$app->user->can('company_admin')) ||(\Yii::$app->user->can('assessor')))
 		{			
-			 $query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);
+			 $query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id])->orderBy('email ASC');
 		}
         // add conditions that should always apply here
 		
