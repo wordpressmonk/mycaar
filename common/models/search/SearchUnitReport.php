@@ -55,7 +55,7 @@ class SearchUnitReport extends UnitReport
 		$query->joinWith(['assessor as assr']);
 		$query->joinWith(['assessor.user']);
 		//$query->joinWith(['program']);
-		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id,'user.status'=>10]);
 		
         $this->load($params);
 
@@ -90,7 +90,7 @@ class SearchUnitReport extends UnitReport
 		$query->joinWith(['unit.module as m']);
 		//$query->joinWith(['unit.module.program as p']);
 		//$query->joinWith(['program']);
-		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id,'user.status'=>10]);
 /* 		if($type == "module")
 			$query->andFilterWhere(['m.module_id'=>$unit_id]);
 		if($type == "program")

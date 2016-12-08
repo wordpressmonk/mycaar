@@ -71,7 +71,7 @@ class ReportController extends Controller
 				'query' => $query,
 			]);	
 			$query->joinWith(['user']);
-			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
+			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id,'user.status'=>10]);			
 			//if any of the user parametr is filled,then search for that users
 			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);			
  			if(isset($param['user']) && $param['user'] !='')

@@ -178,7 +178,7 @@ class CompanyController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id)->deleteCompany();
         return $this->redirect(['index']);
     }
 
@@ -420,15 +420,15 @@ class CompanyController extends Controller
      */
 	 
 	 public function actionMultiDelete()
-    {    
-		$role_id = Yii::$app->request->post()['role_id'];
-		if($role_id)
-		{
-			 foreach($role_id as $tmp)
-			  $this->findModel($tmp)->delete(); 
-		} 
-			
-    }
+	 {    
+			$role_id = Yii::$app->request->post()['role_id'];
+			if($role_id)
+			{
+				 foreach($role_id as $tmp)
+				  $this->findModel($tmp)->deleteCompany(); 
+			} 
+				
+     }
 	
 	/**
      * Multiple Deletes an existing User for company admin model.
