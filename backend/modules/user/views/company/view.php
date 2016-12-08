@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
         <?= Html::a('Edit', ['update', 'id' => $model->company_id], ['class' => 'btn btn-primary']) ?>
+		<?php if(Yii::$app->user->can('company manage')){ ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->company_id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -24,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+		<?php } ?>
     </p>
 
     <?= DetailView::widget([

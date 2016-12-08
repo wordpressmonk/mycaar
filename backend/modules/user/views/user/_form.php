@@ -19,7 +19,7 @@ use common\models\Company;
 		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID *") ?>
 
 		<?php if($checkpage == "Create"){ ?>
-		<?= $form->field($model, 'password')->textInput()->label("Password (Optional)") ?>
+		<?= $form->field($model, 'password')->passwordInput()->label("Password (Optional)") ?>
 		<?php } ?>
 		
 		<?= $form->field($model, 'role')->dropDownList(

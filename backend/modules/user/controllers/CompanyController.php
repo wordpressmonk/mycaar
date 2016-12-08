@@ -17,6 +17,12 @@ use common\models\search\SearchUser;
 use common\models\search\SearchEnrolment;
 use common\models\search\SearchProgramEnrollment;
 use common\models\ProgramEnrollment;
+use common\models\CapabilityAnswer;
+use common\models\AwarenessAnswer;
+use common\models\Role;
+use common\models\Division;
+use common\models\Location;
+use common\models\State;
 use common\models\Enrolment as Enrollment;
 
 
@@ -151,7 +157,11 @@ class CompanyController extends Controller
 					$user->c_id = $model->company_id;								
 					$user->save(false); 								
 				
-				return $this->redirect(['index']);			
+				 if(\Yii::$app->user->can('superadmin')) 
+					return $this->redirect(['index']);	
+				else if(\Yii::$app->user->can('company_admin')) 
+					return $this->redirect(['view','id'=>$model->company_id]);	
+				
 			}else 
 				return $this->render('update', ['model' => $model]);
 		
@@ -264,11 +274,27 @@ class CompanyController extends Controller
 	 public function actionDeleteUser($id)
     {	
 		if($profile = Profile::findOne(['user_id'=>$id]))
-			$profile->delete();		
-		/* if($company = Company::findOne(['admin'=>$id]))
-			$company->delete(); */
-		if($company = Company::findOne(['admin'=>$id]))
-			$company->delete();
+				    $profile->delete();
+				if($company = Company::findOne(['admin'=>$id]))
+				{
+				
+				if($division = Division::findOne(['company_id'=>$company->company_id]))
+					$division->delete();
+				if($location = Location::findOne(['company_id'=>$company->company_id]))
+					$location->delete();
+				if($state = State::findOne(['company_id'=>$company->company_id]))
+					$state->delete();
+				if($role = Role::findOne(['company_id'=>$company->company_id]))
+					$role->delete();
+				
+				$company->delete();
+				}
+				if($enrollment = ProgramEnrollment::findOne(['user_id'=>$id]))
+					$enrollment->delete();
+				if($capanswer = CapabilityAnswer::findOne(['user_id'=>$id]))
+					$capanswer->delete();
+				if($awarenessanswer = AwarenessAnswer::findOne(['user_id'=>$id]))
+					$awarenessanswer->delete();
 		
         User::findOne($id)->delete();
         return $this->redirect(['index-user']);
@@ -419,7 +445,28 @@ class CompanyController extends Controller
 			 foreach($user_id as $tmp)
 			 {	
 				if($profile = Profile::findOne(['user_id'=>$tmp]))
-				   $profile->delete();	
+				    $profile->delete();
+				if($company = Company::findOne(['admin'=>$tmp]))
+				{
+				
+				if($division = Division::findOne(['company_id'=>$company->company_id]))
+					$division->delete();
+				if($location = Location::findOne(['company_id'=>$company->company_id]))
+					$location->delete();
+				if($state = State::findOne(['company_id'=>$company->company_id]))
+					$state->delete();
+				if($role = Role::findOne(['company_id'=>$company->company_id]))
+					$role->delete();
+				
+				$company->delete();
+				}
+				if($enrollment = ProgramEnrollment::findOne(['user_id'=>$tmp]))
+					$enrollment->delete();
+				if($capanswer = CapabilityAnswer::findOne(['user_id'=>$tmp]))
+					$capanswer->delete();
+				if($awarenessanswer = AwarenessAnswer::findOne(['user_id'=>$tmp]))
+					$awarenessanswer->delete();
+						
 			    		  
 				User::findOne($tmp)->delete();     
 			 }

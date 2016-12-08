@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use backend\assets\AppAsset;
+use common\models\Company;
 
 AppAsset::register($this);
 ?>
@@ -160,11 +161,21 @@ AppAsset::register($this);
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/user#all_usrs" ><span class="title">All Users</span></a></li>
 								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/user/create#add_usr" ><span class="title">Add User</span></a></li>
 							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
+								<?php 
+									if(Company::findOne(Yii::$app->user->identity->c_id))
+									{								
+								?>
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-user#all_usrs" ><span class="title">Users</span></a></li>
 								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/company/create-user#add_usr" ><span class="title">Add User</span></a></li>
+									<?php } ?>
 							<?php } else if(\Yii::$app->user->can('assessor')) { ?>
+							<?php 
+								if(Company::findOne(Yii::$app->user->identity->c_id))
+								{								
+								?>
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-role-user#all_usrs" ><span class="title">Users</span></a></li>
-								<li><a id="my_profile" href="<?=\Yii::$app->homeUrl?>user/company/my-profile#my_profile" ><span class="title">My Profile</span></a></li>								
+								<li><a id="my_profile" href="<?=\Yii::$app->homeUrl?>user/company/my-profile#my_profile" ><span class="title">My Profile</span></a></li>
+								<?php } ?>
 							<?php } ?>																		
 							</ul><!--end /submenu -->
 						</li><!--end /menu-li -->
@@ -188,7 +199,11 @@ AppAsset::register($this);
 								<div class="gui-icon"><i class="md md-view-list"></i></div>
 								<span class="title">Program Management</span>
 							</a>
-							<ul>
+							<?php 
+								if(Company::findOne(Yii::$app->user->identity->c_id))
+								{								
+							?>
+							<ul>							
 							<!--start submenu -->
 								<li><a id="alpgs" href="<?=\Yii::$app->homeUrl?>course/program/company-programs#alpgs" ><span class="title">Programs</span></a></li>
 								<li><a id="add_pgm" href="<?=\Yii::$app->homeUrl?>course/program/create#add_pgm"><span class="title">Add Program</span></a></li>
@@ -201,6 +216,9 @@ AppAsset::register($this);
 								<li><a id="reset_u" href="<?=\Yii::$app->homeUrl?>course/report/reset-users#reset_u" ><span class="title">Reset Users</span></a></li>
 							
 							</ul>
+							<?php 
+								}								
+							?>
 						</li>
 						<!-- END Admin -->
 						<?php } else if(\Yii::$app->user->can('assessor')) {?>	
@@ -209,12 +227,17 @@ AppAsset::register($this);
 								<div class="gui-icon"><i class="md md-view-list"></i></div>
 								<span class="title">Programs</span>
 							</a>
+							<?php 
+								if(Company::findOne(Yii::$app->user->identity->c_id))
+								{								
+							?>
 							<ul>
 							<!--start submenu -->
 							<li><a id="enrl" href="<?=\Yii::$app->homeUrl?>user/company/enroll-user#enrl" ><span class="title">Enroll User</span></a></li>
 							<li><a id="ar" href="<?=\Yii::$app->homeUrl?>course/report/assessor-report#ar" ><span class="title">Assessor Reports</span></a></li>
 							<li><a id="ex" href="<?=\Yii::$app->homeUrl?>user/importuser/emportexcel#ex" ><span class="title">Export Excel</span></a></li>
 							</ul>
+							<?php } ?>
 						</li>						
 						<?php } ?>
 						<!-- BEGIN Company -->
@@ -226,7 +249,7 @@ AppAsset::register($this);
 								<div class="gui-icon"><i class="md md-work"></i></div>
 								<span class="title">Company Management</span>
 							</a>
-							<ul>
+							<ul>						
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/index#alcmp" id="alcmp"><span class="title">All Companies</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/create#addcmp" id="addcmp"><span class="title">Add Company</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/role#role" id="role"><span class="title">Roles</span></a></li>
@@ -243,6 +266,10 @@ AppAsset::register($this);
 								<span class="title">Company</span>
 							</a>
 							<!--start submenu -->
+							<?php 
+								if(Company::findOne(Yii::$app->user->identity->c_id))
+								{								
+							?>
 							<ul>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/company/view?id=<?= Yii::$app->user->identity->c_id;?>#view_com" id="view_com"><span class="title">Company Profile</span></a></li>
 								<li><a href="<?=\Yii::$app->homeUrl?>user/role#role" id="role"><span class="title">Role</span></a></li>
@@ -251,6 +278,7 @@ AppAsset::register($this);
 								<li><a href="<?=\Yii::$app->homeUrl?>user/state#st" id="st"><span class="title">State</span></a></li>
 								
 							</ul>
+								<?php } ?>
 						</li>
 						<?php } ?>						
 						<!--end /menu-li -->
