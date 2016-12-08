@@ -128,6 +128,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		</div>
 	<?php 
 	$username ='';
+	echo count($users);
 	foreach($programs as $program)
 	{
 		$modules = $program->publishedModules;
