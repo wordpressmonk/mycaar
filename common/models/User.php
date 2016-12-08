@@ -488,5 +488,5 @@ class User extends ActiveRecord implements IdentityInterface
 		 $this->status = User::STATUS_DELETED;
 		 $this->save(false);
 		 
-	 }
+	 }	 
 }
