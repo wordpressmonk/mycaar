@@ -186,7 +186,7 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-		if($profile = Profile::findOne(['user_id'=>$id]))
+	/* 	if($profile = Profile::findOne(['user_id'=>$id]))
 				    $profile->delete();
 				if($company = Company::findOne(['admin'=>$id]))
 				{
@@ -208,7 +208,7 @@ class UserController extends Controller
 					$capanswer->delete();
 				if($awarenessanswer = AwarenessAnswer::findOne(['user_id'=>$id]))
 					$awarenessanswer->delete();
-			
+			 */
         $this->findModel($id)->delete();
         return $this->redirect(['index']);
     }
@@ -248,7 +248,7 @@ class UserController extends Controller
 					
 					$user = User::findOne($tmp);
 					if(\Yii::$app->user->can($user->getRoleName()) && $current_role != $user->getRoleName() && $current_user->id != $user->id)
-						$user->deleteUser(); 
+						$user->delete(); 
 				 }
 			}  			
 		}

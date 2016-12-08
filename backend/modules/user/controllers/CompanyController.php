@@ -273,7 +273,7 @@ class CompanyController extends Controller
 	
 	 public function actionDeleteUser($id)
     {	
-		if($profile = Profile::findOne(['user_id'=>$id]))
+	/* 	if($profile = Profile::findOne(['user_id'=>$id]))
 				    $profile->delete();
 				if($company = Company::findOne(['admin'=>$id]))
 				{
@@ -294,7 +294,7 @@ class CompanyController extends Controller
 				if($capanswer = CapabilityAnswer::findOne(['user_id'=>$id]))
 					$capanswer->delete();
 				if($awarenessanswer = AwarenessAnswer::findOne(['user_id'=>$id]))
-					$awarenessanswer->delete();
+					$awarenessanswer->delete(); */
 		
         User::findOne($id)->delete();
         return $this->redirect(['index-user']);
@@ -425,7 +425,7 @@ class CompanyController extends Controller
 			if($role_id)
 			{
 				 foreach($role_id as $tmp)
-				  $this->findModel($tmp)->deleteCompany(); 
+				  $this->findModel($tmp)->delete(); 
 			} 
 				
      }
@@ -449,7 +449,7 @@ class CompanyController extends Controller
 					
 					$user = User::findOne($tmp);
 					if(\Yii::$app->user->can($user->getRoleName()) && $current_role != $user->getRoleName() && $current_user->id != $user->id)
-						$user->deleteUser(); 
+						$user->delete(); 
 				 }
 			}  			
 		}
