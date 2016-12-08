@@ -16,12 +16,14 @@ $this->title = 'Signup';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to signup:</p>
+    
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-6">
+		<h1><?= Html::encode($this->title) ?></h1>
+
+    <p>Please fill out the following fields to signup:</p>
+	
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
 			 <?= $form->field($profile, 'firstname',['inputOptions' => ['autocomplete' => 'off']])->textInput(['autofocus' => true]) ?>
@@ -30,10 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			  
              <?= $form->field($model, 'email')->textInput()->label("Username / Email ID") ?>
 			
-			 <?= $form->field($model, 'company_id')->hiddenInput(['value'=>$company_id])->label(false)  ?>
+			 <?= $form->field($model, 'company_id')->hiddenInput(['value'=>$company->company_id])->label(false)  ?>
 			
 			<?php
-				$role = ArrayHelper::map(Role::find()->where(['company_id' =>$company_id])->all(), 'role_id', 'title');
+				$role = ArrayHelper::map(Role::find()->where(['company_id' =>$company->company_id])->all(), 'role_id', 'title');
 					echo $form->field($profile, 'role')->dropDownList(
 					$role,           // Flat array ('id'=>'label')
 					['prompt'=>'--Role--']    // options
@@ -41,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			?>
 
              <?php
-				$division = ArrayHelper::map(Division::find()->where(['company_id' =>$company_id])->all(), 'division_id', 'title');
+				$division = ArrayHelper::map(Division::find()->where(['company_id' =>$company->company_id])->all(), 'division_id', 'title');
 					echo $form->field($profile, 'division')->dropDownList(
 					$division,           // Flat array ('id'=>'label')
 					['prompt'=>'--Division--']    // options
@@ -49,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			?>
 			
 			<?php
-				$location = ArrayHelper::map(Location::find()->where(['company_id' =>$company_id])->all(), 'location_id', 'name');
+				$location = ArrayHelper::map(Location::find()->where(['company_id' =>$company->company_id])->all(), 'location_id', 'name');
 					echo $form->field($profile, 'location')->dropDownList(
 					$location,           // Flat array ('id'=>'label')
 					['prompt'=>'--Location--']    // options
@@ -57,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			?>
 		
 			<?php
-				$state = ArrayHelper::map(State::find()->where(['company_id' =>$company_id])->all(), 'state_id', 'name');
+				$state = ArrayHelper::map(State::find()->where(['company_id' =>$company->company_id])->all(), 'state_id', 'name');
 					echo $form->field($profile, 'state')->dropDownList(
 					$state,           // Flat array ('id'=>'label')
 					['prompt'=>'--State--']    // options
@@ -74,5 +76,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?php ActiveForm::end(); ?>
         </div>
+		
+		<div class="col-lg-1"> </div>
+		<div class="col-lg-5">
+			<h1><?= ucwords($company->name) ?></h1>
+			<div class="row small-padding">
+			 <?php if(!empty($company->logo)){ ?>		
+				<img style="width:300px; height:250px;" src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl([''])?><?= $company->logo ?>"/>
+			  <?php } ?>
+			<div>
+			<div class="row small-padding">
+			  <?php if(!empty($company->about_us)){ ?>
+				<b>About us:</b>
+				<p><?= $company->about_us ?></p>
+			  <?php } ?>
+			<div>
+		</div>
     </div>
 </div>
