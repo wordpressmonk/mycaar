@@ -120,4 +120,8 @@ class Program extends \yii\db\ActiveRecord
 			$this->delete();
 			return true;
 	}
+
+/* 	public function exportProgram(){
+		
+	} */
 }
