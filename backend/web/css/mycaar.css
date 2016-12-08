@@ -1104,7 +1104,10 @@ background-color: lightgreen;
     }
 
 }
-
+/*** Summernote textarea **/
+.note-editor .note-editable{
+	min-height:100px;
+}
 
 
 
