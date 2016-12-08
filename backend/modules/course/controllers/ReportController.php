@@ -71,7 +71,7 @@ class ReportController extends Controller
 				'query' => $query,
 			]);	
 			$query->joinWith(['user']);
-			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id,'user.status'=>10]);			
+			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
 			//if any of the user parametr is filled,then search for that users
 			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);			
  			if(isset($param['user']) && $param['user'] !='')
@@ -113,12 +113,12 @@ class ReportController extends Controller
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
 			$users = $dataProvider->models;			
 			
-		return $this->render('report', [
-					'programs' => $programs,
-					'users' => $users,
-					'params' => false,
-				]);				
-		}	
+			return $this->render('report', [
+						'programs' => $programs,
+						'users' => $users,
+						'params' => false,
+					]);				
+			}	
 	}
 	public function actionAssessorReport(){
         $searchModel = new SearchUnitReport();
