@@ -54,6 +54,7 @@ AppAsset::register($this);
 					</ul>
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
+				<?php if(!\Yii::$app->user->isGuest){ ?>
 				<div class="headerbar-right">
 
 					<ul class="header-nav header-nav-options">
@@ -82,6 +83,7 @@ AppAsset::register($this);
 						</li>
 					</ul><!--end .header-nav-toggle -->
 				</div><!--end #header-navbar-collapse -->
+				<?php } ?>
 			</div>
 		</header>
 		<!-- END HEADER-->

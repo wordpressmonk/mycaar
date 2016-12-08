@@ -251,6 +251,7 @@ class ReportController extends Controller
 			case("cp"):
 				$rep->resetCpTest();
 				$rep->capability_progress = NULL;
+				$rep->cap_done_by = NULL;
 				break;
 			case("aw"):
 				//delete all aware questions

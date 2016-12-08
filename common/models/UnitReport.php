@@ -96,6 +96,7 @@ class UnitReport extends \yii\db\ActiveRecord
 			$answer->delete();
 		}	
 		$this->capability_progress = NULL;
+		$this->cap_done_by = NULL;
 		$this->awareness_progress = NULL;
 	}
 	public function resetAwTest(){
