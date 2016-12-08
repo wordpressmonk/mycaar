@@ -69,6 +69,9 @@ class ReportController extends Controller
 			$query = UserProfile::find();
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
+					'pagination' => [
+						'pageSize' => 0,
+					],
 			]);	
 			$query->joinWith(['user']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
