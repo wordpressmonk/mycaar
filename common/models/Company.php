@@ -99,7 +99,7 @@ class Company extends \yii\db\ActiveRecord
 		Location::deleteAll(['company_id'=>$this->company_id]);
 		State::deleteAll(['company_id'=>$this->company_id]);
 		Role::deleteAll(['company_id'=>$this->company_id]);
-		$programs = $company->programs;
+		$programs = $this->programs;
 		foreach($programs as $program){
 			$program->deleteProgram();
 		}

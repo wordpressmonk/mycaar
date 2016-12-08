@@ -24,7 +24,7 @@ class MyCaar
     public static function getUserAllByrole($rolename)
     {			 	
 		$Roleusers = \Yii::$app->authManager->getUserIdsByRole($rolename);		
-		$data = User::find()->where(['IN', 'id', $Roleusers])->all();
+		$data = User::find()->where(['IN', 'id', $Roleusers])->andWhere(['status'=>10])->all();
 		return $data;
     }
 	

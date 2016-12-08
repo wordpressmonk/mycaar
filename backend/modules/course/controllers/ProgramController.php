@@ -186,7 +186,8 @@ class ProgramController extends Controller
     {
 		$model = $this->findModel($id);
 		if (\Yii::$app->user->can('manageProgram', ['post' => $model])) {
-			$this->findModel($id)->deleteProgram();
+			//$this->findModel($id)->deleteProgram();
+			$this->findModel($id)->delete();
 			if (\Yii::$app->user->can('super_admin'))
 				return $this->redirect(['index']);
 			else return $this->redirect(['program-list']);
