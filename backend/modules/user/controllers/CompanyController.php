@@ -400,12 +400,12 @@ class CompanyController extends Controller
 	 
 	 public function actionMultiDelete()
 	 {    
-			$role_id = Yii::$app->request->post()['role_id'];
-			if($role_id)
-			{
-				 foreach($role_id as $tmp)
-				  $this->findModel($tmp)->delete(); 
-			} 
+		$role_id = Yii::$app->request->post()['role_id'];
+		if($role_id)
+		{
+			 foreach($role_id as $tmp)
+			  $this->findModel($tmp)->delete(); 
+		} 
 				
      }
 	
