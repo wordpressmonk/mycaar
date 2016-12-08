@@ -128,6 +128,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		</div>
 	<?php 
 	$username ='';
+	//echo count($users);
 	foreach($programs as $program)
 	{
 		$modules = $program->publishedModules;
@@ -136,7 +137,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		echo '<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell-8-col">
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
-				<button type="button" class="btn ink-reaction btn-raised btn-xs btn-primary">Download Report</button>
+				<button type="button" class="btn ink-reaction btn-raised btn-xs btn-primary"><a href="'.Url::to(['export/export','program'=>$program->program_id]).'">Download Report</a></button>
 				</span>
 			
 			</div>

@@ -392,6 +392,7 @@ class User extends ActiveRecord implements IdentityInterface
 	 
 	 public function getProgramProgress($program_id){
 		 $program = Program::findOne($program_id);
+		 if($program){
 		 //total units
 		 $modules = $program->publishedModules;
 		 $total_tests = 0;
@@ -427,7 +428,9 @@ class User extends ActiveRecord implements IdentityInterface
 		 if($total_tests == 0)
 			 return 0;
 		 $progress =  ($tests_completed/$total_tests)*100;
-		 return (int)$progress;
+		 return (int)$progress;			 
+		 }
+		else return false;
 	 }
 	 
  public function sendEmail($password)
@@ -521,12 +524,12 @@ class User extends ActiveRecord implements IdentityInterface
 	
 	
 	 public function isEnrolled($program_id){
-		 if(!$program_id)
-			 return false;
+		 
+		$enrolled = ProgramEnrollment::find()->where(['user_id'=>$this->id,'program_id'=>$program_id])->one();
 		 //see if the user is enrolled
-		 if(ProgramEnrollment::find()->where(['user_id'=>$this->id,'program_id'=>$program_id])->one())
+		 if($enrolled != null)
 			 return true;
-		 return false;
+		 else return false;
 		 
 	 }
 	 
