@@ -32,7 +32,7 @@ $homeUrl = Yii::$app->homeUrl;
 					<?php foreach($dataProvider->models as $program){
 						echo 					
 						"<li class='dd-item tile' data-id='$program->program_id'>
-							<div class='btn btn-primary'><i class='fa fa-list'></i> $program->title
+							<div class='btn btn-primary' style='min-height:35px;'><span class='pull-left'><i class='fa fa-list'></i> $program->title</span>
 							<span class='pull-right text-default'>
 								<a href='{$homeUrl}course/program/view?id={$program->program_id}' title='View Program' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
 								<a href='{$homeUrl}course/program/update?id={$program->program_id}' title='Update Program' style='padding-right:3px'><span class='glyphicon glyphicon-pencil'></span></a>
