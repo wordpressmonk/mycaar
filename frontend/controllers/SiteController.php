@@ -170,8 +170,8 @@ class SiteController extends Controller
     {
 	 if($slug)
 	  {
-		$check_slug = Company::find()->where(["slug" =>$slug])->one();
-		if(!$check_slug)
+		$company = Company::find()->where(["slug" =>$slug])->one();
+		if(!$company)
 			 return $this->redirect('Login');
 		 		
         $model = new SignupForm();
@@ -191,12 +191,12 @@ class SiteController extends Controller
                     return $this->goHome();
                 }
             } else {
-					return $this->render('signup', ['model' => $model,'profile'=>$profile,"company_id"=>$check_slug->company_id]);
+					return $this->render('signup', ['model' => $model,'profile'=>$profile,"company"=>$company]);
 			} 
         }
 
         return $this->render('signup', [
-            'model' => $model,'profile'=>$profile,"company_id"=>$check_slug->company_id
+            'model' => $model,'profile'=>$profile,"company"=>$company
         ]);
 	  } else {
 		  return $this->redirect('Login');

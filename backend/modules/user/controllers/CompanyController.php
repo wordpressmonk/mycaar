@@ -446,6 +446,7 @@ class CompanyController extends Controller
 			 {	
 				if($profile = Profile::findOne(['user_id'=>$tmp]))
 				    $profile->delete();
+				
 				if($company = Company::findOne(['admin'=>$tmp]))
 				{
 				
@@ -458,8 +459,9 @@ class CompanyController extends Controller
 				if($role = Role::findOne(['company_id'=>$company->company_id]))
 					$role->delete();
 				
-				$company->delete();
+				 $company->delete();
 				}
+				
 				if($enrollment = ProgramEnrollment::findOne(['user_id'=>$tmp]))
 					$enrollment->delete();
 				if($capanswer = CapabilityAnswer::findOne(['user_id'=>$tmp]))
