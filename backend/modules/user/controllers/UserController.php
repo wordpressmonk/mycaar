@@ -4,6 +4,7 @@ namespace backend\modules\user\controllers;
 
 use Yii;
 use common\models\User;
+use common\models\Company;
 use common\models\MyCaar;
 use common\models\UserProfile as Profile;
 use common\models\search\SearchUser;
