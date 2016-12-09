@@ -106,7 +106,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label class="control-label" for="searchreport-user_id">Role</label>
+									<label class="control-label" for="searchreport-user_id">State</label>
 									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
