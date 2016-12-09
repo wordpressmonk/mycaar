@@ -124,7 +124,7 @@ class ReportController extends Controller
 						'users' => $users,
 						'params' => false,
 					]);				
-			}	
+		}	
 	}
 	public function actionAssessorReport(){
         $searchModel = new SearchUnitReport();

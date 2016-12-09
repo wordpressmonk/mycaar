@@ -189,10 +189,16 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		<!-- Modal -->
 
 	<script>
+	
 		function popUpNotAllowed(){
 			//$(".modal-body").html("Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!");
 			//$("#myModal").modal("show");
-			alert("Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!");
+			var role = "<?=\Yii::$app->user->identity->roleName?>";
+			console.log(role);
+			if(role=="user")
+				alert("Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!");
+			else 
+				alert("Sorry, you're not able to complete your own capability test!");
 		}
 
 	</script>
