@@ -236,8 +236,7 @@ AppAsset::register($this);
 							<ul>
 							<!--start submenu -->
 							<li><a id="enrl" href="<?=\Yii::$app->homeUrl?>user/company/enroll-user#enrl" ><span class="title">Enroll User</span></a></li>
-							<li><a id="ar" href="<?=\Yii::$app->homeUrl?>course/report/assessor-report#ar" ><span class="title">Assessor Reports</span></a></li>
-							<li><a id="ex" href="<?=\Yii::$app->homeUrl?>user/importuser/emportexcel#ex" ><span class="title">Export Excel</span></a></li>
+							<li><a id="ar" href="<?=\Yii::$app->homeUrl?>course/report/assessor-report#ar" ><span class="title">Assessor Reports</span></a></li>							
 							</ul>
 							<?php } ?>
 						</li>						

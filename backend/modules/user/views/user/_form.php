@@ -15,7 +15,11 @@ use common\models\Company;
 		<?php $form = ActiveForm::begin(); ?>
 
 		<?php /* $form->field($model, 'username')->textInput(['maxlength' => true]) */ ?>
-
+		
+		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("Firstname *") ?>
+		
+		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Lastname *") ?>
+		
 		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID *") ?>
 
 		<?php if($checkpage == "Create"){ ?>

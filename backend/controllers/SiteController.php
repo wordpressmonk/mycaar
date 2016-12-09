@@ -217,7 +217,8 @@ class SiteController extends Controller
 			 $model->setPassword($model->new_password);			
 			 if($model->save())
 			 {
-				 Yii::$app->getSession()->setFlash('Success', 'You have successfully change your password !!!.');	
+				 Yii::$app->getSession()->setFlash('Success', 'You have successfully change your password !!!.');
+				 $model->sendEmailChangePassword();	
 			 } else {
 				 return $this->render('change_password', ['model' => $model]);				
 			 }
@@ -226,13 +227,5 @@ class SiteController extends Controller
 		 }
 		return $this->render('change_password', ['model' => $model]);	
 	}
-	public function actionTestMail(){
-		\Yii::$app
-					->mail
-					->compose()
-					->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
-					->setTo('dency@abacies.com')
-					->setSubject('YOUR VERIFIED EMAIL ID')
-					->send();		
-	}
+	
 }

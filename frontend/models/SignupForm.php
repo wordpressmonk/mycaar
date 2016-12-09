@@ -1,6 +1,8 @@
 <?php
 namespace frontend\models;
 
+
+use yii;
 use yii\base\Model;
 use common\models\User;
 
@@ -82,4 +84,31 @@ class SignupForm extends Model
 		 return null;
        // return $user->save()?$user:null;
     }
+	
+	 public function sendEmail()
+    {
+        /* @var $user User */
+		$model = new User();
+
+        $user = $model::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'email' => $this->email,
+        ]);
+
+            if ($user) {
+                $message = Yii::$app->mail->compose(['html' => 'registerSuccessMessage-html'], ['user' => $user])
+                    ->setFrom([Yii::$app->params['supportEmail'] =>' MyCaar'])
+                    ->setTo($this->email)
+                    ->setSubject('WelCome To MyCaar');
+                    
+					 $message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
+					 $message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
+					 $message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
+			 return  $message->send();
+            }
+        
+
+        return false;
+    }
+	
 }

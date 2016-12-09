@@ -70,6 +70,24 @@ use kartik\select2\Select2;
 			</div>
 			<form class="form-horizontal" role="form" >
 				<div class="modal-body">
+				<div class="form-group">
+						<div class="col-sm-12">
+							<label for="email1" class="control-label">Firstname *</label>
+						</div>
+						<div class="col-sm-12">
+							<input type="text" name="firstname" id="firstname" class="form-control" required >
+						</div>
+						<div style="color:red;margin-left:20px" class="error-msg error-firstname"> </div>
+					</div>	
+					<div class="form-group">
+						<div class="col-sm-12">
+							<label for="text" class="control-label">Lastname *</label>
+						</div>
+						<div class="col-sm-12">
+							<input type="text" name="lastname" id="lastname" class="form-control" required >
+						</div>
+						<div style="color:red;margin-left:20px" class="error-msg error-lastname"> </div>
+					</div>	
 					<div class="form-group">
 						<div class="col-sm-12">
 							<label for="email1" class="control-label">Username / Email *</label>
@@ -102,12 +120,28 @@ use kartik\select2\Select2;
 		}
 
  $("#newuser").click(function() { 
+	 $("#firstname").val('');
+	 $("#lastname").val('');
 	 $("#newemail_id").val('');
 	 $(".error-email").html("");
  });
  
 	  $("#addnewuser").click(function() {			
+			var firstname = $('#firstname').val();
+			var lastname = $('#lastname').val();
 			var useremail = $('#newemail_id').val();
+			if($.trim(firstname) == "") { 
+				$(".error-firstname").html("Please Fill Firstname field"); 
+				return false;
+			} else {
+				$(".error-firstname").html("");
+			}
+			if($.trim(lastname) == "") { 
+				$(".error-lastname").html("Please Fill Lastname field"); 
+				return false;
+			} else {
+				$(".error-lastname").html("");
+			}
 			if( !validateEmail(useremail)) { 
 				$(".error-email").html("Invalid email Address!!!."); 
 				return false;
@@ -118,7 +152,11 @@ use kartik\select2\Select2;
 				 $.ajax({
 				   url: '<?=Yii::$app->homeUrl."user/company/ajax-new-user"?>',
 				   type: 'POST',
-				   data: {  emailid: useremail,
+				   data: {  
+				   firstname: firstname,
+				   lastname: lastname,
+				   emailid: useremail,
+				  
 				   },
 				   success: function(data) {												
 						if($.trim(data) == 'false')

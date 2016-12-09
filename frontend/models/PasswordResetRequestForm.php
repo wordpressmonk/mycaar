@@ -61,9 +61,9 @@ class PasswordResetRequestForm extends Model
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar'])
             ->setTo($this->email)
-            ->setSubject('Password reset for ' . Yii::$app->name);			
+            ->setSubject('MyCaar Please Reset Your Password');			
             
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');

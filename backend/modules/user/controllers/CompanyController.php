@@ -368,6 +368,8 @@ class CompanyController extends Controller
 		$model = new User();	
 		$profile = new Profile();	
 		$model->email = Yii::$app->request->post()['emailid'];
+		$profile->firstname = Yii::$app->request->post()['firstname'];
+		$profile->lastname = Yii::$app->request->post()['lastname'];
 		$model->username = $model->email;
 		$model->role = 'company_admin';
 		$model->password = MyCaar::getRandomPassword();

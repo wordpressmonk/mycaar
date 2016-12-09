@@ -46,10 +46,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					'class' => 'yii\grid\CheckboxColumn',
 					 'checkboxOptions' => function ($data){
 						return ['checked' =>false,'value'=>$data['id']];
-					}, 
-				
+					}, 				
 			],
-			
+			'userProfile.firstname',
+			'userProfile.lastname',
+			'roleName',
             ['label' => 'Username / Email ID',
 				'attribute' => 'email',			
 			 ],			
