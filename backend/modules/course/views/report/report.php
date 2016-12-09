@@ -127,7 +127,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				</div>
 		</div>
 	<?php 
-	$username ='';
+	$check_output ='';
 	
 	//echo count($users);
 	foreach($programs as $program)
@@ -142,6 +142,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		$modules = $program->publishedModules;
 		if(!$no_user_enrolled && count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
+		$check_output .= $program->program_id;
 		echo '<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell-8-col">
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
@@ -288,9 +289,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 
 		<?php
 		} //module count && enrollment count
-		else echo "No results found!";
+		//else echo "No results found!";
 	}
-	
+	if($check_output == '')
+		echo "No results found!";
 	//FOR DEBUG
 	foreach($users as $user){
 	$progress = $user->user->getProgramProgress(1);
