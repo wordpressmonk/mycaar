@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 		else {
 			$type = 'alert alert-danger';
-			$message = "Please take the wrong answers";
+			$message = "Please take the wrong/unattended answers";
 		}
 	?>
 	<div class="<?=$type?>" role="alert">
