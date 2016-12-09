@@ -62,6 +62,8 @@ $this->params['breadcrumbs'][] = $this->title;
 					],
 					['class' => 'yii\grid\SerialColumn'],
 					'username', 				
+					'username', 				
+					'username', 				
 					[
 						'format' => 'html',
 						'label' => 'Status',					 

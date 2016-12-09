@@ -8,13 +8,6 @@ use common\models\Company;
 use common\models\MyCaar;
 use common\models\UserProfile as Profile;
 use common\models\search\SearchUser;
-use common\models\ProgramEnrollment;
-use common\models\CapabilityAnswer;
-use common\models\AwarenessAnswer;
-use common\models\Role;
-use common\models\Division;
-use common\models\Location;
-use common\models\State;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -57,17 +50,14 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new SearchUser();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $searchModel = new SearchUser();		
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);	
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
-	public function actionBulk(){
-		print_R($_POST);
-	}
+
     /**
      * Displays a single User model.
      * @param integer $id

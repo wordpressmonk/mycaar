@@ -28,7 +28,6 @@ class MyCaar
 		return $data;
     }
 	
-	
 	public static function getChildRoles($rolename){
 		$child_role = [];			
 		$child_role_name = \Yii::$app->authManager->getChildRoles($rolename);			
@@ -56,5 +55,15 @@ class MyCaar
 		shuffle($chars);
 		$password = implode(array_slice($chars, 0, $length));
 		return $password;
+	}
+	
+	public static function getChildRolesName($rolename){
+		$child_role = [];			
+		$child_role_name = \Yii::$app->authManager->getChildRoles($rolename);			
+		foreach($child_role_name as $tmp){
+			if($rolename != $tmp->name)
+			 $child_role[$tmp->name] = $tmp->name;
+		}
+		return $child_role;
 	}
 }

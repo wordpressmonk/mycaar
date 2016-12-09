@@ -310,6 +310,15 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
     }
 	
+	
+	 /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuthRole()
+    {
+        return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
+    }
+	
 	 public function verifyPassword($password)
     {
        $dbpassword = static::findOne(['username'=>Yii::$app->user->identity->username,'status'=>self::STATUS_ACTIVE])->password_hash;

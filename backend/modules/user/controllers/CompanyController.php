@@ -17,8 +17,6 @@ use common\models\search\SearchUser;
 use common\models\search\SearchEnrolment;
 use common\models\search\SearchProgramEnrollment;
 use common\models\ProgramEnrollment;
-use common\models\CapabilityAnswer;
-use common\models\AwarenessAnswer;
 use common\models\Role;
 use common\models\Division;
 use common\models\Location;

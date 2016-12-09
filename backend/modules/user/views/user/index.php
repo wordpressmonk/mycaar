@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use yii\helpers\ArrayHelper;
+use common\models\MyCaar;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\SearchUser */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -30,6 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
 		
 </div>	 
   
+  <?php
+	//echo "<pre>";
+	//print_r(MyCaar::getChildRoles('company_admin'));
+	//print_r(ArrayHelper::map(MyCaar::getChildRoles('company_admin'), 'key', 'value'));
+	//exit;
+  ?>
 	
 	<div class="small-padding"></div>
 	
@@ -45,10 +52,21 @@ $this->params['breadcrumbs'][] = $this->title;
 						return ['checked' =>false,'value'=>$data['id']];
 					}, 
 				
+			],	
+			[
+				'attribute' => 'firstname',
+				'value' => 'userProfile.firstname',				
+			],	
+			[
+				'attribute' => 'lastname',
+				'value' => 'userProfile.lastname',				
+			],								
+			[
+				'attribute' => 'roleName',
+				'value' => 'roleName',
+			 	 'filter' => Html::activeDropDownList($searchModel, 'roleName',MyCaar::getChildRolesName(MyCaar::getRoleNameByUserid(Yii::$app->user->identity->id)),['class'=>'form-control input-sm','prompt' => 'Role Name']),   
+				
 			],
-			'userProfile.firstname',
-			'userProfile.lastname',
-			'roleName',
              ['label' => 'Username / Email ID',
 				'attribute' => 'email',			
 			 ],
