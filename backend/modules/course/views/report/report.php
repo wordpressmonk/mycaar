@@ -60,7 +60,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label class="control-label" for="searchreport-unit_id">Unit ID</label>
+									<label class="control-label" for="searchreport-unit_id">Program</label>
 									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
@@ -137,10 +137,17 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		echo '<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell-8-col">
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
-				<button type="button" class="btn ink-reaction btn-raised btn-xs btn-primary"><a href="'.Url::to(['export/export','program'=>$program->program_id]).'">Download Report</a></button>
-				</span>
-			
-			</div>
+				</span>';
+		echo Html::beginForm(['/course/export/export'], 'post')
+										.Html::input('hidden', 'p_id', $program->program_id, ['class' =>'form-control'])
+										.Html::input('hidden', 'params', serialize($params), ['class' =>'form-control'])
+										. Html::submitButton(
+											'Download Report',
+											['class' => 'btn ink-reaction btn-raised btn-xs btn-primary']
+										)
+										. Html::endForm();
+
+		echo '</div>
 		</div>';
 		echo '<div class="mdl-cell mdl-cell-4-col mdl-section">
 						<ul style="width: 1000px;">

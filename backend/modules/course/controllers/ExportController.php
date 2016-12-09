@@ -11,16 +11,62 @@ use yii\data\ActiveDataProvider;
 
 use common\models\Program;
 use common\models\Company;
+use common\models\UserProfile;
 
 class ExportController extends Controller
 {	
 	
-	public function actionExport($program){
+	public function actionExport(){
 		
-		$program = Program::findOne($program);
-	
+		
+		$program = Program::findOne(\Yii::$app->request->post()['p_id']);
 		$company = Company::findOne(\Yii::$app->user->identity->c_id);
-	
+		
+		//////////////////get users searched////////////////////////////
+		$param = unserialize(\Yii::$app->request->post()['params']);
+		//var_dump($params);die;
+		if($param){
+			//print_r($params);die;
+			$query = UserProfile::find();
+			$dataProvider = new ActiveDataProvider([
+				'query' => $query,
+					'pagination' => [
+						'pageSize' => 0,
+					],
+			]);	
+			$query->joinWith(['user']);
+			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
+			//if any of the user parametr is filled,then search for that users
+			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);			
+ 			if(isset($param['user']) && $param['user'] !='')
+				$query->andFilterWhere(['user_id'=>$param['user']]);			
+ 			if(isset($param['state']) && $param['state'] !='')
+				$query->andFilterWhere(['state'=>$param['state']]);
+			if(isset($param['role']) && $param['role'] !='')
+				$query->andFilterWhere(['role'=>$param['role']]);
+			if(isset($param['location']) && $param['location'] !='')
+				$query->andFilterWhere(['location'=>$param['location']]);
+			if(isset($param['division']) && $param['division'] !='')
+				$query->andFilterWhere(['division'=>$param['division']]); 
+			if(isset($param['firstname']) && $param['firstname'] !='')
+				$query->andFilterWhere(['like', 'firstname',$param['firstname']]);
+			if(isset($param['lastname']) && $param['lastname'] !='')
+				$query->andFilterWhere(['like', 'lastname', $param['lastname']]);	
+			$query->andFilterWhere(['division'=>$param['division']]); 
+			$users = $dataProvider->models;
+			$filtered_users = [];
+			foreach($users as $user){
+				$filtered_users[] = $user->user_id;
+			}			
+		}else{
+			$users = UserProfile::find()->joinWith(['user'])->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id])->all();
+			$filtered_users = [];
+			foreach($users as $user){
+				$filtered_users[] = $user->user_id;
+			}	
+		}
+		//////////////////////////////////////////////////////////
+		
 		$RedColor	= 'c10001';
 		$GrayColor	= '81889a';
 		$AmberColor	= 'ffc000';
@@ -119,6 +165,8 @@ class ExportController extends Controller
 		$student   = 8;
 		$mark      = 9;
 		foreach($enrollments as $row=>$enrollment){
+			if(in_array($enrollment->user_id,$filtered_users))
+			{
 			$capability_percentage = $enrollment->user->getProgramProgress($program->program_id);
 			if( ( $capability_percentage < 100 ) && ( $capability_percentage > 95 ) ) {
 				$split_color_val = 9;
@@ -188,6 +236,7 @@ class ExportController extends Controller
 			$objDrawing->setHeight(25); // logo height
 			$objDrawing->setWidth(155); // logo height
 			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+			}
 		}
 		
 		//modules and unit section
@@ -251,6 +300,8 @@ class ExportController extends Controller
 
 					//students 
 					foreach($enrollments as $enrollment){
+						if(in_array($enrollment->user_id,$filtered_users))
+						{
 						/********************************************************************************/
 						//get unit progress
 						$progress = $enrollment->user->getUnitProgress($unit->unit_id);
@@ -286,7 +337,8 @@ class ExportController extends Controller
 						$objPHPExcel->setActiveSheetIndex(0)->mergeCells($this->cellsToWidthByColsRow( $StudentUnitFillColumn + 1, $StudentUnitFillRow ).':'.$this->cellsToWidthByColsRow( $StudentUnitFillColumn + 1, $StudentUnitFillRow + 1 ));
 						/************************************ CAPABLE ***********************************/
 						$FinalRowRun 	= $StudentUnitFillRow + 1;
-						$FinalColumnRun = $StudentUnitFillColumn + 1;						
+						$FinalColumnRun = $StudentUnitFillColumn + 1;
+						}
 					}
 					//////////
 					$sheet->getStyle($this->cellsToWidthByColsRow($unittitle, $rownumber + 1))->applyFromArray($style);

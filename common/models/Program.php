@@ -65,10 +65,18 @@ class Program extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProgramEnrollments()
+    public function getEnrollments()
     {
         return $this->hasMany(ProgramEnrollment::className(), ['program_id' => 'program_id']);
+    }	
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProgramEnrollments()
+    {
+        return $this->hasMany(ProgramEnrollment::className(), ['program_id' => 'program_id'])->joinWith(['userProfile as user_profile'])->orderBy(['user_profile.firstname'=>SORT_ASC]);;
     }
+	
     /**
      * @return \yii\db\ActiveQuery
      */

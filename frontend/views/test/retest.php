@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
+use common\models\User;
 use common\models\UnitElement;
 use yii\bootstrap\ActiveForm;
 $this->title = $model->title;
@@ -15,6 +16,22 @@ $this->params['breadcrumbs'][] = $this->title;
 <div  class="card">
 <div class="card-body">
 	<form class="form" method="post">
+	<?php 
+		$user = User::findOne(\Yii::$app->user->id);
+		$awareness_progress = $user->getUnitProgress($model->unit_id);
+		if($awareness_progress['ap'] == 'green'){
+			$type = 'alert alert-success';
+			$message = "Congratulations,you have successfully completed this unit";
+		}
+			
+		else {
+			$type = 'alert alert-danger';
+			$message = "Please take the wrong/unattended answers";
+		}
+	?>
+	<div class="<?=$type?>" role="alert">
+				<strong><?=$message?></strong>
+	</div>
 	<?php 
 	if($errors){
 		echo '<div class="alert alert-danger" role="alert">
@@ -134,10 +151,15 @@ $this->params['breadcrumbs'][] = $this->title;
 		echo '</div>';
 	}
 	?>
+	<?php if($awareness_progress['ap'] == 'green'){ ?>
+		<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Return to Dashboard"/>
+		
+	<?php } else { ?>
 	<div class="form-group">
 		<input name= "save" type="submit" class="btn btn-lg ink-reaction btn-info" value="Submit Answer/s"/>
 		<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save & Return to Dashboard"/>
 	</div>
+	<?php } ?>
 	</form>
 </div>
 </div>

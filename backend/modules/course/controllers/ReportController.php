@@ -64,9 +64,9 @@ class ReportController extends Controller
 				
 				$programs[] = Program::find()->where(['program_id'=>$param['program']])->one();;
 			}else{
-				$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
+				$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
 			}
-			$query = UserProfile::find();
+			$query = UserProfile::find()->orderBy('firstname ASC');
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
@@ -107,8 +107,8 @@ class ReportController extends Controller
         else {
 		 if($p_id)
 			$programs[] = Program::find()->where(['program_id'=>$p_id])->one();
-		 else $programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
-			$query = UserProfile::find();
+		 else $programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
+			$query = UserProfile::find()->orderBy('firstname ASC');
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
@@ -124,7 +124,7 @@ class ReportController extends Controller
 						'users' => $users,
 						'params' => false,
 					]);				
-			}	
+		}	
 	}
 	public function actionAssessorReport(){
         $searchModel = new SearchUnitReport();
