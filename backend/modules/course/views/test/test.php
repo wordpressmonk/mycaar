@@ -9,10 +9,11 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Units', 'url' => ['Test']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<div class="card" style="padding-top:20px">
 <div class="card-head regular style-info">
-	<header><?=$this->title?></header>
+	<header><?=$this->title?>[ Course: <?=$model->module->title?> , Program: <?=$model->module->program->title?> ]</header>
 </div>
-<div  class="card">
 <div class="card-body">
 	<form class="form" method="post">
 		<?php 

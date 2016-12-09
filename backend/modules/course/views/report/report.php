@@ -51,17 +51,17 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				<div class="program-search">
 					<form method="post">
 						<div class="row">
-							<div class="col-sm-6">
+							<!--<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">User ID</label>
-									<?= Html::dropDownList('user', "$selected_user",ArrayHelper::map(User::find()->where(['c_id'=>\Yii::$app->user->identity->c_id,'status'=>10])->all(), 'id', 'username'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?php //echo Html::dropDownList('user', "$selected_user",ArrayHelper::map(User::find()->where(['c_id'=>\Yii::$app->user->identity->c_id,'status'=>10])->all(), 'id', 'username'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
-							</div>
+							</div>-->
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-unit_id">Program</label>
-									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -114,7 +114,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Search</button>  
-							<a class="btn btn-danger" href="<?= Url::to(['report/search'])?>" >Reset </a>
+							<!--<a class="btn btn-danger" href="<?php //echo Url::to(['report/search'])?>" >Reset </a>-->
 						</div>
 					</form>
 				</div>
@@ -128,16 +128,25 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		</div>
 	<?php 
 	$username ='';
+	
 	//echo count($users);
 	foreach($programs as $program)
 	{
+		$no_user_enrolled = true;
+		foreach($users as $key => $user){
+			if($user->user->isEnrolled($program->program_id))
+				{
+					$no_user_enrolled = false;
+				}
+		}
 		$modules = $program->publishedModules;
-		if(count($modules) > 0 && count($program->programEnrollments) > 0)
+		if(!$no_user_enrolled && count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
 		echo '<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell-8-col">
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
-				</span>';
+			</span>';
+		//if(count($users) > 0 && count($program->programEnrollments)>0)
 		echo Html::beginForm(['/course/export/export'], 'post')
 										.Html::input('hidden', 'p_id', $program->program_id, ['class' =>'form-control'])
 										.Html::input('hidden', 'params', serialize($params), ['class' =>'form-control'])
@@ -164,7 +173,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		
 			foreach($users as $user){
 				if($user->user->isEnrolled($program->program_id)){
-					$name = $user->firstname. " ". $user->lastname;
+					$name = $user->userProfile->firstname. " ". $user->userProfile->lastname;
 					if($name == '')
 						$name = $user->user->username;
 					//$progress = 0;
@@ -270,8 +279,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				}		
 			$str.= "</ul></div>";
 		$str.= "</div>";
-		if(!$no_user_enrolled)
-			echo $str;
+		if(!$no_user_enrolled) echo $str;
 			} //if unit count
 		}
 		echo "</div></div>";
@@ -280,6 +288,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 
 		<?php
 		} //module count && enrollment count
+		else echo "No results found!";
 	}
 	
 	//FOR DEBUG
@@ -320,3 +329,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			//alert("Sorry you can't able to attend this capability test, it is already completed!");
 		}
 	</script>
+	
+	<?php if($params){ ?>
+	<script>
+		$('.card-head .tools .btn-collapse').trigger("click");
+	</script>
+	
+	<?php } ?>

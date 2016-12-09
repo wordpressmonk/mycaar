@@ -77,7 +77,7 @@ class SearchProgram extends Program
      */
     public function searchCompanyPrograms($params)
     {
-        $query = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id]);
+        $query = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title');
 
         // add conditions that should always apply here
 

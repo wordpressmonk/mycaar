@@ -37,7 +37,7 @@ class ProgramController extends Controller
 						'roles' => ['superadmin']
                     ],
                     [
-                        'actions' => ['create','view','delete'],
+                        'actions' => ['create','view','delete','company-programs'],
                         'allow' => true,
 						'roles' => ['company_admin']
                     ],

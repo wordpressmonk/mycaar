@@ -97,7 +97,7 @@ class TestController extends Controller
 			$this->saveProgress($user_id,$unit_id);
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				$session->remove($unit_id."_cp_".$user_id);
-				return $this->goHome();
+				return $this->redirect(['report/search','p_id'=>$model->module->program->program_id]);
 			}else
 			return $this->redirect(["cp-test","user_id"=>$user_id,"unit_id"=>$unit_id]);
 			

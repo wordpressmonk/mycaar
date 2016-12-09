@@ -23,6 +23,7 @@ use common\models\search\SearchUnit;
 
 use common\models\UnitReport;
 use common\models\search\SearchUnitReport;
+use common\models\ProgramEnrollment;
 
 use \moonland\phpexcel\Excel;
 /**
@@ -66,7 +67,7 @@ class ReportController extends Controller
 			}else{
 				$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
 			}
-			$query = UserProfile::find()->orderBy('firstname ASC');
+			$query = ProgramEnrollment::find()->orderBy('firstname ASC');
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
@@ -74,9 +75,12 @@ class ReportController extends Controller
 					],
 			]);	
 			$query->joinWith(['user']);
+			$query->joinWith(['user.userProfile as user_profile']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
 			//if any of the user parametr is filled,then search for that users
-			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);			
+			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);	
+			if(isset($param['program']) && $param['program'] !='')
+				$query->andFilterWhere(['program_id'=>$param['program']]);
  			if(isset($param['user']) && $param['user'] !='')
 				$query->andFilterWhere(['user_id'=>$param['user']]);			
  			if(isset($param['state']) && $param['state'] !='')
@@ -91,7 +95,7 @@ class ReportController extends Controller
 				$query->andFilterWhere(['like', 'firstname',$param['firstname']]);
 			if(isset($param['lastname']) && $param['lastname'] !='')
 				$query->andFilterWhere(['like', 'lastname', $param['lastname']]);	
-			
+			$query->groupBy('user_id');
 			$users = $dataProvider->models;
 			//print_r($programs);
 			return $this->render('report', [
@@ -108,7 +112,7 @@ class ReportController extends Controller
 		 if($p_id)
 			$programs[] = Program::find()->where(['program_id'=>$p_id])->one();
 		 else $programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
-			$query = UserProfile::find()->orderBy('firstname ASC');
+			$query = ProgramEnrollment::find()->orderBy('firstname ASC');
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
@@ -116,7 +120,9 @@ class ReportController extends Controller
 					],
 			]);	
 			$query->joinWith(['user']);
+			$query->joinWith(['user.userProfile as user_profile']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+			$query->groupBy('user_id');
 			$users = $dataProvider->models;			
 			
 			return $this->render('report', [
@@ -269,7 +275,7 @@ class ReportController extends Controller
 		return $this->redirect(['report/reset-users','u_id'=>$rep->unit_id]);
 	}
 	public function actionGetModules($p_id){
-		$mods = Module::find()->where(['program_id'=>$p_id])->all();
+		$mods = Module::find()->where(['program_id'=>$p_id])->orderBy('title')->all();
 		 if(count($mods)>0){
 			echo "<option value=''>--Select Course--</option>";
 			foreach($mods as $mod){
@@ -282,7 +288,7 @@ class ReportController extends Controller
 	}
 	
 	public function actionGetUnits($m_id){
-		$mods = Unit::find()->where(['module_id'=>$m_id])->all();
+		$mods = Unit::find()->where(['module_id'=>$m_id])->orderBy('title')->all();
 		 if(count($mods)>0){
 			echo "<option value=''>--Select Lesson--</option>";
 			foreach($mods as $mod){

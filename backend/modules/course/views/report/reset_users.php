@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 								<?=Html::dropDownList(
 									'custom_search[program]',
 									$p_id,
-									ArrayHelper::map(common\models\Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->all(),'program_id', 'title'),
+									ArrayHelper::map(common\models\Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('title')->all(),'program_id', 'title'),
 									[
 									 'id' => 'program_select', 
 									 'class' => 'form-control',
@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 								<?=Html::dropDownList(
 									'custom_search[module]',
 									$m_id,
-									ArrayHelper::map(common\models\Module::find()->where(['program_id' =>$p_id])->all(),'module_id', 'title'),
+									ArrayHelper::map(common\models\Module::find()->where(['program_id' =>$p_id])->orderBy('title')->all(),'module_id', 'title'),
 									[
 									 'id' => 'module_select',
 									 'class' => 'form-control',
@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
 								<?=Html::dropDownList(
 									'custom_search[unit]',
 									$u_id,
-									ArrayHelper::map(common\models\Unit::find()->where(['module_id' =>$m_id])->all(),'unit_id', 'title'),
+									ArrayHelper::map(common\models\Unit::find()->where(['module_id' =>$m_id])->orderBy('title')->all(),'unit_id', 'title'),
 									[
 									 'id' => 'unit_select','prompt' => '--Select Lesson--', 'class' => 'form-control']
 								);?>
