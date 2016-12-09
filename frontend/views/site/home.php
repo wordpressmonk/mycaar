@@ -135,9 +135,11 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 															echo "<span class='first_heading'>Capable</span>";
 														//else echo '<span class="first_heading" style="display: none">Capable</span>';
 														$href= 'javascript:void(0);';
+														if($progress['cp'] != "grey")
+															$onClick = 'popUpNotAllowed();';
+														else $onClick = '';
 														echo "<div name='unit1'>
-
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href." onClick='popUpNotAllowed()'><span class='toolkit'><center>{$progress['cp']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href." onClick={$onClick }><span class='toolkit'><center>{$progress['cp']}</center></span>
 															</a>
 
 														</div>

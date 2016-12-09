@@ -253,7 +253,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														$onClick = '';
 														if($progress['cp'] != 'grey')
 															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id]);
-														if($user->user_id == \Yii::$app->user->id){
+														if($user->user_id == \Yii::$app->user->id && $progress['cp'] != 'grey'){
 															$onClick = "popUpNotAllowed();";
 															$href= 'javascript:void(0);';
 														}
