@@ -173,7 +173,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		
 			foreach($users as $user){
 				if($user->user->isEnrolled($program->program_id)){
-					$name = $user->userProfile->firstname. " ". $user->userProfile->lastname;
+					$name = $user->firstname. " ". $user->lastname;
 					if($name == '')
 						$name = $user->user->username;
 					//$progress = 0;
