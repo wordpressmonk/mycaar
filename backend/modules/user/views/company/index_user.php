@@ -83,6 +83,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	'delete' => function ($url, $model) {
         return Html::a('<span style="margin-left:5px" class="glyphicon glyphicon-trash"></span>', 'delete-user?id='.$model->id, [
                     'title' => Yii::t('app', 'Delete'),
+					'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                   ],
         ]);
     },
   ],

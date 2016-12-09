@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+		 <?= Html::a('All Users', ['index-user'], ['class' => 'btn btn-success']) ?>
     </p>
 		
 		

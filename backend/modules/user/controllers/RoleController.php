@@ -66,7 +66,7 @@ class RoleController extends Controller
         $model = new Role();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['index']);
+			return $this->redirect(['view', 'id' => $model->role_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -85,7 +85,7 @@ class RoleController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['index']);
+			return $this->redirect(['view', 'id' => $model->role_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,

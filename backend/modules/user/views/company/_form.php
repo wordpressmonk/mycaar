@@ -15,18 +15,19 @@ use kartik\select2\Select2;
 <div class="card">
 	<div class="card-body">
 
-    <?php $form = ActiveForm::begin( ['options' => ['enctype'=>'multipart/form-data'] ]); ?>
+    <?php $form = ActiveForm::begin( ['options' => ['enctype'=>'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'about_us')->textarea(['rows' => 3]) ?>
 	
 	<?php if($model->logo != '' ){ ?>
-		<div class="form-group field-company-logo">
+		<div class="form-group field-company-logo" >
 			<label class="control-label" >Logo</label>
-				<img src="<?=Yii::$app->homeUrl.$model->logo ?>" width="150px" height="150px"/>
-				<a id="<?= $model->company_id ?>" class="removelogo" >Remove</a>
-		</div>		
+				<img id='imagesorce' src="<?=Yii::$app->homeUrl.$model->logo ?>" width="150px" height="150px"/>
+				<a id="<?= $model->company_id ?>" style="cursor:pointer" class="removelogo" >Remove</a>
+		</div>	
+	
 	<?php } else {
 					echo $form->field($model, 'logo')->fileInput(['class'=>'form-control']);
 			} 
@@ -119,6 +120,14 @@ use kartik\select2\Select2;
 		return emailReg.test( $email );
 		}
 
+		
+
+$( "#updateform" ).submit(function( event ) {
+  alert( "Handler for .submit() called." );  
+});
+
+ 
+ 
  $("#newuser").click(function() { 
 	 $("#firstname").val('');
 	 $("#lastname").val('');
@@ -172,9 +181,9 @@ use kartik\select2\Select2;
 
 				}); 			
 		  });
-		  
-		  $(".removelogo").click(function() {
-			 var company_id = $(this).attr('id');
+
+		  $(".removelogo").click(function() {					  
+			  var company_id = $(this).attr('id');
 				
 				$.ajax({
 				   url: '<?=Yii::$app->homeUrl."user/company/removelogo"?>',
@@ -185,8 +194,7 @@ use kartik\select2\Select2;
 							 location.reload();
 				   }
 
-				});
-
+				}); 
 		  });
 		 $("#company-name").change(function() {
 				var slugval1 = $(this).val();

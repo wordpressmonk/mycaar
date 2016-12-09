@@ -105,7 +105,7 @@ class UserController extends Controller
 				$model->sendEmail($model->password); 
 				// Email Function is "Send Email to respective user"
 			
-				return $this->redirect(['index']);
+				return $this->redirect(['view', 'id' => $model->id]);
 			}
             else{
 				  return $this->render('create', [
@@ -163,7 +163,7 @@ class UserController extends Controller
 				$profile->user_id = $model->id;			
 				$profile->save();
 			
-				return $this->redirect(['index']);
+				return $this->redirect(['view', 'id' => $model->id]);
 			} else {
                return $this->render('update', ['model' => $model,'profile' => $profile,'roles' => $roles,]);
 			}

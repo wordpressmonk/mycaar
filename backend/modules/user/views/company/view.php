@@ -25,6 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+		
+		 <?= Html::a('All Companies', ['index'], ['class' => 'btn btn-success']) ?>
 		<?php } ?>
     </p>
 
@@ -33,10 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'name',
             'about_us:ntext',
+		
 			[
                 'attribute'=>'Logo',
-				'value'=>Yii::$app->homeUrl.$model->logo,
-				'format' => ['image',['width'=>'150px','height'=>'150px']],
+				'value'=>!empty($model->logo)?Yii::$app->homeUrl.$model->logo:'',
+				 'format' => !empty($model->logo)?['image',['width'=>'150px','height'=>'150px']]:'text',
 				
             ],	
 				'companyAdmin.email',				

@@ -17,6 +17,7 @@ use common\models\search\SearchUser;
 use common\models\search\SearchEnrolment;
 use common\models\search\SearchProgramEnrollment;
 use common\models\ProgramEnrollment;
+use common\models\Program;
 use common\models\Role;
 use common\models\Division;
 use common\models\Location;
@@ -110,7 +111,7 @@ class CompanyController extends Controller
 				$user = User::findOne($model->admin);
 				$user->c_id = $model->company_id;								
 				$user->save(false);					
-				return $this->redirect(['index']);			
+				return $this->redirect(['view', 'id' => $model->company_id]);		
 			} else
 				return $this->render('create', ['model' => $model]);
 			
@@ -137,7 +138,7 @@ class CompanyController extends Controller
 			$model->scenario = 'update_by_company_admin';
 		}
 			
-        if (($model->load(Yii::$app->request->post()))) {	 
+        if (($model->load(Yii::$app->request->post()))) {				
 			/**		Company Logo Image Uploaded for Update function Line 
 			**/
 			$model->logo = UploadedFile::getInstance($model, 'logo');			
@@ -155,9 +156,6 @@ class CompanyController extends Controller
 					$user->c_id = $model->company_id;								
 					$user->save(false); 								
 				
-				 if(\Yii::$app->user->can('superadmin')) 
-					return $this->redirect(['index']);	
-				else if(\Yii::$app->user->can('company_admin')) 
 					return $this->redirect(['view','id'=>$model->company_id]);	
 				
 			}else 
@@ -232,7 +230,7 @@ class CompanyController extends Controller
 					
 				// Email Function is "Send Email to respective user"
 				$model->sendEmail($model->password); 
-				return $this->redirect(['index-user']);
+				return $this->redirect(['view-user', 'id' => $model->id]);
 			} else
 			{					
 				return $this->render('create_user', ['model' =>$model,'profile'=>$profile,'roles'=>$roles]);
@@ -304,7 +302,7 @@ class CompanyController extends Controller
 			$profile->user_id = $model->id;			
 			$profile->save();	
 								
-             return $this->redirect(['index-user']);
+            return $this->redirect(['view-user', 'id' => $model->id]);
 			
 			} else {
             return $this->render('update_user', ['model' => $model,'profile' => $profile,'roles' => $roles,]);
@@ -319,13 +317,14 @@ class CompanyController extends Controller
     }
 
 	public function actionEnrollUser($program_id=false)
-    {		
+    {				
 		$model = new User();	
         $searchModel = new SearchProgramEnrollment();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		if($post=Yii::$app->request->post()){	
 			if(isset($post['Program']) && ($post['action'] === "enrolled") && isset($post['selection']) )
 			{				
+					$program = Program::findOne($post['Program']);		
 					foreach($post['selection'] as $tmp1)
 					{
 						$model1 = new ProgramEnrollment();	
@@ -335,6 +334,7 @@ class CompanyController extends Controller
 							$model1->program_id = $post['Program'];
 							$model1->user_id = $tmp1;
 							$model1->save();
+							$model1->sendEnrollmentEmail($tmp1,$program->title);
 						} 
 					}				
 			}
