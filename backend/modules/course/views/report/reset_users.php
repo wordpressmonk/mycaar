@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label class="control-label" for="searchreport-user_id">Role</label>
+									<label class="control-label" for="searchreport-user_id">State</label>
 									<?= Html::dropDownList('custom_search[state]', "$selected_state",ArrayHelper::map(common\models\State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
