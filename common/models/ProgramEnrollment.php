@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use common\models\User;
 /**
  * This is the model class for table "program_enrollment".
  *
@@ -77,4 +77,36 @@ class ProgramEnrollment extends \yii\db\ActiveRecord
 	public function isEnrolled(){		
 		 return false;		 
 	 }
+	 
+	
+public function sendEnrollmentEmail($id,$programname)
+    {
+        /* @var $user User */
+        $user = User::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'id' => $id,
+        ]);
+			
+        if (!$user) {
+            return false;
+        }
+		
+        $message = Yii::$app
+            ->mail
+            ->compose(
+                ['html' => 'enrolmentSuccessMessage-html'],
+                ['user' => $user,'programname'=>$programname]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
+            ->setTo($user->email)
+            ->setSubject('MyCaar Enrollment Confirmation');
+       	
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
+		
+		return $message->send(); 
+    }	
+	
+	
 }

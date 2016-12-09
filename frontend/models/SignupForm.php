@@ -76,16 +76,17 @@ class SignupForm extends Model
         $user->role = 'user'; 		
         $user->password = $this->password;		
         $user->setPassword($user->password);
+        $user->generatePasswordResetToken();
         $user->generateAuthKey();
 		
-		if($user->save())
-		 return $user;
+		if($user->save())		
+		 return $user;				
 		else
 		 return null;
        // return $user->save()?$user:null;
     }
 	
-	 public function sendEmail()
+	 public function sendEmail($password)
     {
         /* @var $user User */
 		$model = new User();
@@ -96,10 +97,10 @@ class SignupForm extends Model
         ]);
 
             if ($user) {
-                $message = Yii::$app->mail->compose(['html' => 'registerSuccessMessage-html'], ['user' => $user])
+                $message = Yii::$app->mail->compose(['html' => 'passwordSend-text'], ['user' => $user,'password'=>$password])
                     ->setFrom([Yii::$app->params['supportEmail'] =>' MyCaar'])
                     ->setTo($this->email)
-                    ->setSubject('WelCome To MyCaar');
+                    ->setSubject('Please Verified your Email');
                     
 					 $message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
 					 $message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');

@@ -177,7 +177,7 @@ class SiteController extends Controller
         $model = new SignupForm();
 		$profile = new Profile();
 		$profile->scenario = 'company_admin_user';		
-		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate())) {			
             if ($user = $model->signup()) { 
 			
 				$auth = Yii::$app->authManager;
@@ -186,7 +186,7 @@ class SiteController extends Controller
 				
 				$profile->user_id = $user->id;			
 				$profile->save();	
-				$model->sendEmail();
+				$model->sendEmail($model->password);
 							
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();

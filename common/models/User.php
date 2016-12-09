@@ -547,4 +547,6 @@ class User extends ActiveRecord implements IdentityInterface
 		 $this->save(false);		 
 	 }	 
 	 
+	  
+	
 }

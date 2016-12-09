@@ -49,18 +49,13 @@ class SearchUser extends User
     public function search($params)
     {
 		
-		//$Roleusers = ['user','company_admin'];
-		if(\Yii::$app->user->can('sysadmin')) 
+		if(\Yii::$app->user->can('company manage')) 
 		{
-			 $query = User::find()->where(['status'=>10])->orderBy('email ASC');;			 			 
-		} 
-		else if(\Yii::$app->user->can('superadmin')) 
-		{
-			 $query = User::find()->where(['status'=>10])->orderBy('email ASC');	 
-		} 
+			 $query = User::find()->where(['status'=>10]);			 			 
+		} 		
 		else if((\Yii::$app->user->can('company_admin')) ||(\Yii::$app->user->can('assessor')))
 		{			
-			 $query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id,'status'=>10])->orderBy('email ASC');
+			 $query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id,'status'=>10]);
 		}
         // add conditions that should always apply here
 		
@@ -68,12 +63,10 @@ class SearchUser extends User
             'query' => $query,
             
         ]);
-		
-		
+				
 		$query->joinWith(['userProfile as user_profile']);		
 		$query->joinWith(['authRole as rolelist']);		
-		//$query->andWhere(['IN','rolelist.item_name',$Roleusers]);		
-		//$query->Where(['NOT IN','id1',$Roleusers]);		
+		$query->orderBy('user_profile.firstname ASC');
         $this->load($params);
 	
          if (!$this->validate()) {
