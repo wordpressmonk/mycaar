@@ -59,7 +59,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label class="control-label" for="searchreport-unit_id">Unit ID</label>
+									<label class="control-label" for="searchreport-unit_id">Program</label>
 									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
