@@ -269,7 +269,7 @@ class ReportController extends Controller
 		return $this->redirect(['report/reset-users','u_id'=>$rep->unit_id]);
 	}
 	public function actionGetModules($p_id){
-		$mods = Module::find()->where(['program_id'=>$p_id])->all();
+		$mods = Module::find()->where(['program_id'=>$p_id])->orderBy('title')->all();
 		 if(count($mods)>0){
 			echo "<option value=''>--Select Course--</option>";
 			foreach($mods as $mod){
@@ -282,7 +282,7 @@ class ReportController extends Controller
 	}
 	
 	public function actionGetUnits($m_id){
-		$mods = Unit::find()->where(['module_id'=>$m_id])->all();
+		$mods = Unit::find()->where(['module_id'=>$m_id])->orderBy('title')->all();
 		 if(count($mods)>0){
 			echo "<option value=''>--Select Lesson--</option>";
 			foreach($mods as $mod){

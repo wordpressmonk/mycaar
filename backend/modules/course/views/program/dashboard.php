@@ -50,17 +50,17 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				<div class="program-search">
 					<form method="post" action="<?= Url::to(['report/search'])?>">
 						<div class="row">
-							<div class="col-sm-6">
+							<!--<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">User ID</label>
-									<?= Html::dropDownList('user', "$selected_user",ArrayHelper::map(User::find()->where(['c_id'=>\Yii::$app->user->identity->c_id,'status'=>10])->all(), 'id', 'username'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?php //echo Html::dropDownList('user', "$selected_user",ArrayHelper::map(User::find()->where(['c_id'=>\Yii::$app->user->identity->c_id,'status'=>10])->all(), 'id', 'username'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
-							</div>
+							</div>-->
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-unit_id">Program</label>
-									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -133,7 +133,8 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				{
 					//echo "$program->title";
 					$url = Url::to(['report/search','p_id'=>$program->program_id]);
-					echo "<h3 class='text-bold'>$program->title : <a class='text-medium' href='{$url}'>View Report</a></h3>";
+					$m_count = count($program->publishedModules);
+					echo "<h3 class='text-bold'>{$program->title}({$m_count}) : <a class='text-medium' href='{$url}'>View Report</a></h3>";
 
 				}
 				$url = Url::to(['report/search']);

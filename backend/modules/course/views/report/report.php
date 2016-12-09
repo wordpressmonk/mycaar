@@ -51,17 +51,17 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				<div class="program-search">
 					<form method="post">
 						<div class="row">
-							<div class="col-sm-6">
+							<!--<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">User ID</label>
-									<?= Html::dropDownList('user', "$selected_user",ArrayHelper::map(User::find()->where(['c_id'=>\Yii::$app->user->identity->c_id,'status'=>10])->all(), 'id', 'username'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?php //echo Html::dropDownList('user', "$selected_user",ArrayHelper::map(User::find()->where(['c_id'=>\Yii::$app->user->identity->c_id,'status'=>10])->all(), 'id', 'username'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
-							</div>
+							</div>-->
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-unit_id">Program</label>
-									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -106,7 +106,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label class="control-label" for="searchreport-user_id">Role</label>
+									<label class="control-label" for="searchreport-user_id">State</label>
 									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
@@ -114,7 +114,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Search</button>  
-							<a class="btn btn-danger" href="<?= Url::to(['report/search'])?>" >Reset </a>
+							<!--<a class="btn btn-danger" href="<?php //echo Url::to(['report/search'])?>" >Reset </a>-->
 						</div>
 					</form>
 				</div>
@@ -127,17 +127,27 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				</div>
 		</div>
 	<?php 
-	$username ='';
+	$check_output ='';
+	
 	//echo count($users);
 	foreach($programs as $program)
 	{
+		$no_user_enrolled = true;
+		foreach($users as $key => $user){
+			if($user->user->isEnrolled($program->program_id))
+				{
+					$no_user_enrolled = false;
+				}
+		}
 		$modules = $program->publishedModules;
-		if(count($modules) > 0 && count($program->programEnrollments) > 0)
+		if(!$no_user_enrolled && count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
+		$check_output .= $program->program_id;
 		echo '<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell-8-col">
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
-				</span>';
+			</span>';
+		//if(count($users) > 0 && count($program->programEnrollments)>0)
 		echo Html::beginForm(['/course/export/export'], 'post')
 										.Html::input('hidden', 'p_id', $program->program_id, ['class' =>'form-control'])
 										.Html::input('hidden', 'params', serialize($params), ['class' =>'form-control'])
@@ -243,7 +253,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														$onClick = '';
 														if($progress['cp'] != 'grey')
 															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id]);
-														if($user->user_id == \Yii::$app->user->id){
+														if($user->user_id == \Yii::$app->user->id && $progress['cp'] != 'grey'){
 															$onClick = "popUpNotAllowed();";
 															$href= 'javascript:void(0);';
 														}
@@ -270,8 +280,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				}		
 			$str.= "</ul></div>";
 		$str.= "</div>";
-		if(!$no_user_enrolled)
-			echo $str;
+		if(!$no_user_enrolled) echo $str;
 			} //if unit count
 		}
 		echo "</div></div>";
@@ -280,8 +289,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 
 		<?php
 		} //module count && enrollment count
+		//else echo "No results found!";
 	}
-	
+	if($check_output == '')
+		echo "No results found!";
 	//FOR DEBUG
 	foreach($users as $user){
 	$progress = $user->user->getProgramProgress(1);
@@ -320,3 +331,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			//alert("Sorry you can't able to attend this capability test, it is already completed!");
 		}
 	</script>
+	
+	<?php if($params){ ?>
+	<script>
+		$('.card-head .tools .btn-collapse').trigger("click");
+	</script>
+	
+	<?php } ?>
