@@ -101,8 +101,8 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		<?php } else { ?>
 		<div class="form-group">
-			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save & Return to Dashboard"/>
-			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Finish"/>
+			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Submit Answer/s"/>
+			<input name= "save_n_exit" type="submit" class="btn btn-lg ink-reaction btn-info" value="Save & Return to Dashboard"/>			
 		</div>
 		<?php } ?>
 	</form>

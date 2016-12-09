@@ -161,7 +161,7 @@ class TestController extends Controller
 			$this->saveProgress(\Yii::$app->user->id,$u_id);
 			//redirect to next page or homepage
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
-				if(Yii::$app->request->post()['save_n_exit'] == 'Finish'){
+				if(Yii::$app->request->post()['save_n_exit'] == 'Submit Answer/s'){
 					$session->remove($u_id."_".\Yii::$app->user->id);
 					return $this->redirect(["site/index"]);
 				}
