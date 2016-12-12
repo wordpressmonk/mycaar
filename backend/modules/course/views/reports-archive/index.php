@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'attribute' => 'archive_url',
 				 'value'=>function ($data) {
-					return Html::a(Html::encode("Download"),\Yii::$app->homeUrl.$data->archive_url);
+					return Html::a(Html::encode("Download"),\Yii::$app->homeUrl.$data->archive_url, ['target'=>'_blank']);
 				},
 				'format' => 'raw',
 			],
