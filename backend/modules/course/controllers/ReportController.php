@@ -238,7 +238,7 @@ class ReportController extends Controller
 			}
 			$post_data = \Yii::$app->request->post()['search_params'];
 			if($_GET['page'])
-				return $this->redirect(['reset-users','data'=>$post_data,'page'=>\Yii::$app->request->get()['page']]);
+				return $this->redirect(['reset-users','data'=>$post_data,'page'=>$_GET['page']]);
 			else return $this->redirect(['reset-users','data'=>$post_data]);
 		}
 		else
