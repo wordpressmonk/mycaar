@@ -12,6 +12,10 @@ use yii\data\ActiveDataProvider;
 use common\models\Program;
 use common\models\Company;
 use common\models\UserProfile;
+use common\models\Division;
+use common\models\State;
+use common\models\Location;
+use common\models\Role;
 
 class ExportController extends Controller
 {	
@@ -24,6 +28,7 @@ class ExportController extends Controller
 		
 		//////////////////get users searched////////////////////////////
 		$param = unserialize(\Yii::$app->request->post()['params']);
+		$searched_by_user = '';
 		//var_dump($params);die;
 		if($param){
 			//print_r($params);die;
@@ -40,19 +45,41 @@ class ExportController extends Controller
 			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);			
  			if(isset($param['user']) && $param['user'] !='')
 				$query->andFilterWhere(['user_id'=>$param['user']]);			
- 			if(isset($param['state']) && $param['state'] !='')
+ 			if(isset($param['state']) && $param['state'] !=''){
 				$query->andFilterWhere(['state'=>$param['state']]);
-			if(isset($param['role']) && $param['role'] !='')
+				$state = State::findOne($param['state']);
+				$searched_by_user .= " State:".$state->name;
+			}
+				
+			if(isset($param['role']) && $param['role'] !=''){
 				$query->andFilterWhere(['role'=>$param['role']]);
-			if(isset($param['location']) && $param['location'] !='')
+				$role = Role::findOne($param['role']);
+				$searched_by_user .= " Role:".$role->title;
+			}
+				
+			if(isset($param['location']) && $param['location'] !=''){
 				$query->andFilterWhere(['location'=>$param['location']]);
-			if(isset($param['division']) && $param['division'] !='')
+				$location = Location::findOne($param['location']);
+				$searched_by_user .= " Location:".$location->name;
+			}
+				
+			if(isset($param['division']) && $param['division'] !=''){
 				$query->andFilterWhere(['division'=>$param['division']]); 
-			if(isset($param['firstname']) && $param['firstname'] !='')
+				$division = Division::findOne($param['division']);
+				$searched_by_user .= " Division:".$division->title;
+			}
+				
+			if(isset($param['firstname']) && $param['firstname'] !=''){
 				$query->andFilterWhere(['like', 'firstname',$param['firstname']]);
-			if(isset($param['lastname']) && $param['lastname'] !='')
+				$searched_by_user .= " Firstname:".$param['firstname'];
+			}
+				
+			if(isset($param['lastname']) && $param['lastname'] !=''){
 				$query->andFilterWhere(['like', 'lastname', $param['lastname']]);	
-			$query->andFilterWhere(['division'=>$param['division']]); 
+				$searched_by_user .= " Lastname:".$param['lastname'];
+			}
+				
+			//$query->andFilterWhere(['division'=>$param['division']]); 
 			$users = $dataProvider->models;
 			$filtered_users = [];
 			foreach($users as $user){
@@ -141,7 +168,7 @@ class ExportController extends Controller
 		$objPHPExcel->getActiveSheet()->getStyle("E3")->getFont()->setSize(10);
 		
 		//searched by
-		$searched_by_user = "Searched criterias, implode post array, handle later";
+		//$searched_by_user = implode(',',$param);
 		$objRichText = new \PHPExcel_RichText();
 		$objBold = $objRichText->createTextRun('This report searched by : ');
 		$objBold->getFont()->setBold(true);
