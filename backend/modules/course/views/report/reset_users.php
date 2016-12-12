@@ -146,6 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?=Html::beginForm(['report/reset-users'],'post');?>
 		<p>
 			<?=Html::input('hidden', 'search_params', serialize($params), ['class' =>'form-control'])?>
+			<?=Html::input('hidden', 'page', $_GET['page'], ['class' =>'form-control'])?>
 			<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
 
 		<p>

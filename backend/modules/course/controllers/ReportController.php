@@ -206,7 +206,7 @@ class ReportController extends Controller
 			'p_id' => $p_id,
         ]);					
 	}
-	public function actionResetUsers($data=null){
+	public function actionResetUsers($data=null,$page=null){
 		$searchModel = new SearchUnitReport();
 		if($data){
 			$custom_search = unserialize($data);
@@ -237,8 +237,8 @@ class ReportController extends Controller
 				}
 			}
 			$post_data = \Yii::$app->request->post()['search_params'];
-			if($_GET['page'])
-				return $this->redirect(['reset-users','data'=>$post_data,'page'=>$_GET['page']]);
+			if($post['page'] != '')
+				return $this->redirect(['reset-users','data'=>$post_data,'page'=>$post['page']]);
 			else return $this->redirect(['reset-users','data'=>$post_data]);
 		}
 		else
