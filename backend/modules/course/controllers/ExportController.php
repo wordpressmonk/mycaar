@@ -387,9 +387,14 @@ class ExportController extends Controller
 		$objPHPExcel->setActiveSheetIndex(0);		
 		//save sheet
 		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$objWriter->save( \Yii::$app->basePath.'/web/uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls' );
+	/* 	$objWriter->save( \Yii::$app->basePath.'/web/uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls' );
 		$file_url = \Yii::$app->homeurl.'uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls';
-		return $this->redirect($file_url);
+		return $this->redirect($file_url); */
+		$xlsName = str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls';
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$xlsName.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
 	}
 	
 	public function cellColor(&$objPHPExcel,$cells, $color) {
