@@ -56,9 +56,14 @@ class ReportController extends Controller
         ];
     }   
 
-	public function actionSearch($p_id=null){		
+	public function actionSearch($p_id=null,$data=null){		
 		$programs = $users = [];
-		if($param = \Yii::$app->request->post()){	
+		$param = false;
+		if(\Yii::$app->request->post())
+			$param = \Yii::$app->request->post();
+		else if($data)
+			$param = unserialize($data);
+		if($param){	
 			//find program
 			if(isset($param['program']) && $param['program'] !=''){
 				

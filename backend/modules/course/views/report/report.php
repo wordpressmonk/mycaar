@@ -114,7 +114,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Search</button>  
-							<!--<a class="btn btn-danger" href="<?php //echo Url::to(['report/search'])?>" >Reset </a>-->
+							<a class="btn btn-danger" href="<?php echo Url::to(['report/search'])?>" >Clear Search </a>
 						</div>
 					</form>
 				</div>
@@ -252,7 +252,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														$href= 'javascript:void(0);';
 														$onClick = '';
 														if($progress['cp'] != 'grey')
-															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id]);
+															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id,'data'=>serialize($params)]);
 														if($user->user_id == \Yii::$app->user->id && $progress['cp'] != 'grey'){
 															$onClick = "popUpNotAllowed();";
 															$href= 'javascript:void(0);';
