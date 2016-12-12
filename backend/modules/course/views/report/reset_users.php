@@ -109,28 +109,28 @@ $this->params['breadcrumbs'][] = $this->title;
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Role</label>
-									<?= Html::dropDownList('custom_search[role]', "$selected_role",ArrayHelper::map(common\models\Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('custom_search[role]', "$selected_role",ArrayHelper::map(common\models\Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Division</label>
-									<?= Html::dropDownList('custom_search[division]', "$selected_division",ArrayHelper::map(common\models\Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('custom_search[division]', "$selected_division",ArrayHelper::map(common\models\Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
-									<?= Html::dropDownList('custom_search[location]', "$selected_location",ArrayHelper::map(common\models\Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('custom_search[location]', "$selected_location",ArrayHelper::map(common\models\Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">State</label>
-									<?= Html::dropDownList('custom_search[state]', "$selected_state",ArrayHelper::map(common\models\State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('custom_search[state]', "$selected_state",ArrayHelper::map(common\models\State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
