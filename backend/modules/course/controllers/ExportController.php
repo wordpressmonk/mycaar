@@ -164,8 +164,8 @@ class ExportController extends Controller
 		$worksheet = $objPHPExcel->getActiveSheet();
 		$student   = 8;
 		$mark      = 9;
+		$row = 0;
 		foreach($enrollments as $key=>$enrollment){
-			$row = 0;
 			if(in_array($enrollment->user_id,$filtered_users))
 			{	
 			$capability_percentage = $enrollment->user->getProgramProgress($program->program_id);
@@ -237,7 +237,7 @@ class ExportController extends Controller
 			$objDrawing->setHeight(25); // logo height
 			$objDrawing->setWidth(155); // logo height
 			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
-			$row++;
+			$row = $row+1;
 			}
 		}
 		
