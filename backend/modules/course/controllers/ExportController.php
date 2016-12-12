@@ -387,7 +387,8 @@ class ExportController extends Controller
 		$objPHPExcel->setActiveSheetIndex(0);		
 		//save sheet
 		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$categoryname = str_replace('&','and',$categoryname);
+		//$categoryname = str_replace('&','and',$categoryname);
+		$categoryname = $program->program_id;
 		$objWriter->save( \Yii::$app->basePath.'/web/uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls' );
 		$file_url = \Yii::$app->homeurl.'uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls';
 		return $this->redirect($file_url);
