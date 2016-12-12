@@ -144,9 +144,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			</div><!--end .card-body -->
 		</div><!--end .card -->		
 		<?=Html::beginForm(['report/reset-users'],'post');?>
+		<?php    
+		if($_GET && isset($_GET['page']))
+			$page = $_GET['page'];
+		else $page = '';
+		?>
 		<p>
 			<?=Html::input('hidden', 'search_params', serialize($params), ['class' =>'form-control'])?>
-			<?=Html::input('hidden', 'page', $_GET['page'], ['class' =>'form-control'])?>
+			<?=Html::input('hidden', 'page',$page, ['class' =>'form-control'])?>
 			<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
 
 		<p>
