@@ -201,54 +201,48 @@ class ReportController extends Controller
 			'p_id' => $p_id,
         ]);					
 	}
-	public function actionResetUsers(){
+	public function actionResetUsers($data=null){
 		$searchModel = new SearchUnitReport();
-/* 		if($u_id){
-			$unit = Unit::findOne($u_id);
-			if($unit == null)
-				throw new NotFoundHttpException('The requested page does not exist.');
-			$m_id = $unit->module->module_id;
-			$p_id = $unit->module->program_id;
+		if($data){
+			$custom_search = unserialize($data);
 			
-			if(isset(\Yii::$app->request->post()['custom_search'])){
-				$params = \Yii::$app->request->post()['custom_search'];		
-				$dataProvider = $searchModel->searchCustom($params,$u_id);
+		}
+		$params = false;		
+		if(isset(\Yii::$app->request->post()['custom_search'])){
+			$params = \Yii::$app->request->post()['custom_search'];	
+			//print_r($params);die;
+			$dataProvider = $searchModel->searchCustom($params);				
+		}
+		else if(isset($custom_search)){
+			$params = $custom_search;	
+			//print_r($params);die;
+			$dataProvider = $searchModel->searchCustom($params);				
+		}
+		else 
+			$dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
+  
+		if(\Yii::$app->request->post() && isset(\Yii::$app->request->post()['selection'])){
+			$post = \Yii::$app->request->post();
+			foreach($post['selection'] as $report){
+				$rep = UnitReport::findOne($report);
+				if($rep != null){
+					$rep->resetUser();
+					$rep->save();
+					//$rep->delete();				
+				}
 			}
-			else $dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams,$u_id);
+			$post_data = \Yii::$app->request->post()['search_params'];
+			return $this->redirect(['reset-users','data'=>$post_data]);
 		}
 		else
-		{ */
-			$params = false;
-			if(isset(\Yii::$app->request->post()['custom_search'])){
-				$params = \Yii::$app->request->post()['custom_search'];	
-				//print_r($params);die;
-				$dataProvider = $searchModel->searchCustom($params);				
-			}
-			else $dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
-		//}   
-		
-
-		
-			if(\Yii::$app->request->post() && isset(\Yii::$app->request->post()['selection'])){
-				$post = \Yii::$app->request->post();
-				foreach($post['selection'] as $report){
-					$rep = UnitReport::findOne($report);
-					if($rep != null){
-						$rep->resetUser();
-						$rep->save();
-						//$rep->delete();				
-					}
-				}
-				return $this->redirect(['reset-users']);
-			}
-			else return $this->render('reset_users', [
-				'searchModel' => $searchModel,
-				'dataProvider' => $dataProvider,
-				'params' => $params
-			]);				
+			return $this->render('reset_users', [
+			'searchModel' => $searchModel,
+			'dataProvider' => $dataProvider,
+			'params' => $params
+		]);				
 		
 	}
-	public function actionResetTest($type,$r_id){
+	public function actionResetTest($type,$r_id,$params){
 		
 		$rep = UnitReport::findOne($r_id);
 		if($rep == null)
@@ -266,7 +260,8 @@ class ReportController extends Controller
 				break;
 		}
 		$rep->save(false);
-		return $this->redirect(['report/reset-users','u_id'=>$rep->unit_id]);
+		return $this->redirect(['reset-users','data'=>$params]);
+		//return $this->redirect(['report/reset-users','u_id'=>$rep->unit_id]);
 	}
 	public function actionGetModules($p_id){
 		$mods = Module::find()->where(['program_id'=>$p_id])->orderBy('title')->all();

@@ -145,8 +145,8 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div><!--end .card -->		
 		<?=Html::beginForm(['report/reset-users'],'post');?>
 		<p>
-
-					<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
+			<?=Html::input('hidden', 'search_params', serialize($params), ['class' =>'form-control'])?>
+			<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
 
 		<p>
 		<?= GridView::widget([
@@ -176,17 +176,17 @@ $this->params['breadcrumbs'][] = $this->title;
 				[
 					'attribute' => 'Progress(Awareness/Capability)',
 					'format' => 'raw',
-					'value' => function($data){
+					'value' => function($data) use($params){
 						$user = common\models\User::findOne($data->student_id);
 						$progress = $user->getUnitProgress($data->unit_id);
-						$url = Url::to(['report/reset-test','type'=>'aw','r_id'=>$data->report_id]);
+						$url = Url::to(['report/reset-test','type'=>'aw','r_id'=>$data->report_id,'params'=>serialize($params)]);
 						$output = "<div name='unit1'>
 									<a class='circle circle-{$progress['ap']}' href='$url'><span class='toolkit'>{$progress['ap']}</span>
 									</a>
 								";
 						if($progress['cp'] == 'grey')
 							$url = "javascript::void(0)";
-						else $url = Url::to(['report/reset-test','type'=>'cp','r_id'=>$data->report_id]);
+						else $url = Url::to(['report/reset-test','type'=>'cp','r_id'=>$data->report_id,'params'=>serialize($params)]);
 						$output .= "
 									<a class='circle circle-{$progress['cp']}' href='$url'><span class='toolkit'>{$progress['cp']}</span>
 									</a>
