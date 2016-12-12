@@ -164,9 +164,10 @@ class ExportController extends Controller
 		$worksheet = $objPHPExcel->getActiveSheet();
 		$student   = 8;
 		$mark      = 9;
-		foreach($enrollments as $row=>$enrollment){
+		foreach($enrollments as $key=>$enrollment){
 			if(in_array($enrollment->user_id,$filtered_users))
 			{
+			$row = 1;	
 			$capability_percentage = $enrollment->user->getProgramProgress($program->program_id);
 			if( ( $capability_percentage < 100 ) && ( $capability_percentage > 95 ) ) {
 				$split_color_val = 9;
@@ -236,6 +237,7 @@ class ExportController extends Controller
 			$objDrawing->setHeight(25); // logo height
 			$objDrawing->setWidth(155); // logo height
 			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+			$row++;
 			}
 		}
 		
@@ -274,16 +276,16 @@ class ExportController extends Controller
 					$StudentUnitFillColumn	= $unittitle;
 					$StudentUnitFillRow		= $rownumber + 1;
 					/***********************************************/	
-				$style = array(
-					'alignment' => array(
-						'horizontal' =>  \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-						'vertical' =>  \PHPExcel_Style_Alignment::VERTICAL_CENTER
-					),
-					'font'  => array(
-						'bold'  => true,
-						'color' => array('rgb' => '000000'),
-					)
-				);
+					$style = array(
+						'alignment' => array(
+							'horizontal' =>  \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+							'vertical' =>  \PHPExcel_Style_Alignment::VERTICAL_CENTER
+						),
+						'font'  => array(
+							'bold'  => true,
+							'color' => array('rgb' => '000000'),
+						)
+					);
 					$sheet->getStyle($this->cellsToWidthByColsRow($unittitle, $rownumber +1))->applyFromArray($style);
 					$objPHPExcel->getActiveSheet()->mergeCells($this->cellsToMergeByColsRow($unittitle, $unittitle + 1, $rownumber + 1));
 					$worksheet->setCellValueByColumnAndRow($unittitle, $rownumber + 1, $unit->title);
