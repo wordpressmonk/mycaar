@@ -124,6 +124,7 @@ class ModuleController extends Controller
 				return $this->render('add', [
 					'model' => $model,
 					'disabled' => $disabled,
+					'program' => $program
 				]);
 			}
 		}else{

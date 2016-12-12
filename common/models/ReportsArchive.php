@@ -49,4 +49,18 @@ class ReportsArchive extends \yii\db\ActiveRecord
             'archived_date' => 'Archived Date',
         ];
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProgram()
+    {
+        return $this->hasOne(Program::className(), ['program_id' => 'program_id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompany()
+    {
+        return $this->hasOne(Company::className(), ['company_id' => 'company_id']);
+    }
 }

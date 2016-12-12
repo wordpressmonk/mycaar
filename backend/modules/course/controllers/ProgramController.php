@@ -77,7 +77,7 @@ class ProgramController extends Controller
         ]);
     }
 	public function actionDashboard(){
-		$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all();
+		$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
 		return $this->render('dashboard', [
 			'programs' => $programs,
 		]);

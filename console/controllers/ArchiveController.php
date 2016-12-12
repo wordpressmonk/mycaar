@@ -5,6 +5,7 @@ use yii\base\Model;
 use yii\console\Controller;
 
 use common\models\Program;
+use common\models\Company;
 use common\models\ReportsArchive;
 use yii\helpers\Url;
 
@@ -23,10 +24,13 @@ class ArchiveController extends Controller {
 			
 			if(count($modules)>0 && count($enrollments)>0){
 				$url = $this->export($program->program_id);
-				$archive = new ReportsArchive();
+				$archive = ReportsArchive::find()->where(['program_id'=>$program->program_id,'archived_date'=>date('d-m-Y')])->one();
+				if(!$archive)
+					$archive = new ReportsArchive();
 				$archive->program_id = $program->program_id;
 				$archive->company_id = $program->company_id;
 				$archive->archive_url = $url;
+				$archive->archived_date = date('d-m-Y');
 				$archive->save();
 			}
 				
@@ -34,9 +38,9 @@ class ArchiveController extends Controller {
 		
 	}
 	public function export($p_id){		
-		$path = dirname(__DIR__ . '/../../backend/');
+		$path = str_replace('console', 'backend', \Yii::$app->basePath);
 		$program = Program::findOne($p_id);
-		$company = $program->company_id;
+		$company = Company::findOne($program->company_id);
 		
 		$RedColor	= 'c10001';
 		$GrayColor	= '81889a';
@@ -96,7 +100,7 @@ class ArchiveController extends Controller {
 		$objDrawing->setName('Logo');
 		$objDrawing->setDescription('Logo');
 		//if (file_exists($site_left_client_img)) {
-			$objDrawing->setPath(\Yii::$app->basePath.'/web/'.$company->logo); //setOffsetY has no effect
+			$objDrawing->setPath($path.'/web/'.$company->logo); //setOffsetY has no effect
 		//};
 		$objDrawing->setCoordinates('O1');
 		$objDrawing->setHeight(60); 
@@ -146,37 +150,37 @@ class ArchiveController extends Controller {
 			}
 			switch ($split_color_val) {
 				case 1: 
-					$logo = \Yii::$app->basePath.'/web/img/excel/range1.png';
+					$logo = $path.'/web/img/excel/range1.png';
 					break;
 				case 2:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range2.png';
+					$logo = $path.'/web/img/excel/range2.png';
 					break;
 				case 3:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range3.png';
+					$logo = $path.'/web/img/excel/range3.png';
 					break;
 				case 4: 
-					$logo = \Yii::$app->basePath.'/web/img/excel/range4.png';
+					$logo = $path.'/web/img/excel/range4.png';
 					break;
 				case 5:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range5.png';
+					$logo = $path.'/web/img/excel/range5.png';
 					break;
 				case 6:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range6.png';
+					$logo = $path.'/web/img/excel/range6.png';
 					break;
 				case 7:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range7.png';
+					$logo = $path.'/web/img/excel/range7.png';
 					break;
 				case 8:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range8.png';
+					$logo = $path.'/web/img/excel/range8.png';
 					break;
 				case 9:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range9.png';
+					$logo = $path.'/web/img/excel/range9.png';
 					break;
 				case 10:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range1.png';
+					$logo = $path.'/web/img/excel/range1.png';
 					break;
 				default:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range0.png';
+					$logo = $path.'/web/img/excel/range0.png';
 			}
 			$student += 1;
 			$mark += 1;
@@ -356,10 +360,11 @@ class ArchiveController extends Controller {
 
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 		$objPHPExcel->setActiveSheetIndex(0);		
+		$categoryname = $program->program_id;
 		//save sheet
 		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$objWriter->save( \Yii::$app->basePath.'/web/uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls' );
-		$file_url = \Yii::$app->homeurl.'uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls';
+		$objWriter->save( $path.'/web/archives/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls' );
+		$file_url = '/archives/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls';
 		return $file_url;
 	}
 	

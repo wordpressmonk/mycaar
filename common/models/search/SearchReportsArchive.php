@@ -5,12 +5,12 @@ namespace common\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Program;
+use common\models\ReportsArchive;
 
 /**
- * SearchProgram represents the model behind the search form about `common\models\Program`.
+ * SearchReportsArchive represents the model behind the search form about `common\models\ReportsArchive`.
  */
-class SearchProgram extends Program
+class SearchReportsArchive extends ReportsArchive
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class SearchProgram extends Program
     public function rules()
     {
         return [
-            [['program_id', 'company_id'], 'integer'],
-            [['title', 'description'], 'safe'],
+            [['a_id', 'company_id'], 'integer'],
+            [['archive_url','program_id',  'archived_date'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class SearchProgram extends Program
      */
     public function search($params)
     {
-        $query = Program::find();
+        $query = ReportsArchive::find();
 
         // add conditions that should always apply here
 
@@ -59,25 +59,27 @@ class SearchProgram extends Program
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'a_id' => $this->a_id,
             'program_id' => $this->program_id,
             'company_id' => $this->company_id,
+            //'archived_date' => $this->archived_date,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'description', $this->description]);
-
+        $query->andFilterWhere(['like', 'archive_url', $this->archive_url]);
+		$query->andFilterWhere(['like', 'archived_date', $this->archived_date]);
+		
         return $dataProvider;
     }
-   /**
+    /**
      * Creates data provider instance with search query applied
      *
      * @param array $params
      *
      * @return ActiveDataProvider
      */
-    public function searchCompanyPrograms($params)
+    public function searchCustom($params)
     {
-        $query = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id]);
+        $query = ReportsArchive::find()->where(['reports_archive.company_id'=>\Yii::$app->user->identity->c_id]);
 
         // add conditions that should always apply here
 
@@ -86,7 +88,8 @@ class SearchProgram extends Program
         ]);
 
         $this->load($params);
-
+		$query->joinWith(['program as program']);
+		
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
@@ -95,12 +98,14 @@ class SearchProgram extends Program
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'program_id' => $this->program_id,
-            'company_id' => $this->company_id,
+            'a_id' => $this->a_id,
+            //'program.title' => $this->program_id,
+            'reports_archive.company_id' => $this->company_id,
+            //'archived_date' => $this->archived_date,
         ]);
-
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'description', $this->description]);
+		$query->andFilterWhere(['like', 'archived_date', $this->archived_date]);
+		$query->andFilterWhere(['like', 'program.title', $this->program_id]);
+        $query->andFilterWhere(['like', 'archive_url', $this->archive_url]);
 
         return $dataProvider;
     }
