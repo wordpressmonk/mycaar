@@ -165,9 +165,9 @@ class ExportController extends Controller
 		$student   = 8;
 		$mark      = 9;
 		foreach($enrollments as $key=>$enrollment){
+			$row = 1;
 			if(in_array($enrollment->user_id,$filtered_users))
-			{
-			$row = 1;	
+			{	
 			$capability_percentage = $enrollment->user->getProgramProgress($program->program_id);
 			if( ( $capability_percentage < 100 ) && ( $capability_percentage > 95 ) ) {
 				$split_color_val = 9;
