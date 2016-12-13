@@ -46,7 +46,7 @@ class SearchDivision extends Division
 			$query = Division::find();			
 		} else if(\Yii::$app->user->can('company_admin'))
 		{			
-			$query = Division::find()->where(['company_id' =>Yii::$app->user->identity->c_id]);
+			$query = Division::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('title');
 		}			
 
         // add conditions that should always apply here

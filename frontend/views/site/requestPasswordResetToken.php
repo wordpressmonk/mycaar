@@ -15,6 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>Please fill out your email. A link to reset password will be sent there.</p>
 
+		<?php 
+$sessioncheck = Yii::$app->session->getFlash('error');
+if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
+<div id="w3-danger-0" class="alert-danger alert fade in">
+<button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+<?= Yii::$app->session->getFlash('error'); ?>
+</div>
+<?php } ?>
+
     <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>

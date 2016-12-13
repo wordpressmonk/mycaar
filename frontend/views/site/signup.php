@@ -24,6 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>Please fill out the following fields to signup:</p>
 	
+
+	
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
 			 <?= $form->field($profile, 'firstname',['inputOptions' => ['autocomplete' => 'off']])->textInput(['autofocus' => true]) ?>

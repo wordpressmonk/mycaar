@@ -221,6 +221,7 @@ class SiteController extends Controller
                 return $this->goHome();
             } else { 
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+				
             }			   
         } 
         return $this->render('requestPasswordResetToken', ['model' => $model,]);
@@ -270,4 +271,7 @@ class SiteController extends Controller
 		 }
 		return $this->render('change_password', ['model' => $model]);	
 	}
+	
+		
+	
 }

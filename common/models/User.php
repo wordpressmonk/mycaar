@@ -460,9 +460,9 @@ class User extends ActiveRecord implements IdentityInterface
                 ['html' => 'passwordSend-text'],
                 ['user' => $user,'password'=>$password]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.''])
             ->setTo($this->email)
-            ->setSubject('Please Verified your Email');
+            ->setSubject('MyCaar Please Verified your Email');
        
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
@@ -490,9 +490,9 @@ class User extends ActiveRecord implements IdentityInterface
                 ['html' => 'passwordResetToken-html'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.''])
             ->setTo($this->email)
-            ->setSubject('Please Reset Your Password');
+            ->setSubject('MyCaar Please Reset Your Password');
        	
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
@@ -520,9 +520,9 @@ class User extends ActiveRecord implements IdentityInterface
                 ['html' => 'changepasswordSuccessMessage-html'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.''])
             ->setTo($this->email)
-            ->setSubject('Please Reset Your Password');
+            ->setSubject('MyCaar Change Password Success');
        	
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');

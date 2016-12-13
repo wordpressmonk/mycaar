@@ -46,7 +46,7 @@ class SearchRole extends Role
 			$query = Role::find();
 		} else if(\Yii::$app->user->can('company_admin'))
 		{			
-			$query = Role::find()->where(['company_id' =>Yii::$app->user->identity->c_id]);
+			$query = Role::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('title');
 		}
 
         // add conditions that should always apply here

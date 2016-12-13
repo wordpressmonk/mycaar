@@ -46,7 +46,7 @@ class SearchLocation extends Location
 			$query = Location::find();
 		} else if(\Yii::$app->user->can('company_admin'))
 		{			
-			$query = Location::find()->where(['company_id' =>Yii::$app->user->identity->c_id]);
+			$query = Location::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('name');
 		}
 
         // add conditions that should always apply here

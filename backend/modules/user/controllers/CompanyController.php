@@ -333,6 +333,7 @@ class CompanyController extends Controller
 							$model1->program_id = $post['Program'];
 							$model1->user_id = $tmp1;
 							$model1->save();
+							// Email Function is "Send Email to respective user"
 							$model1->sendEnrollmentEmail($tmp1,$program->title);
 						} 
 					}				
@@ -372,13 +373,15 @@ class CompanyController extends Controller
 		$model->password = MyCaar::getRandomPassword();
 		$model->setPassword($model->password);
 	    $model->generateAuthKey();
-	
+		$model->generatePasswordResetToken();
+		
 		if($model->save()){				
 				$auth = Yii::$app->authManager;
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id);				
 		        $profile->user_id = $model->id;
-		        $profile->save();				
+		        $profile->save();
+				// Email Function is "Send Email to respective user"				
 				$model->sendEmail($model->password); 
 			
 			echo "<option value=".$model->id.">".$model->email."</option>";

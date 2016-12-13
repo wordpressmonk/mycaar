@@ -46,7 +46,7 @@ class SearchState extends State
 			$query = State::find();
 		} else if(\Yii::$app->user->can('company_admin'))
 		{			
-			$query = State::find()->where(['company_id' =>Yii::$app->user->identity->c_id]);
+			$query = State::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('name');
 		}
 		
         // add conditions that should always apply here
