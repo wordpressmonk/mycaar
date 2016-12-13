@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<?=Html::dropDownList(
 				'Program',
 				$program_id,
-				ArrayHelper::map(Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->all(),'program_id', 'title'),
+				ArrayHelper::map(Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('title')->all(),'program_id', 'title'),
 				['prompt'=> 'Select',
 				 'id' => 'program_select', 'class' => 'form-control','required'=>'required']
 			);?>

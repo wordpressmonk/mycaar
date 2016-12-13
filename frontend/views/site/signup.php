@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			 <?= $form->field($model, 'company_id')->hiddenInput(['value'=>$company->company_id])->label(false)  ?>
 			
 			<?php
-				$role = ArrayHelper::map(Role::find()->where(['company_id' =>$company->company_id])->all(), 'role_id', 'title');
+				$role = ArrayHelper::map(Role::find()->where(['company_id' =>$company->company_id])->orderBy('title')->all(), 'role_id', 'title');
 					echo $form->field($profile, 'role')->dropDownList(
 					$role,           // Flat array ('id'=>'label')
 					['prompt'=>'--Role--']    // options
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			?>
 
              <?php
-				$division = ArrayHelper::map(Division::find()->where(['company_id' =>$company->company_id])->all(), 'division_id', 'title');
+				$division = ArrayHelper::map(Division::find()->where(['company_id' =>$company->company_id])->orderBy('title')->all(), 'division_id', 'title');
 					echo $form->field($profile, 'division')->dropDownList(
 					$division,           // Flat array ('id'=>'label')
 					['prompt'=>'--Division--']    // options
@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			?>
 			
 			<?php
-				$location = ArrayHelper::map(Location::find()->where(['company_id' =>$company->company_id])->all(), 'location_id', 'name');
+				$location = ArrayHelper::map(Location::find()->where(['company_id' =>$company->company_id])->orderBy('name')->all(), 'location_id', 'name');
 					echo $form->field($profile, 'location')->dropDownList(
 					$location,           // Flat array ('id'=>'label')
 					['prompt'=>'--Location--']    // options
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			?>
 		
 			<?php
-				$state = ArrayHelper::map(State::find()->where(['company_id' =>$company->company_id])->all(), 'state_id', 'name');
+				$state = ArrayHelper::map(State::find()->where(['company_id' =>$company->company_id])->orderBy('name')->all(), 'state_id', 'name');
 					echo $form->field($profile, 'state')->dropDownList(
 					$state,           // Flat array ('id'=>'label')
 					['prompt'=>'--State--']    // options

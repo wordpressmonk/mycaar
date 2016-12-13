@@ -86,7 +86,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Role</label>
 
-									<?= Html::dropDownList('role', "$selected_role",ArrayHelper::map(Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy(['title' => SORT_ASC])->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('role', "$selected_role",ArrayHelper::map(Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -95,7 +95,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Division</label>
 
-									<?= Html::dropDownList('division', "$selected_division",ArrayHelper::map(Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy(['title' => SORT_ASC])->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('division', "$selected_division",ArrayHelper::map(Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -104,7 +104,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
 
-									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy(['name' => SORT_ASC])->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -113,7 +113,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">State</label>
 
-									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy(['name' => SORT_ASC])->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 
 									<div class="help-block"></div>
 								</div>
