@@ -86,35 +86,51 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Role</label>
+<<<<<<< HEAD
 									<?= Html::dropDownList('role', "$selected_role",ArrayHelper::map(Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy(['title' => SORT_ASC])->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+=======
+									<?= Html::dropDownList('role', "$selected_role",ArrayHelper::map(Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+>>>>>>> 88ad3332554a5fc425e7c8624cf2d23db8dbb5c7
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Division</label>
+<<<<<<< HEAD
 									<?= Html::dropDownList('division', "$selected_division",ArrayHelper::map(Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy(['title' => SORT_ASC])->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+=======
+									<?= Html::dropDownList('division', "$selected_division",ArrayHelper::map(Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+>>>>>>> 88ad3332554a5fc425e7c8624cf2d23db8dbb5c7
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
+<<<<<<< HEAD
 									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy(['name' => SORT_ASC])->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+=======
+									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+>>>>>>> 88ad3332554a5fc425e7c8624cf2d23db8dbb5c7
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">State</label>
+<<<<<<< HEAD
 									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy(['name' => SORT_ASC])->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+=======
+									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+>>>>>>> 88ad3332554a5fc425e7c8624cf2d23db8dbb5c7
 									<div class="help-block"></div>
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Search</button>  
-							<!--<a class="btn btn-danger" href="<?php //echo Url::to(['report/search'])?>" >Reset </a>-->
+							<a class="btn btn-danger" href="<?php echo Url::to(['report/search'])?>" >Clear Search </a>
 						</div>
 					</form>
 				</div>
@@ -252,7 +268,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														$href= 'javascript:void(0);';
 														$onClick = '';
 														if($progress['cp'] != 'grey')
-															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id]);
+															$href = Url::to(['test/cp-test','user_id'=>$user->user_id,'unit_id'=>$unit->unit_id,'data'=>serialize($params)]);
 														if($user->user_id == \Yii::$app->user->id && $progress['cp'] != 'grey'){
 															$onClick = "popUpNotAllowed();";
 															$href= 'javascript:void(0);';

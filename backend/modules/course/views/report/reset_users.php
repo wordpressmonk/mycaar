@@ -109,28 +109,28 @@ $this->params['breadcrumbs'][] = $this->title;
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Role</label>
-									<?= Html::dropDownList('custom_search[role]', "$selected_role",ArrayHelper::map(common\models\Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('custom_search[role]', "$selected_role",ArrayHelper::map(common\models\Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Division</label>
-									<?= Html::dropDownList('custom_search[division]', "$selected_division",ArrayHelper::map(common\models\Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('custom_search[division]', "$selected_division",ArrayHelper::map(common\models\Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
-									<?= Html::dropDownList('custom_search[location]', "$selected_location",ArrayHelper::map(common\models\Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('custom_search[location]', "$selected_location",ArrayHelper::map(common\models\Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">State</label>
-									<?= Html::dropDownList('custom_search[state]', "$selected_state",ArrayHelper::map(common\models\State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('custom_search[state]', "$selected_state",ArrayHelper::map(common\models\State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -144,9 +144,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			</div><!--end .card-body -->
 		</div><!--end .card -->		
 		<?=Html::beginForm(['report/reset-users'],'post');?>
+		<?php    
+		if($_GET && isset($_GET['page']))
+			$page = $_GET['page'];
+		else $page = '';
+		?>
 		<p>
-
-					<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
+			<?=Html::input('hidden', 'search_params', serialize($params), ['class' =>'form-control'])?>
+			<?=Html::input('hidden', 'page',$page, ['class' =>'form-control'])?>
+			<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
 
 		<p>
 		<?= GridView::widget([
@@ -176,17 +182,17 @@ $this->params['breadcrumbs'][] = $this->title;
 				[
 					'attribute' => 'Progress(Awareness/Capability)',
 					'format' => 'raw',
-					'value' => function($data){
+					'value' => function($data) use($params){
 						$user = common\models\User::findOne($data->student_id);
 						$progress = $user->getUnitProgress($data->unit_id);
-						$url = Url::to(['report/reset-test','type'=>'aw','r_id'=>$data->report_id]);
+						$url = Url::to(['report/reset-test','type'=>'aw','r_id'=>$data->report_id,'params'=>serialize($params)]);
 						$output = "<div name='unit1'>
 									<a class='circle circle-{$progress['ap']}' href='$url'><span class='toolkit'>{$progress['ap']}</span>
 									</a>
 								";
 						if($progress['cp'] == 'grey')
 							$url = "javascript::void(0)";
-						else $url = Url::to(['report/reset-test','type'=>'cp','r_id'=>$data->report_id]);
+						else $url = Url::to(['report/reset-test','type'=>'cp','r_id'=>$data->report_id,'params'=>serialize($params)]);
 						$output .= "
 									<a class='circle circle-{$progress['cp']}' href='$url'><span class='toolkit'>{$progress['cp']}</span>
 									</a>

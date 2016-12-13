@@ -53,7 +53,7 @@ class TestController extends Controller
 		
 		return true;
 	}
-	public function actionCpTest($user_id,$unit_id){
+	public function actionCpTest($user_id,$unit_id, $data=null){
 		
 		$model = $this->findModel($unit_id);
 		/** SOME ACCESS CHECKS **/
@@ -97,7 +97,7 @@ class TestController extends Controller
 			$this->saveProgress($user_id,$unit_id);
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				$session->remove($unit_id."_cp_".$user_id);
-				return $this->redirect(['report/search','p_id'=>$model->module->program->program_id]);
+				return $this->redirect(['report/search','p_id'=>$model->module->program->program_id,'data'=>$data]);
 			}else
 			return $this->redirect(["cp-test","user_id"=>$user_id,"unit_id"=>$unit_id]);
 			

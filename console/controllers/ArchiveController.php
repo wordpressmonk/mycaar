@@ -1,98 +1,46 @@
-<?php
+<?php 
+namespace console\controllers;
 
-namespace backend\modules\course\controllers;
-
-use Yii;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use yii\data\ActiveDataProvider;
+use yii\base\Model;
+use yii\console\Controller;
 
 use common\models\Program;
 use common\models\Company;
-use common\models\UserProfile;
-use common\models\Division;
-use common\models\State;
-use common\models\Location;
-use common\models\Role;
+use common\models\ReportsArchive;
+use yii\helpers\Url;
 
-class ExportController extends Controller
-{	
+use Yii;
+
+class ArchiveController extends Controller {
 	
-	public function actionExport(){
+
+	
+	public function actionReports(){
 		
-		
-		$program = Program::findOne(\Yii::$app->request->post()['p_id']);
-		$company = Company::findOne(\Yii::$app->user->identity->c_id);
-		
-		//////////////////get users searched////////////////////////////
-		$param = unserialize(\Yii::$app->request->post()['params']);
-		$searched_by_user = '';
-		//var_dump($params);die;
-		if($param){
-			//print_r($params);die;
-			$query = UserProfile::find();
-			$dataProvider = new ActiveDataProvider([
-				'query' => $query,
-					'pagination' => [
-						'pageSize' => 0,
-					],
-			]);	
-			$query->joinWith(['user']);
-			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
-			//if any of the user parametr is filled,then search for that users
-			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);			
- 			if(isset($param['user']) && $param['user'] !='')
-				$query->andFilterWhere(['user_id'=>$param['user']]);			
- 			if(isset($param['state']) && $param['state'] !=''){
-				$query->andFilterWhere(['state'=>$param['state']]);
-				$state = State::findOne($param['state']);
-				$searched_by_user .= " State:".$state->name;
+		$programs = Program::find()->all();
+		foreach($programs as $program){
+			$modules = $program->publishedModules;
+			$enrollments = $program->programEnrollments;
+			
+			if(count($modules)>0 && count($enrollments)>0){
+				$url = $this->export($program->program_id);
+				$archive = ReportsArchive::find()->where(['program_id'=>$program->program_id,'archived_date'=>date('d-m-Y')])->one();
+				if(!$archive)
+					$archive = new ReportsArchive();
+				$archive->program_id = $program->program_id;
+				$archive->company_id = $program->company_id;
+				$archive->archive_url = $url;
+				$archive->archived_date = date('d-m-Y');
+				$archive->save();
 			}
 				
-			if(isset($param['role']) && $param['role'] !=''){
-				$query->andFilterWhere(['role'=>$param['role']]);
-				$role = Role::findOne($param['role']);
-				$searched_by_user .= " Role:".$role->title;
-			}
-				
-			if(isset($param['location']) && $param['location'] !=''){
-				$query->andFilterWhere(['location'=>$param['location']]);
-				$location = Location::findOne($param['location']);
-				$searched_by_user .= " Location:".$location->name;
-			}
-				
-			if(isset($param['division']) && $param['division'] !=''){
-				$query->andFilterWhere(['division'=>$param['division']]); 
-				$division = Division::findOne($param['division']);
-				$searched_by_user .= " Division:".$division->title;
-			}
-				
-			if(isset($param['firstname']) && $param['firstname'] !=''){
-				$query->andFilterWhere(['like', 'firstname',$param['firstname']]);
-				$searched_by_user .= " Firstname:".$param['firstname'];
-			}
-				
-			if(isset($param['lastname']) && $param['lastname'] !=''){
-				$query->andFilterWhere(['like', 'lastname', $param['lastname']]);	
-				$searched_by_user .= " Lastname:".$param['lastname'];
-			}
-				
-			//$query->andFilterWhere(['division'=>$param['division']]); 
-			$users = $dataProvider->models;
-			$filtered_users = [];
-			foreach($users as $user){
-				$filtered_users[] = $user->user_id;
-			}			
-		}else{
-			$users = UserProfile::find()->joinWith(['user'])->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id])->all();
-			$filtered_users = [];
-			foreach($users as $user){
-				$filtered_users[] = $user->user_id;
-			}	
 		}
-		//////////////////////////////////////////////////////////
+		
+	}
+	public function export($p_id){		
+		$path = str_replace('console', 'backend', \Yii::$app->basePath);
+		$program = Program::findOne($p_id);
+		$company = Company::findOne($program->company_id);
 		
 		$RedColor	= 'c10001';
 		$GrayColor	= '81889a';
@@ -142,7 +90,7 @@ class ExportController extends Controller
 		$objDrawing = new \PHPExcel_Worksheet_Drawing();
 		$objDrawing->setName('Logo');
 		$objDrawing->setDescription('Logo');
-		$objDrawing->setPath(\Yii::$app->basePath.'/web/img/CAAR-Logo2.png');
+		$objDrawing->setPath($path.'/web/img/CAAR-Logo2.png');
 		
 		$objDrawing->setCoordinates('D1');
 		$objDrawing->setHeight(60); // logo height
@@ -152,7 +100,7 @@ class ExportController extends Controller
 		$objDrawing->setName('Logo');
 		$objDrawing->setDescription('Logo');
 		//if (file_exists($site_left_client_img)) {
-			$objDrawing->setPath(\Yii::$app->basePath.'/web/'.$company->logo); //setOffsetY has no effect
+			$objDrawing->setPath($path.'/web/'.$company->logo); //setOffsetY has no effect
 		//};
 		$objDrawing->setCoordinates('O1');
 		$objDrawing->setHeight(60); 
@@ -168,7 +116,7 @@ class ExportController extends Controller
 		$objPHPExcel->getActiveSheet()->getStyle("E3")->getFont()->setSize(10);
 		
 		//searched by
-		//$searched_by_user = implode(',',$param);
+		$searched_by_user = "Searched criterias, implode post array, handle later";
 		$objRichText = new \PHPExcel_RichText();
 		$objBold = $objRichText->createTextRun('This report searched by : ');
 		$objBold->getFont()->setBold(true);
@@ -191,10 +139,9 @@ class ExportController extends Controller
 		$worksheet = $objPHPExcel->getActiveSheet();
 		$student   = 8;
 		$mark      = 9;
-		$row = 0;
-		foreach($enrollments as $key=>$enrollment){
-			if(in_array($enrollment->user_id,$filtered_users))
-			{	
+		foreach($enrollments as $row=>$enrollment){
+			//if(in_array($enrollment->user_id,$filtered_users))
+			//{
 			$capability_percentage = $enrollment->user->getProgramProgress($program->program_id);
 			if( ( $capability_percentage < 100 ) && ( $capability_percentage > 95 ) ) {
 				$split_color_val = 9;
@@ -203,37 +150,37 @@ class ExportController extends Controller
 			}
 			switch ($split_color_val) {
 				case 1: 
-					$logo = \Yii::$app->basePath.'/web/img/excel/range1.png';
+					$logo = $path.'/web/img/excel/range1.png';
 					break;
 				case 2:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range2.png';
+					$logo = $path.'/web/img/excel/range2.png';
 					break;
 				case 3:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range3.png';
+					$logo = $path.'/web/img/excel/range3.png';
 					break;
 				case 4: 
-					$logo = \Yii::$app->basePath.'/web/img/excel/range4.png';
+					$logo = $path.'/web/img/excel/range4.png';
 					break;
 				case 5:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range5.png';
+					$logo = $path.'/web/img/excel/range5.png';
 					break;
 				case 6:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range6.png';
+					$logo = $path.'/web/img/excel/range6.png';
 					break;
 				case 7:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range7.png';
+					$logo = $path.'/web/img/excel/range7.png';
 					break;
 				case 8:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range8.png';
+					$logo = $path.'/web/img/excel/range8.png';
 					break;
 				case 9:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range9.png';
+					$logo = $path.'/web/img/excel/range9.png';
 					break;
 				case 10:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range1.png';
+					$logo = $path.'/web/img/excel/range1.png';
 					break;
 				default:
-					$logo = \Yii::$app->basePath.'/web/img/excel/range0.png';
+					$logo = $path.'/web/img/excel/range0.png';
 			}
 			$student += 1;
 			$mark += 1;
@@ -264,8 +211,7 @@ class ExportController extends Controller
 			$objDrawing->setHeight(25); // logo height
 			$objDrawing->setWidth(155); // logo height
 			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
-			$row = $row+1;
-			}
+			//}
 		}
 		
 		//modules and unit section
@@ -303,16 +249,16 @@ class ExportController extends Controller
 					$StudentUnitFillColumn	= $unittitle;
 					$StudentUnitFillRow		= $rownumber + 1;
 					/***********************************************/	
-					$style = array(
-						'alignment' => array(
-							'horizontal' =>  \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-							'vertical' =>  \PHPExcel_Style_Alignment::VERTICAL_CENTER
-						),
-						'font'  => array(
-							'bold'  => true,
-							'color' => array('rgb' => '000000'),
-						)
-					);
+				$style = array(
+					'alignment' => array(
+						'horizontal' =>  \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' =>  \PHPExcel_Style_Alignment::VERTICAL_CENTER
+					),
+					'font'  => array(
+						'bold'  => true,
+						'color' => array('rgb' => '000000'),
+					)
+				);
 					$sheet->getStyle($this->cellsToWidthByColsRow($unittitle, $rownumber +1))->applyFromArray($style);
 					$objPHPExcel->getActiveSheet()->mergeCells($this->cellsToMergeByColsRow($unittitle, $unittitle + 1, $rownumber + 1));
 					$worksheet->setCellValueByColumnAndRow($unittitle, $rownumber + 1, $unit->title);
@@ -329,8 +275,8 @@ class ExportController extends Controller
 
 					//students 
 					foreach($enrollments as $enrollment){
-						if(in_array($enrollment->user_id,$filtered_users))
-						{
+						//if(in_array($enrollment->user_id,$filtered_users))
+						//{
 						/********************************************************************************/
 						//get unit progress
 						$progress = $enrollment->user->getUnitProgress($unit->unit_id);
@@ -367,7 +313,7 @@ class ExportController extends Controller
 						/************************************ CAPABLE ***********************************/
 						$FinalRowRun 	= $StudentUnitFillRow + 1;
 						$FinalColumnRun = $StudentUnitFillColumn + 1;
-						}
+						//}
 					}
 					//////////
 					$sheet->getStyle($this->cellsToWidthByColsRow($unittitle, $rownumber + 1))->applyFromArray($style);
@@ -414,13 +360,12 @@ class ExportController extends Controller
 
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 		$objPHPExcel->setActiveSheetIndex(0);		
+		$categoryname = $program->program_id;
 		//save sheet
 		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		//$categoryname = str_replace('&','and',$categoryname);
-		$categoryname = $program->program_id;
-		$objWriter->save( \Yii::$app->basePath.'/web/uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls' );
-		$file_url = \Yii::$app->homeurl.'uploads/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls';
-		return $this->redirect($file_url);
+		$objWriter->save( $path.'/web/archives/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls' );
+		$file_url = '/archives/Program-'.str_replace('+', '_', urlencode($categoryname) ).date('y-m-d').'-Assessment-Report.xls';
+		return $file_url;
 	}
 	
 	public function cellColor(&$objPHPExcel,$cells, $color) {
@@ -456,3 +401,4 @@ class ExportController extends Controller
 		return $width;
 	}
 }
+?>
