@@ -86,6 +86,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Role</label>
+
 									<?= Html::dropDownList('role', "$selected_role",ArrayHelper::map(Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 
 									<div class="help-block"></div>
