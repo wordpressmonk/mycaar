@@ -7,7 +7,9 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\User;
+use common\models\SiteMeta;
 use common\models\SetPassword;
+use yii\web\UploadedFile;
 
 /**
  * Site controller
@@ -46,6 +48,10 @@ class SiteController extends Controller
                     ],
 					[
                         'actions' => ['change-password', 'error'],
+                        'allow' => true,
+                    ],
+					[
+                        'actions' => ['sitemeta', 'error'],
                         'allow' => true,
                     ],
                 ],
@@ -228,4 +234,22 @@ class SiteController extends Controller
 		return $this->render('change_password', ['model' => $model]);	
 	}
 	
+	
+	public function actionSitemeta()
+	{
+		$model = new SiteMeta();		
+		if ($model->load(Yii::$app->request->post())){				
+			$model->meta_value = UploadedFile::getInstance($model, 'meta_value');				
+			if(!empty($model->meta_value)) { 
+				if(!$model->uploadImage())
+					return;
+			}
+			
+			 $model->save();	  
+									
+		}else{
+			  return $this->render('sitemeta', ['model' => $model]);
+		}
+	}
+
 }

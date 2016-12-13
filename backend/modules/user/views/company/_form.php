@@ -21,17 +21,22 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'about_us')->textarea(['rows' => 3]) ?>
 	
-	<?php if($model->logo != '' ){ ?>
+	<?php if($model->isNewRecord){ 
+		  echo $form->field($model, 'logo')->fileInput(['class'=>'form-control']);
+	 } else if($model->logo != '' ) { ?>	
 		<div class="form-group field-company-logo" >
 			<label class="control-label" >Logo</label>
 				<img id='imagesorce' src="<?=Yii::$app->homeUrl.$model->logo ?>" width="150px" height="150px"/>
-				<a id="<?= $model->company_id ?>" style="cursor:pointer" class="removelogo" >Remove</a>
+				<a id="<?= $model->company_id ?>" style="cursor:pointer" class="removelogo" >Change Logo</a>
 		</div>	
-	
-	<?php } else {
-					echo $form->field($model, 'logo')->fileInput(['class'=>'form-control']);
-			} 
-	?>	
+	<?php 	
+			
+			echo $form->field($model, 'logo')->fileInput(['class'=>'form-control','style'=>'display:none'])->label(False);
+		} else { 	
+			echo $form->field($model, 'logo')->fileInput(['class'=>'form-control']);
+	} ?>
+		 
+		 
 	<?php
 		  if(\Yii::$app->user->can('company manage')) 
 		 { ?>	 
@@ -110,9 +115,16 @@ use kartik\select2\Select2;
 <!-- END FORM MODAL MARKUP -->
 <!-- New User style pop up -->
 
-<style>
-
-</style>
+  <script type="text/javascript"> 
+  $(function(){	
+			$('#company-logo').change( function(event) {
+				var tmppath = URL.createObjectURL(event.target.files[0]);
+				$("#imagesorce").fadeIn("fast").attr('src',tmppath);
+			});
+  });  
+  </script>
+  
+  
 <script>
  $(document).ready(function () {
 	function validateEmail($email) {
@@ -181,7 +193,7 @@ $( "#updateform" ).submit(function( event ) {
 
 				}); 			
 		  });
-
+/* 
 		  $(".removelogo").click(function() {					  
 			  var company_id = $(this).attr('id');
 				
@@ -195,7 +207,7 @@ $( "#updateform" ).submit(function( event ) {
 				   }
 
 				}); 
-		  });
+		  }); */
 		 $("#company-name").change(function() {
 				var slugval1 = $(this).val();
 				var	slugval2 = toCamelCase(slugval1);
@@ -225,7 +237,9 @@ $( "#updateform" ).submit(function( event ) {
 				.replace(/-+$/, '');            // Trim - from end of text
 		}
 
-	
+		  $(".removelogo").click(function() {	
+				$( "#company-logo" ).click();
+		  });
  });
 </script>
 

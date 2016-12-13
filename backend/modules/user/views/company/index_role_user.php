@@ -31,10 +31,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 			
+			[
+				'attribute' => 'firstname',
+				'value' => 'userProfile.firstname',				
+			],	
+			[
+				'attribute' => 'lastname',
+				'value' => 'userProfile.lastname',				
+			],	
+			
+			[
+				'attribute' => 'roleName',
+				'value' => 'roleName',
+			 	 'filter' => Html::activeDropDownList($searchModel, 'roleName',MyCaar::getChildRolesName(MyCaar::getRoleNameByUserid(Yii::$app->user->identity->id)),['class'=>'form-control input-sm','prompt' => 'Role Name']),   
+				
+			],
+			
+			
 			
             ['label' => 'Username / Email ID',
 				'attribute' => 'email',			
 			 ],			
+		
 		
 			[
   'class' => 'yii\grid\ActionColumn',

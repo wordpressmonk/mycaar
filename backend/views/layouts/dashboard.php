@@ -162,6 +162,7 @@ AppAsset::register($this);
 							<?php if(\Yii::$app->user->can('superadmin')){ ?>
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/user#all_usrs" ><span class="title">All Users</span></a></li>
 								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/user/create#add_usr" ><span class="title">Add User</span></a></li>
+								<!--<li><a id="site_meta" href="<?=\Yii::$app->homeUrl?>site/sitemeta#site_meta" ><span class="title">Site Meta</span></a></li>-->
 							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
 								<?php 
 									if(Company::findOne(Yii::$app->user->identity->c_id))

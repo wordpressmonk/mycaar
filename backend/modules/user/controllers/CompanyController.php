@@ -14,7 +14,6 @@ use common\models\UserProfile as Profile;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 use common\models\search\SearchUser;
-use common\models\search\SearchEnrolment;
 use common\models\search\SearchProgramEnrollment;
 use common\models\ProgramEnrollment;
 use common\models\Program;
@@ -22,7 +21,7 @@ use common\models\Role;
 use common\models\Division;
 use common\models\Location;
 use common\models\State;
-use common\models\Enrolment as Enrollment;
+
 
 
 
@@ -134,14 +133,14 @@ class CompanyController extends Controller
 		**/
 		 if(\Yii::$app->user->can('superadmin')) { 
 		}
-		else if(\Yii::$app->user->can('company_admin')) {
-			$model->scenario = 'update_by_company_admin';
+		else if((\Yii::$app->user->can('company_admin'))&& (!$model->logo)) {
+				 $model->scenario = 'update_by_company_admin';
 		}
 			
         if (($model->load(Yii::$app->request->post()))) {				
 			/**		Company Logo Image Uploaded for Update function Line 
-			**/
-			$model->logo = UploadedFile::getInstance($model, 'logo');			
+			**/		
+			$model->logo = UploadedFile::getInstance($model, 'logo');										
 				if(!empty($model->logo)){ 
 					if(!$model->uploadImage())
 						return;
@@ -156,11 +155,11 @@ class CompanyController extends Controller
 					$user->c_id = $model->company_id;								
 					$user->save(false); 								
 				
-					return $this->redirect(['view','id'=>$model->company_id]);	
-				
+					return $this->redirect(['view','id'=>$model->company_id]);		
+					
 			}else 
 				return $this->render('update', ['model' => $model]);
-		
+			
         } else {
             return $this->render('update', ['model' => $model]);
         }
@@ -288,7 +287,7 @@ class CompanyController extends Controller
 		}
 		
         $profile->scenario = 'company_admin_user';
-		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate())) {
 			//handle the role first
 			$model->username = $model->email;			
 			if($model->save())
