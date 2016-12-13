@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			 <?php if((file_exists(Yii::getAlias('@backend').'/web/'.$company->logo)) && (!empty($company->logo))){ ?>		
 				<img style="height:100px;" src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl([$company->logo])?>"/>
 			  <?php } else { ?>
-				 <img style="height:100px;" src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl(['uploads/company_logo/default_logo.jpg'])?>"/> 
+				 <img style="height:100px;" src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl(['img/default_logo.jpg'])?>"/> 
 			  <?php } ?>	
 			<div>
 			<div class="row small-padding">

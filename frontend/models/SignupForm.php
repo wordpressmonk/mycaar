@@ -97,7 +97,7 @@ class SignupForm extends Model
         ]);
 
             if ($user) {
-                $message = Yii::$app->mail->compose(['html' => 'passwordSend-text'], ['user' => $user,'password'=>$password])
+                $message = Yii::$app->mail->compose(['html' => 'signup-password-Send-text'], ['user' => $user,'password'=>$password])
                     ->setFrom([Yii::$app->params['supportEmail'] =>Yii::$app->name.''])
                     ->setTo($this->email)
                     ->setSubject('Please Verified your Email');
