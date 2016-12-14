@@ -95,7 +95,11 @@ class TestController extends Controller
 			}
 
 		}
-
+		$total = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->count();
+		if($total == 0){
+			\Yii::$app->getSession()->setFlash('error', 'No questions found for this unit');
+			return $this->redirect(['site/index']);
+		}
 		//if previous unit is completed
 		$session = Yii::$app->session;
 		$attempted = Report::find()->where(['unit_id'=>$u_id,'student_id'=>\Yii::$app->user->id])->one();
