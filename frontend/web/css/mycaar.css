@@ -182,6 +182,8 @@ background-color: lightgreen;
         float: right;
         margin-right: 10px;
         font-weight: bold;
+		z-index:999;
+		position:relative;
     }
     .mdl-test{
         color:#999999;

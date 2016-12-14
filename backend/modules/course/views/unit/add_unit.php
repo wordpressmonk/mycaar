@@ -5,6 +5,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/form-builder.css");
 $this->registerCssFile(\Yii::$app->homeUrl."css/custom/form-render.css");
 $this->registerJsFile(\Yii::$app->homeUrl."js/custom/form-builder.js");
 $this->registerJsFile(\Yii::$app->homeUrl."js/custom/form-render.js");
+$this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 
 ?>
@@ -206,6 +207,7 @@ function saveFile(input){
   file = input.files[0];
   var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
   if(file != undefined){
+	waitingDialog.show('Uploading..');
     formData= new FormData();
 	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx"){
 		formData.append("media", file);
@@ -216,7 +218,7 @@ function saveFile(input){
 			processData: false,
 			contentType: false,
 			success: function(data){
-				alert('success');
+				waitingDialog.hide();
 				$(input).attr('src', data);
 			}
 		  });
