@@ -45,7 +45,7 @@ AppAsset::register($this);
 							<div class="brand-holder">
 								<a href="<?=\Yii::$app->homeUrl;?>">
 								<?php
-								$right_logo = SiteMeta::find()->where(['meta_key'=>'right-side-logo'])->one();
+								$right_logo = SiteMeta::find()->where(['meta_key'=>'left-side-logo'])->one();
 								?>
 									<img src="<?=\Yii::$app->homeUrl.$right_logo->meta_value;?>" />
 								</a>
@@ -75,7 +75,7 @@ AppAsset::register($this);
 									<img  src="<?=Yii::$app->urlManager->createAbsoluteUrl(['img/default_logo.jpg'])?>"/> 
 										<?php } ?>								
 									<?php }} else{ 
-										$left_logo = SiteMeta::find()->where(['meta_key'=>'left-side-logo'])->one();
+										$left_logo = SiteMeta::find()->where(['meta_key'=>'right-side-logo'])->one();
 											?>
 										<img src="<?=\Yii::$app->homeUrl.$left_logo->meta_value;?>" />
 									<?php }?>
