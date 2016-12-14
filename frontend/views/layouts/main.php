@@ -137,7 +137,7 @@ AppAsset::register($this);
 					
 					<div class="small-padding">
 					<?php if(\Yii::$app->user->can("assessor")) {?>
-					<a href="<?=Yii::$app->urlManagerBackEnd->baseUrl?>" target="blank">DASHBOARD</a>
+					<a href="<?=Yii::$app->urlManagerBackEnd->baseUrl?>">DASHBOARD</a>
 					<?php } ?>
 					<?= Html::beginForm(['/site/logout'], 'post')
 										. Html::submitButton(
