@@ -92,9 +92,12 @@ class TestController extends Controller
 		$questions = CapabilityQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $unit_id])->orderBy('order_id ASC')->limit($limit)->offset($offset)->all();
 		if($answers = Yii::$app->request->post()){
 			//print_r($answers);die;
-			$this->saveAnswers($answers,$user_id);
-			$session[$unit_id."_cp_".$user_id] = $page+1;
-			$this->saveProgress($user_id,$unit_id);
+			if(count($answers) >1 ){
+				$this->saveAnswers($answers,$user_id);
+				$session[$unit_id."_cp_".$user_id] = $page+1;
+				$this->saveProgress($user_id,$unit_id);				
+			}
+
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				$session->remove($unit_id."_cp_".$user_id);
 				return $this->redirect(['report/search','p_id'=>$model->module->program->program_id,'data'=>$data]);
