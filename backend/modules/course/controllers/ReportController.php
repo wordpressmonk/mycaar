@@ -80,8 +80,8 @@ class ReportController extends Controller
 						'pageSize' => 0,
 					],
 			]);	
-			$query->joinWith(['userProfile as user_profile']);
-			$query->joinWith(['user']);
+			$query->innerJoinWith(['userProfile as user_profile']);
+			$query->innerJoinWith(['user']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
 			//if any of the user parametr is filled,then search for that users
 			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);
@@ -119,14 +119,14 @@ class ReportController extends Controller
 			$programs[] = Program::find()->where(['program_id'=>$p_id])->one();
 		 else $programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
 			$query = ProgramEnrollment::find()->orderBy('user_profile.firstname ASC');
-			$query->joinWith(['userProfile as user_profile']);
+			$query->innerJoinWith(['userProfile as user_profile']);
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
 						'pageSize' => 0,
 					],
 			]);	
-			$query->joinWith(['user']);
+			$query->innerJoinWith(['user']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
 			if($p_id)
 				$query->andFilterWhere(['program_id'=>$p_id]);	
