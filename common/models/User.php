@@ -460,7 +460,7 @@ class User extends ActiveRecord implements IdentityInterface
                 ['html' => 'passwordSend-text'],
                 ['user' => $user,'password'=>$password]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.''])
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
             ->setTo($this->email)
             ->setSubject('MyCaar Please Verified your Email');
        
@@ -490,7 +490,7 @@ class User extends ActiveRecord implements IdentityInterface
                 ['html' => 'passwordResetToken-html'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.''])
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
             ->setTo($this->email)
             ->setSubject('MyCaar Please Reset Your Password');
        	
@@ -520,7 +520,7 @@ class User extends ActiveRecord implements IdentityInterface
                 ['html' => 'changepasswordSuccessMessage-html'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.''])
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
             ->setTo($this->email)
             ->setSubject('MyCaar Change Password Success');
        	

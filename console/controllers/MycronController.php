@@ -26,7 +26,7 @@ class MycronController extends Controller {
                 ['html' => 'passwordCron'],
                 ['username' => $tmp->to_email,'password'=>$obj['password'],'loginLink'=>$obj['loginLink'],'resetLink'=>$obj['resetLink']] 
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' MyCaar'])
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
             ->setTo($tmp->to_email)
             ->setSubject($tmp->subject);
             
