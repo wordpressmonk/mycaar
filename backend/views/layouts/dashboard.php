@@ -343,7 +343,7 @@ AppAsset::register($this);
 					</div>
 					<div class="offcanvas-body no-padding">
 					<div class="small-padding">
-					<a href="<?=Yii::$app->urlManagerFrontEnd->baseUrl?>" target="blank">HOME PAGE</a>
+					<a href="<?=Yii::$app->urlManagerFrontEnd->baseUrl?>">HOME PAGE</a>
 					<?= Html::beginForm(['/site/logout'], 'post')
 										. Html::submitButton(
 											'Logout',
