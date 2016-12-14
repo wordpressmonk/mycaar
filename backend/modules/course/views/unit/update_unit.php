@@ -275,7 +275,7 @@ function saveFile(input){
 	file = input.files[0];
 	var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
 	if(file != undefined){
-		waitingDialog.show('I\'m waiting');
+		waitingDialog.show('Uploading..');
 	formData= new FormData();
 	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx"){
 		formData.append("media", file);
