@@ -437,9 +437,10 @@ class User extends ActiveRecord implements IdentityInterface
 		 if($total_tests == 0)
 			 return 0;
 		 $progress =  ($tests_completed/$total_tests)*100;
-		 if($progress > 100)
-			 return 100;
-		 else return (int)$progress;			 
+		 //if($progress > 100)
+		//	 return 100;
+		 //else
+			 return (int)$progress;			 
 		 }
 		else return false;
 	 }
