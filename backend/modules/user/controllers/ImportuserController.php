@@ -53,8 +53,6 @@ class ImportuserController extends Controller
  
 			   $model = new ImportFile();			  
 			 if($model->load(Yii::$app->request->post())){
-				 
-				 //$company_id = $model->company_id;
 				
 		///GET VAlues and Stored in Array with Key //////	 
 		
@@ -80,7 +78,7 @@ class ImportuserController extends Controller
 					 die('Error in File Formate');
 				  }						  
 				  $sheet = $objPHPExcel->getSheet(0);
-				  $highestRow = $sheet->getHighestRow();
+				  $highestRow = $sheet->getHighestRow();	
 				  $highestColumn = $sheet->getHighestColumn();				
 				  $error_report = [];	
 				  
@@ -88,7 +86,12 @@ class ImportuserController extends Controller
 				 
 				 for($row=2; $row<=$highestRow; ++$row)
 				 {                  				 
-					 $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row,NULL,TRUE,FALSE);				   
+					 $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row,NULL,TRUE,FALSE);	
+					
+						if(empty($rowData[0][0]))
+						{
+							continue;
+						}
 					//save to User  table.
 					 $usertable = new User();
 					if(\Yii::$app->user->can('company_admin')) {
@@ -204,7 +207,6 @@ class ImportuserController extends Controller
 				$resetLink = Yii::$app->urlManagerFrontEnd->createAbsoluteUrl(['site/reset-password', 'token' => $usertable->password_reset_token]);
 				$arr = array('password' => $usertable->password, 'loginLink' => $loginLink, 'resetLink' => $resetLink);
 				$quickemail->message = json_encode($arr);
-				//$quickemail->message = $usertable->password;
 				$quickemail->status = 0;			
 				$quickemail->save();	
 				
@@ -215,7 +217,8 @@ class ImportuserController extends Controller
 						 $errors = $usertable->errors;
 						 reset($errors);
 						 $listerror = current($errors);
-						 $error_report[] = $usertable->username." -- ".$listerror[0];
+						 //$error_report[] = $usertable-->email." -- ".$listerror[0];
+						 $error_report[] = "No.".$row." -- ".$usertable->email." -- ".$listerror[0];
 					 }					 
 				 }				
 				if(isset($error_report) && empty($error_report))
@@ -226,8 +229,7 @@ class ImportuserController extends Controller
 					 Yii::$app->getSession()->setFlash('Error', 'User Details Failed To Imported Following Reasons !!!.');
 					 Yii::$app->getSession()->setFlash('Error-data', $error_report); 
 				}				
-				//return $this->render('upload_form', ['model' => $model]);
-				return $this->refresh();				
+				return $this->render('upload_form', ['model' => $model ]);			
 		}else {
 				return $this->render('upload_form', ['model' => $model ]);
 			  }

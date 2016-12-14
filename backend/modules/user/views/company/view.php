@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
                 'attribute'=>'Logo',
 				'value'=>!empty($model->logo)?Yii::$app->homeUrl.$model->logo:'',
-				 'format' => !empty($model->logo)?['image',['height'=>'100px']]:'text',
+				 'format' => !empty($model->logo)?['image',['height'=>'100px','width'=>'300px']]:'text',
 				
             ],	
 				'companyAdmin.email',				
