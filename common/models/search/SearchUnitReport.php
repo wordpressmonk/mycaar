@@ -56,7 +56,8 @@ class SearchUnitReport extends UnitReport
 		$query->joinWith(['assessor.user']);
 		//$query->joinWith(['program']);
 		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id,'user.status'=>10]);
-		
+		$query->andFilterWhere(['u.status'=>1]);
+		$query->andFilterWhere(['m.status'=>1]);
         $this->load($params);
 
         if (!$this->validate()) {
