@@ -32,7 +32,7 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 	
 	<div class="form-group field-sitemeta-rightsidelogo" >
 			<label class="control-label" >Right-Side-Logo :&nbsp;</label>
-				<img id='rightimagesorce' src="<?=Yii::$app->homeUrl.$right->meta_value ?>" height='100px' />
+				<img id='rightimagesorce' src="<?=Yii::$app->homeUrl.$right->meta_value ?>" height='100px' width='275px' />
 				<a  style="cursor:pointer" class="rightremovelogo" >Change Logo</a>
 
 	<?php echo $form->field($model, 'rightsidelogo')->fileInput(['class'=>'form-control','style'=>'display:none'])->label(False); ?>
@@ -40,7 +40,7 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 	
 	<div class="form-group field-sitemeta-leftsidelogo" >
 			<label class="control-label" >Left-Side-Logo&nbsp;&nbsp; : &nbsp;</label>
-				<img id='leftimagesorce' src="<?=Yii::$app->homeUrl.$left->meta_value ?>" height='100px' />
+				<img id='leftimagesorce' src="<?=Yii::$app->homeUrl.$left->meta_value ?>" height='100px' width='275px'/>
 				<a  style="cursor:pointer" class="leftremovelogo" >Change Logo</a>
 		
 	<?php echo $form->field($model, 'leftsidelogo')->fileInput(['class'=>'form-control','style'=>'display:none'])->label(False); ?>
