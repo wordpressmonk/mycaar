@@ -185,6 +185,7 @@ AppAsset::register($this);
 								?>
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-user#all_usrs" ><span class="title">Users</span></a></li>
 								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/company/create-user#add_usr" ><span class="title">Add User</span></a></li>
+								<li><a id="import_usrs" href="<?=\Yii::$app->homeUrl?>user/importuser/importexcel#import_usrs" ><span class="title">Import Users</span></a></li>
 									<?php } ?>
 							<?php } else if(\Yii::$app->user->can('assessor')) { ?>
 							<?php 

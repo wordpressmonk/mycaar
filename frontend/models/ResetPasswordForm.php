@@ -89,7 +89,7 @@ class ResetPasswordForm extends Model
             ->compose(
                 ['html' => 'passwordResetSuccessMessage-html'],['user'=>$user]               
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.''])
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
             ->setTo($userdetails->email)
             ->setSubject('MyCaar Reset-Password Success');
           			

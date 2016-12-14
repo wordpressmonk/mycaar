@@ -97,7 +97,7 @@ public function sendEnrollmentEmail($id,$programname)
                 ['html' => 'enrolmentSuccessMessage-html'],
                 ['user' => $user,'programname'=>$programname]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.''])
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
             ->setTo($user->email)
             ->setSubject('MyCaar Enrollment Confirmation');
        	

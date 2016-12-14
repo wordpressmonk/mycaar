@@ -52,22 +52,14 @@ class SiteMeta extends \yii\db\ActiveRecord
     }
 
 	public function uploadrightImage(){	
-		if($this->validate()) {				
-			$this->rightsidelogo->saveAs('img/'.$this->rightsidelogo->baseName.'.'.$this->rightsidelogo->extension);
-			$this->rightsidelogo = 'img/'.$this->rightsidelogo->baseName.'.'.$this->rightsidelogo->extension;
-		 	return true;	
-		 }else {
-			return false;
-		}	 	
+		$this->rightsidelogo->saveAs('img/'.$this->rightsidelogo->baseName.'.'.$this->rightsidelogo->extension);
+		$this->rightsidelogo = 'img/'.$this->rightsidelogo->baseName.'.'.$this->rightsidelogo->extension;
+		return true;			 	
 	}	
 	
-	public function uploadleftImage(){	
-		if($this->validate()) {				
+	public function uploadleftImage(){				
 			$this->leftsidelogo->saveAs('img/'.$this->leftsidelogo->baseName.'.'.$this->leftsidelogo->extension);
 			$this->leftsidelogo = 'img/'.$this->leftsidelogo->baseName.'.'.$this->leftsidelogo->extension;
-		 	return true;	
-		 }else {
-			return false;
-		}	 	
+		 	return true;			 	
 	}
 }
