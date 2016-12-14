@@ -450,7 +450,13 @@ class UnitController extends Controller
 		$deleted=array_diff($from_update,$to_update);
 		foreach($deleted as $del){
 			CapabilityQuestion::findOne($del)->delete();
-		}		
+		}	
+		//if deleting all cap questions, reset users who had attended the cap
+		$reports = \common\models\UnitReport::find()->where(['unit_id'=>$unit_id])->all();
+		foreach($reports as $report){
+			$report->capability_progress = NULL;
+			$report->save();
+		}
 		
 	}
 
