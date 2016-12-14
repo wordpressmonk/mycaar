@@ -166,6 +166,7 @@ class ExportController extends Controller
 		$objPHPExcel->getActiveSheet()->getStyle('E3')->getAlignment()->setWrapText(true);
 		$objPHPExcel->getActiveSheet()->getStyle("E3")->getFont()->setBold(true);
 		$objPHPExcel->getActiveSheet()->getStyle("E3")->getFont()->setSize(10);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E3')->setAutoSize(true);
 		
 		//searched by
 		//$searched_by_user = implode(',',$param);

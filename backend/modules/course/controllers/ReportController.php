@@ -13,6 +13,7 @@ use common\models\Report;
 use common\models\search\SearchReport;
 use common\models\Program;
 use common\models\search\SearchProgram;
+use common\models\ProgramEnrollment;
 use common\models\UserProfile;
 
 use common\models\Module;
@@ -71,17 +72,21 @@ class ReportController extends Controller
 			}else{
 				$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
 			}
-			$query = UserProfile::find()->orderBy('firstname ASC');
+			//$query = ProgramEnrollment::
+			$query = ProgramEnrollment::find()->orderBy('user_profile.firstname ASC');
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
 						'pageSize' => 0,
 					],
 			]);	
+			$query->joinWith(['userProfile as user_profile']);
 			$query->joinWith(['user']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
 			//if any of the user parametr is filled,then search for that users
-			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);			
+			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);
+			if(isset($param['program']) && $param['program'] !='')
+				$query->andFilterWhere(['program_id'=>$param['program']]);	
  			if(isset($param['user']) && $param['user'] !='')
 				$query->andFilterWhere(['user_id'=>$param['user']]);			
  			if(isset($param['state']) && $param['state'] !='')
@@ -96,7 +101,7 @@ class ReportController extends Controller
 				$query->andFilterWhere(['like', 'firstname',$param['firstname']]);
 			if(isset($param['lastname']) && $param['lastname'] !='')
 				$query->andFilterWhere(['like', 'lastname', $param['lastname']]);	
-			
+			$query->groupBy('program_enrollment.user_id');
 			$users = $dataProvider->models;
 			//print_r($programs);
 			return $this->render('report', [
@@ -113,7 +118,8 @@ class ReportController extends Controller
 		 if($p_id)
 			$programs[] = Program::find()->where(['program_id'=>$p_id])->one();
 		 else $programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
-			$query = UserProfile::find()->orderBy('firstname ASC');
+			$query = ProgramEnrollment::find()->orderBy('user_profile.firstname ASC');
+			$query->joinWith(['userProfile as user_profile']);
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
@@ -122,6 +128,10 @@ class ReportController extends Controller
 			]);	
 			$query->joinWith(['user']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+			if($p_id)
+				$query->andFilterWhere(['program_id'=>$p_id]);	
+			$query->groupBy('program_enrollment.user_id');
+			
 			$users = $dataProvider->models;			
 			
 			return $this->render('report', [
