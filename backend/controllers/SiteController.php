@@ -54,6 +54,10 @@ class SiteController extends Controller
                         'actions' => ['sitemeta', 'error'],
                         'allow' => true,
                     ],
+					[
+                        'actions' => ['sitemeta-update', 'error'],
+                        'allow' => true,
+                    ],
                 ],
             ],
             'verbs' => [
@@ -225,31 +229,59 @@ class SiteController extends Controller
 			 {
 				 Yii::$app->getSession()->setFlash('Success', 'You have successfully change your password !!!.');
 				 $model->sendEmailChangePassword();	
-			 } else {
-				 return $this->render('change_password', ['model' => $model]);				
-			 }
-			 
-			 return $this->refresh();
-		 }
+			 } 
+		}
 		return $this->render('change_password', ['model' => $model]);	
 	}
 	
 	
 	public function actionSitemeta()
-	{
-		$model = new SiteMeta();		
-		if ($model->load(Yii::$app->request->post())){				
-			$model->meta_value = UploadedFile::getInstance($model, 'meta_value');				
-			if(!empty($model->meta_value)) { 
-				if(!$model->uploadImage())
+	{	
+		$model = new SiteMeta();
+		
+		//// Right Side Image Values 
+		$right_logo = SiteMeta::find()->where(['meta_key'=>'right-side-logo'])->one();
+		$current_right_image = $right_logo->meta_value;	
+		
+		//// Left Side Image Values 		
+		$left_logo = SiteMeta::find()->where(['meta_key'=>'left-side-logo'])->one();
+		$current_left_image = $left_logo->meta_value;
+		
+	  if ($model->load(Yii::$app->request->post())) {	
+		
+			//// Right Side Image Uploaded Function 
+			$right_logo->rightsidelogo = UploadedFile::getInstance($model, 'rightsidelogo');		
+			if(!empty($right_logo->rightsidelogo)){   
+				if(!$right_logo->uploadrightImage())				
 					return;
-			}
+				 else
+					$right_logo->meta_value = $right_logo->rightsidelogo;	
+				
+			} else {
+				$right_logo->meta_value = $current_right_image;
+			}								
+			$right_logo->save();	
 			
-			 $model->save();	  
-									
-		}else{
-			  return $this->render('sitemeta', ['model' => $model]);
-		}
+			//// End Up Right Side Image Uploaded Function 
+			
+			//// Left Side Image Uploaded Function 			
+			$left_logo->leftsidelogo = UploadedFile::getInstance($model, 'leftsidelogo');		
+			if(!empty($left_logo->leftsidelogo)){   
+				if(!$left_logo->uploadleftImage())				
+					return;
+				else
+					$left_logo->meta_value = $left_logo->leftsidelogo;				
+			} else {
+				$left_logo->meta_value = $current_left_image;
+			}	
+			$left_logo->save();	
+			//// End Up Left Side Image Uploaded Function 
+			
+			 Yii::$app->getSession()->setFlash('Success', 'Logo Changed Successfully!!!.');
+			
+		}		
+			return $this->render('sitemeta', ['left' =>$left_logo,'right'=>$right_logo,'model'=>$model]);	
+			
 	}
 
 }

@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			  <?php } else { ?>
 				 <img style="height:100px;" src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl(['img/default_logo.jpg'])?>"/> 
 			  <?php } ?>	
-			<div>
+			</div>
 			<div class="row small-padding">
 			  <?php if(!empty($company->about_us)){ ?>
 				<b>About us:</b>

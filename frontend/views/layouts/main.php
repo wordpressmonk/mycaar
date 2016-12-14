@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
+use common\models\SiteMeta;
 
 AppAsset::register($this);
 ?>
@@ -42,7 +43,10 @@ AppAsset::register($this);
 						<li class="header-nav-brand" >
 							<div class="brand-holder">
 								<a href="<?=\Yii::$app->homeUrl;?>">
-									<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl;?>/img/CAAR-Logo2.png" />
+								<?php
+								$right_logo = SiteMeta::find()->where(['meta_key'=>'right-side-logo'])->one();
+								?>
+									<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl.'/'.$right_logo->meta_value;?>" />
 								</a>
 							</div>
 						</li>
@@ -63,12 +67,17 @@ AppAsset::register($this);
 								<a href="<?=\Yii::$app->homeUrl;?>">
 									<?php if(!\Yii::$app->user->isGuest && !\Yii::$app->user->can('superadmin')){ 
 										$company = common\models\Company::findOne(\Yii::$app->user->identity->c_id);
-										if($company){										
-									?>
-									
-										<img src="<?= Yii::$app->urlManagerBackEnd->baseUrl."/".$company->logo;?>" />
-									<?php }} else{ ?>
-										<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl;?>/img/CAAR-Logo2.png" />
+										if($company){
+											if((file_exists(Yii::getAlias('@backend').'/web/'.$company->logo)) && (!empty($company->logo))){ 										
+							?>										
+								<img src="<?= Yii::$app->urlManagerBackEnd->baseUrl."/".$company->logo;?>" />
+								<?php } else { ?>
+								<img  src="<?=Yii::$app->urlManagerBackEnd->createAbsoluteUrl(['img/default_logo.jpg'])?>"/> 
+										<?php } ?>
+									<?php }} else{ 
+										$left_logo = SiteMeta::find()->where(['meta_key'=>'left-side-logo'])->one();
+										?>
+										<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl.'/'.$left_logo->meta_value;?>" />
 									<?php }?>
 								</a>
 							</div>

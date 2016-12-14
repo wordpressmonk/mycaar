@@ -17,8 +17,9 @@ class SiteMeta extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-	//public $siterightlogo;
-	//public $siteleftlogo;
+	 
+	public $rightsidelogo;
+	public $leftsidelogo;
 	
     public static function tableName()
     {
@@ -31,8 +32,10 @@ class SiteMeta extends \yii\db\ActiveRecord
     public function rules()
     {
         return [  
-            [['meta_key'], 'string'],
-            [['meta_value'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true], 
+            [['meta_key','meta_value'], 'string'],
+            [['rightsidelogo','leftsidelogo'], 'safe'],
+            [['rightsidelogo'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true], 
+            [['leftsidelogo'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true], 
         ];
     }
 
@@ -47,12 +50,22 @@ class SiteMeta extends \yii\db\ActiveRecord
             'meta_key' => 'Meta Key',
         ];
     }
+
+	public function uploadrightImage(){	
+		if($this->validate()) {				
+			$this->rightsidelogo->saveAs('img/'.$this->rightsidelogo->baseName.'.'.$this->rightsidelogo->extension);
+			$this->rightsidelogo = 'img/'.$this->rightsidelogo->baseName.'.'.$this->rightsidelogo->extension;
+		 	return true;	
+		 }else {
+			return false;
+		}	 	
+	}	
 	
-	public function uploadImage(){	
-		if($this->validate()) {	
-			$this->meta_value->saveAs('uploads/side_logo/'.$this->meta_value->baseName.'.'.$this->meta_value->extension);
-			$this->meta_value = 'uploads/side_logo/'.$this->meta_value->baseName.'.'.$this->meta_value->extension;
-			return true;	
+	public function uploadleftImage(){	
+		if($this->validate()) {				
+			$this->leftsidelogo->saveAs('img/'.$this->leftsidelogo->baseName.'.'.$this->leftsidelogo->extension);
+			$this->leftsidelogo = 'img/'.$this->leftsidelogo->baseName.'.'.$this->leftsidelogo->extension;
+		 	return true;	
 		 }else {
 			return false;
 		}	 	

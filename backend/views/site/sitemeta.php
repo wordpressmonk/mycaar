@@ -6,49 +6,46 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\SiteMeta */
 /* @var $form ActiveForm */
+
+$this->title = 'Update Logo';
+$this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="user-create">
 
-    <h1>Update Site Logos</h1>
+    <h1>Update Logos</h1>
+	
+	<?php 
+$sessioncheck = Yii::$app->session->getFlash('Success');
+if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
+<div id="w3-success-0" class="alert-success alert fade in">
+<button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+<?= Yii::$app->session->getFlash('Success'); ?>
+</div>
+<?php } ?>
+
 <div class="card">
 	<div class="card-body">
 
-    <?php $form = ActiveForm::begin(['action' =>['site/sitemeta'], 'id' => 'forum_post', 'method' => 'POST','options' => ['enctype'=>'multipart/form-data']]); ?>
-
+    <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data']]); ?>
 	
-	  <?php echo $form->field($model, 'meta_key')->textInput(['class'=>'form-control','value'=>'right-side-logo']); ?>
-	  <?php //echo $form->field($model, 'meta_key[]')->textInput(['class'=>'form-control','value'=>'left-side-logo']); ?>
-	  
-	  <?php echo $form->field($model, 'meta_value')->fileInput(['class'=>'form-control']); ?>
-	  <?php //echo $form->field($model, 'meta_value[]')->fileInput(['class'=>'form-control']); ?>
-	  
-	 <!--<div class="form-group field-sitemeta-meta_value">
-		<label class="control-label" for="sitemeta-meta_value">Meta Value</label>
-		<input id="sitemeta-meta_value" class="form-control" name="SiteMeta[meta_value][]" value="image2" type="text">
-		<div class="help-block"></div>
-	</div>
+	<div class="form-group field-sitemeta-rightsidelogo" >
+			<label class="control-label" >Right-Side-Logo :&nbsp;</label>
+				<img id='rightimagesorce' src="<?=Yii::$app->homeUrl.$right->meta_value ?>" height='100px' />
+				<a  style="cursor:pointer" class="rightremovelogo" >Change Logo</a>
 
-	<div class="form-group field-sitemeta-meta_value">
-		<label class="control-label" for="sitemeta-meta_value">Meta Value</label>
-		<input id="sitemeta-meta_value" class="form-control" name="SiteMeta[meta_value][]" value="image2" type="text">
-		<div class="help-block"></div>
-	</div>-->
+	<?php echo $form->field($model, 'rightsidelogo')->fileInput(['class'=>'form-control','style'=>'display:none'])->label(False); ?>
+	</div>	
+	
+	<div class="form-group field-sitemeta-leftsidelogo" >
+			<label class="control-label" >Left-Side-Logo&nbsp;&nbsp; : &nbsp;</label>
+				<img id='leftimagesorce' src="<?=Yii::$app->homeUrl.$left->meta_value ?>" height='100px' />
+				<a  style="cursor:pointer" class="leftremovelogo" >Change Logo</a>
+		
+	<?php echo $form->field($model, 'leftsidelogo')->fileInput(['class'=>'form-control','style'=>'display:none'])->label(False); ?>
 
-		<!--<div class="form-group field-sitemeta-meta_value has-success">
-			<label class="control-label" for="sitemeta-meta_value">Right Side Logo</label>
-			<img id='rightlogo' style="cursor:pointer" src="<?=Yii::$app->homeUrl."img/CAAR-Logo2.png" ?>" height="100px"/>			
-				<input id="sitemeta-meta_value" style="display:none" class="form-control right-side-logo"  name="SiteMeta[meta_value][]" type="file">
-			<div class="help-block"></div>
-		</div>
-
-		<div class="form-group field-sitemeta-meta_value  has-success">
-			<label class="control-label" for="sitemeta-meta_value">Left Side Logo</label>
-			<img id='leftlogo' style="cursor:pointer" src="<?=Yii::$app->homeUrl."img/CAAR-Logo2.png" ?>"  height="100px"/>
-				<input id="sitemeta-meta_value"  style="display:none" class="form-control left-side-logo" name="SiteMeta[meta_value][]" type="file">
-			<div class="help-block"></div>
-		</div>-->
-
-    
+   </div>	 
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
         </div>
@@ -59,27 +56,30 @@ use yii\widgets\ActiveForm;
 </div>
 
   <script type="text/javascript"> 
-  $(function(){	
-			$('.right-side-logo').change( function(event) {
+
+    $(function(){	
+			$('#sitemeta-rightsidelogo').change( function(event) {
 				var tmppath = URL.createObjectURL(event.target.files[0]);
-				$("#rightlogo").fadeIn("fast").attr('src',tmppath);
-			});
-			
-			$('.left-side-logo').change( function(event) {
-				var tmppath = URL.createObjectURL(event.target.files[0]);
-				$("#leftlogo").fadeIn("fast").attr('src',tmppath);
+				$("#rightimagesorce").fadeIn("fast").attr('src',tmppath);
 			});
   });  
-  </script>
-  <script>
- $(document).ready(function () {
-	 
-	  $("#rightlogo").click(function() {	
-			$( ".right-side-logo" ).click();
+  
+   $(function(){	
+			$('#sitemeta-leftsidelogo').change( function(event) {
+				var tmppath = URL.createObjectURL(event.target.files[0]);
+				$("#leftimagesorce").fadeIn("fast").attr('src',tmppath);
+			});
+  });  
+  
+ $(document).ready(function () {	 
+
+	$(".rightremovelogo").click(function() {	
+				$( "#sitemeta-rightsidelogo" ).click();
+		  });
+	
+	$(".leftremovelogo").click(function() {	
+				$( "#sitemeta-leftsidelogo" ).click();
 		  });
 		  
-	 $("#leftlogo").click(function() {	
-			$( ".left-side-logo" ).click();
-		  });	  
- });
+ }); 
 </script>

@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use backend\assets\AppAsset;
 use common\models\Company;
+use common\models\SiteMeta;
 
 AppAsset::register($this);
 ?>
@@ -43,7 +44,10 @@ AppAsset::register($this);
 						<li class="header-nav-brand" >
 							<div class="brand-holder">
 								<a href="<?=\Yii::$app->homeUrl;?>">
-									<img src="<?=\Yii::$app->homeUrl;?>/img/CAAR-Logo2.png" />
+								<?php
+								$right_logo = SiteMeta::find()->where(['meta_key'=>'right-side-logo'])->one();
+								?>
+									<img src="<?=\Yii::$app->homeUrl.$right_logo->meta_value;?>" />
 								</a>
 							</div>
 						</li>
@@ -63,12 +67,17 @@ AppAsset::register($this);
 								<a href="<?=\Yii::$app->homeUrl;?>">
 									<?php if(!\Yii::$app->user->can('superadmin')){ 
 										$company = common\models\Company::findOne(\Yii::$app->user->identity->c_id);
-										if($company){										
-									?>
-									
+										if($company){	
+											if((file_exists(Yii::getAlias('@backend').'/web/'.$company->logo)) && (!empty($company->logo))){ 
+									?>									
 										<img src="<?= \Yii::$app->homeUrl.$company->logo;?>" />
-									<?php }} else{ ?>
-										<img src="<?=\Yii::$app->homeUrl;?>/img/CAAR-Logo2.png" />
+								<?php } else { ?>
+									<img  src="<?=Yii::$app->urlManager->createAbsoluteUrl(['img/default_logo.jpg'])?>"/> 
+										<?php } ?>								
+									<?php }} else{ 
+										$left_logo = SiteMeta::find()->where(['meta_key'=>'left-side-logo'])->one();
+											?>
+										<img src="<?=\Yii::$app->homeUrl.$left_logo->meta_value;?>" />
 									<?php }?>
 								</a>
 							</div>
@@ -154,7 +163,11 @@ AppAsset::register($this);
 						<li class="gui-folder">
 							<a>
 								<div class="gui-icon"><i class="md md-settings"></i></div>
-								<span class="title">Users</span>
+								<?php if(\Yii::$app->user->can('superadmin')){ ?>
+									<span class="title">Admin</span>
+								<?php } else { ?>
+									<span class="title">Users</span>
+								<?php } ?>
 							</a>
 							<!--start submenu -->
 							<ul>
@@ -162,7 +175,9 @@ AppAsset::register($this);
 							<?php if(\Yii::$app->user->can('superadmin')){ ?>
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/user#all_usrs" ><span class="title">All Users</span></a></li>
 								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/user/create#add_usr" ><span class="title">Add User</span></a></li>
-								<!--<li><a id="site_meta" href="<?=\Yii::$app->homeUrl?>site/sitemeta#site_meta" ><span class="title">Site Meta</span></a></li>-->
+								<li><a id="import_usrs" href="<?=\Yii::$app->homeUrl?>user/importuser/importexcel#import_usrs" ><span class="title">Import Users</span></a></li>
+								<li><a id="site_meta" href="<?=\Yii::$app->homeUrl?>site/sitemeta#site_meta" ><span class="title">Update Logo</span></a></li>
+								
 							<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
 								<?php 
 									if(Company::findOne(Yii::$app->user->identity->c_id))
