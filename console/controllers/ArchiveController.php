@@ -116,7 +116,7 @@ class ArchiveController extends Controller {
 		$objPHPExcel->getActiveSheet()->getStyle("E3")->getFont()->setSize(10);
 		
 		//searched by
-		$searched_by_user = "Searched criterias, implode post array, handle later";
+		$searched_by_user = "Archived on ".date('d-m-Y');
 		$objRichText = new \PHPExcel_RichText();
 		$objBold = $objRichText->createTextRun('This report searched by : ');
 		$objBold->getFont()->setBold(true);
