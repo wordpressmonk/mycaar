@@ -26,7 +26,7 @@ use kartik\select2\Select2;
 	 } else if($model->logo != '' ) { ?>	
 		<div class="form-group field-company-logo" >
 			<label class="control-label" >Logo</label>
-				<img id='imagesorce' src="<?=Yii::$app->homeUrl.$model->logo ?>" height="100px"/>
+				<img id='imagesorce' src="<?=Yii::$app->homeUrl.$model->logo ?>" height="100px" width="300px"/>
 				<a id="<?= $model->company_id ?>" style="cursor:pointer" class="removelogo" >Change Logo</a>
 		</div>	
 	<?php 	
