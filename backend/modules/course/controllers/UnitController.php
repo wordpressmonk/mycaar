@@ -313,7 +313,7 @@ class UnitController extends Controller
 			$answer = "";
 			$description = $awareness_question->description  = '';
 			if(isset($quest['description'][0][1]))
-					$awareness_question->description  = htmlentities($quest['description'][0][1], ENT_QUOTES, 'UTF-8');
+					$awareness_question->description  = $quest['description'][0][1];
 			if($awareness_question->save(false)){
 				//reformat the form data
 				$name = $quest['type'][0][1]."-".$awareness_question->aq_id; //change this to primary key
@@ -339,7 +339,7 @@ class UnitController extends Controller
 							$to_update_options[] = $awareness_option->option_id;
 
 						$awareness_option->question_id =  $awareness_question->aq_id;
-						$awareness_option->answer = $optn;
+						$awareness_option->answer = $opt[1];
 						$awareness_option->save();
 						$opt_string = "<option option_id='{$awareness_option->option_id}'  label='$optn ' value='$optn '>'$optn '</option>";
 							if(!empty($quest['answer'])){
