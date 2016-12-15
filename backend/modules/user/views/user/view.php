@@ -42,6 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
 				'label' => 'User Access Level',
 				'value' => MyCaar::getRoleNameByUserid($model->id),
 			],
+			[
+				'attribute' => 'company.name', 
+				'label' => 'Company Name',
+				'value' => isset($model->company->name)?$model->company->name:'( not Set )',
+			],
+			
         ],
     ]) ?>
 

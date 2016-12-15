@@ -43,8 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'attribute' => 'roleName',
 				'value' => 'roleName',
-			 	 'filter' => Html::activeDropDownList($searchModel, 'roleName',MyCaar::getChildRolesName(MyCaar::getRoleNameByUserid(Yii::$app->user->identity->id)),['class'=>'form-control input-sm','prompt' => 'Role Name']),   
-				
+			 	 'filter' => Html::activeDropDownList($searchModel, 'roleName',MyCaar::getChildRoles('company_admin'),['class'=>'form-control input-sm','prompt' => 'Role Name']),  
+/*
+ 'filter' => Html::activeDropDownList($searchModel, 'roleName',MyCaar::getChildRolesName(MyCaar::getRoleNameByUserid(Yii::$app->user->identity->id)),['class'=>'form-control input-sm','prompt' => 'Role Name']),				 
+*/				
 			],
 			
 			

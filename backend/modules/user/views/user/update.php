@@ -18,7 +18,6 @@ $this->params['breadcrumbs'][] = 'Update';
         'model' => $model,
 		'profile'=>$profile,
 		'roles' => $roles,
-		'checkpage'=>"Update",
     ]) ?>
 
 </div>

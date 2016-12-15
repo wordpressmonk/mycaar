@@ -79,9 +79,10 @@ class UserController extends Controller
     {
         $model = new User();
 		$profile = new Profile();
-		$roles = $this->getRoles();
+		//$roles = $this->getRoles(); Superadmin Role Show the Sysadmin Role...
+		$roles = MyCaar::getChildRoles(MyCaar::getRoleNameByUserid(Yii::$app->user->identity->id));
 		$profile->scenario = 'company_admin_user';
-       // if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
+      
 		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
 			$model->username = $model->email;
 			//Random Password Generation For MyCaar Common models
@@ -143,17 +144,23 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-		$model->scenario = 'update_by_admin';
+		//$model->scenario = 'update_by_admin';
 		$model->role = $model->getRoleName();
 		$profile = Profile::find()->where(['user_id'=>$id])->one();
-		$roles = $this->getRoles();
-		
+		//$roles = $this->getRoles();  Superadmin Role Show the Sysadmin Role...
+		$roles = MyCaar::getChildRoles(MyCaar::getRoleNameByUserid(Yii::$app->user->identity->id));
 		 $profile->scenario = 'company_admin_user';
 		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {
-			
-      //  if (($model->load(Yii::$app->request->post())) && ($model->validate())) {
+				
+    
 			//handle the role first
 			$model->username = $model->email;
+			// Only To Change the Password 
+			if(!empty($model->password))
+			{ 
+				$model->setPassword($model->password);
+				$model->generatePasswordResetToken();
+			}	
 			if($model->save())
 			{
 				$auth = Yii::$app->authManager;
@@ -162,7 +169,10 @@ class UserController extends Controller
 				$auth->assign($authorRole, $model->id);
 				$profile->user_id = $model->id;			
 				$profile->save();
-			
+				if(!empty($model->password))
+					$model->sendEmail($model->password); 
+				// Email Function Only Update Password is "Send Email to respective user"
+				
 				return $this->redirect(['view', 'id' => $model->id]);
 			} else {
                return $this->render('update', ['model' => $model,'profile' => $profile,'roles' => $roles,]);

@@ -65,7 +65,21 @@ class SearchUser extends User
         ]);
 				
 		$query->joinWith(['userProfile as user_profile']);		
-		$query->joinWith(['authRole as rolelist']);		
+		$query->joinWith(['authRole as rolelist']);	
+		
+		if(\Yii::$app->user->can('sysadmin')) 
+		{			
+		} 
+		else if(\Yii::$app->user->can('superadmin'))
+		{
+			$query->andWhere(['<>','rolelist.item_name','sysadmin']);
+		}
+		else if((\Yii::$app->user->can('company_admin')) ||(\Yii::$app->user->can('assessor')))
+		{
+			$query->andWhere(['not in','rolelist.item_name',['sysadmin','superadmin']]);
+		}			
+	
+		
 		$query->orderBy('user_profile.firstname ASC');
         $this->load($params);
 	

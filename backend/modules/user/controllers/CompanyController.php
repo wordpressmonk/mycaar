@@ -289,7 +289,13 @@ class CompanyController extends Controller
         $profile->scenario = 'company_admin_user';
 		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate())) {
 			//handle the role first
-			$model->username = $model->email;			
+			$model->username = $model->email;
+			// Only To Change the Password 			
+			if(!empty($model->password))
+			{
+				$model->setPassword($model->password);
+				$model->generatePasswordResetToken();
+			}			
 			if($model->save())
 			{
 			//handle the role first		
@@ -300,7 +306,12 @@ class CompanyController extends Controller
 			//save profile first			
 			$profile->user_id = $model->id;			
 			$profile->save();	
-								
+			
+			if(!empty($model->password))
+					$model->sendEmail($model->password); 
+				// Email Function Only Update Password is "Send Email to respective user"
+				
+			
             return $this->redirect(['view-user', 'id' => $model->id]);
 			
 			} else {

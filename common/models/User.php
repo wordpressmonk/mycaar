@@ -62,7 +62,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['email', 'role'], 'required','except' => ['apply_changepassword','apply_setpassword']],
 			['email', 'email'],
-			['password','string'],
+			['password','string','min'=>6,'max'=>15],
 			//[['password'], 'required', 'except' => ['update_by_admin','update_by_company_admin','apply_forgotpassword']],
             [['c_id'], 'integer'],           
             [['username', 'email'], 'string', 'max' => 255],
@@ -317,6 +317,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAuthRole()
     {
         return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
+    }
+	
+	 /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompany()
+    {
+        return $this->hasOne(Company::className(), ['company_id' => 'c_id']);
     }
 	
 	 public function verifyPassword($password)
