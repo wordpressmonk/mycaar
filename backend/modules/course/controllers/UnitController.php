@@ -324,12 +324,20 @@ class UnitController extends Controller
 				$html .= "<field type='$type' description='$description' label='$label' class='$class' name='$name' src='false'>";					
 				//////////////
 				if(!empty($quest['options'])){
+					$from_update_options = $to_update_options = [];
+					$current_optns = $awareness_question->awarenessOptions;
+					foreach($current_optns as $op){
+						$from_update_options[] = $op->option_id;
+					}
 					foreach($quest['options'] as $opt){
 						$optn = htmlentities($opt[1], ENT_QUOTES, 'UTF-8');
 						$option_id = $opt[2][0][1];
 						$awareness_option = AwarenessOption::findOne($option_id);
 						if (!$awareness_option) 
 							$awareness_option = new AwarenessOption();
+						else
+							$to_update_options[] = $awareness_option->option_id;
+
 						$awareness_option->question_id =  $awareness_question->aq_id;
 						$awareness_option->answer = $optn;
 						$awareness_option->save();
@@ -344,6 +352,10 @@ class UnitController extends Controller
 								}
 							}
 						$html .= $opt_string;
+					}
+					$deleted=array_diff($from_update_options,$to_update_options);
+						foreach($deleted as $del){
+							AwarenessOption::findOne($del)->delete();
 					}
 				}
 				$html .= '</field>';
