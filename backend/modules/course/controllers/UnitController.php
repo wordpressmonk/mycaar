@@ -414,7 +414,7 @@ class UnitController extends Controller
 			$answer = "";
 			$description = $cap_question->description  = '';
 			if(isset($quest['description'][0][1]))
-					$cap_question->description  = htmlentities($quest['description'][0][1], ENT_QUOTES, 'UTF-8');
+					$cap_question->description  = $quest['description'][0][1];
 			if($cap_question->save(false)){
 				//reformat the form data
 				$name = $quest['type'][0][1]."-".$cap_question->cq_id; //change this to primary key
