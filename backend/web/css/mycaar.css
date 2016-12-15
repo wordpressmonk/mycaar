@@ -86,7 +86,13 @@ height: 25px !important;
 .w3-progressbar{
 background-color: lightgreen;
 }
-
+.mdl-label{
+	float: right;
+	margin-right: 10px;
+	font-weight: bold;
+	z-index:999;
+	position:relative;
+}
 /*For Chrome */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 

@@ -102,7 +102,10 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
 								$aw_data = $element->content;
+								//print_r($aw_data);die;
+								//$aw_data = str_replace("&amp;", "&", $aw_data);
 								$aw_data = html_entity_decode($aw_data);
+								$aw_data = str_replace("&amp;", "&", $aw_data);								
 								$aw_data = str_replace("'", "\'", $aw_data);
 								//$aw_data = str_replace('"', '&quot;', $aw_data);
 							?>
@@ -216,6 +219,7 @@ $(document).ready(function(){
 	};
  	var aw_data = '<?=$aw_data?>';
 	//aw_data.replace(/"/g,"&quot;");
+	//var aw_data = aw_data.replace(/&amp;/g, '&');
 	console.log(aw_data);
 	if (aw_data) {
 		awareness_elements.formData = aw_data;
@@ -299,5 +303,6 @@ function saveFile(input){
 
 	}
 }
+//($('.fld-description').val()).length;
 <!---------- End of save file ------------->
 </script>
