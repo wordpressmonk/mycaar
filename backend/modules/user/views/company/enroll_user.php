@@ -223,13 +223,13 @@ $this->params['breadcrumbs'][] = $this->title;
 			var program = $("#program_select").val();
 			if($.trim(program) == "")
 			{
-				alert("Please Select the Program!!!.");
+				alert('Please Select the "Program in dropbox" !!!.');
 				return false;
 			}
 			var action = $("#action").val();
 			if($.trim(action) == "")
 			{
-				alert("Please Select the Mark to Status!!!.");
+				alert('Please Select the option in dropbox "Mark selected as" !!!.');
 				return false;
 			}	
 			var user_id = $.map($('input[name="selection[]"]:checked'), function(c){return c.value; })
@@ -246,7 +246,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			var program = $("#program_select").val();
 			if($.trim(program) == "")
 			{
-				alert("Please Select the Program!!!.");
+				alert('Please Select the "Program in dropbox" !!!.');
 				return false;
 			}
 			
