@@ -39,10 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				 ];
 				 
 ?>
+<h1>Enroll Users</h1>
 <div class="small-padding">
 <div class="card">
-<div class="card-head style-primary"><header>Enroll </header></div>
 
+<div class="card-body">
 <div class="card card-collapse">
 			<div class="card-head style-default">
 				<div class="tools">
@@ -155,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div><!--end .card -->
 	
 	
-<div class="card-body">
+
 
 	<?php //Html::beginForm('enroll-user-save','post');?>
 	
