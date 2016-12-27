@@ -235,7 +235,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			var user_id = $.map($('input[name="selection[]"]:checked'), function(c){return c.value; })
 			if($.trim(user_id) === "")
 			{
-				alert("Please Select the Checkbox to Mark to Status!!!.");
+				alert("Please Select the Checkbox to Enroll / Not Enroll !!!.");
 				return false;
 			}	
 			
