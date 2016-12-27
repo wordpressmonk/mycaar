@@ -6,8 +6,25 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use common\models\MyCaar;
 use common\models\Program;
-use yii\widgets\Pjax;
 
+use yii\helpers\Url;
+use common\models\User;
+
+use common\models\Role;
+use common\models\Division;
+use common\models\Location;
+use common\models\State;
+
+$program_id = isset($params['Program'])?$params['Program']:'';
+$username = isset($params['username'])?$params['username']:'';
+$fullname = isset($params['fullname'])?$params['fullname']:'';
+$enrollcheck = isset($params['enrollcheck'])?$params['enrollcheck']:'';
+$accesslevel = isset($params['accesslevel'])?$params['accesslevel']:'';
+
+$selected_division = isset($params['division'])?$params['division']:'';
+$selected_role = isset($params['role'])?$params['role']:'';
+$selected_location = isset($params['location'])?$params['location']:'';
+$selected_state = isset($params['state'])?$params['state']:''; 
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\SearchUser */
@@ -15,42 +32,159 @@ use yii\widgets\Pjax;
 
 $this->title = 'Enroll User';
 $this->params['breadcrumbs'][] = $this->title;
+
+	$array = [
+					['id' => '1', 'name' => 'Enrolled'],
+					['id' => '0', 'name' => 'Not Enrolled'],
+				 ];
+				 
 ?>
 <div class="small-padding">
 <div class="card">
 <div class="card-head style-primary"><header>Enroll </header></div>
+
+<div class="card card-collapse">
+			<div class="card-head style-default">
+				<div class="tools">
+					<div class="btn-group">
+						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapse"><i class="fa fa-angle-down"></i></a>
+					</div>
+				</div>
+				<header>Search</header>
+			</div><!--end .card-head -->
+			<div class="card-body">
+				<div class="program-search">
+					<form method="post" >
+						<div class="row">
+							<div class="col-md-3" >
+							<div class="form-group">
+								<label class="control-label" for="searchreport-unit_id">Program</label>
+								<?=Html::dropDownList(
+									'Program',
+									"$program_id",
+									ArrayHelper::map(Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('title')->all(),'program_id', 'title'),
+									['prompt'=> '--Select--',
+									 'id' => 'program_select', 'class' => 'form-control','required'=>'required']
+								);?>
+								<div class="help-block"></div>								
+							</div>
+						</div>
+						<div class="col-sm-3">
+									<div class="form-group">
+									<label class="control-label" for="searchreport-c_id">Fullname</label>
+									<input type="text" class="form-control" name="fullname" value="<?=$fullname?>">
+									<div class="help-block"></div>
+								</div>
+							</div>
+						
+						<div class="col-sm-3">
+									<div class="form-group">
+									<label class="control-label" for="searchreport-c_id">Username</label>
+									<input type="text" class="form-control" name="username" value="<?=$username?>">
+									<div class="help-block"></div>
+								</div>
+						</div>
+						
+						<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">Enroll-status</label>
+
+									<?= Html::dropDownList('enrollcheck',"$enrollcheck",  ArrayHelper::map($array, 'id', 'name'),['class'=>'form-control','prompt' => '--Select--'])  ?>
+
+									<div class="help-block"></div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">Role</label>
+
+									<?= Html::dropDownList('role', "$selected_role",ArrayHelper::map(Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+
+									<div class="help-block"></div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">Division</label>
+
+									<?= Html::dropDownList('division', "$selected_division",ArrayHelper::map(Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+
+									<div class="help-block"></div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">Location</label>
+
+									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+
+									<div class="help-block"></div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">State</label>
+
+									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+
+									<div class="help-block"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">Access Level</label>
+									
+									<?= Html::dropDownList('accesslevel', "$accesslevel",MyCaar::getChildRoles('company_admin'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									
+									<div class="help-block"></div>
+								</div>
+							</div>
+						</div>	
+						<div class="form-group">
+							<button type="submit" value="search" name="clickaction" class="btn btn-primary searchclick">Search</button>  
+							<a class="btn btn-danger" href="<?php echo Url::to(['company/enroll-user'])?>" >Clear Search </a>
+						</div>
+					<!--</form>-->
+				</div>
+			</div><!--end .card-body -->
+		</div><!--end .card -->
+	
+	
 <div class="card-body">
 
-	<?=Html::beginForm('enroll-user','post');?>
-
-	<div class="row">
+	<?php //Html::beginForm('enroll-user-save','post');?>
+	
+	<div class="row">	
+		
+		
 		<div class="col-md-5" >
-			<?=Html::dropDownList(
-				'Program',
-				$program_id,
-				ArrayHelper::map(Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('title')->all(),'program_id', 'title'),
-				['prompt'=> 'Select',
-				 'id' => 'program_select', 'class' => 'form-control','required'=>'required']
-			);?>
-		</div>
-		<div class="col-md-5" >
-		<?=Html::dropDownList('action','',[''=>'Mark selected as: ','enrolled'=>'Enroll','unenrolled'=>'UnEnrol'],['class'=>'form-control','required'=>'required'])?>
+		  <div class="form-group">
+			<label class="control-label" for="searchreport-unit_id">Mark to Status</label>
+		<?=Html::dropDownList('action','',[''=>'Mark selected as: ','enrolled'=>'Enrolled','unenrolled'=>'Not Enrolled'],['class'=>'form-control','id'=>'action'])?>
+			<div class="help-block"></div>								
+		  </div>
 		</div>
 		<div class="col-md-2" >
-			<?=Html::submitButton('Change', ['class' => 'btn btn-success pull-right',]);?>
+		  <div class="form-group">
+			<label class="control-label" for="searchreport-unit_id"></label>
+			<?=Html::submitButton('Change', ['class' => 'btn btn-success changeclick pull-right',"value"=>"change","name"=>"clickaction"]);?>						
+		  </div>
 		</div>
-</div>
+	</div>
+	
+
+
 <div class="small-padding"></div>
 		<?php if($program_id){ 
-		
-		$array = [
-					['id' => '1', 'name' => 'Enroll'],
-					['id' => '0', 'name' => 'UnEnrol'],
-				 ];
 ?>				
 				<?=GridView::widget([
 				'dataProvider' => $dataProvider,
-				'filterModel' => $searchModel,
+				//'filterModel' => $searchModel,
 				'layout' => '{items}',
 				'columns' => [
 					[	
@@ -78,17 +212,25 @@ $this->params['breadcrumbs'][] = $this->title;
 				],
 				]);  ?>
 		<?php } ?>
-		<?= Html::endForm();?> 
-
+	<?= Html::endForm();?> 
+</div>
+	
 	</div>	
 </div>	
 </div>
-<script>
+<script>		
+		$( ".changeclick" ).click(function() {									
+				$("#action").attr("required","required");												
+		});
+		$( ".searchclick" ).click(function() {									
+				$("#action").removeAttr("required");												
+		});		
+</script>		
 
-
-			$( "#program_select" ).change(function() {					
-				var programid = $(this).val();				
-					window.location.href = "<?=Yii::$app->homeUrl;?>user/company/enroll-user?program_id="+programid;
-			});
+ <script>
+		$('.card-head .tools .btn-collapse').on('click', function (e) {
+			var card = $(e.currentTarget).closest('.card');
+			materialadmin.AppCard.toggleCardCollapse(card);
+		});
 		
-</script>					
+</script>			
