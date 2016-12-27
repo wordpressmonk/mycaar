@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									"$program_id",
 									ArrayHelper::map(Program::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('title')->all(),'program_id', 'title'),
 									['prompt'=> '--Select--',
-									 'id' => 'program_select', 'class' => 'form-control','required'=>'required']
+									 'id' => 'program_select', 'class' => 'form-control']
 								);?>
 								<div class="help-block"></div>								
 							</div>
@@ -172,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="col-md-2" >
 		  <div class="form-group">
 			<label class="control-label" for="searchreport-unit_id"></label>
-			<?=Html::submitButton('Change', ['class' => 'btn btn-success changeclick pull-right',"value"=>"change","name"=>"clickaction"]);?>						
+			<?=Html::submitButton('Change', ['class' => 'btn btn-success changeclick pull-right',"value"=>"change","name"=>"clickaction","style"=>"margin-top: 20px;"]);?>						
 		  </div>
 		</div>
 	</div>
@@ -219,12 +219,38 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>	
 </div>
 <script>		
-		$( ".changeclick" ).click(function() {									
-				$("#action").attr("required","required");												
+		$( ".changeclick" ).click(function() {
+			var program = $("#program_select").val();
+			if($.trim(program) == "")
+			{
+				alert("Please Select the Program!!!.");
+				return false;
+			}
+			var action = $("#action").val();
+			if($.trim(action) == "")
+			{
+				alert("Please Select the Mark to Status!!!.");
+				return false;
+			}	
+			var user_id = $.map($('input[name="selection[]"]:checked'), function(c){return c.value; })
+			if($.trim(user_id) === "")
+			{
+				alert("Please Select the Checkbox to Mark to Status!!!.");
+				return false;
+			}	
+			
 		});
-		$( ".searchclick" ).click(function() {									
-				$("#action").removeAttr("required");												
-		});		
+			
+			
+		$( ".searchclick" ).click(function() {
+			var program = $("#program_select").val();
+			if($.trim(program) == "")
+			{
+				alert("Please Select the Program!!!.");
+				return false;
+			}
+			
+		});
 </script>		
 
  <script>

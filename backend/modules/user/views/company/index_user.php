@@ -276,14 +276,16 @@ $selected_state = isset($params['state'])?$params['state']:'';
 				return false;
 			}
 		
+			var user_id = $.map($('input[name="selection[]"]:checked'), function(c){return c.value; })
+			if($.trim(user_id) === "")
+			{
+				alert("Please Select the Checkbox to Change the Role!!!.");
+				return false;
+			}	
+				  
 		    var r = confirm("Are you Sure To Change the Role!");
 		    if (r == true) {
-				var user_id = $.map($('input[name="selection[]"]:checked'), function(c){return c.value; })
-				if($.trim(user_id) === "")
-				 {
-					alert("Please Select the Checkbox to Change the Role!!!.");
-					return false;
-				  }				
+							
 				 $.ajax({
 				   url: '<?=Yii::$app->homeUrl."user/company/multi-change-role"?>',
 				   type: 'POST',
