@@ -471,5 +471,13 @@ class UnitController extends Controller
 		}
 		
 	}
-
+	public function actionReOrder(){
+		$data = \Yii::$app->request->post()['data'];
+		foreach($data as $order=>$unit){
+			$unit = $this->findModel($unit['id']);
+			$unit->unit_order = $order;
+			$unit->save();
+		}
+		return true;
+	}
 }

@@ -1116,7 +1116,13 @@ background-color: lightgreen;
 .note-editor .note-editable{
 	min-height:100px;
 }
-
+.nestable-pg-title{
+	display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-height: 20px;
+}
 
 
 

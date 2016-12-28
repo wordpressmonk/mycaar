@@ -1,5 +1,5 @@
 <?php
-
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
@@ -27,11 +27,11 @@ $homeUrl = Yii::$app->homeUrl;
     </p>
 	<div class='row'>
 		<div class='col-lg-12'>
-			<div class='dd nestable-list'>
-				<ol class='dd-list'>
+			
 					<?php foreach($dataProvider->models as $program){
 						echo 					
-						"<li class='dd-item tile' data-id='$program->program_id'>
+						"<div class='dd nestable-list' id='list_{$program->program_id}'>
+				<ol class='dd-list'><li class='dd-item tile' data-id='$program->program_id'>
 							<div class='btn btn-primary' style='min-height:35px;'><span class='pull-left'><i class='fa fa-list'></i> $program->title</span>
 							<span class='pull-right text-default'>
 								<a href='{$homeUrl}course/program/view?id={$program->program_id}' title='View Program' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
@@ -42,7 +42,7 @@ $homeUrl = Yii::$app->homeUrl;
 							</div>
 						";
 						$modules = $program->modules;
-						if(count($modules)>0){
+						//if(count($modules)>0){
 							echo "<ol class='dd-list'>";
 							foreach($modules as $module){
 								echo "
@@ -61,10 +61,10 @@ $homeUrl = Yii::$app->homeUrl;
 									";
 								$units = $module->units;
 								if(count($units)>0){
-									echo "<ol class='dd-list'>";
+									echo "<div data-type='unit' class='dd nestable-unit-list' id='unit_{$module->module_id}'><ol class='dd-list'>";
 									foreach($units as $unit){
 										echo "
-									<li class='dd-item' data-id='$unit->unit_id'>
+									<li data-type='unit' data-m_id='$module->module_id' class='dd-item list-group' data-id='$unit->unit_id' ><div class='dd-handle btn btn-default-light'></div>
 										<div class='btn btn-default-bright' style='min-height:35px;'><span class='pull-left'>$unit->title</span>
 											<span class='pull-right text-primary-dark'>
 												<a href='{$homeUrl}course/unit/update?id={$unit->unit_id}' title='View Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
@@ -79,17 +79,17 @@ $homeUrl = Yii::$app->homeUrl;
 										</div>
 									</li>";
 									}
-									echo "</ol>";
+									echo "</ol></div>";
 								}
 								echo "</li>";
 							}	
 							echo "</ol>";
-						}
+						//}
 
-						echo "</li>";
+						echo "</li></ol>
+			</div>";
 					}?>
-				</ol>
-			</div><!--end .dd.nestable-list -->
+				<!--end .dd.nestable-list -->
 		</div><!--end .col -->
 
 	</div><!--end .row -->
@@ -97,7 +97,79 @@ $homeUrl = Yii::$app->homeUrl;
 </div>
 <script src="<?=Yii::$app->homeUrl?>js/libs/nestable/jquery.nestable.js"></script>
 <script>
-$(document).ready(function(){
-	$('.nestable-list').nestable();
-});
+//$(document).ready(function(){
+/* 	$('.nestable-list').nestable({
+		//maxDepth:2,
+		group:$(this).attr('id'),
+	}).on('change', updateOutput); */
+/*  $('.nestable-list').each(function(i, obj) {
+    //test
+	var elem_id = $(this).attr('id');
+	console.log(elem_id);
+	$('#'+elem_id).nestable({
+		group : 0,
+		//maxDepth: 2
+	}).on('beforeDragEnd', function(event, item, source, destination, position, feedback) {
+    // If you need to persist list items order if changes, you need to comment the next line
+	console.log('item',item);
+	console.log('dest',destination[0]);
+	console.log('src',source[0]);
+		if (source[0] != destination[0]) { feedback.abort = true; return; }
+		//if (position==0 && source[0] != destination[0]) { feedback.abort = true; return; }
+			feedback.abort = !window.confirm('Continue?');
+		}).on('dragEnd', updateOutput(elem_id)); 
+	}); */
+//});
+/* 	$('.nestable-list').nestable({
+		group : 0,
+		maxDepth: 3,
+	}).on('beforeDragEnd', function(event, item, source, destination, position, feedback) {
+			console.log('dest',destination[0]);
+			console.log('src',source[0]);
+			var data_type = item.attr('data-type');
+			if(data_type == 'unit'){
+				return;
+			} 
+			if (source[0] != destination[0]) { feedback.abort = true; return; }
+
+		})
+		.on('change',function(){
+			updateOutput($('.nestable-list').nestable('serialize'));
+		});  */
+		$('.nestable-unit-list').nestable({
+		group : $(this).attr('id'),
+		maxDepth: 3,
+		}).on('beforeDragEnd', function(event, item, source, destination, position, feedback) {
+			console.log('dest',destination[0]);
+			console.log('src',source[0]);
+			if (source[0] != destination[0]) { feedback.abort = true; return; }
+
+		}).on('dragEnd', function(event, item, source, destination, position, feedback) {
+			console.log('dest',destination[0]);
+			console.log('src',source[0]);
+			if (source[0] != destination[0]) { feedback.abort = true; return; }
+
+		})
+		.on('change',function(){
+			updateOutput($('.nestable-unit-list').nestable('serialize'));
+			//$('.nestable-list').nestable();
+		 });
+		
+function updateOutput(output){
+	console.log('output',output);
+
+ 	$.ajax({
+		url:'<?=Url::to(['unit/re-order'])?>',
+		type: 'POST',
+		data: {data:output},
+		dataType: 'json',
+		success:function(response){
+			console.log(response);
+		},
+		error:function(response){
+			console.log(response);
+		}
+	})  
+	console.log('changed');
+}
 </script>
