@@ -35,7 +35,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 				else
 					echo '<li id="unit_'.$unit->unit_id.'" class="ui-state-default"><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.substr($unit->title,0,12).'..</a></li>';
 			}?>
-			<li><a class="unit_view" data-unit_id="new" href="#tab2">Add New Lesson</a></li>
+			<li class="ui-state-disabled"><a class="unit_view" data-unit_id="new" href="#tab2">Add New Lesson</a></li>
 		</ul>
 		<div class="card-body tab-content style-default-bright">
 		<div class="tab-pane active" id="tab1">
@@ -146,6 +146,8 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 <script>
   $( function() {
     $( "#sortable" ).sortable({
+		items: "li:not(.ui-state-disabled)",
+		cancel: ".ui-state-disabled",
 		axis: 'y',
 		update: function (event, ui) {
 			var data = $(this).sortable('serialize');
