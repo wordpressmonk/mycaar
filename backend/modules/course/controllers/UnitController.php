@@ -484,4 +484,15 @@ class UnitController extends Controller
 		}
 		return true;
 	}
+	public function actionSort(){
+		$data = \Yii::$app->request->post();
+		//print_r($data);die;
+		foreach($data['unit'] as $order=>$unit){
+			//echo $unit;
+			$unit = $this->findModel($unit);
+			$unit->unit_order = $order;
+			$unit->save();
+		}
+		return true;
+	}
 }
