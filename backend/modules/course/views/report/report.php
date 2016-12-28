@@ -164,11 +164,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 											['class' => 'btn ink-reaction btn-raised btn-xs btn-info']
 										)
 										. Html::endForm();
-
-		echo '</div>
-		</div>';
-		echo '<div class="mdl-cell mdl-cell-4-col mdl-section">
-						<ul style="width: 1000px;">
+										
+		echo '<div>
+						<ul>
 							<li>
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelyellow mdl-yellow" data-upgraded=",MaterialButton"> Amber</button><span class="mdl-complete">In Progress</span>
@@ -177,6 +175,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							</li>
 						</ul>
 					</div>';
+		echo '</div>
+		</div>';
+
 		echo '<div class="horizontal al_cpp_category_16">';
 		echo '<ul class="name_list" >';
 		
