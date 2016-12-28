@@ -234,7 +234,7 @@ AppAsset::register($this);
 								<li><a id="reset_un" href="<?=\Yii::$app->homeUrl?>course/report/reset-units#reset_un" ><span class="title">Reset Lessons</span></a></li>-->
 								<li><a id="reset_u" href="<?=\Yii::$app->homeUrl?>course/report/reset-users#reset_u" ><span class="title">Reset Programs</span></a></li>
 								<li><a id="archives" href="<?=\Yii::$app->homeUrl?>course/reports-archive/index#archives" ><span class="title">Archives</span></a></li>
-							
+								<li><a id="cpymodules" href="<?=\Yii::$app->homeUrl?>course/copy/index#cpymodules" ><span class="title">Copy Module</span></a></li>
 							</ul>
 							<?php 
 								}								

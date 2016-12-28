@@ -21,6 +21,10 @@ use Yii;
  */
 class Module extends \yii\db\ActiveRecord
 {
+	
+	public $copy_program;
+	public $copy_module;
+	
     /**
      * @inheritdoc
      */
@@ -43,7 +47,7 @@ class Module extends \yii\db\ActiveRecord
             [['title'], 'string', 'max' => 1000],
 			[['language'], 'string', 'max' => 200],
             [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Program::className(), 'targetAttribute' => ['program_id' => 'program_id']],
-			[['course_start_date','course_end_date','enrl_start_date','enrl_end_date','is_course_open_anytime','is_enrlmnt_open_anytime'],'safe']
+			[['course_start_date','course_end_date','enrl_start_date','enrl_end_date','is_course_open_anytime','is_enrlmnt_open_anytime','copy_program','copy_module'],'safe']
         ];
     }
 

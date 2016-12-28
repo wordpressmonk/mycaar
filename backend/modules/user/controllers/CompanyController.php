@@ -98,7 +98,7 @@ class CompanyController extends Controller
     {
         $model = new Company();
         if ($model->load(Yii::$app->request->post())) {	
-
+		
 			/**		Company Logo Image Uploaded for Created function Line --- Connected with "Company Module"
 			**/			
 			$model->logo = UploadedFile::getInstance($model, 'logo');			
