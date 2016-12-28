@@ -64,7 +64,7 @@ $homeUrl = Yii::$app->homeUrl;
 									echo "<div data-type='unit' class='dd nestable-unit-list' id='unit_{$module->module_id}'><ol class='dd-list'>";
 									foreach($units as $unit){
 										echo "
-									<li data-type='unit' data-m_id='$module->module_id' class='dd-item list-group' data-id='$unit->unit_id' ><div class='dd-handle btn btn-default-light'></div>
+									<li data-type='unit' data-m_id='$module->module_id' class='dd-item list-group' data-id='$unit->unit_id'><div class='dd-handle btn btn-default-light'></div>
 										<div class='btn btn-default-bright' style='min-height:35px;'><span class='pull-left'>$unit->title</span>
 											<span class='pull-right text-primary-dark'>
 												<a href='{$homeUrl}course/unit/update?id={$unit->unit_id}' title='View Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
@@ -102,23 +102,24 @@ $homeUrl = Yii::$app->homeUrl;
 		//maxDepth:2,
 		group:$(this).attr('id'),
 	}).on('change', updateOutput); */
-/*  $('.nestable-list').each(function(i, obj) {
+ $('.nestable-unit-list').each(function(i, obj) {
     //test
 	var elem_id = $(this).attr('id');
 	console.log(elem_id);
 	$('#'+elem_id).nestable({
-		group : 0,
-		//maxDepth: 2
+		//group : 0,
+		maxDepth: 3
 	}).on('beforeDragEnd', function(event, item, source, destination, position, feedback) {
-    // If you need to persist list items order if changes, you need to comment the next line
-	console.log('item',item);
-	console.log('dest',destination[0]);
-	console.log('src',source[0]);
-		if (source[0] != destination[0]) { feedback.abort = true; return; }
-		//if (position==0 && source[0] != destination[0]) { feedback.abort = true; return; }
-			feedback.abort = !window.confirm('Continue?');
-		}).on('dragEnd', updateOutput(elem_id)); 
-	}); */
+			console.log('dest',destination[0]);
+			console.log('src',source[0]);
+			if (source[0] != destination[0]) { feedback.abort = true; return; }
+
+		})
+	.on('change',function(){
+		updateOutput($('#'+elem_id).nestable('serialize'));
+		//$('.nestable-list').nestable();
+	 });
+	}); 
 //});
 /* 	$('.nestable-list').nestable({
 		group : 0,
@@ -136,15 +137,10 @@ $homeUrl = Yii::$app->homeUrl;
 		.on('change',function(){
 			updateOutput($('.nestable-list').nestable('serialize'));
 		});  */
-		$('.nestable-unit-list').nestable({
-		group : $(this).attr('id'),
+	/* 	$('.nestable-unit-list').nestable({
+		group : 0,
 		maxDepth: 3,
 		}).on('beforeDragEnd', function(event, item, source, destination, position, feedback) {
-			console.log('dest',destination[0]);
-			console.log('src',source[0]);
-			if (source[0] != destination[0]) { feedback.abort = true; return; }
-
-		}).on('dragEnd', function(event, item, source, destination, position, feedback) {
 			console.log('dest',destination[0]);
 			console.log('src',source[0]);
 			if (source[0] != destination[0]) { feedback.abort = true; return; }
@@ -153,7 +149,7 @@ $homeUrl = Yii::$app->homeUrl;
 		.on('change',function(){
 			updateOutput($('.nestable-unit-list').nestable('serialize'));
 			//$('.nestable-list').nestable();
-		 });
+		 }); */
 		
 function updateOutput(output){
 	console.log('output',output);
