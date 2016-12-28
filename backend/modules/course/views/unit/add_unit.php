@@ -28,7 +28,7 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 /* 				if($unit->unit_id == $model->unit_id)
 					echo '<li class="active"><a href="#tab1">'.$unit->title.'</a></li>';
 				else */
-					echo '<li id="unit_'.$unit->unit_id.'" class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.substr($unit->title,0,12).'..</a></li>';
+					echo '<li id="unit_'.$unit->unit_id.'" class="ui-state-default"><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.substr($unit->title,0,12).'..</a></li>';
 			}?>
 			<li class="active text-info small-padding"><h4>ADD NEW</h4></li>
 		</ul>
