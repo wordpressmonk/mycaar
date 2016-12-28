@@ -30,7 +30,7 @@ $homeUrl = Yii::$app->homeUrl;
 			
 					<?php foreach($dataProvider->models as $program){
 						echo 					
-						"<div class='dd nestable-list' id='list_{$program->program_id}'>
+						"
 				<ol class='dd-list'><li class='dd-item tile' data-id='$program->program_id'>
 							<div class='btn btn-primary' style='min-height:35px;'><span class='pull-left'><i class='fa fa-list'></i> $program->title</span>
 							<span class='pull-right text-default'>
@@ -43,7 +43,7 @@ $homeUrl = Yii::$app->homeUrl;
 						";
 						$modules = $program->modules;
 						//if(count($modules)>0){
-							echo "<ol class='dd-list'>";
+							echo "<div class='dd nestable-list' id='list_{$program->program_id}'><ol class='dd-list'>";
 							foreach($modules as $module){
 								echo "
 									<li class='dd-item list-group' data-id='$module->module_id'>
@@ -83,11 +83,11 @@ $homeUrl = Yii::$app->homeUrl;
 								}
 								echo "</ol></li>";
 							}	
-							echo "</ol>";
+							echo "</ol></div>";
 						//}
 
 						echo "</li></ol>
-			</div>";
+			";
 					}?>
 				<!--end .dd.nestable-list -->
 		</div><!--end .col -->
