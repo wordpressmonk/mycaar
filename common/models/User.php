@@ -309,8 +309,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
     }
-	
-	
+
+	public function getUserRole()
+	{
+		return $this->hasOne(Role::className(), ['role_id' => 'role'])->via('userProfile');
+	}
+
 	 /**
      * @return \yii\db\ActiveQuery
      */

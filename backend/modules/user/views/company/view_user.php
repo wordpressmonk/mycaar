@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			[
 				'attribute' => 'role', 
-				'label' => 'User Access Level',
+				'label' => 'Access Level',
 				'value' => MyCaar::getRoleNameByUserid($model->user_id),
 			],			
 			'employee_number',			

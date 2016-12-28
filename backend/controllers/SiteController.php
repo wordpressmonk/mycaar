@@ -283,5 +283,5 @@ class SiteController extends Controller
 			return $this->render('sitemeta', ['left' =>$left_logo,'right'=>$right_logo,'model'=>$model]);	
 			
 	}
-
+	
 }

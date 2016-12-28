@@ -21,6 +21,7 @@ use common\models\Role;
 use common\models\Division;
 use common\models\Location;
 use common\models\State;
+use common\models\AuthAssignment;
 
 
 
@@ -47,7 +48,7 @@ class CompanyController extends Controller
                 'rules' => [
                    
 					 [
-                        'actions' => ['index','create','view','update','delete','index-user','create-user','view-user','update-user','delete-user','enroll-user','multi-delete','multi-delete-user','ajax-new-user','removelogo'],
+                        'actions' => ['index','create','view','update','delete','index-user','create-user','view-user','update-user','delete-user','enroll-user','multi-delete','multi-delete-user','ajax-new-user','removelogo','multi-change-role'],
                         'allow' => true,
 						'roles' => ['company_admin']
                     ],
@@ -241,16 +242,20 @@ class CompanyController extends Controller
 	
 	
 	public function actionIndexUser()
-    {
-        $searchModel = new SearchUser();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    {		
+		$searchModel = new SearchUser(); 		
+		$extrasearch = false;
+		if(\Yii::$app->request->post())
+			$extrasearch = \Yii::$app->request->post();
 
+        $dataProvider = $searchModel->searchcompanyadmin(Yii::$app->request->queryParams,$extrasearch);
+		
         return $this->render('index_user', [
             'searchModel' => $searchModel,
-             'dataProvider' => $dataProvider, 
+            'dataProvider' => $dataProvider,
+			'params'=>$extrasearch,	
         ]);
     }
-	
 	
 	 public function actionViewUser($id)
     {		
@@ -326,50 +331,6 @@ class CompanyController extends Controller
         }
     }
 
-	public function actionEnrollUser($program_id=false)
-    {				
-		$model = new User();	
-        $searchModel = new SearchProgramEnrollment();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		if($post=Yii::$app->request->post()){	
-			if(isset($post['Program']) && ($post['action'] === "enrolled") && isset($post['selection']) )
-			{				
-					$program = Program::findOne($post['Program']);		
-					foreach($post['selection'] as $tmp1)
-					{
-						$model1 = new ProgramEnrollment();	
-						$check_userid = $model1::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp1])->one();
-						if(!$check_userid)
-						{
-							$model1->program_id = $post['Program'];
-							$model1->user_id = $tmp1;
-							$model1->save();
-							// Email Function is "Send Email to respective user"
-							$model1->sendEnrollmentEmail($tmp1,$program->title);
-						} 
-					}				
-			}
-			else if(isset($post['Program']) && ($post['action'] === "unenrolled") && isset($post['selection']))
-			{				
-					foreach($post['selection'] as $tmp2)
-					{
-						$model2 = new ProgramEnrollment();	
-						$model2 = $model2::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp2])->one();
-						if($model2)
-							$model2->delete();
-					}								
-			}						
-			return $this->redirect(['enroll-user','program_id'=>$post['Program']]);			
-		}
-        else { 
-			return $this->render('enroll_user', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,'model' => $model,'program_id'=>$program_id
-			]);
-			}
-    }
-	
-	
 	 /** Company Logo Remove Function Through AJAX Call 
      **/	 	 
 	public function actionAjaxNewUser()
@@ -450,12 +411,17 @@ class CompanyController extends Controller
 	
 	public function actionIndexRoleUser()
     {
-        $searchModel = new SearchUser();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new SearchUser();		
+		$extrasearch = false;
+		if(\Yii::$app->request->post())
+			$extrasearch = \Yii::$app->request->post();
 
+		$dataProvider = $searchModel->searchcompanyadmin(Yii::$app->request->queryParams,$extrasearch);
+		
         return $this->render('index_role_user', [
             'searchModel' => $searchModel,
-             'dataProvider' => $dataProvider, 
+            'dataProvider' => $dataProvider,
+			'params'=>$extrasearch,	
         ]);
     }
 	
@@ -523,5 +489,79 @@ class CompanyController extends Controller
             return $this->render('update_my_profile', ['model' => $model,'profile' => $profile,]);
         }
     }
+	
+	
+ 	public function actionEnrollUser()
+    {				
+		$model = new User();	
+		$searchModel = new SearchProgramEnrollment();		
+		$extrasearch = false;
+		if($post=Yii::$app->request->post())
+		{
+			$extrasearch = \Yii::$app->request->post();
+			
+			if($extrasearch['clickaction'] == "change")
+			{
+				if(isset($post['Program']) && ($post['action'] === "enrolled") && isset($post['selection']) )
+				{				
+					$program = Program::findOne($post['Program']);		
+					foreach($post['selection'] as $tmp1)
+					{
+						$model1 = new ProgramEnrollment();	
+						$check_userid = $model1::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp1])->one();
+						if(!$check_userid)
+						{
+							$model1->program_id = $post['Program'];
+							$model1->user_id = $tmp1;
+							$model1->save();
+							// Email Function is "Send Email to respective user"
+							$model1->sendEnrollmentEmail($tmp1,$program->title);
+						} 
+					}				
+				}
+				else if(isset($post['Program']) && ($post['action'] === "unenrolled") && isset($post['selection']))
+				{				
+					foreach($post['selection'] as $tmp2)
+					{
+						$model2 = new ProgramEnrollment();	
+						$model2 = $model2::find()->where(['program_id'=>$post['Program'],'user_id'=>$tmp2])->one();
+						if($model2)
+							$model2->delete();
+					}								
+				}
+			
+			}
+				
+		}
+		$dataProvider = $searchModel->searchfilter(Yii::$app->request->queryParams,$extrasearch);
+		
+        return $this->render('enroll_user', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+			'params'=>$extrasearch,	
+        ]);
+
+    }
+	 
+	
+	 public function actionMultiChangeRole()
+	 {    
+			$user_id = Yii::$app->request->post()['user_id'];	
+			$newrole = Yii::$app->request->post()['role'];	
+			if(($user_id) && ($newrole))
+			{		
+				$user = explode(",",$user_id);		
+			 	 foreach($user as $tmp)
+				 {	
+					$auth = Yii::$app->authManager;
+					$auth->revokeAll($tmp);
+					$authorRole = $auth->getRole($newrole);
+					$auth->assign($authorRole, $tmp); 			
+				 }  
+			}  			
+		}
+
+
 	
 }
