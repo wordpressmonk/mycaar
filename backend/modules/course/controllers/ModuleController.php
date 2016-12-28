@@ -162,9 +162,9 @@ class ModuleController extends Controller
         }
     }
 	public function actionReOrder(){
-		$data = \Yii::$app->request->post()['data'];
+		$data = \Yii::$app->request->post()['data'][0];
 		//print_r($data);die;
-		foreach($data as $order=>$module){
+		foreach($data['children'] as $order=>$module){
 			$module = $this->findModel($module['id']);
 			$module->module_order = $order;
 			$module->save();
