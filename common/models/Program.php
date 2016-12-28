@@ -55,8 +55,8 @@ class Program extends \yii\db\ActiveRecord
      */
     public function getModules()
     {
-        return $this->hasMany(Module::className(), ['program_id' => 'program_id']);
-		//->orderBy(['module_order'=>'SORT_ASC']);
+        return $this->hasMany(Module::className(), ['program_id' => 'program_id'])
+		->orderBy(['module_order'=>'SORT_ASC']);
     }
 	
     /**
@@ -64,8 +64,7 @@ class Program extends \yii\db\ActiveRecord
      */	
 	public function getPublishedModules()
 	{
-		return $this->hasMany(Module::className(), ['program_id' => 'program_id'])
-		->andOnCondition(['status' => 1]);
+		return $this->hasMany(Module::className(), ['program_id' => 'program_id'])->orderBy(['module_order'=>'SORT_ASC'])->andOnCondition(['status' => 1]);
 	}
 	
     /**

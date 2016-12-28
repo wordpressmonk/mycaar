@@ -161,4 +161,14 @@ class ModuleController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+	public function actionReOrder(){
+		$data = \Yii::$app->request->post()['data'];
+		//print_r($data);die;
+		foreach($data as $order=>$module){
+			$module = $this->findModel($module['id']);
+			$module->module_order = $order;
+			$module->save();
+		}
+		return true;
+	}
 }
