@@ -55,7 +55,8 @@ class Program extends \yii\db\ActiveRecord
      */
     public function getModules()
     {
-        return $this->hasMany(Module::className(), ['program_id' => 'program_id'])->orderBy(['module_order'=>'SORT_ASC']);
+        return $this->hasMany(Module::className(), ['program_id' => 'program_id']);
+		//->orderBy(['module_order'=>'SORT_ASC']);
     }
 	
     /**
