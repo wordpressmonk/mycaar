@@ -128,12 +128,12 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				</div>
 			</div><!--end .card-body -->
 		</div><!--end .card -->
-		<div class="mdl-grid">
+		<!--<div class="mdl-grid">
 				<div class="mdl-cell mdl-cell-8-col">
 					<span class="mdl-welcome"><h3>Welcome <?=\Yii::$app->user->identity->fullname?></h3></span>
 					<span class="mdl-current"><h3>Current Programs :</h3></span>
 				</div>
-		</div>
+		</div>-->
 	<?php 
 	$check_output ='';
 	
