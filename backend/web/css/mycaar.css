@@ -1123,6 +1123,9 @@ background-color: lightgreen;
     padding: 0;
     min-height: 20px;
 }
-
+.program_test>span, .program_test>form {
+    display: inline-block;
+    margin-right: 10px;
+}
 
 

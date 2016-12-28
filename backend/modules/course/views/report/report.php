@@ -31,15 +31,15 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 //}
 ?>
 
-    <div class="mdl-grid mdl-home">
+    <!--<div class="mdl-grid mdl-home">
 					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
 						<h1 class="mdl-sidebar"><strong>Dashboard & Search</strong></h1>
 					</div>
 
-	</div>
+	</div>-->
 
-		<div class="card card-collapse card-collapsed">
-			<div class="card-head style-default">
+		<div class="card card-collapse card-collapsed small-padding">
+			<div class="card-head card-head-xs style-default">
 				<div class="tools">
 					<div class="btn-group">
 						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapse"><i class="fa fa-angle-down"></i></a>
@@ -151,8 +151,8 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		if(!$no_user_enrolled && count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
 		$check_output .= $program->program_id;
-		echo '<div class="mdl-grid">
-			<div class="mdl-cell mdl-cell-8-col">
+		echo '<div class="mdl-grid row">
+			<div class="program_test">
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
 			</span>';
 		//if(count($users) > 0 && count($program->programEnrollments)>0)
@@ -161,7 +161,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 										.Html::input('hidden', 'params', serialize($params), ['class' =>'form-control'])
 										. Html::submitButton(
 											'Download Report',
-											['class' => 'btn ink-reaction btn-raised btn-xs btn-primary']
+											['class' => 'btn ink-reaction btn-raised btn-xs btn-info']
 										)
 										. Html::endForm();
 
@@ -218,7 +218,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			;
 					$str.= '<div class="course_name">
                             <h2>
-                                <strong>'.$module->title.'</strong>
+                                '.$module->title.'
                             </h2>
                     </div>
 					<div class="course_units">
@@ -342,7 +342,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	
 	<?php if($params){ ?>
 	<script>
-		$('.card-head .tools .btn-collapse').trigger("click");
+		//$('.card-head .tools .btn-collapse').trigger("click");
 	</script>
 	
 	<?php } ?>
