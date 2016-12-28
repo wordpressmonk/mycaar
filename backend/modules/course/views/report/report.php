@@ -165,7 +165,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 										)
 										. Html::endForm();
 										
-		echo '<div>
+		echo '<div style="float: right;">
 						<ul>
 							<li>
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
