@@ -100,10 +100,6 @@ class UnitController extends Controller
 		$program = $module->program;
 		if (\Yii::$app->user->can('manageProgram', ['post' => $program])) {
         if(isset(Yii::$app->request->post()['unit_title'])) {
-			//print_r(Yii::$app->request->post());
-			//$data = json_decode(Yii::$app->request->post()['builder_data']);
-			//json_decode(stripslashes($_POST['posts']));
-			//print_r($data->html);
 			$model->module_id = $m_id;
 			$model->title = Yii::$app->request->post()['unit_title'];
 			$model->status = Yii::$app->request->post()['unit_status'];
@@ -201,6 +197,7 @@ class UnitController extends Controller
 			}
 			$schedule->unit_id = $unit_id;
 			$schedule->cron_time = $cron_time;
+			$schedule->actual_time = $monthsLater;
 			if($schedule->save()){
 				if(file_exists('/tmp/crontab.txt')){
 					//write cron_tab

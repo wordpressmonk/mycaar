@@ -31,6 +31,7 @@ class ResetController extends Controller {
 		$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$id.PHP_EOL;
 		$old_command = $schedule->cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$id.PHP_EOL;
 		$schedule->cron_time = $cron_time;
+		$schedule->actual_time = $monthsLater;
 		if($schedule->save()){
 			if(file_exists('/tmp/crontab.txt')){
 				//write cron_tab

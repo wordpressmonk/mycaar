@@ -30,8 +30,9 @@ class ResetSchedule extends \yii\db\ActiveRecord
         return [
             [['unit_id', 'cron_time'], 'required'],
             [['unit_id'], 'integer'],
-            [['updated_at'], 'safe'],
+            [['updated_at','actual_time'], 'safe'],
             [['cron_time'], 'string', 'max' => 50],
+			//[['actual_time'], 'string', 'max' => 1200],
         ];
     }
 
@@ -45,6 +46,7 @@ class ResetSchedule extends \yii\db\ActiveRecord
             'unit_id' => 'Unit ID',
             'cron_time' => 'Cron Time',
             'updated_at' => 'Updated At',
+			'actual_time' => 'Scheduled At'
         ];
     }
 }
