@@ -234,8 +234,8 @@ class ReportController extends Controller
 			$dataProvider = $searchModel->searchCustom($params);				
 		}
 		else 
-			$dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
-  
+		$dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
+		//print_r($params);
 		if(\Yii::$app->request->post() && isset(\Yii::$app->request->post()['selection'])){
 			$post = \Yii::$app->request->post();
 			

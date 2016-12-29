@@ -83,8 +83,14 @@ class SearchUnitReport extends UnitReport
 		 $query = UnitReport::find();
         // add conditions that should always apply here
 		//print_R($param);die;
+		if(!empty($param))
+			$number = 0;
+		else $number = 20;
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+				'pagination' => [
+					'pageSize' => $number,
+				],
         ]);
 		$query->joinWith(['user_profile.user']);
 		$query->joinWith(['unit as u']);
