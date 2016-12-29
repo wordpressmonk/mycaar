@@ -377,7 +377,11 @@ class ReportController extends Controller
 					 file_put_contents('/tmp/crontab.txt', $output); 
 				} 
 				file_put_contents('/tmp/crontab.txt', $output.$new_cron_command); 
-				//echo exec('crontab /tmp/crontab.txt');
+				echo exec('crontab /tmp/crontab.txt');
+				
+				//print for debugging
+				$output = shell_exec('crontab -l');
+				echo $output;
 			}
 		}
 
