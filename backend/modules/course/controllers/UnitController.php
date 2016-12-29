@@ -187,8 +187,8 @@ class UnitController extends Controller
 			
 			//create the cron time
 			//minute hour day month weekday
-			//$cron_time = "0 1 $date $month *";
-			$cron_time = "* * * * *";
+			$cron_time = "0 1 $date $month *";
+			//$cron_time = "* * * * *"; //for debugging
 			$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
 			$old_command = false;
 			
@@ -232,18 +232,16 @@ class UnitController extends Controller
         $model = $this->findModel($id);
 		$module = Module::find()->where(['module_id'=>$model->module_id])->one();
 		$program = $module->program;
+		$current_reset_period = $model->auto_reset_period;
 		if (\Yii::$app->user->can('manageProgram', ['post' => $program])) {
 			if(isset(Yii::$app->request->post()['unit_title'])) {
-				//print_r(Yii::$app->request->post());
-				//$data = json_decode(Yii::$app->request->post()['builder_data']);
-				//json_decode(stripslashes($_POST['posts']));
-				//print_r($data->html);
-				//$model->module_id = $m_id;
 				$model->title = Yii::$app->request->post()['unit_title'];
 				$model->status = Yii::$app->request->post()['unit_status'];
 				$model->auto_reset_period = Yii::$app->request->post()['reset_period'];
 				if($model->save()){
-					$this->saveAutoReset($model->unit_id,$model->auto_reset_period);
+					//if any change in the auto_reset_period, then only alter the crontab
+					if($current_reset_period != $model->auto_reset_period)
+						$this->saveAutoReset($model->unit_id,$model->auto_reset_period);
 					//save elements as well
 					$element = UnitElement::find()->where(['unit_id'=>$id,'element_type'=>'page'])->one();
 					$element->unit_id = $model->unit_id;
