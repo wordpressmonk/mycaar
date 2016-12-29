@@ -30,8 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		<div class ="card-body">
 
-
-		<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+		<?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
 		<div class="card card-collapse">
 			<div class="card-head style-default">
@@ -44,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			</div><!--end .card-head -->
 			<div class="card-body">
 				<div class="program-search">
-					<form method="post">
+					<form method="get">
 
 						<div class="row">
 							<div class="col-sm-6">

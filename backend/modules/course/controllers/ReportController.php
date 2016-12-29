@@ -223,8 +223,8 @@ class ReportController extends Controller
 			
 		}
 		$params = false;		
-		if(isset(\Yii::$app->request->post()['custom_search'])){
-			$params = \Yii::$app->request->post()['custom_search'];	
+		if(isset(\Yii::$app->request->get()['custom_search'])){
+			$params = \Yii::$app->request->get()['custom_search'];	
 			//print_r($params);die;
 			$dataProvider = $searchModel->searchCustom($params);				
 		}
