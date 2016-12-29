@@ -238,11 +238,31 @@ class ReportController extends Controller
   
 		if(\Yii::$app->request->post() && isset(\Yii::$app->request->post()['selection'])){
 			$post = \Yii::$app->request->post();
+			
+			$type = $post['reset_type'];
 			foreach($post['selection'] as $report){
 				$rep = UnitReport::findOne($report);
 				if($rep != null){
-					$rep->resetUser();
-					$rep->save();
+					switch($type){			
+						case("cp"):
+							$rep->resetCpTest();
+							$rep->capability_progress = NULL;
+							$rep->cap_done_by = NULL;
+							$rep->save();
+							break;
+						case("aw"):
+							//delete all aware questions
+							$rep->resetAwTest();			
+							$rep->awareness_progress = NULL;
+							$rep->save();
+							break;
+						case("all"):
+							$rep->resetUser();
+							$rep->save();
+							break;
+					}
+					//$rep->resetUser();
+					//$rep->save();
 					//$rep->delete();				
 				}
 			}
@@ -320,5 +340,18 @@ class ReportController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+	
+	/**
+	 * Auto-reset lesson after a particular time period
+	 */
+	public function actionAutoReset(){
+		$output = shell_exec('crontab -l');
+		file_put_contents('/tmp/crontab.txt', $output.'* * * * * NEW_CRON'.PHP_EOL);
+		echo exec('crontab /tmp/crontab.txt');
+		
+		//print all cron jobs
+		$output = shell_exec('crontab -l');
+		echo $output;
+	}
 
 }

@@ -149,15 +149,23 @@ $this->params['breadcrumbs'][] = $this->title;
 			$page = $_GET['page'];
 		else $page = '';
 		?>
+		
 		<p>
-			<?=Html::input('hidden', 'search_params', serialize($params), ['class' =>'form-control'])?>
-			<?=Html::input('hidden', 'page',$page, ['class' =>'form-control'])?>
-			<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
-
+		<div class="row">
+			<div class="col-md-6">
+				<?=Html::input('hidden', 'search_params', serialize($params), ['class' =>'form-control'])?>
+				<?=Html::input('hidden', 'page',$page, ['class' =>'form-control'])?>
+				<?=Html::dropDownList('reset_type','',['all'=>'All Selected (both Awareness & Capability)','aw'=>'Selected Awareness Only','cp'=>'Selected Capability Only'], ['class' =>'form-control'])?>
+			</div>
+			<div class="col-md-2">
+				<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
+			</div>
+		</div>
 		<p>
 		<?= GridView::widget([
 			'dataProvider' => $dataProvider,
 		//	'filterModel' => $searchModel,
+			'layout' => '{items}',
 			'columns' => [
 				['class' => 'yii\grid\CheckboxColumn'],
 				[
