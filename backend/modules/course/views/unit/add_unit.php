@@ -58,7 +58,12 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 								<div class="help-block"></div>
 								
 							</div>
-
+							<div class="form-group field-reset-period">
+								<label>Auto Reset Period [In months]</label>
+								<input type="text" id="auto_reset_period" class="form-control">
+								<div class="help-block"></div>
+								
+							</div>
 							<div class="form-group">
 								<div class="checkbox checkbox-styled">
 									<label>
@@ -69,6 +74,7 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 							</div>
 					
 							<div id="build-wrap"></div>
+
 						</div>
 					</div>
 				</div><!--end .panel -->
@@ -170,6 +176,12 @@ $(document).ready(function(){
 		var unit_status = 0;
 		if($('#unit_status').is(":checked"))
 			unit_status = 1;
+		var auto_reset_period = $('#auto_reset_period').val();
+		if(auto_reset_period.length > 2){
+			$('.field-reset-period').addClass('has-error');
+			$('.field-reset-period .help-block').html('Invalid reset period');
+			return false;
+		}
 		var unit_title = $('#unit_title').val();
 		if(!unit_title || unit_title == ''){
 			$('.field-unit-title .help-block').html('Title cannot be blank');
@@ -181,7 +193,7 @@ $(document).ready(function(){
 		//save to db
 		$.ajax({
 			url:'<?=Url::to(['unit/create','m_id'=>$module->module_id])?>',
-			data: {unit_title:unit_title,builder_data : builder_data,unit_status:unit_status},
+			data: {unit_title:unit_title,builder_data : builder_data,unit_status:unit_status,reset_period:auto_reset_period},
 			type: 'post',
 			dataType : 'json',
 			success : function(data){

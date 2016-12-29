@@ -30,8 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		<div class ="card-body">
 
-
-		<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+		<?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
 		<div class="card card-collapse">
 			<div class="card-head style-default">
@@ -44,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			</div><!--end .card-head -->
 			<div class="card-body">
 				<div class="program-search">
-					<form method="post">
+					<form method="get">
 
 						<div class="row">
 							<div class="col-sm-6">
@@ -137,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Search</button>  
-							<a class="btn btn-danger" href="<?= Url::to(['report/reset-users','u_id'=>$u_id])?>" >Clear Search </a>
+							<a class="btn btn-danger" href="<?= Url::to(['report/reset-users'])?>" >Clear Search </a>
 						</div>
 					</form>
 				</div>
@@ -158,14 +157,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?=Html::dropDownList('reset_type','',['all'=>'All Selected (both Awareness & Capability)','aw'=>'Selected Awareness Only','cp'=>'Selected Capability Only'], ['class' =>'form-control'])?>
 			</div>
 			<div class="col-md-2">
-				<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
+				<?=Html::submitButton('Reset', ['class' => 'btn btn-info',]);?>
 			</div>
 		</div>
 		<p>
 		<?= GridView::widget([
 			'dataProvider' => $dataProvider,
 		//	'filterModel' => $searchModel,
-			'layout' => '{items}',
+		//	'layout' => '{items}{pager}',
 			'columns' => [
 				['class' => 'yii\grid\CheckboxColumn'],
 				[

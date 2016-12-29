@@ -11,15 +11,14 @@ use yii\widgets\ActiveForm;
 <div class="program-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'action' => ['reset-users'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'user_id') ?>
+    <?= $form->field($model, 'student_id') ?>
 
     <?= $form->field($model, 'unit_id') ?>
 
-    <?= $form->field($model, 'c_id') ?>
 
 
     <div class="form-group">

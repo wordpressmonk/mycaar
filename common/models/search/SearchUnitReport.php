@@ -88,14 +88,11 @@ class SearchUnitReport extends UnitReport
             return $dataProvider;
         }
 		$query->andFilterWhere(['or',
-			['like', 'assr.firstname', $this->cap_done_by],
-			['like','assr.lastname', $this->cap_done_by]
-		]);
+						['like', 'assr.firstname', $this->cap_done_by],
+						['like','assr.lastname', $this->cap_done_by]]);
 		$query->andFilterWhere(['or',
-			['like', 'profile.firstname', $this->student_id],
-			['like','profile.lastname', $this->student_id]
-		]);				
-
+						['like', 'profile.firstname', $this->student_id],
+						['like','profile.lastname', $this->student_id]]);
 		$query->andFilterWhere(['like', 'u.title', $this->unit_id]);
 		$query->andFilterWhere(['like', 'm.title', $this->module_id]);
 		
