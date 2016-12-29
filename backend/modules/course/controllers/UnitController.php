@@ -149,12 +149,37 @@ class UnitController extends Controller
 			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
 		}
     }
+	public function removeAutoReset($unit_id){
+		$schedule = ResetSchedule::find()->where(['unit_id'=>$unit_id])->one();
+		if($schedule){
+			$old_command = $schedule->cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
+			if(file_exists('/tmp/crontab.txt')){
+				//write cron_tab
+				$output = shell_exec('crontab -l');
+				 if($old_command){
+					//removing
+					 $output = str_replace($old_command, "", $output);
+					 file_put_contents('/tmp/crontab.txt', $output); 
+				} 
+				//file_put_contents('/tmp/crontab.txt', $output.$new_cron_command); 
+				exec('crontab /tmp/crontab.txt');					
+				//print for debugging
+				//$output = shell_exec('crontab -l');					
+			}
+			$schedule->delete();
+		}
+		return true;
+
+	}
 	/**
 	 * Auto-reset lesson after a particular time period
 	 */
-	public function saveAutoReset($unit_id,$months){
-	
+	public function saveAutoReset($unit_id,$months){	
 		if(Unit::findOne($unit_id) != null){
+			if($months == NULL || $months == '' ){
+				$this->removeAutoReset($unit_id);	
+				return true;
+			}
 			$today = time();
 			$monthsLater = strtotime("+{$months} months", $today);
 			$month = (int)date('m', $monthsLater);
@@ -162,7 +187,8 @@ class UnitController extends Controller
 			
 			//create the cron time
 			//minute hour day month weekday
-			$cron_time = "0 1 $date $month *";
+			//$cron_time = "0 1 $date $month *";
+			$cron_time = "* * * * *";
 			$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
 			$old_command = false;
 			
