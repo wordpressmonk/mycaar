@@ -12,8 +12,8 @@ use Yii;
 class ResetController extends Controller {
 	
 	public function actionUnit($id){
-		
-		Unit::findOne($unit)->resetUnit();
+		if(Unit::findOne($id) != null)
+			Unit::findOne($id)->resetUnit();
 	}
 }
 ?>
