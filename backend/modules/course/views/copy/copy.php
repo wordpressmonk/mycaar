@@ -72,7 +72,7 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#module-program_id").change(function(){
+    $("#copymodule-program_id").change(function(){
 		var program_id = $(this).val();
 		 $.ajax({
 				   url: '<?=Url::to(['copy/get-modules'])?>',
@@ -80,23 +80,23 @@ $(document).ready(function(){
 				   data: {  program_id: program_id,
 				   },
 				   success: function(data) {		
-						$("#module-copy_module").html(data);						
+						$("#copymodule-copy_module").html(data);						
 				   }
 				 }); 
 		
     });
 	
 	<?php if(isset($model->copy_module)){ ?>
-		 $.ajax({
+		  $.ajax({
 				   url: '<?=Url::to(['copy/get-modules-selected'])?>',
 				   type: 'POST',
 				   data: {  program_id: <?= $model->program_id ?>,
 							module_id: <?= $model->copy_module ?>,
 				   },
 				   success: function(data) {		
-						$("#module-copy_module").html(data);						
+						$("#copymodule-copy_module").html(data);						
 				   }
-				 }); 
-	<?php } ?>
+				 });  
+	<?php  } ?>
 });
 </script>

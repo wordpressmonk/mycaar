@@ -3,6 +3,7 @@
 namespace backend\modules\course\controllers;
 
 use Yii;
+use common\models\CopyModule;
 use common\models\Module;
 use common\models\Unit;
 use common\models\UnitElement;
@@ -15,24 +16,25 @@ class CopyController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $model = new Module();
-		$model->scenario = 'apply_copy_controller';
+        $model = new CopyModule();
 		$program = Program::find()->where(["company_id"=>\Yii::$app->user->identity->c_id])->all();		
 		 if ($model->load(Yii::$app->request->post())) {
 								
 				$program_id = $model->program_id;
 				$copyprogram_id = $model->copy_program;
 				$copymodule = Module::find()->where(["module_id"=>$model->copy_module,"program_id"=>$program_id])->one();
+				$count = Module::find()->where(["program_id"=>$copyprogram_id])->count();
 				
 			if($copymodule)
 			{
-				$model2 = new Module();
-				$model2->setAttributes($copymodule->getAttributes(), false);
-				$model2->module_id = ""; 
-				$model2->program_id = $copyprogram_id; 
-				if($model2->save())
+				$module = new Module();
+				$module->setAttributes($copymodule->getAttributes(), false);
+				$module->module_id = ""; 
+				$module->module_order = $count; 
+				$module->program_id = $copyprogram_id; 
+				if($module->save())
 				{
-					$model2->module_id;
+					$module->module_id;
 					$copyunit = Unit::find()->where(["module_id"=>$model->copy_module])->all();
 					
 				 if($copyunit)
@@ -42,7 +44,7 @@ class CopyController extends \yii\web\Controller
 						$unit = new Unit();
 						$unit->setAttributes($tmpunit->getAttributes(), false);
 						$unit->unit_id = ""; 
-						$unit->module_id = $model2->module_id; 
+						$unit->module_id = $module->module_id; 
 						
 						if($unit->save())
 						{
@@ -120,7 +122,7 @@ class CopyController extends \yii\web\Controller
 			  Yii::$app->getSession()->setFlash('Success', 'Copy the Module Successfully to another Program !!!.');
 			}
 		 }
-		return $this->render('copymodule', ['program' => $program,'model'=>$model]);
+		return $this->render('copy', ['program' => $program,'model'=>$model]);
 		
     }
 	
