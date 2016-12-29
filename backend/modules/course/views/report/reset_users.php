@@ -158,14 +158,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?=Html::dropDownList('reset_type','',['all'=>'All Selected (both Awareness & Capability)','aw'=>'Selected Awareness Only','cp'=>'Selected Capability Only'], ['class' =>'form-control'])?>
 			</div>
 			<div class="col-md-2">
-				<?=Html::submitButton('Reset Selected', ['class' => 'btn btn-info',]);?>
+				<?=Html::submitButton('Reset', ['class' => 'btn btn-info',]);?>
 			</div>
 		</div>
 		<p>
 		<?= GridView::widget([
 			'dataProvider' => $dataProvider,
 		//	'filterModel' => $searchModel,
-			'layout' => '{items}',
+			'layout' => '{items}\n{pager}',
 			'columns' => [
 				['class' => 'yii\grid\CheckboxColumn'],
 				[
