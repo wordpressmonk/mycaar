@@ -10,6 +10,7 @@ use common\models\AwarenessOption;
 use common\models\Unit;
 use common\models\UnitElement;
 use common\models\search\SearchUnit;
+use common\models\ResetSchedule;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -106,10 +107,13 @@ class UnitController extends Controller
 			$model->module_id = $m_id;
 			$model->title = Yii::$app->request->post()['unit_title'];
 			$model->status = Yii::$app->request->post()['unit_status'];
+			$model->auto_reset_period = Yii::$app->request->post()['reset_period'];	
 			$previous_unit = Unit::find()->where(["module_id"=>$m_id])->orderBy('unit_order DESC')->one();
 			if($previous_unit)
 				$model->unit_order = $previous_unit->unit_order+1;
 			if($model->save()){
+				//save schedule here
+				$this->saveAutoReset($model->unit_id,$model->auto_reset_period);
 				//save elements as well
 				$element = new UnitElement();
 				$element->unit_id = $model->unit_id;
@@ -145,7 +149,52 @@ class UnitController extends Controller
 			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
 		}
     }
+	/**
+	 * Auto-reset lesson after a particular time period
+	 */
+	public function saveAutoReset($unit_id,$months){
+	
+		if(Unit::findOne($unit_id) != null){
+			$today = time();
+			$monthsLater = strtotime("+{$months} months", $today);
+			$month = (int)date('m', $monthsLater);
+			$date = (int)date('d', $monthsLater);
+			
+			//create the cron time
+			//minute hour day month weekday
+			$cron_time = "0 1 $date $month *";
+			$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
+			$old_command = false;
+			
+			//save schedule
+			$schedule = ResetSchedule::find()->where(['unit_id'=>$unit_id])->one();
+			if(!$schedule){
+				$schedule = new ResetSchedule();
+			}else{
+				$old_command = $schedule->cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
+			}
+			$schedule->unit_id = $unit_id;
+			$schedule->cron_time = $cron_time;
+			if($schedule->save()){
+				if(file_exists('/tmp/crontab.txt')){
+					//write cron_tab
+					$output = shell_exec('crontab -l');
+					 if($old_command){
+						//removing
+						 $output = str_replace($old_command, "", $output);
+						 file_put_contents('/tmp/crontab.txt', $output); 
+					} 
+					file_put_contents('/tmp/crontab.txt', $output.$new_cron_command); 
+					echo exec('crontab /tmp/crontab.txt');					
+					//print for debugging
+					//$output = shell_exec('crontab -l');					
+				}
 
+				return true;
+			}
+		}
+
+	}
     /**
      * Updates an existing Unit model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -166,7 +215,9 @@ class UnitController extends Controller
 				//$model->module_id = $m_id;
 				$model->title = Yii::$app->request->post()['unit_title'];
 				$model->status = Yii::$app->request->post()['unit_status'];
+				$model->auto_reset_period = Yii::$app->request->post()['reset_period'];
 				if($model->save()){
+					$this->saveAutoReset($model->unit_id,$model->auto_reset_period);
 					//save elements as well
 					$element = UnitElement::find()->where(['unit_id'=>$id,'element_type'=>'page'])->one();
 					$element->unit_id = $model->unit_id;

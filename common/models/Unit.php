@@ -36,6 +36,7 @@ class Unit extends \yii\db\ActiveRecord
         return [
             [['module_id', 'title'], 'required'],
             [['module_id', 'status', 'unit_order'], 'integer'],
+			[['auto_reset_period'], 'integer'],
             [['title'], 'string', 'max' => 1000],
             [['module_id'], 'exist', 'skipOnError' => true, 'targetClass' => Module::className(), 'targetAttribute' => ['module_id' => 'module_id']],
         ];
@@ -52,6 +53,7 @@ class Unit extends \yii\db\ActiveRecord
             'title' => 'Title',
             'status' => 'Status',
 			'unit_order' => 'Unit Order',
+			'auto_reset_period' => 'AutoReset Period'
         ];
     }
 

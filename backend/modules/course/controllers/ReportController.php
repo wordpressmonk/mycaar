@@ -24,7 +24,6 @@ use common\models\search\SearchUnit;
 
 use common\models\UnitReport;
 use common\models\search\SearchUnitReport;
-use common\models\ResetSchedule;
 
 use \moonland\phpexcel\Excel;
 /**
@@ -342,48 +341,5 @@ class ReportController extends Controller
         }
     }
 	
-	/**
-	 * Auto-reset lesson after a particular time period
-	 */
-	public function actionAutoReset($unit_id,$months){
-	
-		if(Unit::findOne($unit_id) != null){
-			$today = time();
-			$monthsLater = strtotime("+{$months} months", $today);
-			$month = (int)date('m', $monthsLater);
-			$date = (int)date('d', $monthsLater);
-			
-			//create the cron time
-			//minute hour day month weekday
-			$cron_time = "0 1 $date $month *";
-			$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
-			$old_command = false;
-			
-			//save schedule
-			$schedule = ResetSchedule::find()->where(['unit_id'=>$unit_id])->one();
-			if(!$schedule){
-				$schedule = new ResetSchedule();
-			}else{
-				$old_command = $schedule->cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
-			}
-			$schedule->unit_id = $unit_id;
-			$schedule->cron_time = $cron_time;
-			if($schedule->save()){
-				//write cron_tab
-				$output = shell_exec('crontab -l');
-				 if($old_command){
-					//removing
-					 $output = str_replace($old_command, "", $output);
-					 file_put_contents('/tmp/crontab.txt', $output); 
-				} 
-				file_put_contents('/tmp/crontab.txt', $output.$new_cron_command); 
-				echo exec('crontab /tmp/crontab.txt');
-				
-				//print for debugging
-				$output = shell_exec('crontab -l');
-				echo $output;
-			}
-		}
 
-	}
 }
