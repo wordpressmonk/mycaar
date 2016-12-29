@@ -371,11 +371,11 @@ class ReportController extends Controller
 			if($schedule->save()){
 				//write cron_tab
 				$output = shell_exec('crontab -l');
-				if($old_command){
+				/* if($old_command){
 					//removing
 					 $output = str_replace($old_command, "", $output);
 					 file_put_contents('/tmp/crontab.txt', $output); 
-				}
+				} */
 				file_put_contents('/tmp/crontab.txt', $output.$new_cron_command); 
 				echo exec('crontab /tmp/crontab.txt');
 			}
