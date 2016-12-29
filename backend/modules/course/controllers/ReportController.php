@@ -344,11 +344,14 @@ class ReportController extends Controller
 	/**
 	 * Auto-reset lesson after a particular time period
 	 */
-	public function actionAutoReset(){
-		/* $output = shell_exec('crontab -l');
-		file_put_contents('/tmp/crontab.txt', $output.'* * * * * NEW_CRON'.PHP_EOL);
-		echo exec('crontab /tmp/crontab.txt');
-		 */
+	public function actionAutoReset($unit_id){
+		//sample cron
+		//cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii archive/reports
+		if(Unit::findOne($unit) != null){
+			$output = shell_exec('crontab -l');
+			file_put_contents('/tmp/crontab.txt', $output.'* * * * * cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL);
+			echo exec('crontab /tmp/crontab.txt');			
+		}	 
 		//print all cron jobs
 		$output = shell_exec('crontab -l');
 		echo $output;
