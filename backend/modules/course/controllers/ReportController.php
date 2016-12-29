@@ -356,7 +356,7 @@ class ReportController extends Controller
 			//create the cron time
 			//minute hour day month weekday
 			$cron_time = "0 1 $date $month *";
-			$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit'.$unit_id.PHP_EOL;
+			$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
 			$old_command = false;
 			
 			//save schedule
@@ -364,7 +364,7 @@ class ReportController extends Controller
 			if(!$schedule){
 				$schedule = new ResetSchedule();
 			}else{
-				$old_command = $schedule->cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit'.$unit_id.PHP_EOL;
+				$old_command = $schedule->cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
 			}
 			$schedule->unit_id = $unit_id;
 			$schedule->cron_time = $cron_time;
