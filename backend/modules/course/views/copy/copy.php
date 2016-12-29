@@ -87,7 +87,7 @@ $(document).ready(function(){
     });
 	
 	<?php if(isset($model->copy_module)){ ?>
-		  $.ajax({
+		   $.ajax({
 				   url: '<?=Url::to(['copy/get-modules-selected'])?>',
 				   type: 'POST',
 				   data: {  program_id: <?= $model->program_id ?>,
@@ -96,7 +96,7 @@ $(document).ready(function(){
 				   success: function(data) {		
 						$("#copymodule-copy_module").html(data);						
 				   }
-				 });  
+				 });   
 	<?php  } ?>
 });
 </script>

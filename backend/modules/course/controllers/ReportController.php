@@ -143,11 +143,19 @@ class ReportController extends Controller
 	}
 	public function actionAssessorReport(){
         $searchModel = new SearchUnitReport();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        
+		$extrasearch = false;
+		if($get=Yii::$app->request->get())
+		 {
+			$extrasearch = \Yii::$app->request->get();
+		 }
+		 
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams,$extrasearch);
+		
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'params'=>$extrasearch,	
         ]);		
 	}
 	public function actionResetPrograms(){

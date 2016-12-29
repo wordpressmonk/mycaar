@@ -75,6 +75,12 @@ class UnitReport extends \yii\db\ActiveRecord
     {
         return $this->hasOne(UserProfile::className(), ['user_id' => 'student_id']);
     }
+	
+	 public function getAuthRole()
+    {
+        return $this->hasOne(AuthAssignment::className(), ['user_id' => 'student_id']);
+    }
+	
     /**
      * @return \yii\db\ActiveQuery
      */

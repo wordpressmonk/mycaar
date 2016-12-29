@@ -18,7 +18,7 @@ class CopyController extends \yii\web\Controller
     {
         $model = new CopyModule();
 		$program = Program::find()->where(["company_id"=>\Yii::$app->user->identity->c_id])->orderBy("title")->all();		
-		 if ($model->load(Yii::$app->request->post())) {
+		 if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 								
 				$program_id = $model->program_id;
 				$copyprogram_id = $model->copy_program;
@@ -30,7 +30,9 @@ class CopyController extends \yii\web\Controller
 				$module = new Module();
 				$module->setAttributes($copymodule->getAttributes(), false);
 				$module->module_id = ""; 
+				$module->copy_id = $copymodule->module_id; 
 				$module->module_order = $count; 
+				$module->title = $copymodule->title." ( copy ) "; 
 				$module->program_id = $copyprogram_id; 
 				if($module->save())
 				{
@@ -121,8 +123,10 @@ class CopyController extends \yii\web\Controller
 				
 			  Yii::$app->getSession()->setFlash('Success', 'Selected module has been successfully copied !!!.');
 			}
+			return $this->redirect(['index']);
+		 } else {
+			return $this->render('copy', ['program' => $program,'model'=>$model]);
 		 }
-		return $this->render('copy', ['program' => $program,'model'=>$model]);
 		
     }
 	
@@ -144,7 +148,7 @@ class CopyController extends \yii\web\Controller
 	  }
     }
 	
-	public function actionGetModulesSelected()
+	 public function actionGetModulesSelected()
     {
 		echo "<option value=''>--Select Module--</option>";
 		
@@ -162,6 +166,6 @@ class CopyController extends \yii\web\Controller
 			  }
 		  }	
 	  }
-    }
+    } 
 
 }

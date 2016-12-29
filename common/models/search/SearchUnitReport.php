@@ -13,6 +13,13 @@ use common\models\UnitReport;
 class SearchUnitReport extends UnitReport
 {
     public $module_id;
+	
+	public $division;
+	public $location;
+	public $role;
+	public $state;
+	public $accesslevel;
+	
 	/**
      * @inheritdoc
      */
@@ -21,6 +28,7 @@ class SearchUnitReport extends UnitReport
         return [
           //  [['unit_id'], 'integer'],
             [['cap_done_by','student_id','unit_id','module_id'], 'string'],
+			 [['location','role','state','division','accesslevel'], 'safe'],
         ];
     }
 
@@ -40,20 +48,34 @@ class SearchUnitReport extends UnitReport
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$extrasearch)
     {
+
+		if(isset($extrasearch['accesslevel']) && $extrasearch['accesslevel']!='')
+			$params['SearchUnitReport']['accesslevel'] = $extrasearch['accesslevel'];
+		if(isset($extrasearch['division']) && $extrasearch['division']!='')
+			$params['SearchUnitReport']['division'] = $extrasearch['division'];
+		if(isset($extrasearch['role']) && $extrasearch['role']!='')
+			$params['SearchUnitReport']['role'] = $extrasearch['role'];
+		if(isset($extrasearch['location']) && $extrasearch['location']!='')
+			$params['SearchUnitReport']['location'] = $extrasearch['location'];
+		if(isset($extrasearch['state']) && $extrasearch['state']!='')
+			$params['SearchUnitReport']['state'] = $extrasearch['state']; 
+
         $query = UnitReport::find()->where(['not',['cap_done_by'=>NULL]]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+
         ]);
 		$query->joinWith(['unit as u']);
 		$query->joinWith(['unit.module as m']);
 		$query->joinWith(['user_profile as profile']);
 		$query->joinWith(['assessor as assr']);
 		$query->joinWith(['assessor.user']);
+		$query->joinWith(['authRole as rolelist']);	
 		//$query->joinWith(['program']);
 		$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id,'user.status'=>10]);
 		//$query->andFilterWhere(['u.status'=>1]);
@@ -65,14 +87,24 @@ class SearchUnitReport extends UnitReport
             // $query->where('0=1');
             return $dataProvider;
         }
-		$query->andFilterWhere(['like', 'assr.firstname', $this->cap_done_by])
-			->orFilterWhere(['like', 'assr.lastname', $this->cap_done_by]);
-
-		$query->andFilterWhere(['like', 'profile.firstname', $this->student_id])
-			->orFilterWhere(['like', 'profile.lastname', $this->student_id]);				
+		$query->andFilterWhere(['or',
+			['like', 'assr.firstname', $this->cap_done_by],
+			['like','assr.lastname', $this->cap_done_by]
+		]);
+		$query->andFilterWhere(['or',
+			['like', 'profile.firstname', $this->student_id],
+			['like','profile.lastname', $this->student_id]
+		]);				
 
 		$query->andFilterWhere(['like', 'u.title', $this->unit_id]);
 		$query->andFilterWhere(['like', 'm.title', $this->module_id]);
+		
+		$query->andFilterWhere(['=', 'profile.division', $this->division]);        
+        $query->andFilterWhere(['=', 'profile.location', $this->location]);        
+        $query->andFilterWhere(['=', 'profile.role', $this->role]);        
+        $query->andFilterWhere(['=', 'profile.state', $this->state]);
+		$query->andFilterWhere(['like', 'rolelist.item_name', $this->accesslevel]);   		
+			
 		//}
 
         return $dataProvider;
