@@ -17,7 +17,7 @@ class CopyController extends \yii\web\Controller
     public function actionIndex()
     {
         $model = new CopyModule();
-		$program = Program::find()->where(["company_id"=>\Yii::$app->user->identity->c_id])->all();		
+		$program = Program::find()->where(["company_id"=>\Yii::$app->user->identity->c_id])->orderBy("title")->all();		
 		 if ($model->load(Yii::$app->request->post())) {
 								
 				$program_id = $model->program_id;
@@ -119,7 +119,7 @@ class CopyController extends \yii\web\Controller
 				  }		
 				}	
 				
-			  Yii::$app->getSession()->setFlash('Success', 'Copy the Module Successfully to another Program !!!.');
+			  Yii::$app->getSession()->setFlash('Success', 'Selected module has been successfully copied !!!.');
 			}
 		 }
 		return $this->render('copy', ['program' => $program,'model'=>$model]);
@@ -133,7 +133,7 @@ class CopyController extends \yii\web\Controller
 		
       if($post=Yii::$app->request->post())
 	  {
-		  $module = Module::find()->where(["program_id"=>$post['program_id']])->all();
+		  $module = Module::find()->where(["program_id"=>$post['program_id']])->orderBy("title")->all();
 		  if($module)
 		  {
 			  foreach($module as $tmp)
@@ -150,7 +150,7 @@ class CopyController extends \yii\web\Controller
 		
       if($post=Yii::$app->request->post())
 	  {
-		  $module = Module::find()->where(["program_id"=>$post['program_id']])->all();
+		  $module = Module::find()->where(["program_id"=>$post['program_id']])->orderBy("title")->all();
 		  if($module)
 		  {
 			  foreach($module as $tmp)
