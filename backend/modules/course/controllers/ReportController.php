@@ -349,7 +349,9 @@ class ReportController extends Controller
 		//cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii archive/reports
 		if(Unit::findOne($unit_id) != null){
 			$output = shell_exec('crontab -l');
-			file_put_contents('/tmp/crontab.txt', $output.'* * * * * cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL);
+			 $output = str_replace('* * * * * cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL, "", $output);
+			 file_put_contents('/tmp/crontab.txt', $output);
+			/* file_put_contents('/tmp/crontab.txt', $output.'* * * * * cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL); */
 			echo exec('crontab /tmp/crontab.txt');			
 		}	 
 		//print all cron jobs
