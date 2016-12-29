@@ -17,7 +17,7 @@ class ResetController extends Controller {
 		if($unit != null)
 			$unit->resetUnit();
 		//after resetting,again set the cronjob for next time
-		$schedule = ResetSchedule::find()->where(['unit_id'=>$unit_id])->one();
+		$schedule = ResetSchedule::find()->where(['unit_id'=>$id])->one();
 		//make the new cron command
 		$months = $unit->auto_reset_period;
 		$today = time();
@@ -28,8 +28,8 @@ class ResetController extends Controller {
 		//create the cron time
 		//minute hour day month weekday
 		$cron_time = "0 1 $date $month *";
-		$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
-		$old_command = $schedule->cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$unit_id.PHP_EOL;
+		$new_cron_command = $cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$id.PHP_EOL;
+		$old_command = $schedule->cron_time.' cd /home/wordpressmonks/public_html/works/mycaar_lms && php yii reset/unit '.$id.PHP_EOL;
 		$schedule->cron_time = $cron_time;
 		if($schedule->save()){
 			if(file_exists('/tmp/crontab.txt')){
