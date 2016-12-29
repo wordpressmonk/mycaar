@@ -137,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Search</button>  
-							<a class="btn btn-danger" href="<?= Url::to(['report/reset-users','u_id'=>$u_id])?>" >Clear Search </a>
+							<a class="btn btn-danger" href="<?= Url::to(['report/reset-users'])?>" >Clear Search </a>
 						</div>
 					</form>
 				</div>
