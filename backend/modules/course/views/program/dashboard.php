@@ -31,20 +31,20 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 //}
 ?>
 
-    <div class="mdl-grid mdl-home">
+    <!--<div class="mdl-grid mdl-home">
 					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
 						<h1 class="mdl-sidebar"><strong>Dashboard & Search</strong></h1>
 					</div>
-	</div>
+	</div>-->
 
-		<div class="card card-collapse">
-			<div class="card-head style-default">
+		<div class="card card-collapse small-padding">
+			<div class="card-head card-head-xs style-default">
 				<div class="tools">
 					<div class="btn-group">
 						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapse"><i class="fa fa-angle-down"></i></a>
 					</div>
 				</div>
-				<header>Search</header>
+				<header >Search</header>
 			</div><!--end .card-head -->
 			<div class="card-body">
 				<div class="program-search">
@@ -127,12 +127,12 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				</div>
 			</div><!--end .card-body -->
 		</div><!--end .card -->
-		<div class="mdl-grid">
+		<!--<div class="mdl-grid">
 				<div class="mdl-cell mdl-cell-8-col">
 					<span class="mdl-welcome"><h3>Welcome <?=\Yii::$app->user->identity->fullname?></h3></span>
 					<span class="mdl-current"><h3>Current Programs :</h3></span>
 				</div>
-		</div>
+		</div>-->
 		<div class="row small-padding">
 
 			<?php 

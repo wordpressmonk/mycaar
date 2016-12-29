@@ -42,9 +42,9 @@ class SearchModule extends Module
     public function search($params,$program_id=null)
     {
 		
-        $query = Module::find();
+        $query = Module::find()->orderBy('module_order');
 		if($program_id)
-			$query = Module::find()->where(['program_id'=>$program_id]);
+			$query = Module::find()->where(['program_id'=>$program_id])->orderBy('module_order');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

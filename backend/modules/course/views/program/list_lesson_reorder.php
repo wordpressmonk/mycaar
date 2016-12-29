@@ -4,11 +4,9 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use common\models\Company;
-
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\SearchProgram */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'Programs';
 $this->params['breadcrumbs'][] = $this->title;
 $homeUrl = Yii::$app->homeUrl;
@@ -30,7 +28,7 @@ $homeUrl = Yii::$app->homeUrl;
 			
 					<?php foreach($dataProvider->models as $program){
 						echo 					
-						"
+						"<div class='dd nestable-list' id='list_{$program->program_id}'>
 				<ol class='dd-list'><li class='dd-item tile' data-id='$program->program_id'>
 							<div class='btn btn-primary' style='min-height:35px;'><span class='pull-left'><i class='fa fa-list'></i> $program->title</span>
 							<span class='pull-right text-default'>
@@ -43,11 +41,11 @@ $homeUrl = Yii::$app->homeUrl;
 						";
 						$modules = $program->modules;
 						//if(count($modules)>0){
-							echo "<div class='dd nestable-list' id='list_{$program->program_id}'><ol class='dd-list'>";
+							echo "<ol class='dd-list'>";
 							foreach($modules as $module){
 								echo "
-									<li class='dd-item list-group' data-id='$module->module_id'>
-										<div class='dd-handle btn btn-default-light'></div><div class='btn btn-default' style='min-height:35px;'><span class='pull-left'>$module->title</span>
+									<li class='dd-item' data-id='$module->module_id'>
+										<div class='btn btn-default' style='min-height:35px;'><span class='pull-left'>$module->title</span>
 											<span class='pull-right text-primary'>
 												<a href='{$homeUrl}course/module/update?id={$module->module_id}' title='Update Course' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
 												<a href='{$homeUrl}course/unit/create?m_id={$module->module_id}' title='Add Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-plus'></span></a>
@@ -60,11 +58,11 @@ $homeUrl = Yii::$app->homeUrl;
 										</div>
 									";
 								$units = $module->units;
-								echo "<ol class='dd-list'>";
 								if(count($units)>0){
+									echo "<div data-type='unit' class='dd nestable-unit-list' id='unit_{$module->module_id}'><ol class='dd-list'>";
 									foreach($units as $unit){
 										echo "
-									<li data-type='unit' data-m_id='$module->module_id' class='dd-item' data-id='$unit->unit_id'>
+									<li data-type='unit' data-m_id='$module->module_id' class='dd-item list-group' data-id='$unit->unit_id'><div class='dd-handle btn btn-default-light'></div>
 										<div class='btn btn-default-bright' style='min-height:35px;'><span class='pull-left'>$unit->title</span>
 											<span class='pull-right text-primary-dark'>
 												<a href='{$homeUrl}course/unit/update?id={$unit->unit_id}' title='View Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
@@ -79,15 +77,14 @@ $homeUrl = Yii::$app->homeUrl;
 										</div>
 									</li>";
 									}
-									//echo "</ol>";
+									echo "</ol></div>";
 								}
-								echo "</ol></li>";
+								echo "</li>";
 							}	
-							echo "</ol></div>";
+							echo "</ol>";
 						//}
-
 						echo "</li></ol>
-			";
+			</div>";
 					}?>
 				<!--end .dd.nestable-list -->
 		</div><!--end .col -->
@@ -97,8 +94,12 @@ $homeUrl = Yii::$app->homeUrl;
 </div>
 <script src="<?=Yii::$app->homeUrl?>js/libs/nestable/jquery.nestable.js"></script>
 <script>
-
-/*  $('.nestable-unit-list').each(function(i, obj) {
+//$(document).ready(function(){
+/* 	$('.nestable-list').nestable({
+		//maxDepth:2,
+		group:$(this).attr('id'),
+	}).on('change', updateOutput); */
+ $('.nestable-unit-list').each(function(i, obj) {
     //test
 	var elem_id = $(this).attr('id');
 	console.log(elem_id);
@@ -109,37 +110,45 @@ $homeUrl = Yii::$app->homeUrl;
 			console.log('dest',destination[0]);
 			console.log('src',source[0]);
 			if (source[0] != destination[0]) { feedback.abort = true; return; }
-
 		})
 	.on('change',function(){
 		updateOutput($('#'+elem_id).nestable('serialize'));
 		//$('.nestable-list').nestable();
 	 });
-	}); */ 
-$('.nestable-list').each(function(i, obj) {
-    //test
-	var elem_id = $(this).attr('id');
-	console.log(elem_id);
-	$('#'+elem_id).nestable({
-		//group : 0,
-		maxDepth: 3
+	}); 
+//});
+/* 	$('.nestable-list').nestable({
+		group : 0,
+		maxDepth: 3,
 	}).on('beforeDragEnd', function(event, item, source, destination, position, feedback) {
 			console.log('dest',destination[0]);
 			console.log('src',source[0]);
+			var data_type = item.attr('data-type');
+			if(data_type == 'unit'){
+				return;
+			} 
 			if (source[0] != destination[0]) { feedback.abort = true; return; }
-
 		})
-	.on('change',function(){
-		updateOutput($('#'+elem_id).nestable('serialize'));
-		//$('.nestable-list').nestable();
-	 });
-	});
+		.on('change',function(){
+			updateOutput($('.nestable-list').nestable('serialize'));
+		});  */
+	/* 	$('.nestable-unit-list').nestable({
+		group : 0,
+		maxDepth: 3,
+		}).on('beforeDragEnd', function(event, item, source, destination, position, feedback) {
+			console.log('dest',destination[0]);
+			console.log('src',source[0]);
+			if (source[0] != destination[0]) { feedback.abort = true; return; }
+		})
+		.on('change',function(){
+			updateOutput($('.nestable-unit-list').nestable('serialize'));
+			//$('.nestable-list').nestable();
+		 }); */
 		
 function updateOutput(output){
 	console.log('output',output);
-
  	$.ajax({
-		url:'<?=Url::to(['module/re-order'])?>',
+		url:'<?=Url::to(['unit/re-order'])?>',
 		type: 'POST',
 		data: {data:output},
 		dataType: 'json',
@@ -153,3 +162,15 @@ function updateOutput(output){
 	console.log('changed');
 }
 </script>
+
+//controller
+	public function actionReOrder(){
+		$data = \Yii::$app->request->post()['data'];
+		//print_r($data);die;
+		foreach($data as $order=>$module){
+			$module = $this->findModel($module['id']);
+			$module->module_order = $order;
+			$module->save();
+		}
+		return true;
+	}

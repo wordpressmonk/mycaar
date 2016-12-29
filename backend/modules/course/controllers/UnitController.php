@@ -106,6 +106,9 @@ class UnitController extends Controller
 			$model->module_id = $m_id;
 			$model->title = Yii::$app->request->post()['unit_title'];
 			$model->status = Yii::$app->request->post()['unit_status'];
+			$previous_unit = Unit::find()->where(["module_id"=>$m_id])->orderBy('unit_order DESC')->one();
+			if($previous_unit)
+				$model->unit_order = $previous_unit->unit_order+1;
 			if($model->save()){
 				//save elements as well
 				$element = new UnitElement();
@@ -471,5 +474,25 @@ class UnitController extends Controller
 		}
 		
 	}
-
+	public function actionReOrder(){
+		$data = \Yii::$app->request->post()['data'];
+		//print_r($data);die;
+		foreach($data as $order=>$unit){
+			$unit = $this->findModel($unit['id']);
+			$unit->unit_order = $order;
+			$unit->save();
+		}
+		return true;
+	}
+	public function actionSort(){
+		$data = \Yii::$app->request->post();
+		//print_r($data);die;
+		foreach($data['unit'] as $order=>$unit){
+			//echo $unit;
+			$unit = $this->findModel($unit);
+			$unit->unit_order = $order;
+			$unit->save();
+		}
+		return true;
+	}
 }

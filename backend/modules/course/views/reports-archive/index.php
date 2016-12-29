@@ -31,18 +31,18 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
             //'program.title',
             //'company_id',
-/* 			[
+			[
 				'attribute' => 'archived_date',
 				'value' => 'archived_date',
 				'filter' => '<input placeholder="--Search--" type="text" name="SearchReportsArchive[archived_date]" id="archived_date" class="form-control" />',
 				'format' => 'html',
-			], */
-			[
+			],
+/* 			[
 				'attribute' => 'archived_date',
 				'value' => 'archived_date',
 				'filter'=>ArrayHelper::map(Archive::find()->asArray()->groupBy('archived_date')->all(), 'archived_date', 'archived_date'),
 				'format' => 'html',
-			],
+			], */
 			[
 				'attribute' => 'archive_url',
 				 'value'=>function ($data) {

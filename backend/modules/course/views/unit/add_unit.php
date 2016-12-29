@@ -23,14 +23,14 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 	<div class="col-lg-12">
 	<h4 class="small-padding">[ Program: <a href="<?= Url::to(['program/view','id'=>$module->program->program_id])?>"><?=$module->program->title?></a> , Module: <a href="<?= Url::to(['module/update','id'=>$module->module_id])?>"><?=$module->title?> ]</a></h4>
 	<div class="card tabs-left style-default-light">
-		<ul class="card-head nav nav-tabs tabs-info" data-toggle="tabs">
+		<ul id="sortable" class="card-head nav nav-tabs tabs-info" data-toggle="tabs">
 			<?php foreach($module->units as $unit){
 /* 				if($unit->unit_id == $model->unit_id)
 					echo '<li class="active"><a href="#tab1">'.$unit->title.'</a></li>';
 				else */
-					echo '<li><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.substr($unit->title,0,12).'..</a></li>';
+					echo '<li id="unit_'.$unit->unit_id.'" class="ui-state-default"><a class="unit_view" data-unit_id="'.$unit->unit_id.'" href="#tab2">'.substr($unit->title,0,12).'..</a></li>';
 			}?>
-			<li class="active text-info small-padding"><h4>ADD NEW</h4></li>
+			<li class="ui-state-disabled active text-info small-padding"><h4>ADD NEW</h4></li>
 		</ul>
 		<div class="card-body tab-content style-default-bright">
 		<div class="tab-pane active" id="tab1">
@@ -110,6 +110,24 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 
 </div>
 <script>
+  $( function() {
+    $( "#sortable" ).sortable({
+		items: "li:not(.ui-state-disabled)",
+		cancel: ".ui-state-disabled",
+		axis: 'y',
+		update: function (event, ui) {
+			var data = $(this).sortable('serialize');
+			console.log('data',data);
+			// POST to server using $.post or $.ajax
+			 $.ajax({
+				data: data,
+				type: 'POST',
+				url: '<?=Url::to(['unit/sort'])?>'
+			}); 
+		}
+	});
+    $( "#sortable" ).disableSelection();
+  } );
 $(document).ready(function(){
 	<!---------- validate unit title ------------>
 	$('.unit_view').click(function(){

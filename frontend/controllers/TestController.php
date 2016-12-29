@@ -52,7 +52,7 @@ class TestController extends Controller
 		$current_unit = Unit::findOne($u_id);
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
-		$previous_unit = Unit::find()->where(['and', "unit_id<$u_id", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_id DESC')->one();
+		$previous_unit = Unit::find()->where(['and', "unit_order<$current_unit->unit_order", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_order DESC')->one();
 		//
 		$user = User::findOne(\Yii::$app->user->id);
 		if($previous_unit && $user->getRoleName() == 'user' ){
@@ -83,7 +83,7 @@ class TestController extends Controller
 		$current_unit = Unit::findOne($u_id);
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
-		$previous_unit = Unit::find()->where(['and', "unit_id<$u_id", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_id DESC')->one();
+		$previous_unit = Unit::find()->where(['and', "unit_order<$current_unit->unit_order", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_order DESC')->one();
 		//
 		$user = User::findOne(\Yii::$app->user->id);
 		if($previous_unit && $user->getRoleName() == 'user' ){

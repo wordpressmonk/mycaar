@@ -40,7 +40,7 @@ class Module extends \yii\db\ActiveRecord
     {
         return [
             [['program_id', 'title'], 'required'],
-            [['program_id', 'status'], 'integer'],
+            [['program_id', 'status','module_order'], 'integer'],
             [['short_description', 'detailed_description','featured_video_url'], 'string'],
 			[['featured_image'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
 			//[['featured_video_url'], 'file','extensions' => 'mp4', 'skipOnEmpty' => true],
@@ -75,7 +75,8 @@ class Module extends \yii\db\ActiveRecord
             'featured_video_url' => 'Featured Video',
             'detailed_description' => 'Detailed Description',
             'status' => 'Status',
-			'language'=> 'Course Language',
+			'language' => 'Course Language',
+			'module_order' => 'Module Order',
         ];
     }
 
@@ -100,15 +101,16 @@ class Module extends \yii\db\ActiveRecord
      */
     public function getUnits()
     {
-        return $this->hasMany(Unit::className(), ['module_id' => 'module_id'])->orderBy(['unit_id' => SORT_ASC]);;
+        return $this->hasMany(Unit::className(), ['module_id' => 'module_id'])->orderBy(['unit_order' => SORT_ASC]);;
     }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getPublishedUnits()
     {
-        return $this->hasMany(Unit::className(), ['module_id' => 'module_id'])->orderBy(['unit_id' => SORT_ASC])->andOnCondition(['status' => 1]);
+        return $this->hasMany(Unit::className(), ['module_id' => 'module_id'])->orderBy(['unit_order' => SORT_ASC])->andOnCondition(['status' => 1]);
     }	
+	
 	public function uploadImage(){
 		if($this->validate()) {
 			$this->featured_image->saveAs('uploads/' . $this->featured_image->baseName . '.' .$this->featured_image->extension);
@@ -117,6 +119,7 @@ class Module extends \yii\db\ActiveRecord
 		}else
 			return false;
 	}
+	
 	public function uploadVideo(){
 		if($this->validate()) {
 			$this->featured_video_url->saveAs('uploads/' . $this->featured_video_url->baseName . '.' .$this->featured_video_url->extension);
@@ -125,6 +128,7 @@ class Module extends \yii\db\ActiveRecord
 		}else
 			return false;
 	}
+	
 	public function resetModule(){
 		foreach($this->units as $unit){
 			$reports = UnitReport::find()->where(['unit_id'=>$unit->unit_id])->all();
