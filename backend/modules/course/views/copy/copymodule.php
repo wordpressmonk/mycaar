@@ -16,6 +16,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+		<?php 
+$sessioncheck = Yii::$app->session->getFlash('Success');
+if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
+<div id="w3-success-0" class="alert-success alert fade in">
+<button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+<?= Yii::$app->session->getFlash('Success'); ?>
+</div>
+<?php } ?>
+
 	<div class="card">
 	<div class="card-body">
 	
@@ -71,11 +80,23 @@ $(document).ready(function(){
 				   data: {  program_id: program_id,
 				   },
 				   success: function(data) {		
-						$("#module-copy_module").html(data);
-						
+						$("#module-copy_module").html(data);						
 				   }
 				 }); 
 		
     });
+	
+	<?php if(isset($model->copy_module)){ ?>
+		 $.ajax({
+				   url: '<?=Url::to(['copy/get-modules-selected'])?>',
+				   type: 'POST',
+				   data: {  program_id: <?= $model->program_id ?>,
+							module_id: <?= $model->copy_module ?>,
+				   },
+				   success: function(data) {		
+						$("#module-copy_module").html(data);						
+				   }
+				 }); 
+	<?php } ?>
 });
 </script>

@@ -16,14 +16,16 @@ class CopyController extends \yii\web\Controller
     public function actionIndex()
     {
         $model = new Module();
+		$model->scenario = 'apply_copy_controller';
 		$program = Program::find()->where(["company_id"=>\Yii::$app->user->identity->c_id])->all();		
 		 if ($model->load(Yii::$app->request->post())) {
-				
-				
+								
 				$program_id = $model->program_id;
 				$copyprogram_id = $model->copy_program;
 				$copymodule = Module::find()->where(["module_id"=>$model->copy_module,"program_id"=>$program_id])->one();
 				
+			if($copymodule)
+			{
 				$model2 = new Module();
 				$model2->setAttributes($copymodule->getAttributes(), false);
 				$model2->module_id = ""; 
@@ -33,6 +35,8 @@ class CopyController extends \yii\web\Controller
 					$model2->module_id;
 					$copyunit = Unit::find()->where(["module_id"=>$model->copy_module])->all();
 					
+				 if($copyunit)
+				  {
 					foreach($copyunit as $tmpunit)
 					{
 						$unit = new Unit();
@@ -44,6 +48,8 @@ class CopyController extends \yii\web\Controller
 						{
 							$copyunitelement = UnitElement::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
 							
+						  if($copyunitelement)
+						  {
 							foreach($copyunitelement as $tmpunitelement)
 							{
 								$unitelement = new UnitElement();
@@ -53,8 +59,11 @@ class CopyController extends \yii\web\Controller
 								$unitelement->save();								
 							}
 							
+						  }	
 							$copycapabilityquestion = CapabilityQuestion::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
-							
+						 
+						 if($copycapabilityquestion)
+						  {
 							foreach($copycapabilityquestion as $tmpcapabilityquestion)
 							{
 								$capabilityquestion = new CapabilityQuestion();
@@ -63,51 +72,53 @@ class CopyController extends \yii\web\Controller
 								$capabilityquestion->unit_id = $unit->unit_id; 								
 								$capabilityquestion->save();								
 							}
+						  }
 							
-							
-					 		$copyawrenessquestion = AwarenessQuestion::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
-							
+					 	 $copyawrenessquestion = AwarenessQuestion::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
+						  if($copyawrenessquestion)
+						  {
 							foreach($copyawrenessquestion as $tmpawrenessquestion)
-							{
-								
-								
+							{																
 								$awrenessquestion = new AwarenessQuestion();
 								$awrenessquestion->setAttributes($tmpawrenessquestion->getAttributes(), false);
 								$awrenessquestion->aq_id = ""; 							
 								$awrenessquestion->unit_id = $unit->unit_id; 								
-								$awrenessquestion->save();	
-								 
+								$awrenessquestion->answer = ""; 								
+								$awrenessquestion->save(false);	
+								unset($optionsvalues); 
 								$options = explode("_",$tmpawrenessquestion->answer);
+								$optionsvalues = [];
 								
+							 if($options)
+							 {		
 								foreach($options as $tmpoption)
 								{
-									
-									$copyawrenessooption = AwarenessOption::find()->where(["question_id"=>$tmpoption])->one();
-									
+								  $copyawrenessooption = AwarenessOption::find()->where(["question_id"=>$tmpoption])->one();
+								  if($copyawrenessooption)
+							      {
 									$awrenessoption = new AwarenessOption();
 									$awrenessoption->setAttributes($copyawrenessooption->getAttributes(), false);
 									$awrenessoption->option_id = ""; 
 									$awrenessoption->question_id = $awrenessquestion->aq_id;
-									$awrenessoption->save(); 
+									$awrenessoption->save();
 									
+									$optionsvalues[] = $awrenessoption->option_id; 
+								  }
 								}  
-								
+							 }
+								$answer = implode("_",$optionsvalues);
+								$awrenessquestion->answer = $answer; 								
+								$awrenessquestion->save();
+							 	
 							}
-							
-							
-							
-							 
+						  } 
 						}
 					}
-					/* 
-				
-					echo "<pre>";
-					print_r($copyunit);
-					exit;
-					 */
+				  }		
 				}	
 				
-				
+			  Yii::$app->getSession()->setFlash('Success', 'Copy the Module Successfully to another Program !!!.');
+			}
 		 }
 		return $this->render('copymodule', ['program' => $program,'model'=>$model]);
 		
@@ -116,7 +127,7 @@ class CopyController extends \yii\web\Controller
 	
 	 public function actionGetModules()
     {
-		echo "<option value=''>--Select the Module--</option>";
+		echo "<option value=''>--Select Module--</option>";
 		
       if($post=Yii::$app->request->post())
 	  {
@@ -126,6 +137,26 @@ class CopyController extends \yii\web\Controller
 			  foreach($module as $tmp)
 			  {
 				  echo "<option value=".$tmp->module_id.">".$tmp->title."</option>";
+			  }
+		  }	
+	  }
+    }
+	
+	public function actionGetModulesSelected()
+    {
+		echo "<option value=''>--Select Module--</option>";
+		
+      if($post=Yii::$app->request->post())
+	  {
+		  $module = Module::find()->where(["program_id"=>$post['program_id']])->all();
+		  if($module)
+		  {
+			  foreach($module as $tmp)
+			  {
+				  if(isset($post['module_id']) && ( $post['module_id'] == $tmp->module_id))
+				    echo "<option selected='selected' value=".$tmp->module_id.">".$tmp->title."</option>";
+				  else 
+				    echo "<option value=".$tmp->module_id.">".$tmp->title."</option>";
 			  }
 		  }	
 	  }

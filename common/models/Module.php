@@ -47,10 +47,21 @@ class Module extends \yii\db\ActiveRecord
             [['title'], 'string', 'max' => 1000],
 			[['language'], 'string', 'max' => 200],
             [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Program::className(), 'targetAttribute' => ['program_id' => 'program_id']],
-			[['course_start_date','course_end_date','enrl_start_date','enrl_end_date','is_course_open_anytime','is_enrlmnt_open_anytime','copy_program','copy_module'],'safe']
+			[['course_start_date','course_end_date','enrl_start_date','enrl_end_date','is_course_open_anytime','is_enrlmnt_open_anytime','copy_program','copy_module'],'safe'],
+			
+			
+			 [['program_id', 'copy_program','copy_module'], 'required','on' => ['apply_copy_controller']],
         ];
     }
 
+	
+	public function scenarios()
+    {
+        $scenarios = parent::scenarios();      
+        $scenarios['apply_copy_controller'] = ['program_id','copy_program','copy_module'];//Scenario Values Only Accepted
+        return $scenarios;
+    }
+	
     /**
      * @inheritdoc
      */
