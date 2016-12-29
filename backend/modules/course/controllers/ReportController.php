@@ -376,10 +376,10 @@ class ReportController extends Controller
 					 $output = str_replace($old_command, "", $output);
 					 file_put_contents('/tmp/crontab.txt', $output); 
 				}
-				file_put_contents('/tmp/crontab.txt', $output.$new_cron_command); 			
+				file_put_contents('/tmp/crontab.txt', $output.$new_cron_command); 
+				echo exec('crontab /tmp/crontab.txt');
 			}
 		}
 
 	}
-
 }
