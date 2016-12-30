@@ -328,6 +328,7 @@ class UnitController extends Controller
 	 * Returns array
 	 */	
 	public function formatQuestions($data){
+		//print_r($data);die;
 		$output = [];
 		$html = str_replace("<fields>","",$data);
 		$html = str_replace("</fields>","",$html);
@@ -343,6 +344,7 @@ class UnitController extends Controller
 				'id' => [],
 				'answer' => [],
 				'description' => [],
+				'src' => []
 			];
 		preg_match_all('/<option[^>]*?>([\s\S]*?)<\/option>/', $options_reg,$data['options'], PREG_SET_ORDER);
 		foreach($data['options'] as $key=>$dat){
@@ -353,9 +355,11 @@ class UnitController extends Controller
 		preg_match_all('/[^<option] label="([\s\S]*?)"/', $field_reg,$data['question'], PREG_SET_ORDER);
 		preg_match_all('/name="([\s\S]*?)"/', $field_reg,$data['id'], PREG_SET_ORDER);
 		preg_match_all('/selected="true">([\s\S]*?)</', $options_reg,$data['answer'], PREG_SET_ORDER);
+		preg_match_all('/src="([\s\S]*?)"/', $field_reg,$data['src'], PREG_SET_ORDER);
 		$output[] = $data;
 	
 		}
+		//print_r($output);die;
 		return $output;		
 	}
 	
@@ -385,6 +389,7 @@ class UnitController extends Controller
 			}
 			$awareness_question->question = $quest['question'][0][1];
 			$awareness_question->question_type = $quest['type'][0][1];
+			$awareness_question->src = $quest['src'][0][1];
 			$awareness_question->order_id = $order;
 			$answer = "";
 			$description = $awareness_question->description  = '';
@@ -395,9 +400,10 @@ class UnitController extends Controller
 				$name = $quest['type'][0][1]."-".$awareness_question->aq_id; //change this to primary key
 				$type = $class = $quest['type'][0][1];
 				$label = htmlentities($quest['question'][0][1], ENT_QUOTES, 'UTF-8');
+				$src = $quest['src'][0][1];
 				if(isset($quest['description'][0][1]))
 					$description = htmlentities($quest['description'][0][1], ENT_QUOTES, 'UTF-8');
-				$html .= "<field type='$type' description='$description' label='$label' class='$class' name='$name' src='false'>";					
+				$html .= "<field type='$type' description='$description' label='$label' class='$class' name='$name' src='$src'>";					
 				//////////////
 				if(!empty($quest['options'])){
 					$from_update_options = $to_update_options = [];

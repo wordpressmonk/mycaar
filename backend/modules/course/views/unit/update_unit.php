@@ -241,7 +241,16 @@ $(document).ready(function(){
 	<!----------end of unit elements----------->
 	<!---------- start of awareness elements ------->
 	var awareness_elements = {
-	  disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','img','video','audio','paragraph','textdisplay','filedownload'],
+		disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','paragraph','textdisplay','video','audio',],
+	  //disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','img','video','audio','paragraph','textdisplay','filedownload'],
+	   controlOrder: [
+        'checkbox-group',
+        'radio-group',
+		'text',
+		'fileupload',
+		'img',
+		'filedownload',
+		],
 	   fieldRemoveWarn: true ,
 	   controlPosition: 'left',
 	   editOnAdd: true,

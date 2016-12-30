@@ -145,7 +145,35 @@ $this->params['breadcrumbs'][] = $this->title;
 				</div>";
 				//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
 				echo '</div>';
-				break;				
+				break;	
+			case "img":
+				$q = html_entity_decode($question->question);
+				$description = html_entity_decode($question->description);
+				echo "<h3>{$q}</h3>";
+				echo "<p>{$description}</p>";
+				//echo '<div class="form-group">';
+				echo
+				"<div class='form-group'>
+					<img src='$question->src' height='300px'>
+				</div>";
+				//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
+				//echo '</div>';
+				break;
+			case "filedownload":
+				$q = html_entity_decode($question->question);
+				$description = html_entity_decode($question->description);
+				echo "<h3>{$q}</h3>";
+				echo "<p>{$description}</p>";
+				//echo '<div class="form-group">';
+				echo
+				"<div class='form-group'>
+					<a href='$question->src'>
+						<button type='button' class='btn btn-info'>Download File</button>
+					</a>
+				</div>";
+				//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
+				//echo '</div>';
+				break;					
 		}
 			
 		echo '</div>';
