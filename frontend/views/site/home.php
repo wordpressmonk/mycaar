@@ -93,7 +93,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			;
 					echo '<div class="course_name" style="position:relative">
                             <h2>
-                                <strong>'.$module->title.'</strong>
+                                '.$module->title.'
                             </h2>
                     </div>
 					<div class="course_units">
