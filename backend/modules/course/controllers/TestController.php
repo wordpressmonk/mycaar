@@ -55,6 +55,7 @@ class TestController extends Controller
 	}
 	public function actionCpTest($user_id,$unit_id, $data=null){
 		
+		$user = User::findOne($user_id);
 		$model = $this->findModel($unit_id);
 		/** SOME ACCESS CHECKS **/
 		$this->isAllowed($user_id,$unit_id);
@@ -112,6 +113,7 @@ class TestController extends Controller
 			'answers' => false,
 			'errors' => false,
 			'final'=> $final,
+			'user'=> $user
         ]);
 	}
 	public function saveAnswers($answers,$user_id){
