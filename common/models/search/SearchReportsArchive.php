@@ -79,7 +79,7 @@ class SearchReportsArchive extends ReportsArchive
      */
     public function searchCustom($params)
     {
-        $query = ReportsArchive::find()->where(['reports_archive.company_id'=>\Yii::$app->user->identity->c_id]);
+        $query = ReportsArchive::find()->where(['reports_archive.company_id'=>\Yii::$app->user->identity->c_id])->orderBy('a_id DESC');;
 
         // add conditions that should always apply here
 
