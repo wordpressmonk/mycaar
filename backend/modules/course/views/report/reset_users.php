@@ -29,7 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="card">
 
 		<div class ="card-body">
-
+		<?php if (Yii::$app->session->hasFlash('select_some')): ?>	
+			<div class="alert alert-danger fade in alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+				<?= Yii::$app->session->getFlash('select_some'); ?>
+			</div>
+		<?php endif; ?>
 		<?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
 		<div class="card card-collapse">

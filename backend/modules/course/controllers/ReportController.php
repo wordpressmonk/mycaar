@@ -244,9 +244,17 @@ class ReportController extends Controller
 		else 
 		$dataProvider = $searchModel->searchCustom(Yii::$app->request->queryParams);
 		//print_r($params);
-		if(\Yii::$app->request->post() && isset(\Yii::$app->request->post()['selection'])){
+		if(\Yii::$app->request->post() && isset(\Yii::$app->request->post()['reset_type']) ){
+			//print_R(\Yii::$app->request->post()['selection']);die;
 			$post = \Yii::$app->request->post();
-			
+			$post_data = \Yii::$app->request->post()['search_params'];
+			if(!isset($post['selection'])){
+				\Yii::$app->session->setFlash('select_some', 'Please select some reports!');
+				if($post['page'] != '')
+					return $this->redirect(['reset-users','data'=>$post_data,'page'=>$post['page']]);
+				else return $this->redirect(['reset-users','data'=>$post_data]);				
+			}
+						
 			$type = $post['reset_type'];
 			foreach($post['selection'] as $report){
 				$rep = UnitReport::findOne($report);
@@ -274,7 +282,6 @@ class ReportController extends Controller
 					//$rep->delete();				
 				}
 			}
-			$post_data = \Yii::$app->request->post()['search_params'];
 			if($post['page'] != '')
 				return $this->redirect(['reset-users','data'=>$post_data,'page'=>$post['page']]);
 			else return $this->redirect(['reset-users','data'=>$post_data]);
