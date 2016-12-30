@@ -1,6 +1,7 @@
 <?php
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+	'timeZone' =>'asia/kolkata',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
