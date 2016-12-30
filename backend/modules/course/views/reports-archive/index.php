@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'attribute' => 'program_id',
 				'value' => 'program.title',
+				'filter' => Html::activeDropDownList($searchModel, 'program_id', ArrayHelper::map(common\models\Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['class'=>'form-control','prompt' => 'Select Program']),
 			],
             //'program.title',
             //'company_id',
