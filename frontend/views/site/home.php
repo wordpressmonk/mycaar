@@ -121,7 +121,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 													$progress = $user->user->getUnitProgress($unit->unit_id);
 													if($progress['ap'] == "red")
 														$action = "learn";
-													else $action = "retake";
+													else $action = "learn";
 													$url = Url::to(["test/$action",'u_id'=>$unit->unit_id]);
 													echo "<div name='unit1'>
 															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$url'><span class='toolkit'><center>{$progress['ap']}</center></span>

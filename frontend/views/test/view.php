@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="card">
 	<div class="card-body">
-	
+	<div class="small-padding pull-right"> <?= Html::a('Take Test', ['aw-test', 'u_id' => $model->unit_id], ['class' => 'btn btn-lg ink-reaction btn-info']) ?></div>	
     <h1><?= Html::encode($this->title) ?></h1>
 
 		<?php 
