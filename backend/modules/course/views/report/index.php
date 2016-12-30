@@ -150,6 +150,8 @@ $selected_state = isset($params['state'])?$params['state']:'';
 					'label' => 'Date & Time',
 					'attribute' => 'updated_at',
 					'value' => 'updated_at',
+				 	'filter' => '<input data-date-format="yyyy-mm-dd"  placeholder="--Search--" type="text" name="SearchUnitReport[updated_at]" id="updated_at" class="form-control" />',
+						'format' => 'html', 
 				
 				],
 				//'assessor.fullname',
@@ -184,3 +186,30 @@ $selected_state = isset($params['state'])?$params['state']:'';
 		});  
 		
 </script>	
+<script>
+ $(document).ready(function(){
+
+	 $(document).on( "click","#updated_at", function() {
+			  //$('#updated_at').datepicker("show","autoclose","true");			
+			  $('#updated_at').datepicker("show","autoclose","true");			
+	});
+			   /* $('#updated_at').datepicker({
+					autoclose: true, 
+					todayHighlight: true,
+					format: 'yyyy-mm-dd',
+				});  */
+		//});
+	 
+	 $('#updated_at').datepicker().on('changeDate', function(ev)
+		{                 
+		$('.datepicker').hide();
+		});
+
+	 $('#updated_at').datepicker({
+		autoclose: true, 
+		todayHighlight: true,
+		format: 'yyyy-mm-dd',
+	}); 
+}); 
+</script>
+
