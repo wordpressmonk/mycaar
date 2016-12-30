@@ -62,6 +62,7 @@ $(document).ready(function(){
 		autoclose: true, 
 		todayHighlight: true,
 		format: 'dd-mm-yyyy',
+		clearBtn: true
 	});
 });
 </script>

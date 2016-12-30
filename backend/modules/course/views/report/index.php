@@ -109,7 +109,7 @@ $selected_state = isset($params['state'])?$params['state']:'';
     <p>
         <?= Html::a('Dashboard', ['report/search#db'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>    
+
 	<?= GridView::widget([
 			'dataProvider' => $dataProvider,
 			'filterModel' => $searchModel,
@@ -145,14 +145,11 @@ $selected_state = isset($params['state'])?$params['state']:'';
 					'value' => 'unit.title',
 				
 				],
-				
 				[
-					'label' => 'Date & Time',
 					'attribute' => 'updated_at',
 					'value' => 'updated_at',
-				 	'filter' => '<input data-date-format="yyyy-mm-dd"  placeholder="--Search--" type="text" name="SearchUnitReport[updated_at]" id="updated_at" class="form-control" />',
-						'format' => 'html', 
-				
+					'filter' => '<input placeholder="--Search--" type="text" name="SearchUnitReport[updated_at]" id="updated_at" class="form-control" />',
+					'format' => 'html',
 				],
 				//'assessor.fullname',
 				
@@ -176,40 +173,23 @@ $selected_state = isset($params['state'])?$params['state']:'';
 				//['class' => 'yii\grid\ActionColumn'],
 			],
 		]); ?>
-<?php Pjax::end(); ?></div>
+</div>
 
  <script>
- 
+ //$(document).ready(function(){
 	  	$('.card-head .tools .btn-collapse').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
-		});  
-		
-</script>	
-<script>
- $(document).ready(function(){
 
-	 $(document).on( "click","#updated_at", function() {
-			  //$('#updated_at').datepicker("show","autoclose","true");			
-			  $('#updated_at').datepicker("show","autoclose","true");			
-	});
-			   /* $('#updated_at').datepicker({
-					autoclose: true, 
-					todayHighlight: true,
-					format: 'yyyy-mm-dd',
-				});  */
-		//});
-	 
-	 $('#updated_at').datepicker().on('changeDate', function(ev)
-		{                 
-		$('.datepicker').hide();
-		});
+		}); 
 
-	 $('#updated_at').datepicker({
+	$('#updated_at').datepicker({
+	//$(document).find('#updated_at').datepicker({
 		autoclose: true, 
 		todayHighlight: true,
 		format: 'yyyy-mm-dd',
-	}); 
-}); 
-</script>
+		clearBtn: true
+	});		
+ //});		
+</script>	
 

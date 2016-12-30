@@ -27,8 +27,9 @@ class SearchUnitReport extends UnitReport
     {
         return [
           //  [['unit_id'], 'integer'],
-            [['cap_done_by','student_id','unit_id','module_id','updated_at'], 'string'],
-			 [['location','role','state','division','accesslevel'], 'safe'],
+            [['cap_done_by','student_id','unit_id','module_id'], 'string'],
+			 [['location','role','state','division','accesslevel','updated_at'], 'safe'],
+
         ];
     }
 
@@ -101,8 +102,8 @@ class SearchUnitReport extends UnitReport
         $query->andFilterWhere(['=', 'profile.role', $this->role]);        
         $query->andFilterWhere(['=', 'profile.state', $this->state]);
 		$query->andFilterWhere(['like', 'rolelist.item_name', $this->accesslevel]);   		
-		$query->andFilterWhere(['like', 'unit_report.updated_at', $this->updated_at]);   		
-			
+		$query->andFilterWhere(['like', 'unit_report.updated_at', $this->updated_at]);  	
+
 		//}
 
         return $dataProvider;

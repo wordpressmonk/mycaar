@@ -19,7 +19,7 @@ class SearchReportsArchive extends ReportsArchive
     {
         return [
             [['a_id', 'company_id'], 'integer'],
-            [['archive_url','program_id',  'archived_date'], 'safe'],
+            [['program_id',  'archived_date'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class SearchReportsArchive extends ReportsArchive
      */
     public function search($params)
     {
-        $query = ReportsArchive::find();
+        $query = ReportsArchive::find()->orderBy('a_id DESC');
 
         // add conditions that should always apply here
 
@@ -79,7 +79,7 @@ class SearchReportsArchive extends ReportsArchive
      */
     public function searchCustom($params)
     {
-        $query = ReportsArchive::find()->where(['reports_archive.company_id'=>\Yii::$app->user->identity->c_id]);
+        $query = ReportsArchive::find()->where(['reports_archive.company_id'=>\Yii::$app->user->identity->c_id])->orderBy('a_id DESC');;
 
         // add conditions that should always apply here
 

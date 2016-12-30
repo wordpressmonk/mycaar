@@ -45,7 +45,7 @@ class ReportsArchive extends \yii\db\ActiveRecord
             'a_id' => 'A ID',
             'program_id' => 'Program ID',
             'company_id' => 'Company ID',
-            'archive_url' => 'Archive Url',
+            'archive_url' => 'Reports',
             'archived_date' => 'Archived Date',
         ];
     }
