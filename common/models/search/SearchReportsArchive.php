@@ -41,7 +41,7 @@ class SearchReportsArchive extends ReportsArchive
      */
     public function search($params)
     {
-        $query = ReportsArchive::find();
+        $query = ReportsArchive::find()->orderBy('a_id DESC');
 
         // add conditions that should always apply here
 
