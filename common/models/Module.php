@@ -38,8 +38,9 @@ class Module extends \yii\db\ActiveRecord
         return [
             [['program_id', 'title'], 'required'],
             [['program_id', 'status','module_order'], 'integer'],
-            [['short_description', 'detailed_description','featured_video_url'], 'string'],
+            [['short_description', 'detailed_description','featured_video_url','featured_video_http_url'], 'string'],
 			[['featured_image'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
+			[['featured_video_upload'], 'file','extensions' => 'mp4, m4v, webm, ogv, wmv, flv', 'skipOnEmpty' => true],
 			//[['featured_video_url'], 'file','extensions' => 'mp4', 'skipOnEmpty' => true],
             [['title'], 'string', 'max' => 1000],
 			[['language'], 'string', 'max' => 200],
@@ -60,6 +61,8 @@ class Module extends \yii\db\ActiveRecord
             'title' => 'Course Name',
             'short_description' => 'Short Description',
             'featured_video_url' => 'Featured Video',
+            'featured_video_http_url' => 'Featured Video Http Url',
+            'featured_video_upload' => 'Featured Video Upload',
             'detailed_description' => 'Detailed Description',
             'status' => 'Status',
 			'language' => 'Course Language',
@@ -109,8 +112,8 @@ class Module extends \yii\db\ActiveRecord
 	
 	public function uploadVideo(){
 		if($this->validate()) {
-			$this->featured_video_url->saveAs('uploads/' . $this->featured_video_url->baseName . '.' .$this->featured_video_url->extension);
-			$this->featured_video_url = 'uploads/'.$this->featured_video_url->baseName.'.'.$this->featured_video_url->extension;
+			$this->featured_video_upload->saveAs('uploads/videos/' . $this->featured_video_upload->baseName . '.' .$this->featured_video_upload->extension);
+			$this->featured_video_upload = 'uploads/videos/'.$this->featured_video_upload->baseName.'.'.$this->featured_video_upload->extension;
 			return true;
 		}else
 			return false;

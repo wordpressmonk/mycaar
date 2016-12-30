@@ -105,8 +105,24 @@ use kartik\select2\Select2;
 									else echo 'This is used on the Course Overview page and will be displayed with the course description.';
 									?></p>
 									<?= $form->field($model, 'featured_video_url')->textArea(['class'=>'form-control'])->label(false) ?>
-								
-								
+									
+									<h4>Featured Video URL</h4>									
+									<p><?php if(!$model->isNewRecord && $model->featured_video_http_url != ''){  ?>
+									<a href="<?= $model->featured_video_http_url; ?>" target="_blank"><?= $model->featured_video_http_url; ?></a>
+									<?php } ?>
+									</p>
+									
+									<?= $form->field($model, 'featured_video_http_url')->textInput(['class'=>'form-control'])->label(false) ?>
+									
+									
+									<h4>Featured Video Upload</h4>			
+									  <video width="400" controls>
+										<source src="mov_bbb.mp4" type="video/mp4">
+										<source src="mov_bbb.ogg" type="video/ogg">
+										Your browser does not support HTML5 video.
+									  </video>
+									<?= $form->field($model, 'featured_video_upload')->fileInput(['class'=>'form-control'])->label(false) ?>
+									
 									<h4>Course Description	</h4>
 									<p>This is an in-depth description of the course. It should include such things like an overview, outcomes, possible requirements, etc.</p>
 									<?= $form->field($model, 'detailed_description')->textarea(['id'=>'course_desc']) ?>
