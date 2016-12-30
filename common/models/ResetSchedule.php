@@ -49,4 +49,8 @@ class ResetSchedule extends \yii\db\ActiveRecord
 			'actual_time' => 'Scheduled At'
         ];
     }
+	
+	public function getUnit(){
+		return $this->hasOne(Unit::className(), ['unit_id'=>'unit_id']);
+	}
 }
