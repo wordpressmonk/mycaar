@@ -50,7 +50,7 @@ class UnitReport extends \yii\db\ActiveRecord
             'student_id' => 'Student ID',
             'awareness_progress' => 'Awareness Progress',
             'capability_progress' => 'Capability Progress',
-            'updated_at' => 'Updated At',
+            'updated_at' => 'Date & Time',
         ];
     }
     /**

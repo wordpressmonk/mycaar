@@ -109,7 +109,7 @@ $selected_state = isset($params['state'])?$params['state']:'';
     <p>
         <?= Html::a('Dashboard', ['report/search#db'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>    
+
 	<?= GridView::widget([
 			'dataProvider' => $dataProvider,
 			'filterModel' => $searchModel,
@@ -145,12 +145,11 @@ $selected_state = isset($params['state'])?$params['state']:'';
 					'value' => 'unit.title',
 				
 				],
-				
 				[
-					'label' => 'Date & Time',
 					'attribute' => 'updated_at',
 					'value' => 'updated_at',
-				
+					'filter' => '<input placeholder="--Search--" type="text" name="SearchUnitReport[updated_at]" id="updated_at" class="form-control" />',
+					'format' => 'html',
 				],
 				//'assessor.fullname',
 				
@@ -174,13 +173,21 @@ $selected_state = isset($params['state'])?$params['state']:'';
 				//['class' => 'yii\grid\ActionColumn'],
 			],
 		]); ?>
-<?php Pjax::end(); ?></div>
+</div>
 
  <script>
- 
+ //$(document).ready(function(){
 	  	$('.card-head .tools .btn-collapse').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
-		});  
-		
+		}); 
+
+	$('#updated_at').datepicker({
+	//$(document).find('#updated_at').datepicker({
+		autoclose: true, 
+		todayHighlight: true,
+		format: 'yyyy-mm-dd',
+		clearBtn: true
+	});		
+ //});		
 </script>	
