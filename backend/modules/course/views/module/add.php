@@ -36,7 +36,7 @@ use kartik\select2\Select2;
 			<div class="panel-group" id="accordion7">
 				<div class="card panel">
 					<div class="card-head style-primary " data-toggle="collapse" data-parent="#accordion7" data-target="#accordion7-1">
-						<header>Step 1 - Course Overview</header>
+						<header>Step 1 - Module Overview</header>
 						<div class="tools">
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
@@ -50,7 +50,7 @@ use kartik\select2\Select2;
 							<?php $form = ActiveForm::begin([
 											'options' => ['enctype'=>'multipart/form-data']
 							]); ?>
-								<h4>Course Status</h4>
+								<h4>Module Status</h4>
 								<?= $form->field($model, 'status',['options'=>['class'=>'form-group']])->checkbox(['class'=>'form-control'])->label(false) ?>
 							
 								<?= $form->field($model, 'title')->textInput(['maxlength' => true,'class'=>'form-control']) ?>
@@ -62,7 +62,7 @@ use kartik\select2\Select2;
 								<p><?php if(!$model->isNewRecord && $model->featured_image != ''){ ?>
 									<img src="<?=Yii::$app->homeUrl.$model->featured_image?>" width="150px" height="150px"/>
 								<?php } 
-								else echo 'The image is used on the "Courses" listing ( archive ) page along with the course excerpt.';
+								else echo 'The image is used on the "Modules" listing ( archive ) page along with the module excerpt.';
 								?></p>
 								<?= $form->field($model, 'featured_image')->fileInput(['class'=>'form-control'])->label(false) ?>
 								
@@ -88,7 +88,7 @@ use kartik\select2\Select2;
 				</br>
 				<div class="card panel">
 					<div class="card-head collapsed" data-toggle="collapse" data-parent="#accordion7" data-target="#accordion7-2">
-						<header>Step 2 - Course Description</header>
+						<header>Step 2 - Module Description</header>
 						<div class="tools">
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
@@ -102,13 +102,13 @@ use kartik\select2\Select2;
 									<p><?php if(!$model->isNewRecord && $model->featured_video_url != ''){ 
 										echo $model->featured_video_url;
 									} 
-									else echo 'This is used on the Course Overview page and will be displayed with the course description.';
+									else echo 'This is used on the module Overview page and will be displayed with the module description.';
 									?></p>
 									<?= $form->field($model, 'featured_video_url')->textArea(['class'=>'form-control'])->label(false) ?>
 								
 								
-									<h4>Course Description	</h4>
-									<p>This is an in-depth description of the course. It should include such things like an overview, outcomes, possible requirements, etc.</p>
+									<h4>Module Description	</h4>
+									<p>This is an in-depth description of the module. It should include such things like an overview, outcomes, possible requirements, etc.</p>
 									<?= $form->field($model, 'detailed_description')->textarea(['id'=>'course_desc']) ?>
 								
 								<div class="form-group">
@@ -123,7 +123,7 @@ use kartik\select2\Select2;
 				</br>
 				<div class="card panel">
 					<div class="card-head collapsed" data-toggle="collapse" data-parent="#accordion7" data-target="#accordion7-3">
-						<header>Step 3 - Course Dates</header>
+						<header>Step 3 - Module Dates</header>
 						<div class="tools">
 							<a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
 						</div>
