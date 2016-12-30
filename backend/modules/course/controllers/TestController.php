@@ -144,6 +144,7 @@ class TestController extends Controller
 		$report->student_id = $user_id;
 		$report->cap_done_by = \Yii::$app->user->id;
 		$report->capability_progress = $progress;
+		$report->updated_at = date('Y-m-d H:i:s');
 		$report->save(false);
 		return (int)$progress;
 		//print_R($resp);
