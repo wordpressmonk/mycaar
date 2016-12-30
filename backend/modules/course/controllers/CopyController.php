@@ -18,8 +18,8 @@ class CopyController extends \yii\web\Controller
     {
         $model = new CopyModule();
 		$program = Program::find()->where(["company_id"=>\Yii::$app->user->identity->c_id])->orderBy("title")->all();		
-		 if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-								
+		 if ($model->load(Yii::$app->request->post())) {
+	
 				$program_id = $model->program_id;
 				$copyprogram_id = $model->copy_program;
 				$copymodule = Module::find()->where(["module_id"=>$model->copy_module,"program_id"=>$program_id])->one();
@@ -30,7 +30,6 @@ class CopyController extends \yii\web\Controller
 				$module = new Module();
 				$module->setAttributes($copymodule->getAttributes(), false);
 				$module->module_id = ""; 
-				$module->copy_id = $copymodule->module_id; 
 				$module->module_order = $count; 
 				$module->title = $copymodule->title." ( copy ) "; 
 				$module->program_id = $copyprogram_id; 
@@ -148,24 +147,4 @@ class CopyController extends \yii\web\Controller
 	  }
     }
 	
-	 public function actionGetModulesSelected()
-    {
-		echo "<option value=''>--Select Module--</option>";
-		
-      if($post=Yii::$app->request->post())
-	  {
-		  $module = Module::find()->where(["program_id"=>$post['program_id']])->orderBy("title")->all();
-		  if($module)
-		  {
-			  foreach($module as $tmp)
-			  {
-				  if(isset($post['module_id']) && ( $post['module_id'] == $tmp->module_id))
-				    echo "<option selected='selected' value=".$tmp->module_id.">".$tmp->title."</option>";
-				  else 
-				    echo "<option value=".$tmp->module_id.">".$tmp->title."</option>";
-			  }
-		  }	
-	  }
-    } 
-
 }

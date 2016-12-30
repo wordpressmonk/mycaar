@@ -21,8 +21,6 @@ class CopyModule extends Model
     {
         return [
             [['program_id', 'copy_program','copy_module'], 'required'],			
-			[['copy_program'],'validateprogram'],
-			[['copy_module'],'validatemodule'],
         ];
     }
 
@@ -36,23 +34,4 @@ class CopyModule extends Model
         ];
     }
 	
-	public function validateprogram($attribute,$params)
-    {
-		if($this->copy_program == $this->program_id)
-		{
-			$this->addError($attribute, 'Both Program are same cannot be copy');
-			return false;   
-		} 	
-    }
-	
-	
-	public function validatemodule($attribute,$params)
-    {
-		 $checkmodule = Module::findOne(['copy_id'=>$this->copy_module,'program_id'=>$this->copy_program]);
-		if($checkmodule)
-		{
-			$this->addError($attribute, 'Already same module is copied to this program');
-			return false;   
-		} 	
-    }
 }
