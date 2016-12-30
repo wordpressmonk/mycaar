@@ -19,7 +19,7 @@ use kartik\select2\Select2;
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="col-lg-10">
-				<h1><?=$model->isNewRecord ?"Add New Course":"Update: ".$model->title;?></h1>
+				<h1><?=$model->isNewRecord ?"Add New Module":"Update: ".$model->title;?></h1>
 				<?php if($program){ ?>
 					<h4>[ Program: <a href="<?=Url::to(['program/view','id'=>$model->isNewRecord ?$program->program_id:$model->program->program_id])?>" ><?= $model->isNewRecord ?$program->title:$model->program->title;?> ]</a></h4>
 				<?php } ?>
@@ -28,7 +28,7 @@ use kartik\select2\Select2;
 			<div class="col-lg-2">
 				<h1><?php
 				if(!$model->isNewRecord )
-				echo Html::a('Add Unit', ['unit/create','m_id'=>$model->module_id], ['class' => 'btn btn-info pull-right']) ?>
+				echo Html::a('Add Lesson', ['unit/create','m_id'=>$model->module_id], ['class' => 'btn btn-info pull-right']) ?>
 			</h1>
 			</div>
 		</div><!--end .col -->

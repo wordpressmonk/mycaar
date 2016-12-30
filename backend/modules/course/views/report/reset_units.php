@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						$m_id,
 						ArrayHelper::map(Module::find()->where(['program_id' =>$p_id])->all(),'module_id', 'title'),
 						[
-						 'id' => 'module_select','prompt' => '--Select Course--','class' => 'form-control','required'=>'required']
+						 'id' => 'module_select','prompt' => '--Select Module--','class' => 'form-control','required'=>'required']
 					);?>
 				</div>
 				<div class="col-md-2" >

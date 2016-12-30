@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									[
 									 'id' => 'module_select',
 									 'class' => 'form-control',
-									 'prompt' => '--Select Course--',
+									 'prompt' => '--Select Module--',
 									 'onchange'=>'$.post( "'.Yii::$app->urlManager->createUrl('course/report/get-units?m_id=').'"+$(this).val(), function( data ) {
 										$( "select#unit_select" ).html( data ).change();
 										
@@ -177,7 +177,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					'value' => 'unit.module.program.title',
 				],
 				[
-					'label'	=> 'Course',
+					'label'	=> 'Module',
 					'value' => 'unit.module.title',
 				],
 				[

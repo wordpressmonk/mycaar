@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => 'html'
 			],
 			[
-				'label' => 'Unit',
+				'label' => 'Lesson',
 				'attribute' => 'unit_id',
 				'value' => function($data){
 					return Html::a($data->unit->title,['unit/update?id='.$data->unit_id]);
