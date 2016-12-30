@@ -28,42 +28,62 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 	<div class="card">
 	<div class="card-body">
 	
-		<?php $form = ActiveForm::begin(); ?>
+			<form id="forum_post" action="<?=Url::to(['copy/index'])?>" method="POST" >
 			<div class="row">
 				<div class="col-md-6">								
-				   <?php
-					$data = ArrayHelper::map($program, 'program_id', 'title');
-					echo $form->field($model, 'program_id')->dropDownList(
-					$data,           // Flat array ('id'=>'label')
-					['prompt'=>'--Select Program--']    // options
-					)->label("From Program"); ?>		 
+				   <?php $data = ArrayHelper::map($program, 'program_id', 'title'); ?>	
+
+				<div class="form-group field-copymodule-program_id ">
+					<label class="control-label" for="copymodule-program_id">From Program</label>
+					<select id="copymodule-program_id" class="form-control" name="CopyModule[program_id]">
+					<option value="">--Select Program--</option>
+						<?php 
+							foreach($data as $key=>$tmp)
+							{
+								echo "<option value=".$key.">".$tmp."</option>";
+							}	
+						?>
+					</select>
+					<div class="help-block copymodule-program_id" style="display: none;">Program Name cannot be blank.</div>
+				</div>
+					
 				</div>
 				
-				<div class="col-md-6">
-						<?php
-					$data = ArrayHelper::map($program, 'program_id', 'title');
-					echo $form->field($model, 'copy_program')->dropDownList(
-					$data,           // Flat array ('id'=>'label')
-					['prompt'=>'--Select Program--']   // options
-					)->label("To Program"); ?>
-					
+				<div class="col-md-6">					
+					<div class="form-group field-copymodule-copy_program">
+						<label class="control-label" for="copymodule-copy_program">To Program</label>
+						<select id="copymodule-copy_program" class="form-control" name="CopyModule[copy_program]">
+							<option value="">--Select Program--</option>
+							<?php 
+							 foreach($data as $key=>$tmp)
+							 {
+								echo "<option value=".$key.">".$tmp."</option>";
+							 }	
+							?>
+						</select>
+						<div class="help-block copymodule-copy_program" style="display: none;">Copy To Program Name cannot be blank.</div>						
+					</div>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6">				
-					<?php
-					echo $form->field($model, 'copy_module')->dropDownList(				
-					['prompt'=>'--Select Module--' ]    // options
-					)->label("Module to Copy"); ?>
+				<div class="col-md-6">									
+					<div class="form-group field-copymodule-copy_module">
+						<label class="control-label" for="copymodule-copy_module">Module to Copy</label>
+						<select id="copymodule-copy_module" class="form-control" name="CopyModule[copy_module]">
+							<option value="">--Select Module--</option>
+						</select>
+						<div class="help-block copymodule-copy_module" style="display: none;">Module Copy cannot be blank</div>
+					</div>
+
 					
 				</div>
 			</div>
 				
 		<div class="form-group">
-			<?= Html::submitButton('Copy', ['class' =>'btn btn-success']) ?>
+			<?= Html::submitButton('Copy', ['class' =>'btn btn-success','id'=>'clickcopy']) ?>
 		</div>
 		
-		<?php ActiveForm::end(); ?>
+		</form>
 	</div>
 </div>
 
@@ -71,7 +91,40 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 
 
 <script type="text/javascript">
-$(document).ready(function(){
+$(document).ready(function(){	
+ 	$( "#forum_post" ).submit(function() {
+		var test = 0;
+		$(".form-control").each(function(){
+			var id = $(this).attr('id');
+			var val = $(this).val();			
+			if($.trim(val) == "")
+			{	
+				$("."+id).show();
+				$(".field-"+id).addClass("has-error");
+				test = 1;
+			}							
+		});
+		if($.trim(test) == 1)			
+			return false;
+		
+		var program_id = $("#copymodule-program_id").val();
+		var copy_program_id = $("#copymodule-copy_program").val();
+		if($.trim(program_id) == $.trim(copy_program_id))
+		{
+			alert("both program is same");
+			return false;
+		}
+		$("#clickcopy").attr("disabled","disabled");
+	}); 
+
+	
+	 $(".form-control").change(function(){
+		 var id = $(this).attr('id');
+		 $("."+id).hide();
+		 $(".field-"+id).removeClass("has-error");
+		// $("#clickcopy").removeAttr("disabled");
+	 });
+	 
     $("#copymodule-program_id").change(function(){
 		var program_id = $(this).val();
 		 $.ajax({
@@ -82,21 +135,9 @@ $(document).ready(function(){
 				   success: function(data) {		
 						$("#copymodule-copy_module").html(data);						
 				   }
-				 }); 
-		
+				 }); 		
     });
-	
-	<?php if(isset($model->copy_module)){ ?>
-		   $.ajax({
-				   url: '<?=Url::to(['copy/get-modules-selected'])?>',
-				   type: 'POST',
-				   data: {  program_id: <?= $model->program_id ?>,
-							module_id: <?= $model->copy_module ?>,
-				   },
-				   success: function(data) {		
-						$("#copymodule-copy_module").html(data);						
-				   }
-				 });   
-	<?php  } ?>
+
 });
 </script>
+
