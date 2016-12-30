@@ -19,7 +19,7 @@ class SearchReportsArchive extends ReportsArchive
     {
         return [
             [['a_id', 'company_id'], 'integer'],
-            [['archive_url','program_id',  'archived_date'], 'safe'],
+            [['program_id',  'archived_date'], 'safe'],
         ];
     }
 
