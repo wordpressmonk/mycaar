@@ -227,6 +227,7 @@ AppAsset::register($this);
 								<li><a id="alpgs" href="<?=\Yii::$app->homeUrl?>course/program/company-programs#alpgs" ><span class="title">Programs</span></a></li>
 								<li><a id="add_pgm" href="<?=\Yii::$app->homeUrl?>course/program/create#add_pgm"><span class="title">Add Program</span></a></li>
 								<li><a id="add_course" href="<?=\Yii::$app->homeUrl?>course/module/create#add_course"><span class="title">Add Course</span></a></li>
+								<li><a id="cpymodules" href="<?=\Yii::$app->homeUrl?>course/copy/index#cpymodules" ><span class="title">Copy Module</span></a></li>
 								<li><a id="enrl" href="<?=\Yii::$app->homeUrl?>user/company/enroll-user#enrl" ><span class="title">Enroll User</span></a></li>
 								<li><a id="ar" href="<?=\Yii::$app->homeUrl?>course/report/assessor-report#ar" ><span class="title">Assessor Reports</span></a></li>
 								<!--<li><a id="reset" href="<?=\Yii::$app->homeUrl?>course/report/reset-programs#reset" ><span class="title">Reset Programs</span></a></li>
@@ -234,8 +235,7 @@ AppAsset::register($this);
 								<li><a id="reset_un" href="<?=\Yii::$app->homeUrl?>course/report/reset-units#reset_un" ><span class="title">Reset Lessons</span></a></li>-->
 								<li><a id="reset_u" href="<?=\Yii::$app->homeUrl?>course/report/reset-users#reset_u" ><span class="title">Reset Programs</span></a></li>
 								<li><a id="archives" href="<?=\Yii::$app->homeUrl?>course/reports-archive/index#archives" ><span class="title">Archived Reports</span></a></li>
-								<li><a id="cpymodules" href="<?=\Yii::$app->homeUrl?>course/copy/index#cpymodules" ><span class="title">Copy Module</span></a></li>
-
+								<li><a id="auto_rst" href="<?=\Yii::$app->homeUrl?>course/autoreset/index#auto_rst" ><span class="title">Reset Schedules</span></a></li>
 							</ul>
 							<?php 
 								}								
