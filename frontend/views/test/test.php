@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					echo
 					"<div class='form-group'>
 						<a href='$question->src'>
-							<button class='btn btn-info' value='Download File'/>
+							<button type='button' class='btn btn-info'>Download File</button>
 						</a>
 					</div>";
 					//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
