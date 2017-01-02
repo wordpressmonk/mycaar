@@ -17,7 +17,7 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Units', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="col-md-12">
+<div class="col-md-12 small-padding">
 	<div class="card card-underline">
 		<div class="card-head">
 			<ul class="nav nav-tabs pull-right" data-toggle="tabs">
