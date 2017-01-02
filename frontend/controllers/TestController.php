@@ -48,8 +48,18 @@ class TestController extends Controller
             ],
         ];
     }
+	public function isAllowed($u_id){
+		$unit = Unit::findOne($u_id);
+		if(\Yii::$app->user->identity->isEnrolled($unit->module->program_id))
+			return true;
+		else return false;
+	}
 	public function actionLearn($u_id){
 		$current_unit = Unit::findOne($u_id);
+		if(!$this->isAllowed($u_id)){
+			\Yii::$app->getSession()->setFlash('error', 'You are not enrolled to this program. Please contact your administrator');
+			return $this->redirect(['site/index']);
+		}
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
 		//see if show learning elements enabled, if not redirect to test page
@@ -63,7 +73,7 @@ class TestController extends Controller
 			$previous_unit_report = Report::find()->where(['unit_id'=>$previous_unit->unit_id,'student_id'=>\Yii::$app->user->id])->one();
 			if($previous_unit->unit_id != $u_id && (!$previous_unit_report || $previous_unit_report->awareness_progress != 100)){
 				\Yii::$app->getSession()->setFlash('error', 'This Unit is not available at the moment. Please check back later (or) Please Complete The Pervious Unit');
-				return $this->redirect(['site/index#'.$u_id]);
+				return $this->redirect(['site/index']);
 			}
 
 		}
@@ -84,6 +94,10 @@ class TestController extends Controller
     public function actionAwTest($u_id)
     {
 		$current_unit = Unit::findOne($u_id);
+		if(!$this->isAllowed($u_id)){
+			\Yii::$app->getSession()->setFlash('error', 'You are not enrolled to this program. Please contact your administrator');
+			return $this->redirect(['site/index']);
+		}
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
 		$previous_unit = Unit::find()->where(['and', "unit_order<$current_unit->unit_order", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_order DESC')->one();
@@ -204,6 +218,10 @@ class TestController extends Controller
 /* 		$this->isAnyChange($u_id,\Yii::$app->user->id);
 		die; */
 		$model = $this->findModel($u_id);
+		if(!$this->isAllowed($u_id)){
+			\Yii::$app->getSession()->setFlash('error', 'You are not enrolled to this program. Please contact your administrator');
+			return $this->redirect(['site/index']);
+		}
 		$questions = $model->awarenessQuestions;
 		foreach($questions as $key=>$quest){
 			$questions[$key]['options'] = $quest->awarenessOptions;

@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<ul class="nav nav-tabs pull-right" data-toggle="tabs">
 				<li class="active"><a href="#learning">Learning Page</a></li>
 				<li><a href="#aw_test">Awareness Test Page</a></li>
-				<li><a href="#cap_test">Capability Test Page</a></li>
+				<!--<li><a href="#cap_test">Capability Test Page</a></li>-->
 			</ul>
 			<header>PREVIEW &nbsp; <a class="btn btn-sm btn-info pull-right" href="<?=Url::to(['unit/update','id'=>$model->unit_id])?>">Back</a></header>
 		</div>
