@@ -360,6 +360,7 @@ function saveFile(input){
 			success: function(data){
 				waitingDialog.hide();
 				$(input).attr('src', data);
+				$(input).next().val(data);
 			}
 		});
 	}else{
@@ -370,6 +371,11 @@ function saveFile(input){
 
 
 	}
+}
+function saveUrl(input){
+	console.log("tbp",$(input).val());
+	$(input).prev().attr('src',$(input).val());
+	console.log('src',$(input).prev().attr('src'));
 }
 //($('.fld-description').val()).length;
 <!---------- End of save file ------------->

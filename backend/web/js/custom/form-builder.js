@@ -2495,22 +2495,22 @@ function formBuilderEventsFn() {
           attributefield += '<textarea ' + utils.attrString(inputConfig) + '>' + attrVal + '</textarea>';
 		 /** Image **/
         } else if (attribute === 'value' && utils.inArray(values.type, imageArea)) {
-          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +'  accept="image/*">';
+          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +'  accept="image/*" style="width:18%;display:inline-block"><input placeholder="Or paste URL here" type="text" class="form-control" onChange="saveUrl(this);return false" style="width:80%;display:inline-block;margin-left:5px">';
 		  if(values.src)
 			attributefield += '<img src="'+values.src+'" width="100px" height="100px" />'; 
 		/** video **/
         } else if (attribute === 'value' && utils.inArray(values.type, videoArea)) {
-          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' accept="video/*">';
+          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' accept="video/*" style="width:18%;display:inline-block"><input placeholder="Or paste URL here" type="text" class="form-control" onChange="saveUrl(this);return false" style="width:80%;display:inline-block;margin-left:5px">';
 		  if(values.src)
 			attributefield += '<video width="500" height="300" controls=""><source src="'+values.src+'"></audio>'; 
 		/** Audio **/
         } else if (attribute === 'value' && utils.inArray(values.type, audioArea)) {
-          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' accept="audio/*">';
+          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' accept="audio/*" style="width:18%;display:inline-block"><input placeholder="Or paste URL here" type="text" class="form-control" onChange="saveUrl(this);return false" style="width:80%;display:inline-block;margin-left:5px">';
 		  if(values.src)
 			attributefield += '<audio width="500" height="300" controls=""><source src="'+values.src+'"></audio>';  
 		/** File Download **/
         } else if (attribute === 'value' && utils.inArray(values.type, fileArea)) {
-          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' >';
+          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' style="width:18%;display:inline-block"><input placeholder="Or paste URL here" type="text" class="form-control" onChange="saveUrl(this);return false" style="width:80%;display:inline-block;margin-left:5px">';
 		  if(values.src)
 			attributefield += '<a href="'+values.src+'">'+values.src+'</a>'; 
         }else {
