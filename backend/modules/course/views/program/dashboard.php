@@ -133,11 +133,11 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					<span class="mdl-current"><h3>Current Programs :</h3></span>
 				</div>
 		</div>-->
-		<div class="row small-padding">
+		<!--<div class="row small-padding">
 
 			<?php 
 
-				foreach($programs as $program)
+/* 				foreach($programs as $program)
 				{
 					//echo "$program->title";
 					$url = Url::to(['report/search','p_id'=>$program->program_id]);
@@ -146,9 +146,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 
 				}
 				$url = Url::to(['report/search']);
-				echo "<h3><a class='text-ultra-bold' href='{$url}'>View All Reports</a></h3>";
+				echo "<h3><a class='text-ultra-bold' href='{$url}'>View All Reports</a></h3>"; */
 			?>
-		</div>
+		</div>-->
 	<script>
 		$('.card-head .tools .btn-collapse').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');

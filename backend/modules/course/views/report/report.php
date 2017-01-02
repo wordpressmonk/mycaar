@@ -152,7 +152,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		{
 		$check_output .= $program->program_id;
 		echo '<div class="mdl-grid row">
-			<div class="program_test">
+			<div class="program_test" style="min-width:100%">
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
 			</span>';
 		//if(count($users) > 0 && count($program->programEnrollments)>0)
