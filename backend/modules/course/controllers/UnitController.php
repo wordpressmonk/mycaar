@@ -104,6 +104,7 @@ class UnitController extends Controller
 			$model->title = Yii::$app->request->post()['unit_title'];
 			$model->status = Yii::$app->request->post()['unit_status'];
 			$model->auto_reset_period = Yii::$app->request->post()['reset_period'];	
+			$model->show_learning_page = Yii::$app->request->post()['show_learning_page'];	
 			$previous_unit = Unit::find()->where(["module_id"=>$m_id])->orderBy('unit_order DESC')->one();
 			if($previous_unit)
 				$model->unit_order = $previous_unit->unit_order+1;
@@ -236,6 +237,7 @@ class UnitController extends Controller
 				$model->title = Yii::$app->request->post()['unit_title'];
 				$model->status = Yii::$app->request->post()['unit_status'];
 				$model->auto_reset_period = Yii::$app->request->post()['reset_period'];
+				$model->show_learning_page = Yii::$app->request->post()['show_learning_page'];	
 				if($model->save()){
 					//if any change in the auto_reset_period, then only alter the crontab
 					if($current_reset_period != $model->auto_reset_period)
