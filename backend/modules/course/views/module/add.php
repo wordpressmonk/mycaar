@@ -106,9 +106,6 @@ use kartik\select2\Select2;
 									?></p>
 									<?= $form->field($model, 'featured_video_url')->textArea(['class'=>'form-control'])->label(false) ?>
 
-									
-									
-
 									<h4>Module Description	</h4>
 									<p>This is an in-depth description of the module. It should include such things like an overview, outcomes, possible requirements, etc.</p>
 

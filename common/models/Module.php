@@ -38,11 +38,9 @@ class Module extends \yii\db\ActiveRecord
         return [
             [['program_id', 'title'], 'required'],
             [['program_id', 'status','module_order'], 'integer'],
-            [['short_description', 'detailed_description'], 'string'],
-            //[['short_description', 'detailed_description','featured_video_http_url'], 'string'],
+            //[['short_description', 'detailed_description'], 'string'],
+			[['short_description', 'detailed_description','featured_video_url'], 'string'],
 			[['featured_image'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
-			//[['featured_video_upload'], 'file','extensions' => 'mp4, m4v, webm, ogv, wmv, flv', 'skipOnEmpty' => true],
-			//[['featured_video_url'], 'file','extensions' => 'mp4', 'skipOnEmpty' => true],
             [['title'], 'string', 'max' => 1000],
 			[['language'], 'string', 'max' => 200],
             [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Program::className(), 'targetAttribute' => ['program_id' => 'program_id']],
@@ -62,8 +60,6 @@ class Module extends \yii\db\ActiveRecord
             'title' => 'Module Name',
             'short_description' => 'Short Description',
             'featured_video_url' => 'Featured Video',
-            //'featured_video_http_url' => 'Featured Video Http Url',
-            //'featured_video_upload' => 'Featured Video Upload',
             'detailed_description' => 'Detailed Description',
             'status' => 'Status',
 			'language' => 'Module Language',
@@ -103,21 +99,21 @@ class Module extends \yii\db\ActiveRecord
     }	
 	
 	public function uploadImage(){
-		if($this->validate()) {
+		//if($this->validate()) {
 			$this->featured_image->saveAs('uploads/' . $this->featured_image->baseName . '.' .$this->featured_image->extension);
 			$this->featured_image = 'uploads/'.$this->featured_image->baseName.'.'.$this->featured_image->extension;
 			return true;
-		}else
-			return false;
+		/* }else
+			return false; */
 	}
 	
 	public function uploadVideo(){
-		if($this->validate()) {
-			$this->featured_video_upload->saveAs('uploads/videos/' . $this->featured_video_upload->baseName . '.' .$this->featured_video_upload->extension);
-			$this->featured_video_upload = 'uploads/videos/'.$this->featured_video_upload->baseName.'.'.$this->featured_video_upload->extension;
-			return true;
-		}else
-			return false;
+		//if($this->validate()) {
+			/* $this->featured_video_url->saveAs('uploads/' . $this->featured_video_url->baseName . '.' .$this->featured_video_url->extension);
+			$this->featured_video_url = 'uploads/'.$this->featured_video_url->baseName.'.'.$this->featured_video_url->extension;
+			return true; */
+		/* }else
+			return false; */
 	}
 	
 	public function resetModule(){
