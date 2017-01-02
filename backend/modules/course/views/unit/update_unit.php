@@ -51,7 +51,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 					</div>
 					<div id="unit_details" class="collapse" aria-expanded="true">
 						<div class="card-body">
-							
+							<a class="btn btn-success" href="<?=Url::to(['unit/preview','u_id'=>$model->unit_id])?>">Preview</a> 
 							<div class="checkbox checkbox-styled checkbox-info  pull-right">
 								<label>
 								<?php 
@@ -98,6 +98,8 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 								//echo $formdata;die;
 							?>
 							<div id="build-wrap"></div>
+							<!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Preview Lesson</button>-->
+							<a class="btn btn-success" href="<?=Url::to(['unit/preview','u_id'=>$model->unit_id])?>">Preview</a> 
 						</div>
 					</div>
 				</div><!--end .panel -->
@@ -111,6 +113,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 					</div>
 					<div id="awareness_test" class="collapse" aria-expanded="false">
 						<div class="card-body">
+						<a class="btn btn-success" href="<?=Url::to(['unit/preview','u_id'=>$model->unit_id])?>#aw_test">Preview</a> 
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
 								$aw_data = $element->content;
@@ -122,6 +125,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 								//$aw_data = str_replace('"', '&quot;', $aw_data);
 							?>
 						<div id="aware_form"></div>
+						<a class="btn btn-success" href="<?=Url::to(['unit/preview','u_id'=>$model->unit_id])?>#aw_test">Preview</a> 
 						</div>
 					</div>
 				</div><!--end .panel -->
@@ -153,8 +157,22 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 	</div><!--end .col -->
 </div><!--end .row -->
 <!-- END COLORS -->
-
 </div>
+<!-- Bootstrap modal dialog -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Preview Lesson</h4>
+            </div>
+            <div class="modal-body">
+                <?php echo $this->render('preview_lesson', ['model'=>$model]); ?>              
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script>
   $( function() {
     $( "#sortable" ).sortable({

@@ -147,9 +147,9 @@ $this->params['breadcrumbs'][] = $this->title;
 					<button onclick="return false;" class="btn btn-lg ink-reaction btn-info">Save & Return to Dashboard</button>	
 				</form>
 			</div>
-			<div class="tab-pane" id="cap_test">		
+			<!--<div class="tab-pane" id="cap_test">		
 			<?php
-			foreach($cp_questions as $question){
+			/* foreach($cp_questions as $question){
 			echo '<div class="small-padding">';
 					echo "<h3>{$question->question}</h3>";
 					echo "<p>{$question->description}</p>";
@@ -174,10 +174,10 @@ $this->params['breadcrumbs'][] = $this->title;
 					echo "</div>";
 				
 			echo '</div>';
-			}
+			} */
 			?>
 			<button onclick="return false;" class="btn btn-lg ink-reaction btn-info">Finish Answer/s</button>
-			</div>
+			</div>-->
 		</div>
 	</div><!--end .card -->
 	<em class="text-caption">Preview</em>
@@ -192,4 +192,7 @@ jQuery(document).ready(function($) {
 	};
 	$(fbRender).formRender(formRenderOpts);
 });
+var hash = window.location.hash;
+if(hash != '')
+	$("a[href='" + hash + "']").tab("show");
 </script>
