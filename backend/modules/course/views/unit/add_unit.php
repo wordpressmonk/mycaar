@@ -13,6 +13,9 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 	display:none;
 }
+.required-wrap{
+	display:none;
+}
 </style>
 <div class="section-body contain-lg">
 
