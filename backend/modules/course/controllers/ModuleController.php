@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
+use yii\helpers\Url;
 
 /**
  * ModuleController implements the CRUD actions for Module model.
@@ -173,4 +174,15 @@ class ModuleController extends Controller
 		return true;
 	}
 
+		public function actionUpload(){
+		//$name = uniqid();
+		$name = preg_replace( 
+                     array("/\s+/", "/[^-\.\w]+/"), 
+                     array("_", ""), 
+                     trim($_FILES["media"]["name"])); 
+		$dir = "uploads/media/";
+		move_uploaded_file($_FILES["media"]["tmp_name"], $dir. $name);
+		return $url = Yii::$app->urlManager->createAbsoluteUrl([$dir.$name]);
+	}
+	
 }

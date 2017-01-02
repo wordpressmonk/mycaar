@@ -10,6 +10,7 @@ use common\models\Division;
 use common\models\Location;
 use common\models\State;
 use common\models\MyCaar;
+use common\models\Program;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -21,6 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 $accesslevel = isset($params['accesslevel'])?$params['accesslevel']:'';
+$programid = isset($params['programid'])?$params['programid']:'';
+$moduleid = isset($params['moduleid'])?$params['moduleid']:'';
+$unitid = isset($params['unitid'])?$params['unitid']:'';
 $selected_division = isset($params['division'])?$params['division']:'';
 $selected_role = isset($params['role'])?$params['role']:'';
 $selected_location = isset($params['location'])?$params['location']:'';
@@ -90,6 +94,35 @@ $selected_state = isset($params['state'])?$params['state']:'';
 									
 									<?= Html::dropDownList('accesslevel', "$accesslevel",MyCaar::getChildRoles('company_admin'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 									
+									<div class="help-block"></div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">Program</label>
+									
+									<?= Html::dropDownList('programid', "$programid",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control','id'=>'programid']) ?>
+									
+									<div class="help-block"></div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">Module</label>
+									
+									<?= Html::dropDownList('moduleid', "$moduleid",array('' => '--Select--'),['class'=>'form-control','id'=>'moduleid']) ?>
+									
+									<div class="help-block"></div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-user_id">Lesson</label>
+									
+									<?= Html::dropDownList('unitid', "$unitid", array('' => '--Select--'),['class'=>'form-control','id'=>'unitid']) ?>
+									
+									
+					
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -191,5 +224,55 @@ $selected_state = isset($params['state'])?$params['state']:'';
 		clearBtn: true
 	});		
  //});		
+ 
+ $("#programid").change(function(){
+		var program_id = $(this).val();
+		 $.ajax({
+				   url: '<?=Url::to(['report/get-modules'])?>',
+				   type: 'GET',
+				   data: { p_id: program_id,
+				   },
+				   success: function(data) {		
+						$("#moduleid").html(data);						
+				   }
+				 }); 		
+    });
+	
+ $("#moduleid").change(function(){
+		var module_id = $(this).val();
+		 $.ajax({
+				   url: '<?=Url::to(['report/get-units'])?>',
+				   type: 'GET',
+				   data: { m_id: module_id,
+				   },
+				   success: function(data) {		
+						$("#unitid").html(data);						
+				   }
+				 }); 		
+    });	
+<?php if(isset($moduleid) && !empty($moduleid)){ ?>
+			$.ajax({
+				   url: '<?=Url::to(['report/get-modules'])?>',
+				   type: 'GET',
+				   data: { p_id: <?php echo $programid; ?>,m_id: <?php echo $moduleid; ?>
+				   },
+				   success: function(data) {		
+						$("#moduleid").html(data);						
+				   }
+				 }); 
+				 
+<?php } ?>	
+<?php if(isset($unitid) && !empty($unitid)){ ?>
+			$.ajax({
+				   url: '<?=Url::to(['report/get-units'])?>',
+				   type: 'GET',
+				   data: { m_id: <?php echo $moduleid; ?>,u_id: <?php echo $unitid; ?>
+				   },
+				   success: function(data) {		
+						$("#unitid").html(data);						
+				   }
+				 }); 
+				 
+<?php } ?>	
 </script>	
 

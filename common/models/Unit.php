@@ -81,6 +81,7 @@ class Unit extends \yii\db\ActiveRecord
         return $this->hasOne(Module::className(), ['module_id' => 'module_id']);
     }
 
+
     /**
      * @return \yii\db\ActiveQuery
      */

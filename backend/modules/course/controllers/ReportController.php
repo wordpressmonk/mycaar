@@ -315,12 +315,15 @@ class ReportController extends Controller
 		return $this->redirect(['reset-users','data'=>$params]);
 		//return $this->redirect(['report/reset-users','u_id'=>$rep->unit_id]);
 	}
-	public function actionGetModules($p_id){
+	public function actionGetModules($p_id,$m_id=""){
 		$mods = Module::find()->where(['program_id'=>$p_id,'status'=>1])->orderBy('title')->all();
 		 if(count($mods)>0){
-			echo "<option value=''>--Select Course--</option>";
+			echo "<option value=''>--Select Module--</option>";
 			foreach($mods as $mod){
-				echo "<option value='".$mod->module_id."'>".$mod->title."</option>";
+				if(isset($m_id) && !empty($m_id) && ($m_id == $mod->module_id))
+				  echo "<option selected='selected' value='".$mod->module_id."'>".$mod->title."</option>";
+				else	
+				  echo "<option value='".$mod->module_id."'>".$mod->title."</option>";
 			}
 		}
 		else{
@@ -328,12 +331,15 @@ class ReportController extends Controller
 		}
 	}
 	
-	public function actionGetUnits($m_id){
+	public function actionGetUnits($m_id,$u_id=""){
 		$mods = Unit::find()->where(['module_id'=>$m_id,'status'=>1])->orderBy('title')->all();
 		 if(count($mods)>0){
 			echo "<option value=''>--Select Lesson--</option>";
 			foreach($mods as $mod){
-				echo "<option value='".$mod->unit_id."'>".$mod->title."</option>";
+				if(isset($u_id) && !empty($u_id) && ($u_id == $mod->unit_id))
+				   echo "<option selected='selected' value='".$mod->unit_id."'>".$mod->title."</option>";
+				else 
+					echo "<option value='".$mod->unit_id."'>".$mod->title."</option>";
 			}
 		}
 		else{
@@ -355,6 +361,9 @@ class ReportController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+	
+	
+	
 	
 
 }

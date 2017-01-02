@@ -21,6 +21,7 @@ use Yii;
  */
 class Module extends \yii\db\ActiveRecord
 {
+	public $featured_video_upload;
 	
     /**
      * @inheritdoc
@@ -41,6 +42,7 @@ class Module extends \yii\db\ActiveRecord
             //[['short_description', 'detailed_description'], 'string'],
 			[['short_description', 'detailed_description','featured_video_url'], 'string'],
 			[['featured_image'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
+			[['featured_video_upload'], 'file','extensions' => 'mp4,m4v,webm,ogv,wmv,flv', 'skipOnEmpty' => true],
             [['title'], 'string', 'max' => 1000],
 			[['language'], 'string', 'max' => 200],
             [['program_id'], 'exist', 'skipOnError' => true, 'targetClass' => Program::className(), 'targetAttribute' => ['program_id' => 'program_id']],
@@ -59,7 +61,8 @@ class Module extends \yii\db\ActiveRecord
             'program_id' => 'Program ID',
             'title' => 'Module Name',
             'short_description' => 'Short Description',
-            'featured_video_url' => 'Featured Video',
+            'featured_video_url' => 'Feattured Video',
+            'featured_video_upload' => 'Feattured Video Upload',
             'detailed_description' => 'Detailed Description',
             'status' => 'Status',
 			'language' => 'Module Language',

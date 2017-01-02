@@ -19,6 +19,9 @@ class SearchUnitReport extends UnitReport
 	public $role;
 	public $state;
 	public $accesslevel;
+	public $programid;
+	public $moduleid;
+	public $unitid;
 	
 	/**
      * @inheritdoc
@@ -28,7 +31,7 @@ class SearchUnitReport extends UnitReport
         return [
           //  [['unit_id'], 'integer'],
             [['cap_done_by','student_id','unit_id','module_id'], 'string'],
-			 [['location','role','state','division','accesslevel','updated_at'], 'safe'],
+			 [['location','role','state','division','accesslevel','updated_at','unitid','moduleid','programid'], 'safe'],
 
         ];
     }
@@ -62,6 +65,12 @@ class SearchUnitReport extends UnitReport
 			$params['SearchUnitReport']['location'] = $extrasearch['location'];
 		if(isset($extrasearch['state']) && $extrasearch['state']!='')
 			$params['SearchUnitReport']['state'] = $extrasearch['state']; 
+		if(isset($extrasearch['programid']) && $extrasearch['programid']!='')
+			$params['SearchUnitReport']['programid'] = $extrasearch['programid'];
+		if(isset($extrasearch['moduleid']) && $extrasearch['moduleid']!='')
+			$params['SearchUnitReport']['moduleid'] = $extrasearch['moduleid'];
+		if(isset($extrasearch['unitid']) && $extrasearch['unitid']!='')
+			$params['SearchUnitReport']['unitid'] = $extrasearch['unitid'];
 
         $query = UnitReport::find()->where(['not',['cap_done_by'=>NULL]]);
 
@@ -96,6 +105,9 @@ class SearchUnitReport extends UnitReport
 						['like','profile.lastname', $this->student_id]]);
 		$query->andFilterWhere(['like', 'u.title', $this->unit_id]);
 		$query->andFilterWhere(['like', 'm.title', $this->module_id]);
+		$query->andFilterWhere(['=', 'm.program_id', $this->programid]);
+		$query->andFilterWhere(['=', 'm.module_id', $this->moduleid]);
+		$query->andFilterWhere(['=', 'u.unit_id', $this->unitid]);
 		
 		$query->andFilterWhere(['=', 'profile.division', $this->division]);        
         $query->andFilterWhere(['=', 'profile.location', $this->location]);        
