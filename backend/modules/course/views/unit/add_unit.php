@@ -70,8 +70,13 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 							<div class="form-group">
 								<div class="checkbox checkbox-styled">
 									<label>
-										<input type="checkbox" value="">
-										<span>Show Unit Deatils Page</span>
+										<?php 
+											if($model->show_learning_page )
+												$checked = "checked";
+											else $checked = "";
+										?>
+										<input id="show_learning_page" type="checkbox" <?=$checked?>>
+										<span>Show Lesson Details Page</span>
 									</label>
 								</div>
 							</div>
@@ -179,6 +184,9 @@ $(document).ready(function(){
 		var unit_status = 0;
 		if($('#unit_status').is(":checked"))
 			unit_status = 1;
+		var show_learning_page = 0;
+		if($('#show_learning_page').is(":checked"))
+			show_learning_page = 1;	
 		var auto_reset_period = $('#auto_reset_period').val();
 		if(auto_reset_period.length > 2){
 			$('.field-reset-period').addClass('has-error');
@@ -196,7 +204,7 @@ $(document).ready(function(){
 		//save to db
 		$.ajax({
 			url:'<?=Url::to(['unit/create','m_id'=>$module->module_id])?>',
-			data: {unit_title:unit_title,builder_data : builder_data,unit_status:unit_status,reset_period:auto_reset_period},
+			data: {unit_title:unit_title,builder_data : builder_data,unit_status:unit_status,reset_period:auto_reset_period,show_learning_page:show_learning_page},
 			type: 'post',
 			dataType : 'json',
 			success : function(data){

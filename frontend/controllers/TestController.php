@@ -52,6 +52,9 @@ class TestController extends Controller
 		$current_unit = Unit::findOne($u_id);
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
+		//see if show learning elements enabled, if not redirect to test page
+		if(!$current_unit->show_learning_page)
+			return $this->redirect(['aw-test','u_id'=>$u_id]);
 		$previous_unit = Unit::find()->where(['and', "unit_order<$current_unit->unit_order", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_order DESC')->one();
 		//
 		$user = User::findOne(\Yii::$app->user->id);
