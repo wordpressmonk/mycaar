@@ -59,14 +59,14 @@ class Module extends \yii\db\ActiveRecord
         return [
             'module_id' => 'Module ID',
             'program_id' => 'Program ID',
-            'title' => 'Course Name',
+            'title' => 'Module Name',
             'short_description' => 'Short Description',
             'featured_video_url' => 'Featured Video',
             //'featured_video_http_url' => 'Featured Video Http Url',
             //'featured_video_upload' => 'Featured Video Upload',
             'detailed_description' => 'Detailed Description',
             'status' => 'Status',
-			'language' => 'Course Language',
+			'language' => 'Module Language',
 			'module_order' => 'Module Order',
         ];
     }

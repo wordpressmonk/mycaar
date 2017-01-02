@@ -62,7 +62,7 @@ class Unit extends \yii\db\ActiveRecord
      */
     public function getAwarenessQuestions()
     {
-        return $this->hasMany(AwarenessQuestion::className(), ['unit_id' => 'unit_id']);
+        return $this->hasMany(AwarenessQuestion::className(), ['unit_id' => 'unit_id'])->orderBy(['order_id'=>'SORT_ASC']);;
     }
 
     /**
@@ -70,7 +70,7 @@ class Unit extends \yii\db\ActiveRecord
      */
     public function getCapabilityQuestions()
     {
-        return $this->hasMany(CapabilityQuestion::className(), ['unit_id' => 'unit_id']);
+        return $this->hasMany(CapabilityQuestion::className(), ['unit_id' => 'unit_id'])->orderBy(['order_id'=>'SORT_ASC']);;
     }
 
     /**

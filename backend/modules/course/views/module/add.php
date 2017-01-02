@@ -136,9 +136,9 @@ use kartik\select2\Select2;
 						<div class="card-body">
 						<?php $form = ActiveForm::begin(); ?>
 							<div class="form-group">
-								<h4>Course Dates</h4>
+								<h4>Module Dates</h4>
 								<?= $form->field($model, 'is_course_open_anytime',['template' => '<div class="checkbox checkbox-styled"><label>{input}<span>This course has no end date</span></label></div>','options'=>['tag'=>'div']])->checkbox([],false); ?>
-								<p>This is the duration the course will be open to the students</p>
+								<p>This is the duration the module will be open to the students</p>
 							</div>
 							<div class="form-group">
 								<div class="input-daterange input-group" id="start_date">

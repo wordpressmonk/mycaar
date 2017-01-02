@@ -10,7 +10,7 @@ use common\models\UserProfile;
 /* @var $searchModel common\models\search\SearchProgram */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Reset Users';
+$this->title = 'Reset Progress';
 $this->params['breadcrumbs'][] = $this->title;
 	$selected_user = isset($params['user_id'])?$params['user_id']:'';
 	//$selected_program = isset($params['program'])?$params['program']:'';

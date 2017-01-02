@@ -129,7 +129,7 @@ class TestController extends Controller
 			} */
 		if($total <= ($page+1)*$limit)
 			$final = true;
-		$questions = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->orderBy('order_id ASC')->limit($limit)->offset($offset)->all();
+		$questions = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->orderBy('order_id ASC')->limit($limit)->offset($offset)->orderBy('order_id ASC')->all();
 		//print_r($questions);
 		foreach($questions as $key=>$quest){
 			$questions[$key]['options'] = $quest->awarenessOptions;
@@ -268,7 +268,10 @@ class TestController extends Controller
 		$command = $query->createCommand();
 		$resp = $command->queryOne();
 		//print_R($resp);die;
-		$progress = ($resp['right_answer']/$resp['questions'])*100;//die;
+		if($resp['right_answer']==$resp['questions'])
+			$progress = 100;
+		else
+			$progress = ($resp['right_answer']/$resp['questions'])*100;//die;
 		//save progress to DB
 		$report = Report::find()->where(['unit_id'=>$unit_id,'student_id'=>$user_id])->one();
 		

@@ -1130,9 +1130,9 @@ background-color: lightgreen;
 .lesson {
 	margin-top: 5px;
 }
-.lesson span {
-	font-size: 14px;
-	display: block;
+.lesson>div {
     line-height: 20px;
 }
-
+.lesson label{
+	min-width:120px;
+}

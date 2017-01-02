@@ -16,6 +16,9 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/jquery-ui.min.js");
 button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 	display:none;
 }
+.required-wrap{
+	display:none;
+}
 </style>
 <div class="section-body contain-lg">
 <h2 class="col-md-9">Update Lesson: <?=$model->title?></h2>
@@ -241,7 +244,16 @@ $(document).ready(function(){
 	<!----------end of unit elements----------->
 	<!---------- start of awareness elements ------->
 	var awareness_elements = {
-	  disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','img','video','audio','paragraph','textdisplay','filedownload'],
+		disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','paragraph','textdisplay','video','audio',],
+	  //disableFields: ['autocomplete','button','checkbox','textarea','hidden','header','date','number','select','img','video','audio','paragraph','textdisplay','filedownload'],
+	   controlOrder: [
+        'checkbox-group',
+        'radio-group',
+		'text',
+		'fileupload',
+		'img',
+		'filedownload',
+		],
 	   fieldRemoveWarn: true ,
 	   controlPosition: 'left',
 	   editOnAdd: true,
