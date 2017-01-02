@@ -318,7 +318,7 @@ class ReportController extends Controller
 	public function actionGetModules($p_id){
 		$mods = Module::find()->where(['program_id'=>$p_id,'status'=>1])->orderBy('title')->all();
 		 if(count($mods)>0){
-			echo "<option value=''>--Select Course--</option>";
+			echo "<option value=''>--Select Module--</option>";
 			foreach($mods as $mod){
 				echo "<option value='".$mod->module_id."'>".$mod->title."</option>";
 			}
