@@ -63,7 +63,7 @@ class TestController extends Controller
 			$previous_unit_report = Report::find()->where(['unit_id'=>$previous_unit->unit_id,'student_id'=>\Yii::$app->user->id])->one();
 			if($previous_unit->unit_id != $u_id && (!$previous_unit_report || $previous_unit_report->awareness_progress != 100)){
 				\Yii::$app->getSession()->setFlash('error', 'This Unit is not available at the moment. Please check back later (or) Please Complete The Pervious Unit');
-				return $this->redirect(['site/index']);
+				return $this->redirect(['site/index#'.$u_id]);
 			}
 
 		}
@@ -156,7 +156,7 @@ class TestController extends Controller
 					$this->saveProgress(\Yii::$app->user->id,$u_id);
 				  }
 				  $session->remove($u_id."_".\Yii::$app->user->id);
-				  return $this->redirect(["site/index"]);
+				  return $this->redirect(["site/index#".$u_id]);
 				}
 			  }
 			if( in_array("", $answers, true) || $count_qstns > $ans_qstns){
@@ -177,11 +177,11 @@ class TestController extends Controller
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				if(Yii::$app->request->post()['save_n_exit'] == 'Submit Answer/s'){
 					$session->remove($u_id."_".\Yii::$app->user->id);
-					return $this->redirect(["site/index"]);
+					return $this->redirect(["site/index#".$u_id]);
 				}
 				if(Yii::$app->request->post()['save_n_exit'] == 'Save & Return to Dashboard'){
 					//$session->remove($u_id."_".\Yii::$app->user->id);
-					return $this->redirect(["site/index"]);
+					return $this->redirect(["site/index#".$u_id]);
 				}
 			}
 
@@ -219,13 +219,13 @@ class TestController extends Controller
 			$this->saveAnswers($answers);
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				$this->saveProgress(\Yii::$app->user->id,$u_id);
-				return $this->redirect(["site/index"]);
+				return $this->redirect(["site/index#".$u_id]);
 			}
 				
 			if($this->saveProgress(\Yii::$app->user->id,$u_id)!= 100)
 				return $this->redirect(['retake','u_id'=>$u_id]);
 			//redirect to next page or homepage
-			return $this->redirect(["site/index"]);
+			return $this->redirect(["site/index#".$u_id]);
 		}
 		else return $this->render('retest', [
             'model' => $model,
