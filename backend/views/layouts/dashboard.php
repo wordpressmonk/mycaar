@@ -233,7 +233,7 @@ AppAsset::register($this);
 								<!--<li><a id="reset" href="<?=\Yii::$app->homeUrl?>course/report/reset-programs#reset" ><span class="title">Reset Programs</span></a></li>
 								<li><a id="reset_m" href="<?=\Yii::$app->homeUrl?>course/report/reset-modules#reset_m" ><span class="title">Reset Courses</span></a></li>
 								<li><a id="reset_un" href="<?=\Yii::$app->homeUrl?>course/report/reset-units#reset_un" ><span class="title">Reset Lessons</span></a></li>-->
-								<li><a id="reset_u" href="<?=\Yii::$app->homeUrl?>course/report/reset-users#reset_u" ><span class="title">Reset Programs</span></a></li>
+								<li><a id="reset_u" href="<?=\Yii::$app->homeUrl?>course/report/reset-users#reset_u" ><span class="title">Reset Progress</span></a></li>
 								<li><a id="auto_rst" href="<?=\Yii::$app->homeUrl?>course/autoreset/index#auto_rst" ><span class="title">Reset Schedules</span></a></li>
 								<li><a id="archives" href="<?=\Yii::$app->homeUrl?>course/reports-archive/index#archives" ><span class="title">Archived Reports</span></a></li>
 								

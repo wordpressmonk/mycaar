@@ -12,11 +12,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="card" style="padding-top:20px">
 <div class="card-head regular style-info">
-	<header><strong>Lesson: <?=$this->title?></strong>
+	<header>
 		<div class="lesson">
-			<span>Module: <?=$model->module->title?></span>
-			<span>Program: <?=$model->module->program->title?></span>
-			<span>User: <?=$user->userProfile->fullname?></span>	
+			<div class="text-lg"><strong><label>Lesson:</label> <?=$this->title?></strong></div>
+			<div class="text-sm"><label>Module:</label> <?=$model->module->title?></div>
+			<div class="text-sm"><label>Program:</label> <?=$model->module->program->title?></div>
+			<div class="text-sm"><label>User:</label> <?=$user->userProfile->fullname?></div>	
 		</div>
 	</header>
 </div>
