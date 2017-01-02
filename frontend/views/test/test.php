@@ -113,7 +113,6 @@ $this->params['breadcrumbs'][] = $this->title;
 						<a href='$question->src'>
 							<button class='btn btn-info' value='Download File'/>
 						</a>
-						<img src='$question->src' height='300px'>
 					</div>";
 					//echo "<div class='text-danger' id='help_{$question->aq_id}'></div>";
 					//echo '</div>';
