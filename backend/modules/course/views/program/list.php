@@ -36,7 +36,7 @@ $homeUrl = Yii::$app->homeUrl;
 							<span class='pull-right text-default'>
 								<a href='{$homeUrl}course/program/view?id={$program->program_id}' title='View Program' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
 								<a href='{$homeUrl}course/program/update?id={$program->program_id}' title='Update Program' style='padding-right:3px'><span class='glyphicon glyphicon-pencil'></span></a>
-								<a href='{$homeUrl}course/module/create?p_id={$program->program_id}' title='Add Course' style='padding-right:3px'><span class='glyphicon glyphicon-plus'></span></a>
+								<a href='{$homeUrl}course/module/create?p_id={$program->program_id}' title='Add Module' style='padding-right:3px'><span class='glyphicon glyphicon-plus'></span></a>
 								<a href='{$homeUrl}course/program/delete?id={$program->program_id}' title='Delete Program' data-confirm='Are you sure you want to delete this item?' data-method='post' style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>
 							</span>
 							</div>
@@ -49,9 +49,9 @@ $homeUrl = Yii::$app->homeUrl;
 									<li class='dd-item list-group' data-id='$module->module_id'>
 										<div class='dd-handle btn btn-default-light'></div><div class='btn btn-default' style='min-height:35px;'><span class='pull-left'>$module->title</span>
 											<span class='pull-right text-primary'>
-												<a href='{$homeUrl}course/module/update?id={$module->module_id}' title='Update Course' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
+												<a href='{$homeUrl}course/module/update?id={$module->module_id}' title='Update Module' style='padding-right:3px'><span class='glyphicon glyphicon-eye-open'></span></a>
 												<a href='{$homeUrl}course/unit/create?m_id={$module->module_id}' title='Add Lesson' style='padding-right:3px'><span class='glyphicon glyphicon-plus'></span></a>
-												<a href='{$homeUrl}course/module/delete?id={$module->module_id}' title='Delete Course' data-confirm='Are you sure you want to delete this item?' data-method='post'  style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>";
+												<a href='{$homeUrl}course/module/delete?id={$module->module_id}' title='Delete Module' data-confirm='Are you sure you want to delete this item?' data-method='post'  style='padding-right:3px'><span class='glyphicon glyphicon-trash'></span></a>";
 										if($module->status)
 											echo "<span class='glyphicon glyphicon-ok' title='published'></span>";
 										else

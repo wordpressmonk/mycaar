@@ -18,8 +18,8 @@ class SearchReportsArchive extends ReportsArchive
     public function rules()
     {
         return [
-            [['a_id', 'company_id'], 'integer'],
-            [['program_id',  'archived_date'], 'safe'],
+            [['a_id', 'company_id','program_id'], 'integer'],
+            [[ 'archived_date'], 'safe'],
         ];
     }
 
@@ -88,7 +88,7 @@ class SearchReportsArchive extends ReportsArchive
         ]);
 
         $this->load($params);
-		$query->joinWith(['program as program']);
+		//$query->joinWith(['program as program']);
 		
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -99,12 +99,12 @@ class SearchReportsArchive extends ReportsArchive
         // grid filtering conditions
         $query->andFilterWhere([
             'a_id' => $this->a_id,
-            //'program.title' => $this->program_id,
+            'program_id' => $this->program_id,
             'reports_archive.company_id' => $this->company_id,
             //'archived_date' => $this->archived_date,
         ]);
 		$query->andFilterWhere(['like', 'archived_date', $this->archived_date]);
-		$query->andFilterWhere(['like', 'program.title', $this->program_id]);
+		//$query->andFilterWhere(['like', 'program.title', $this->program_id]);
         $query->andFilterWhere(['like', 'archive_url', $this->archive_url]);
 
         return $dataProvider;

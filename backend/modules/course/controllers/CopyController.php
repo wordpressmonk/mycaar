@@ -49,21 +49,8 @@ class CopyController extends \yii\web\Controller
 						
 						if($unit->save())
 						{
-							$copyunitelement = UnitElement::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
 							
-						  if($copyunitelement)
-						  {
-							foreach($copyunitelement as $tmpunitelement)
-							{
-								$unitelement = new UnitElement();
-								$unitelement->setAttributes($tmpunitelement->getAttributes(), false);
-								$unitelement->element_id = ""; 
-								$unitelement->unit_id = $unit->unit_id; 								
-								$unitelement->save();								
-							}
-							
-						  }	
-							$copycapabilityquestion = CapabilityQuestion::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
+						$copycapabilityquestion = CapabilityQuestion::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
 						 
 						 if($copycapabilityquestion)
 						  {
@@ -78,6 +65,10 @@ class CopyController extends \yii\web\Controller
 						  }
 							
 					 	 $copyawrenessquestion = AwarenessQuestion::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
+						 
+						 $oldoptionvals = [];
+						 $newoptionvals = [];
+						 
 						  if($copyawrenessquestion)
 						  {
 							foreach($copyawrenessquestion as $tmpawrenessquestion)
@@ -88,33 +79,62 @@ class CopyController extends \yii\web\Controller
 								$awrenessquestion->unit_id = $unit->unit_id; 								
 								$awrenessquestion->answer = ""; 								
 								$awrenessquestion->save(false);	
-								unset($optionsvalues); 
-								$options = explode("_",$tmpawrenessquestion->answer);
-								$optionsvalues = [];
 								
-							 if($options)
-							 {		
-								foreach($options as $tmpoption)
-								{
-								  $copyawrenessooption = AwarenessOption::find()->where(["question_id"=>$tmpoption])->one();
+								$answerrequired = $options = explode("_",$tmpawrenessquestion->answer);
+								$optionsvalues = [];
+								$copyawrenessooption = AwarenessOption::find()->where(["question_id"=>$tmpawrenessquestion->aq_id])->all();
+								 
 								  if($copyawrenessooption)
-							      {
-									$awrenessoption = new AwarenessOption();
-									$awrenessoption->setAttributes($copyawrenessooption->getAttributes(), false);
-									$awrenessoption->option_id = ""; 
-									$awrenessoption->question_id = $awrenessquestion->aq_id;
-									$awrenessoption->save();
+							      {									  
+									 foreach($copyawrenessooption as $tmpawrenessooption)
+									{	
+										
+										$awrenessoption = new AwarenessOption();
+										$awrenessoption->setAttributes($tmpawrenessooption->getAttributes(), false);
+										$awrenessoption->option_id = ""; 
+										$awrenessoption->question_id = $awrenessquestion->aq_id;
+										$awrenessoption->save();
+										
+										$oldoptionvals[] = "option_id='".$tmpawrenessooption->option_id."'";
+										$newoptionvals[] = "option_id='".$awrenessoption->option_id."'";
+										
+										if(in_array($tmpawrenessooption->option_id,$answerrequired)) 
+										{
+											$optionsvalues[] = $awrenessoption->option_id; 
+										}
+									}
 									
-									$optionsvalues[] = $awrenessoption->option_id; 
 								  }
-								}  
-							 }
+								  
 								$answer = implode("_",$optionsvalues);
 								$awrenessquestion->answer = $answer; 								
 								$awrenessquestion->save();
-							 	
+						
 							}
 						  } 
+						  
+						  $copyunitelement = UnitElement::find()->where(["unit_id"=>$tmpunit->unit_id])->all();
+							
+						  if($copyunitelement)
+						  {
+							foreach($copyunitelement as $tmpunitelement)
+							{
+								$unitelement = new UnitElement();
+								$unitelement->setAttributes($tmpunitelement->getAttributes(), false);
+								$unitelement->element_id = ""; 
+								if($tmpunitelement->element_type == "aw_data")
+								{
+									$aw_data = $tmpunitelement->content;
+									$new_aw_data = str_replace($oldoptionvals, $newoptionvals, $aw_data);
+									$unitelement->content = $new_aw_data;
+								}
+								$unitelement->unit_id = $unit->unit_id; 								
+								$unitelement->save();								
+							}
+							
+						  }	
+						  
+						  
 						}
 					}
 				  }		

@@ -198,6 +198,7 @@ class UnitController extends Controller
 			$schedule->unit_id = $unit_id;
 			$schedule->cron_time = $cron_time;
 			$schedule->actual_time = $monthsLater;
+			$schedule->updated_at = date('Y-m-d H:i:s');
 			if($schedule->save()){
 				if(file_exists('/tmp/crontab.txt')){
 					//write cron_tab

@@ -1127,5 +1127,12 @@ background-color: lightgreen;
     display: inline-block;
     margin-right: 10px;
 }
-
+.lesson {
+	margin-top: 5px;
+}
+.lesson span {
+	font-size: 14px;
+	display: block;
+    line-height: 20px;
+}
 
