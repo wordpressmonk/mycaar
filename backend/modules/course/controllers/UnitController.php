@@ -576,4 +576,25 @@ class UnitController extends Controller
 		}
 		return true;
 	}
+	
+	public function actionPreview($u_id){
+        $model = $this->findModel($u_id);
+		$program = $model->module->program;
+		if (\Yii::$app->user->can('manageProgram', ['post' => $program])) {
+			$questions = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->orderBy('order_id ASC')->orderBy('order_id ASC')->all();
+			foreach($questions as $key=>$quest){
+				$questions[$key]['options'] = $quest->awarenessOptions;
+			}
+		$cp_questions = CapabilityQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->orderBy('order_id ASC')->all();
+			return $this->render('preview', [
+				'model' => $this->findModel($u_id),
+				'questions' => $questions,
+				'cp_questions' => $cp_questions
+			]);			
+		}else
+		{
+			//yii\web\ForbiddenHttpException
+			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+		}
+	}
 }

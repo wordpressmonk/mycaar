@@ -133,13 +133,20 @@ class TestController extends Controller
 		if($total <= ($page+1)*$limit)
 			$final = true;
 		$questions = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->orderBy('order_id ASC')->limit($limit)->offset($offset)->orderBy('order_id ASC')->all();
+		$questions_assessable = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])
+		->andWhere(['<>','question_type','img'])
+		->andWhere(['<>','question_type','filedownload'])
+		->orderBy('order_id ASC')
+		->limit($limit)
+		->offset($offset)
+		->orderBy('order_id ASC')->all();
 		//print_r($questions);
 		foreach($questions as $key=>$quest){
 			$questions[$key]['options'] = $quest->awarenessOptions;
 		}
 		if($answers = Yii::$app->request->post()){
 			//print_r(Yii::$app->request->post());die;
-			$count_qstns = count($questions);
+			$count_qstns = count($questions_assessable);
 			$ans_qstns = count($answers)-1;
 			//print_r(Yii::$app->request->post());die;
 			  if(isset(Yii::$app->request->post()['save_n_exit'])){

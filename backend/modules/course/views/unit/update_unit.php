@@ -23,11 +23,10 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 <div class="section-body contain-lg">
 <h2 class="col-md-9">Update Lesson: <?=$model->title?></h2>
 
-
 <div class="row">
 
-		
-	
+<div class="small-padding"><a class="btn btn-info pull-right" href="<?=Url::to(['unit/preview','u_id'=>$model->unit_id])?>">Preview Lesson</a></div>
+
 	<div class="col-lg-12">
 	<h4 class="small-padding">[ Program: <a href="<?= Url::to(['program/view','id'=>$module->program->program_id])?>"><?=$module->program->title?></a> , Module: <a href="<?= Url::to(['module/update','id'=>$module->module_id])?>"><?=$module->title?> ]</a></h4>
 	<div class="card tabs-left style-default-light">
