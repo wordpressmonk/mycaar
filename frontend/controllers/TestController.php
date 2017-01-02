@@ -48,8 +48,18 @@ class TestController extends Controller
             ],
         ];
     }
+	public function isAllowed($u_id){
+		$unit = Unit::findOne($u_id);
+		if(\Yii::$app->user->identity->isEnrolled($unit->module->program_id))
+			return true;
+		else return false;
+	}
 	public function actionLearn($u_id){
 		$current_unit = Unit::findOne($u_id);
+		if(!$this->isAllowed($u_id)){
+			\Yii::$app->getSession()->setFlash('error', 'You are not enrolled to this program. Please contact your administrator');
+			return $this->redirect(['site/index']);
+		}
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
 		//see if show learning elements enabled, if not redirect to test page
@@ -84,6 +94,10 @@ class TestController extends Controller
     public function actionAwTest($u_id)
     {
 		$current_unit = Unit::findOne($u_id);
+		if(!$this->isAllowed($u_id)){
+			\Yii::$app->getSession()->setFlash('error', 'You are not enrolled to this program. Please contact your administrator');
+			return $this->redirect(['site/index']);
+		}
 		if($current_unit == null)
 			throw new NotFoundHttpException('The requested page does not exist.');
 		$previous_unit = Unit::find()->where(['and', "unit_order<$current_unit->unit_order", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_order DESC')->one();
@@ -133,13 +147,20 @@ class TestController extends Controller
 		if($total <= ($page+1)*$limit)
 			$final = true;
 		$questions = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->orderBy('order_id ASC')->limit($limit)->offset($offset)->orderBy('order_id ASC')->all();
+		$questions_assessable = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])
+		->andWhere(['<>','question_type','img'])
+		->andWhere(['<>','question_type','filedownload'])
+		->orderBy('order_id ASC')
+		->limit($limit)
+		->offset($offset)
+		->orderBy('order_id ASC')->all();
 		//print_r($questions);
 		foreach($questions as $key=>$quest){
 			$questions[$key]['options'] = $quest->awarenessOptions;
 		}
 		if($answers = Yii::$app->request->post()){
 			//print_r(Yii::$app->request->post());die;
-			$count_qstns = count($questions);
+			$count_qstns = count($questions_assessable);
 			$ans_qstns = count($answers)-1;
 			//print_r(Yii::$app->request->post());die;
 			  if(isset(Yii::$app->request->post()['save_n_exit'])){
@@ -149,7 +170,7 @@ class TestController extends Controller
 					$this->saveProgress(\Yii::$app->user->id,$u_id);
 				  }
 				  $session->remove($u_id."_".\Yii::$app->user->id);
-				  return $this->redirect(["site/index"]);
+				  return $this->redirect(["site/index#".$u_id]);
 				}
 			  }
 			if( in_array("", $answers, true) || $count_qstns > $ans_qstns){
@@ -170,11 +191,11 @@ class TestController extends Controller
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				if(Yii::$app->request->post()['save_n_exit'] == 'Submit Answer/s'){
 					$session->remove($u_id."_".\Yii::$app->user->id);
-					return $this->redirect(["site/index"]);
+					return $this->redirect(["site/index#".$u_id]);
 				}
 				if(Yii::$app->request->post()['save_n_exit'] == 'Save & Return to Dashboard'){
 					//$session->remove($u_id."_".\Yii::$app->user->id);
-					return $this->redirect(["site/index"]);
+					return $this->redirect(["site/index#".$u_id]);
 				}
 			}
 
@@ -197,6 +218,10 @@ class TestController extends Controller
 /* 		$this->isAnyChange($u_id,\Yii::$app->user->id);
 		die; */
 		$model = $this->findModel($u_id);
+		if(!$this->isAllowed($u_id)){
+			\Yii::$app->getSession()->setFlash('error', 'You are not enrolled to this program. Please contact your administrator');
+			return $this->redirect(['site/index']);
+		}
 		$questions = $model->awarenessQuestions;
 		foreach($questions as $key=>$quest){
 			$questions[$key]['options'] = $quest->awarenessOptions;
@@ -212,13 +237,13 @@ class TestController extends Controller
 			$this->saveAnswers($answers);
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				$this->saveProgress(\Yii::$app->user->id,$u_id);
-				return $this->redirect(["site/index"]);
+				return $this->redirect(["site/index#".$u_id]);
 			}
 				
 			if($this->saveProgress(\Yii::$app->user->id,$u_id)!= 100)
 				return $this->redirect(['retake','u_id'=>$u_id]);
 			//redirect to next page or homepage
-			return $this->redirect(["site/index"]);
+			return $this->redirect(["site/index#".$u_id]);
 		}
 		else return $this->render('retest', [
             'model' => $model,

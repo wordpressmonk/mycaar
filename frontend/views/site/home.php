@@ -105,7 +105,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					else 
 						echo '<li class="margin" style="margin-left: -304px">';
 						echo 
-							'<div class="single_unit_title"><a href="'.Url::to(['test/learn','u_id'=>$unit->unit_id]).'">
+							'<div class="single_unit_title" id="'.$unit->unit_id.'"><a href="#'.$unit->title.'">
                                         '.$unit->title.'
                             </a></div>
 							<div class="course_types">';

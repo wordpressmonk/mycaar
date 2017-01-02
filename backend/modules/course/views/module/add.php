@@ -148,7 +148,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 						<?php $form = ActiveForm::begin(); ?>
 							<div class="form-group">
 								<h4>Module Dates</h4>
-								<?= $form->field($model, 'is_course_open_anytime',['template' => '<div class="checkbox checkbox-styled"><label>{input}<span>This course has no end date</span></label></div>','options'=>['tag'=>'div']])->checkbox([],false); ?>
+								<?= $form->field($model, 'is_course_open_anytime',['template' => '<div class="checkbox checkbox-styled"><label>{input}<span>This module has no end date</span></label></div>','options'=>['tag'=>'div']])->checkbox([],false); ?>
 								<p>This is the duration the module will be open to the students</p>
 							</div>
 							<div class="form-group">
