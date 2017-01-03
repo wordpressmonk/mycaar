@@ -274,23 +274,23 @@ function saveUrl(input){
 function saveVideoUrl(input){
 	console.log("tbp",$(input).val());
 	var url = $(input).val();
-if(url!=''){
-	waitingDialog.show('Fetching..');
-		$.ajax({
-			url: "<?=Url::to(['unit/embed'])?>?url="+url,
-			type: "GET",
-			processData: false,
-			contentType: false,
-			success: function(data){
-				waitingDialog.hide();
-				$(input).prev().attr('src',data);
-			},
-			error:function(data){
-				alert("Oops!Something wrong happend. Please try again later");
-				waitingDialog.hide();
-			}
-		});
-}
+	if(url!=''){
+		waitingDialog.show('Fetching..');
+			$.ajax({
+				url: "<?=Url::to(['unit/embed'])?>?url="+url,
+				type: "GET",
+				processData: false,
+				contentType: false,
+				success: function(data){
+					waitingDialog.hide();
+					$(input).prev().attr('src',data);
+				},
+				error:function(data){
+					alert("Oops!Something wrong happend. Please try again later");
+					waitingDialog.hide();
+				}
+			});
+	}
 	//$(input).prev().attr('src',$(input).val());
 	//console.log('src',$(input).prev().attr('src'));
 }
