@@ -103,7 +103,9 @@ class UnitController extends Controller
 			$model->module_id = $m_id;
 			$model->title = Yii::$app->request->post()['unit_title'];
 			$model->status = Yii::$app->request->post()['unit_status'];
-			$model->auto_reset_period = Yii::$app->request->post()['reset_period'];	
+			if(Yii::$app->request->post()['reset_period'] != 0)
+				$model->auto_reset_period = Yii::$app->request->post()['reset_period'];	
+			else $model->auto_reset_period = NULL;
 			$model->show_learning_page = Yii::$app->request->post()['show_learning_page'];	
 			$previous_unit = Unit::find()->where(["module_id"=>$m_id])->orderBy('unit_order DESC')->one();
 			if($previous_unit)
@@ -173,7 +175,7 @@ class UnitController extends Controller
 	 */
 	public function saveAutoReset($unit_id,$months){	
 		if(Unit::findOne($unit_id) != null){
-			if($months == NULL || $months == '' ){
+			if($months == NULL || $months == '' || $months == 0){
 				$this->removeAutoReset($unit_id);	
 				return true;
 			}
@@ -236,7 +238,9 @@ class UnitController extends Controller
 			if(isset(Yii::$app->request->post()['unit_title'])) {
 				$model->title = Yii::$app->request->post()['unit_title'];
 				$model->status = Yii::$app->request->post()['unit_status'];
-				$model->auto_reset_period = Yii::$app->request->post()['reset_period'];
+				if(Yii::$app->request->post()['reset_period'] != 0)
+					$model->auto_reset_period = Yii::$app->request->post()['reset_period'];
+				else $model->auto_reset_period = NULL;
 				$model->show_learning_page = Yii::$app->request->post()['show_learning_page'];	
 				if($model->save()){
 					//if any change in the auto_reset_period, then only alter the crontab
