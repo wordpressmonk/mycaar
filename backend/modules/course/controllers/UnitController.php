@@ -608,10 +608,12 @@ class UnitController extends Controller
 		$info = Embed::create($url);
 		//var_dump($info->code);die;
 		//echo preg_match_all('/src="([\s\S]*?)"/', $info->code,$src[], PREG_SET_ORDER);die;
-		$xpath = new \DOMXPath(@\DOMDocument::loadHTML($info->code));
-		$src = $xpath->evaluate("string(//iframe/@src)");
-		if(!$src)
-			return $url;
-		else return $src;
+		if($info && $info->code){
+			$xpath = new \DOMXPath(@\DOMDocument::loadHTML($info->code));
+			$src = $xpath->evaluate("string(//iframe/@src)");	
+			if(!$src)
+				return $url;			
+		}
+		return $src;
 	}
 }
