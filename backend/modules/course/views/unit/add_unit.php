@@ -268,6 +268,23 @@ function saveFile(input){
 }
 function saveUrl(input){
 	console.log("tbp",$(input).val());
+	var url = $(input).val();
+	var ext = url.substring(url.lastIndexOf(".")+1);
+	var mc_type = $(input).attr('data_mc_type');	
+	supportedFormats = [];
+		if(mc_type == 'audio')
+			supportedFormats = ['mp3'];
+		if(mc_type == 'image'){
+			supportedFormats = ['jpg','png','gif','jpeg'];	
+		}		
+		if(mc_type == 'file')
+			supportedFormats = ['pdf','doc','docx','ppt','pptx'];
+		if (0 > supportedFormats.indexOf(ext)) {
+			alert("Invalid Url");
+			//clear all
+			$(input).val("");
+			return false;
+		}		
 	$(input).prev().attr('src',$(input).val());
 	console.log('src',$(input).prev().attr('src'));
 }

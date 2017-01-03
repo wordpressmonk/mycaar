@@ -353,8 +353,9 @@ function saveFile(input){
 			supportedFormats = ['mp4','m4v','webm','ogv','wmv','flv'];
 		if(mc_type == 'audio')
 			supportedFormats = ['mp3'];
-		if(mc_type == 'image')
+		if(mc_type == 'image'){
 			supportedFormats = ['jpg','png','gif','jpeg'];	
+		}		
 		if(mc_type == 'file')
 			supportedFormats = ['pdf','doc','docx','ppt','pptx'];
 	
@@ -392,34 +393,60 @@ function saveFile(input){
 }
 function saveUrl(input){
 	console.log("tbp",$(input).val());
+	var url = $(input).val();
+	var ext = url.substring(url.lastIndexOf(".")+1);
+	var mc_type = $(input).attr('data_mc_type');	
+	supportedFormats = [];
+		if(mc_type == 'audio')
+			supportedFormats = ['mp3'];
+		if(mc_type == 'image'){
+			supportedFormats = ['jpg','png','gif','jpeg'];	
+		}		
+		if(mc_type == 'file')
+			supportedFormats = ['pdf','doc','docx','ppt','pptx'];
+		if (0 > supportedFormats.indexOf(ext)) {
+			alert("Invalid Url");
+			//clear all
+			$(input).val("");
+			return false;
+		}		
 	$(input).prev().attr('src',$(input).val());
 	console.log('src',$(input).prev().attr('src'));
 }
+
+function IsValidImageUrl(url) {
+$("<img>", {
+    src: url,
+    error: function() { alert(url + ': ' + false); },
+    load: function() { alert(url + ': ' + true); }
+});
+}
+
 function saveVideoUrl(input){
 	console.log("tbp",$(input).val());
 	var url = $(input).val();
-if(url!=''){
-	waitingDialog.show('Fetching..');
-		$.ajax({
-			url: "<?=Url::to(['unit/embed'])?>?url="+url,
-			type: "GET",
-			processData: false,
-			contentType: false,
-			success: function(data){
-				waitingDialog.hide();
-				$(input).prev().attr('src',data);
-			},
-			error:function(data){
-				alert("Oops!Something wrong happend. Please try again later");
-				waitingDialog.hide();
-			}
-		});
-}
+	if(url!=''){
+		waitingDialog.show('Fetching..');
+			$.ajax({
+				url: "<?=Url::to(['unit/embed'])?>?url="+url,
+				type: "GET",
+				processData: false,
+				contentType: false,
+				success: function(data){
+					waitingDialog.hide();
+					$(input).prev().attr('src',data);
+				},
+				error:function(data){
+					alert("Oops!Something wrong happend. Please try again later");
+					waitingDialog.hide();
+				}
+			});
+	}
 	//$(input).prev().attr('src',$(input).val());
 	//console.log('src',$(input).prev().attr('src'));
 }
-//$('.fld-description').summernote();
-$('.fld-label').val('');
+$('.fld-description').summernote();
+//$('.fld-label').val('');
 //($('.fld-description').val()).length;
 <!---------- End of save file ------------->
 </script>
