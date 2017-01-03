@@ -459,7 +459,7 @@ console.log(fieldData.type);
 		break;
 	case 'video':
 		fieldData.type = 'iframe';
-		fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
+		fieldMarkup = '<div class="prev_video"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
 		'<' + fieldData.type + ' ' + fieldDataString + ' width="600" height="300" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
 		'</div>';
 		break;

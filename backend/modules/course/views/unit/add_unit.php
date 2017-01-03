@@ -16,6 +16,9 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 .required-wrap{
 	display:none;
 }
+.prev_video{
+	display:none;
+}
 </style>
 <div class="section-body contain-lg">
 
