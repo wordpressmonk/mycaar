@@ -343,13 +343,31 @@ $(document).ready(function(){
 });
 <!---------- Save file -------------------->
 function saveFile(input){
+	//console.log("mc_type",$(input).attr('data_mc_type'));
+	var mc_type = $(input).attr('data_mc_type');
+	supportedFormats = [];
+		if(mc_type == 'video')
+			supportedFormats = ['mp4','m4v','webm','ogv','wmv','flv'];
+		if(mc_type == 'audio')
+			supportedFormats = ['mp3'];
+		if(mc_type == 'image')
+			supportedFormats = ['jpg','png','gif','jpeg'];	
+		if(mc_type == 'file')
+			supportedFormats = ['pdf','doc','docx','ppt','pptx'];
+	
 	var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
 	file = input.files[0];
-	var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
+
+	if (0 > supportedFormats.indexOf(ext)) {
+		alert("Extension not supported");
+		//clear all
+		$(input).next().val("");
+		$(input).val("");
+		return false;
+	}
 	if(file != undefined){
 		waitingDialog.show('Uploading..');
-	formData= new FormData();
-	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx" || ext == "m4v" || ext == "webm" || ext == "ogv" || ext == "wmv" || ext == "flv"){
+		formData= new FormData();
 		formData.append("media", file);
 		$.ajax({
 			url: "<?=Url::to(['unit/upload'])?>",
@@ -361,15 +379,12 @@ function saveFile(input){
 				waitingDialog.hide();
 				$(input).attr('src', data);
 				$(input).next().val(data);
+			},
+			error:function(data){
+				alert("Oops!Something wrong happend. Please try again later");
+				waitingDialog.hide();
 			}
 		});
-	}else{
-		alert("Extension not supported");
-		$(input).val("");
-		return false;
-	}
-
-
 	}
 }
 function saveUrl(input){

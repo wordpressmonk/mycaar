@@ -217,42 +217,35 @@ $(document).ready(function(){
 	<!----------end of unit elements----------->
 });
 <!---------- Save file -------------------->
+<!---------- Save file -------------------->
 function saveFile(input){
-/* 	console.log(new FormData(elem));
-	$.ajax({
-		url: "form.php",
-		type: "POST",
-		data: new FormData(elem),
-		contentType: false,
-		cache: false,
-		processData: false,
-		success: function (data) {
-			$("#targetLayer").html(data);
-		},
-		error: function () {
-		}
-	});	 */	
+	//console.log("mc_type",$(input).attr('data_mc_type'));
+	var mc_type = $(input).attr('data_mc_type');
+	supportedFormats = [];
+		if(mc_type == 'video')
+			supportedFormats = ['mp4','m4v','webm','ogv','wmv','flv'];
+		if(mc_type == 'audio')
+			supportedFormats = ['mp3'];
+		if(mc_type == 'image')
+			supportedFormats = ['jpg','png','gif','jpeg'];	
+		if(mc_type == 'file')
+			supportedFormats = ['pdf','doc','docx','ppt','pptx'];
+	
 	var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
-	//&& (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")
-/* 	if (input.files && input.files[0] ) {
-		var reader = new FileReader();
-		reader.onload = function (e) {
-			$(input).attr('src', e.target.result);
-			console.log(e.target.result);
-		}
-		//console.log(e.target.result);
-		reader.readAsDataURL(input.files[0]);
-	}else{
-		 $('#img').attr('src', '/assets/no_preview.png');
-	} */
-  file = input.files[0];
-  var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
-  if(file != undefined){
-	waitingDialog.show('Uploading..');
-    formData= new FormData();
-	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx" || ext == "m4v" || ext == "webm" || ext == "ogv" || ext == "wmv" || ext == "flv"){
+	file = input.files[0];
+
+	if (0 > supportedFormats.indexOf(ext)) {
+		alert("Extension not supported");
+		//clear all
+		$(input).next().val("");
+		$(input).val("");
+		return false;
+	}
+	if(file != undefined){
+		waitingDialog.show('Uploading..');
+		formData= new FormData();
 		formData.append("media", file);
-		  $.ajax({
+		$.ajax({
 			url: "<?=Url::to(['unit/upload'])?>",
 			type: "POST",
 			data: formData,
@@ -261,16 +254,14 @@ function saveFile(input){
 			success: function(data){
 				waitingDialog.hide();
 				$(input).attr('src', data);
+				$(input).next().val(data);
+			},
+			error:function(data){
+				alert("Oops!Something wrong happend. Please try again later");
+				waitingDialog.hide();
 			}
-		  });
-	}else{
-		alert("Extension not supported");
-		return false;
+		});
 	}
-
-    //if(!!file.type.match(/image.*/)){
-
-    }
 }
 function saveUrl(input){
 	console.log("tbp",$(input).val());
