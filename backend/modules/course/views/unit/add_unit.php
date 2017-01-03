@@ -250,7 +250,7 @@ function saveFile(input){
   if(file != undefined){
 	waitingDialog.show('Uploading..');
     formData= new FormData();
-	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx"){
+	if(ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg" || ext == "mp4" || ext == "mp3" || ext == "pdf" || ext == "doc" || ext == "docx" || ext == "m4v" || ext == "webm" || ext == "ogv" || ext == "wmv" || ext == "flv"){
 		formData.append("media", file);
 		  $.ajax({
 			url: "<?=Url::to(['unit/upload'])?>",
