@@ -113,7 +113,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 									else echo 'This is used on the module Overview page and will be displayed with the module description.';
 									?></p>
 									<div class="col-md-6">
-									<?= $form->field($model, 'featured_video_url')->textInput(['class'=>'form-control'])->label(false) ?>
+									<?= $form->field($model, 'featured_video_url')->textInput(['class'=>'form-control','onChange'=>'saveVideoUrl(this)','id'=>'video_url'])->label(false) ?>
 									</div>
 									<div class="col-md-1"> ( Or ) </div> 
 									<div class="col-md-5">
@@ -261,7 +261,7 @@ function saveFile(input){
 			success: function(data){
 				waitingDialog.hide();
 				//$(input).attr('src', data);
-				$("#module-featured_video_url").val(data);
+				$('#video_url').val(data);
 			}
 		}); 
  	}else{
@@ -277,5 +277,28 @@ function saveFile(input){
 }
 //($('.fld-description').val()).length;
 <!---------- End of save file ------------->
+function saveVideoUrl(input){
+	console.log("tbp",$(input).val());
+	var url = $(input).val();
+	if(url!=''){
+	waitingDialog.show('Fetching..');
+		$.ajax({
+			url: "<?=Url::to(['unit/embed'])?>?url="+url,
+			type: "GET",
+			processData: false,
+			contentType: false,
+			success: function(data){
+				waitingDialog.hide();
+				$('#video_url').val(data);
+			},
+			error:function(data){
+				alert("Oops!Something wrong happend. Please try again later");
+				waitingDialog.hide();
+			}
+		});		
+	}
 
+	//$(input).prev().attr('src',$(input).val());
+	//console.log('src',$(input).prev().attr('src'));
+}
 </script>
