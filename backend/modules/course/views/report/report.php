@@ -246,9 +246,12 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														$str.= '<span class="first_heading">Aware</span>';
 													else $str.= '<span class="first_heading" style="display: none">Aware</span>';
 													$progress = $user->user->getUnitProgress($unit->unit_id);
+													if($user->user_id == \Yii::$app->user->id)
+														$href = \Yii::$app->urlManagerFrontEnd->baseUrl."/test/aw-test?u_id=".$unit->unit_id;
+													else $href="javascript:void(0);";
 													//print_r($progress);
 													$str.= "<div name='unit1'>
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='javascript:void(0);'><span class='toolkit'><center>{$progress['ap']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$href' target='_blank' ><span class='toolkit'><center>{$progress['ap']}</center></span>
 															</a>
 														</div>
 
