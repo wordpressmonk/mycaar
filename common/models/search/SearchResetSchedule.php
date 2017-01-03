@@ -12,6 +12,7 @@ use common\models\ResetSchedule;
  */
 class SearchResetSchedule extends ResetSchedule
 {
+	public $program;
 	public $module;
     /**
      * @inheritdoc
@@ -19,8 +20,8 @@ class SearchResetSchedule extends ResetSchedule
     public function rules()
     {
         return [
-            [['s_id'], 'integer'],
-            [['cron_time', 'actual_time', 'unit_id', 'module'], 'safe'],
+            [['s_id','unit_id', 'module','program'], 'integer'],
+            [['cron_time', 'actual_time'], 'safe'],
         ];
     }
 
@@ -52,7 +53,8 @@ class SearchResetSchedule extends ResetSchedule
 
         $this->load($params);
 		$query->innerJoinWith(['unit as u']);
-		$query->innerJoinWith(['unit.module as module']);
+		$query->innerJoinWith(['unit.module as m']);
+		$query->innerJoinWith(['unit.module.program as program']);
 		
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -63,14 +65,16 @@ class SearchResetSchedule extends ResetSchedule
         // grid filtering conditions
         $query->andFilterWhere([
             's_id' => $this->s_id,
-          //  'u.title' => $this->unit_id,
+            'u.unit_id' => $this->unit_id,
+			'm.module_id' => $this->module,
+			'program.program_id' => $this->program,
             'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'cron_time', $this->cron_time])
-            ->andFilterWhere(['like', 'actual_time', $this->actual_time])
-			->andFilterWhere(['like', 'u.title', $this->unit_id])	
-			->andFilterWhere(['like', 'module.title', $this->module]);	
+            ->andFilterWhere(['like', 'actual_time', $this->actual_time]);
+			//->andFilterWhere(['like', 'u.title', $this->unit_id])	
+			//->andFilterWhere(['like', 'module.title', $this->module]);	
         return $dataProvider;
     }
 }
