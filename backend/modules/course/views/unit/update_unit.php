@@ -392,6 +392,11 @@ function saveFile(input){
 }
 function saveUrl(input){
 	console.log("tbp",$(input).val());
+	$(input).prev().attr('src',$(input).val());
+	console.log('src',$(input).prev().attr('src'));
+}
+function saveVideoUrl(input){
+	console.log("tbp",$(input).val());
 	var url = $(input).val();
 	waitingDialog.show('Fetching..');
 		$.ajax({
