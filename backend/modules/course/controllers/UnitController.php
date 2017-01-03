@@ -610,6 +610,8 @@ class UnitController extends Controller
 		//echo preg_match_all('/src="([\s\S]*?)"/', $info->code,$src[], PREG_SET_ORDER);die;
 		$xpath = new \DOMXPath(@\DOMDocument::loadHTML($info->code));
 		$src = $xpath->evaluate("string(//iframe/@src)");
-		return $src;
+		if(!$src)
+			return $url;
+		else return $src;
 	}
 }
