@@ -458,8 +458,9 @@ console.log(fieldData.type);
 		'</div>';
 		break;
 	case 'video':
+		fieldData.type = 'iframe';
 		fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
-		'<' + fieldData.type + ' ' + fieldDataString + ' width="500" heigh="200" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
+		'<' + fieldData.type + ' ' + fieldDataString + ' width="600" height="300" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
 		'</div>';
 		break;
 	case 'audio':

@@ -105,7 +105,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 												$url = $model->featured_video_url; 
 										
 									if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
-											echo "<video width='320' height='240' src=".$url." controls></video>";
+											echo "<iframe width='600' height='300' src=".$url." controls></iframe>";
 									} else {
 											echo $url;
 									}
