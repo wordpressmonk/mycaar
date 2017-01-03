@@ -392,8 +392,24 @@ function saveFile(input){
 }
 function saveUrl(input){
 	console.log("tbp",$(input).val());
-	$(input).prev().attr('src',$(input).val());
-	console.log('src',$(input).prev().attr('src'));
+	var url = $(input).val();
+	waitingDialog.show('Fetching..');
+		$.ajax({
+			url: "<?=Url::to(['unit/embed'])?>?url="+url,
+			type: "GET",
+			processData: false,
+			contentType: false,
+			success: function(data){
+				waitingDialog.hide();
+				$(input).prev().attr('src',data);
+			},
+			error:function(data){
+				alert("Oops!Something wrong happend. Please try again later");
+				waitingDialog.hide();
+			}
+		});
+	//$(input).prev().attr('src',$(input).val());
+	//console.log('src',$(input).prev().attr('src'));
 }
 //($('.fld-description').val()).length;
 <!---------- End of save file ------------->

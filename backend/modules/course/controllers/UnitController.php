@@ -15,7 +15,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
+use Embed\Embed;
 /**
  * UnitController implements the CRUD actions for Unit model.
  */
@@ -600,5 +600,16 @@ class UnitController extends Controller
 			//yii\web\ForbiddenHttpException
 			throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
 		}
+	}
+	
+	public function actionEmbed($url){
+		
+		//Load any url:
+		$info = Embed::create($url);
+		//var_dump($info->code);die;
+		//echo preg_match_all('/src="([\s\S]*?)"/', $info->code,$src[], PREG_SET_ORDER);die;
+		$xpath = new \DOMXPath(@\DOMDocument::loadHTML($info->code));
+		$src = $xpath->evaluate("string(//iframe/@src)");
+		return $src;
 	}
 }
