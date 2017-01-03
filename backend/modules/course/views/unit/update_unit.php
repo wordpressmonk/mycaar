@@ -398,6 +398,7 @@ function saveUrl(input){
 function saveVideoUrl(input){
 	console.log("tbp",$(input).val());
 	var url = $(input).val();
+if(url!=''){
 	waitingDialog.show('Fetching..');
 		$.ajax({
 			url: "<?=Url::to(['unit/embed'])?>?url="+url,
@@ -413,9 +414,12 @@ function saveVideoUrl(input){
 				waitingDialog.hide();
 			}
 		});
+}
 	//$(input).prev().attr('src',$(input).val());
 	//console.log('src',$(input).prev().attr('src'));
 }
+//$('.fld-description').summernote();
+$('.fld-label').val('');
 //($('.fld-description').val()).length;
 <!---------- End of save file ------------->
 </script>

@@ -2009,9 +2009,6 @@ function formBuilderEventsFn() {
       }
 
       field.name = isNew ? nameAttr(field) : field.name || nameAttr(field);
-	  if(isNew){
-		  field.label = '';
-	  }
       if (isNew && utils.inArray(field.type, ['text', 'number', 'file', 'select', 'textarea'])) {
         field.className = 'form-control'; // backwards compatibility
       } else {

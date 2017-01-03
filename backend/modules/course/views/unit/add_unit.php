@@ -294,5 +294,7 @@ function saveVideoUrl(input){
 	//$(input).prev().attr('src',$(input).val());
 	//console.log('src',$(input).prev().attr('src'));
 }
+$('.fld-label').val('');
+//$('.fld-description').summernote();
 <!---------- End of save file ------------->
 </script>
