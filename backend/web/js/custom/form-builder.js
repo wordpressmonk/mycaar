@@ -2506,8 +2506,8 @@ function formBuilderEventsFn() {
 			if(values.src)
 				val = values.src;
           attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' data_mc_type="video"  accept="video/*" style="width:18%;display:inline-block"><input data_mc_type="video" placeholder="Or paste URL here" type="text" class="form-control" value="'+val+'" onChange="saveVideoUrl(this);return false" style="width:80%;display:inline-block;margin-left:5px">';
-		  if(values.src)
-			attributefield += '<iframe width="400" height="200" controls="" src="'+values.src+'"></iframe>'; 
+		  //if(values.src)
+		//	attributefield += '<iframe width="400" height="200" controls="" src="'+values.src+'"></iframe>'; 
 		/** Audio **/
         } else if (attribute === 'value' && utils.inArray(values.type, audioArea)) {
 			var val = '';
