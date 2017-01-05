@@ -453,13 +453,15 @@ console.log(fieldData.type);
 		break;
 	case 'filedownload':
 		fieldData.type = 'a';
+		fieldLabelVal = 'Download File';
 		fieldMarkup = '<div class="small-padding filedownload-preview"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p><button class="btn btn-info btn-lg">'+
 		'<' + fieldData.type + ' href="'+fieldData.src+'" >' + fieldLabelVal + '</' + fieldData.type + '></button>'+
 		'</div>';
 		break;
 	case 'video':
-		fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
-		'<' + fieldData.type + ' ' + fieldDataString + ' width="500" heigh="200" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
+		fieldData.type = 'iframe';
+		fieldMarkup = '<div class="prev_video"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
+		'<' + fieldData.type + ' ' + fieldDataString + ' width="600" height="300" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
 		'</div>';
 		break;
 	case 'audio':
