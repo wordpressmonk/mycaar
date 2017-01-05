@@ -378,9 +378,9 @@ function saveFile(input){
 		if(mc_type == 'video')
 			supportedFormats = ['mp4','m4v','webm','ogv','wmv','flv'];
 		if(mc_type == 'audio')
-			supportedFormats = ['mp3'];
+			supportedFormats = ['mp3','ogg','wma','m4a','wav'];
 		if(mc_type == 'image'){
-			supportedFormats = ['jpg','png','gif','jpeg'];	
+			supportedFormats = ['jpg','jpeg','jpe','gif','png','bmp','tif','tiff','ico'];	
 		}		
 		if(mc_type == 'file')
 			supportedFormats = ['pdf','doc','docx','ppt','pptx'];
@@ -425,9 +425,9 @@ function saveUrl(input){
 		var mc_type = $(input).attr('data_mc_type');	
 		supportedFormats = [];
 			if(mc_type == 'audio')
-				supportedFormats = ['mp3'];
+				supportedFormats = ['mp3','ogg','wma','m4a','wav'];
 			if(mc_type == 'image'){
-				supportedFormats = ['jpg','png','gif','jpeg'];	
+				supportedFormats = ['jpg','jpeg','jpe','gif','png','bmp','tif','tiff','ico'];	
 			}		
 			if(mc_type == 'file')
 				supportedFormats = ['pdf','doc','docx','ppt','pptx'];
