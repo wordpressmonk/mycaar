@@ -184,7 +184,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 		axis: 'y',
 		update: function (event, ui) {
 			var data = $(this).sortable('serialize');
-			console.log('data',data);
+			//console.log('data',data);
 			// POST to server using $.post or $.ajax
 			 $.ajax({
 				data: data,
@@ -256,6 +256,20 @@ $(document).ready(function(){
 			$('.field-unit-title').addClass('has-error');
 			return false;
 		}
+		//see if any of the url fields are empty
+		var req = [];
+		$('.url_field').each(function(){
+			if($(this).val() =='')
+			{
+				alert("Please upload the "+$(this).attr("data_mc_type")+" file/s");
+				req.push($(this).attr("data_mc_type"));
+				//return false;
+			}
+		});
+		if(req.length > 0){
+			return false;
+		}
+			
 		//console.log($(unit_element_editor).data('formBuilder').formData);
 		var builder_data = JSON.stringify({'html':$(unit_element_editor).data('formBuilder').formData});
 		//save to db
@@ -291,7 +305,7 @@ $(document).ready(function(){
  	var aw_data = '<?=$aw_data?>';
 	//aw_data.replace(/"/g,"&quot;");
 	//var aw_data = aw_data.replace(/&amp;/g, '&');
-	console.log(aw_data);
+	//console.log(aw_data);
 	if (aw_data) {
 		awareness_elements.formData = aw_data;
 	}	
@@ -301,6 +315,18 @@ $(document).ready(function(){
 	//SaveAwarenessTest
 	var saveBtn = document.querySelector('#frmb-2-save');
 	saveBtn.onclick = function() {
+		var req = [];
+		$('.url_field').each(function(){
+			if($(this).val() =='')
+			{
+				alert("Please upload the "+$(this).attr("data_mc_type")+" file/s");
+				req.push($(this).attr("data_mc_type"));
+				//return false;
+			}
+		});
+		if(req.length > 0){
+			return false;
+		}
 		var form_data = $(awareness_editor).data('formBuilder').formData;
 		var awareness_data = JSON.stringify({'html':form_data});
 		//save to db
@@ -392,26 +418,27 @@ function saveFile(input){
 	}
 }
 function saveUrl(input){
-	console.log("tbp",$(input).val());
+	//console.log("tbp",$(input).val());
 	var url = $(input).val();
-	var ext = url.substring(url.lastIndexOf(".")+1);
-	var mc_type = $(input).attr('data_mc_type');	
-	supportedFormats = [];
-		if(mc_type == 'audio')
-			supportedFormats = ['mp3'];
-		if(mc_type == 'image'){
-			supportedFormats = ['jpg','png','gif','jpeg'];	
-		}		
-		if(mc_type == 'file')
-			supportedFormats = ['pdf','doc','docx','ppt','pptx'];
-		if (0 > supportedFormats.indexOf(ext)) {
-			alert("Invalid Url");
-			//clear all
-			$(input).val("");
-			return false;
-		}		
-	$(input).prev().attr('src',$(input).val());
-	console.log('src',$(input).prev().attr('src'));
+	if(url !=''){
+		var ext = url.substring(url.lastIndexOf(".")+1);
+		var mc_type = $(input).attr('data_mc_type');	
+		supportedFormats = [];
+			if(mc_type == 'audio')
+				supportedFormats = ['mp3'];
+			if(mc_type == 'image'){
+				supportedFormats = ['jpg','png','gif','jpeg'];	
+			}		
+			if(mc_type == 'file')
+				supportedFormats = ['pdf','doc','docx','ppt','pptx'];
+			if (0 > supportedFormats.indexOf(ext)) {
+				alert("Invalid Url");
+				//clear all
+				$(input).val("");
+				return false;
+			}		
+		$(input).prev().attr('src',$(input).val());		
+	}
 }
 
 function IsValidImageUrl(url) {
@@ -423,9 +450,10 @@ $("<img>", {
 }
 
 function saveVideoUrl(input){
-	console.log("tbp",$(input).val());
+	//console.log("tbp",$(input).val());
 	var url = $(input).val();
 	if(url!=''){
+		$('#frmb-0-save').attr("disabled",true);
 		waitingDialog.show('Fetching..');
 			$.ajax({
 				url: "<?=Url::to(['unit/embed'])?>?url="+url,
@@ -435,17 +463,20 @@ function saveVideoUrl(input){
 				success: function(data){
 					waitingDialog.hide();
 					$(input).prev().attr('src',data);
+					$('#frmb-0-save').attr("disabled",false);
 				},
 				error:function(data){
 					alert("Oops!Something wrong happend. Please try again later");
 					waitingDialog.hide();
+					$('#frmb-0-save').attr("disabled",false);
+					$(input).val("");
 				}
 			});
 	}
 	//$(input).prev().attr('src',$(input).val());
 	//console.log('src',$(input).prev().attr('src'));
 }
-$('.fld-description').summernote();
+//$('.fld-description').summernote();
 //$('.fld-label').val('');
 //($('.fld-description').val()).length;
 <!---------- End of save file ------------->

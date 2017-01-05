@@ -134,7 +134,7 @@ button#frmb-0-view-data,button#frmb-1-view-data,button#frmb-2-view-data{
 		axis: 'y',
 		update: function (event, ui) {
 			var data = $(this).sortable('serialize');
-			console.log('data',data);
+			//console.log('data',data);
 			// POST to server using $.post or $.ajax
 			 $.ajax({
 				data: data,
@@ -202,7 +202,20 @@ $(document).ready(function(){
 			$('.field-unit-title').addClass('has-error');
 			return false;
 		}
-		console.log($(unit_element_editor).data('formBuilder').formData);
+		//see if any of the url fields are empty
+		var req = [];
+		$('.url_field').each(function(){
+			if($(this).val() =='')
+			{
+				alert("Please upload the "+$(this).attr("data_mc_type")+" file/s");
+				req.push($(this).attr("data_mc_type"));
+				//return false;
+			}
+		});
+		if(req.length > 0){
+			return false;
+		}
+		//console.log($(unit_element_editor).data('formBuilder').formData);
 		var builder_data = JSON.stringify({'html':$(unit_element_editor).data('formBuilder').formData});
 		//save to db
 		$.ajax({
@@ -267,8 +280,9 @@ function saveFile(input){
 	}
 }
 function saveUrl(input){
-	console.log("tbp",$(input).val());
+	//console.log("tbp",$(input).val());
 	var url = $(input).val();
+	if(url !=''){
 	var ext = url.substring(url.lastIndexOf(".")+1);
 	var mc_type = $(input).attr('data_mc_type');	
 	supportedFormats = [];
@@ -286,12 +300,14 @@ function saveUrl(input){
 			return false;
 		}		
 	$(input).prev().attr('src',$(input).val());
-	console.log('src',$(input).prev().attr('src'));
+	//console.log('src',$(input).prev().attr('src'));
+	}
 }
 function saveVideoUrl(input){
-	console.log("tbp",$(input).val());
+	//console.log("tbp",$(input).val());
 	var url = $(input).val();
 	if(url!=''){
+		$('#frmb-0-save').attr("disabled",true);
 		waitingDialog.show('Fetching..');
 			$.ajax({
 				url: "<?=Url::to(['unit/embed'])?>?url="+url,
@@ -301,10 +317,13 @@ function saveVideoUrl(input){
 				success: function(data){
 					waitingDialog.hide();
 					$(input).prev().attr('src',data);
+					$('#frmb-0-save').attr("disabled",false);
 				},
 				error:function(data){
 					alert("Oops!Something wrong happend. Please try again later");
 					waitingDialog.hide();
+					$('#frmb-0-save').attr("disabled",false);
+					$(input).val("");
 				}
 			});
 	}
