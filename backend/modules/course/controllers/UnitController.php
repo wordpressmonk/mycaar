@@ -614,6 +614,6 @@ class UnitController extends Controller
 			if(!$src)
 				return $url;			
 		}
-		return $src;
+		return $src."&rel=0";
 	}
 }
