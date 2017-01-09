@@ -29,7 +29,7 @@ class ProgramController extends Controller
             ],
              'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['index','create','view','dashboard'],
+				'only' => ['index','create','view','dashboard','delete','company-programs'],
                 'rules' => [
                     [
                         'actions' => ['index'],

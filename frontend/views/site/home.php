@@ -21,7 +21,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 						<h1 class="mdl-sidebar"><strong>Home Page</strong></h1>
 					</div>
 					<div class="mdl-cell mdl-cell-4-col mdl-section">
-						<ul style="width: 1000px;">
+						<ul style="width: 1000px;padding-left: 100px;">
 							<li>
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelyellow mdl-yellow" data-upgraded=",MaterialButton"> Amber</button><span class="mdl-complete">In Progress</span>

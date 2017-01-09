@@ -5,9 +5,12 @@ namespace backend\modules\course\controllers;
 use Yii;
 use common\models\ResetSchedule;
 use common\models\search\SearchResetSchedule;
+use common\models\Module;
+use common\models\Unit;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * AutoresetController implements the CRUD actions for ResetSchedule model.
@@ -37,10 +40,28 @@ class AutoresetController extends Controller
     {
         $searchModel = new SearchResetSchedule();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+		
+		$modules = ArrayHelper::map
+		(
+			Module::find()
+			->where(['program.company_id'=>\Yii::$app->user->identity->c_id])
+			->innerJoinWith(['program'])->orderBy('title')->all(), 'module_id',function($model, 	$defaultValue) {
+					return $model->title.' ['.$model->program->title.']';
+				}
+		);
+		$lessons = ArrayHelper::map
+		(
+			Unit::find()
+			->where(['program.company_id'=>\Yii::$app->user->identity->c_id])
+			->innerJoinWith(['module','module.program as program'])->orderBy('title')->all(), 'unit_id',function($model, $defaultValue) {
+					return $model->title.' ['.$model->module->title.']';
+				}
+		);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'modules' => $modules,
+			'lessons' => $lessons
         ]);
     }
 

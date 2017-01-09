@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8d7f7fe8d0d72298448f73a09d44259d",
-    "content-hash": "c93783cc7d7c5cf926c95201a35e473c",
+    "hash": "f2a2db2b7a5542d402f8c8efaf850966",
+    "content-hash": "f828e9c1f33081f0cedb9f74a99213a4",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -254,6 +254,58 @@
                 "markdown-extra"
             ],
             "time": "2016-09-14 20:40:20"
+        },
+        {
+            "name": "embed/embed",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oscarotero/Embed.git",
+                "reference": "ac4f531edaf870c21d3de073a8e5c108043702ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oscarotero/Embed/zipball/ac4f531edaf870c21d3de073a8e5c108043702ce",
+                "reference": "ac4f531edaf870c21d3de073a8e5c108043702ce",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-mbstring": "*",
+                "php": "^5.5|^7.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.0",
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Embed\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oscar Otero",
+                    "email": "oom@oscarotero.com",
+                    "homepage": "http://oscarotero.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP library to retrieve page info using oembed, opengraph, etc",
+            "homepage": "https://github.com/oscarotero/Embed",
+            "keywords": [
+                "embed",
+                "embedly",
+                "oembed",
+                "opengraph",
+                "twitter cards"
+            ],
+            "time": "2016-12-19 22:43:45"
         },
         {
             "name": "ezyang/htmlpurifier",
