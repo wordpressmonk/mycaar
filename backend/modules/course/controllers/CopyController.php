@@ -44,6 +44,7 @@ class CopyController extends \yii\web\Controller
 					{
 						$unit = new Unit();
 						$unit->setAttributes($tmpunit->getAttributes(), false);
+						$unit->auto_reset_period = NULL; 
 						$unit->unit_id = ""; 
 						$unit->module_id = $module->module_id; 
 						
