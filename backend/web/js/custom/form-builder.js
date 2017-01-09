@@ -756,14 +756,14 @@ function formBuilderHelpersFn(opts, formBuilder) {
   };
 
   _helpers.prepData = function (form) {
-	 console.log(form);
+	 //console.log(form);
     var formData = [];
 
     if (form.childNodes.length !== 0) {
       // build data object
       utils.forEach(form.childNodes, function (index, field) {
         var $field = $(field);
-		console.log('field',$field);
+		//console.log('field',$field);
         if (!$field.hasClass('disabled')) {
           var match;
           var multipleField;
@@ -799,8 +799,9 @@ function formBuilderHelpersFn(opts, formBuilder) {
             if (multipleField) {
               fieldData.values = _helpers.fieldOptionData($field);
             }
-			//console.log($field[0].attributes.id.value);
+			console.log('zxc',$field[0].attributes.id.value);
 			fieldData.src = $('#value-'+$field[0].attributes.id.value).attr('src')||false;
+			fieldData.data_media_type = $('#value-'+$field[0].attributes.id.value).attr('data_media_type')||false;
             formData.push(fieldData);
           })();
         }
@@ -2505,7 +2506,8 @@ function formBuilderEventsFn() {
 			var val = '';
 			if(values.src)
 				val = values.src;
-          attributefield += '<input onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' data_mc_type="video"  accept="video/*" style="width:18%;display:inline-block"><input data_mc_type="video" placeholder="Or paste URL here" type="text" class="url_field form-control" value="'+val+'" onChange="saveVideoUrl(this);return false" style="width:80%;display:inline-block;margin-left:5px" required>';
+          attributefield += '<input data_media_type="'+values.data_media_type+'" onChange="saveFile(this);return false;" src="'+values.src+'" type="file" '+ utils.attrString(inputConfig) +' data_mc_type="video"  accept="video/*" style="width:18%;display:inline-block"><input data_mc_type="video" placeholder="Or paste URL here" type="text" class="url_field form-control" value="'+val+'" onChange="saveVideoUrl(this);return false" style="width:80%;display:inline-block;margin-left:5px" required>';
+		  attributefield += '.mp4,.m4v,.webm, or .ogv';
 		  //if(values.src)
 		//	attributefield += '<iframe width="400" height="200" controls="" src="'+values.src+'"></iframe>'; 
 		/** Audio **/

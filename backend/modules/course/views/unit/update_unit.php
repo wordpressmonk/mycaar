@@ -376,7 +376,7 @@ function saveFile(input){
 	var mc_type = $(input).attr('data_mc_type');
 	supportedFormats = [];
 		if(mc_type == 'video')
-			supportedFormats = ['mp4','m4v','webm','ogv','wmv','flv'];
+			supportedFormats = ['mp4','m4v','webm','ogv'];
 		if(mc_type == 'audio')
 			supportedFormats = ['mp3','ogg','wma','m4a','wav'];
 		if(mc_type == 'image'){
@@ -408,6 +408,7 @@ function saveFile(input){
 			success: function(data){
 				waitingDialog.hide();
 				$(input).attr('src', data);
+				$(input).attr('data_media_type', ext);
 				$(input).next().val(data);
 			},
 			error:function(data){
