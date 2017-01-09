@@ -126,7 +126,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 									<?= $form->field($model, 'detailed_description')->textarea(['id'=>'course_desc']) ?>
 								
 								<div class="form-group">
-									<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-sm ink-reaction btn-default' : 'btn btn-sm ink-reaction btn-default']) ?>
+									<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-sm ink-reaction btn-default' : 'btn btn-sm ink-reaction btn-default','id' => $model->isNewRecord ? '':'update_check']) ?>
 								</div>
 							<?php ActiveForm::end(); ?>
 							</div>
@@ -279,6 +279,7 @@ function saveFile(input){
 //($('.fld-description').val()).length;
 <!---------- End of save file ------------->
 function saveVideoUrl(input){
+	$("#update_check").attr("disabled","disabled");
 	console.log("tbp",$(input).val());
 	var url = $(input).val();
 	if(url!=''){
@@ -298,8 +299,12 @@ function saveVideoUrl(input){
 			}
 		});		
 	}
-
+	$("#update_check").removeAttr("disabled");
 	//$(input).prev().attr('src',$(input).val());
 	//console.log('src',$(input).prev().attr('src'));
 }
+
+
+
+
 </script>
