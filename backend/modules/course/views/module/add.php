@@ -112,11 +112,11 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 									}
 									else echo 'This is used on the module Overview page and will be displayed with the module description.';
 									?></p>
-									<div class="col-md-6">
+									<div class="col-md-5">
 									<?= $form->field($model, 'featured_video_url')->textInput(['class'=>'form-control','onChange'=>'saveVideoUrl(this)','id'=>'video_url'])->label(false) ?>
 									</div>
 									<div class="col-md-1"> ( Or ) </div> 
-									<div class="col-md-5">
+									<div class="col-md-6">
 									<?= $form->field($model, 'featured_video_upload')->fileInput(['onChange'=>'saveFile(this)','class'=>'form-control'])->label(false) ?>
 									</div>
 
@@ -250,7 +250,7 @@ function saveFile(input){
 		
 		waitingDialog.show('Uploading..');
 	 formData= new FormData();
-	if(ext == "mp4" || ext == "m4v" || ext == "webm" || ext == "ogv" || ext == "wmv" || ext == "flv"){
+	if(ext == "mp4" || ext == "m4v" || ext == "webm" || ext == "ogv"){
 		formData.append("media", file); 
 		$.ajax({
 			url: "<?=Url::to(['module/upload'])?>",
@@ -266,6 +266,7 @@ function saveFile(input){
 		}); 
  	}else{
 		alert("Extension not supported");
+		waitingDialog.hide();
 		//$(input).val("");
 		return false;
 	} 

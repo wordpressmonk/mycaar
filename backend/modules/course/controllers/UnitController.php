@@ -605,15 +605,18 @@ class UnitController extends Controller
 	public function actionEmbed($url){
 		
 		//Load any url:
-		$info = Embed::create($url);
+		$info = Embed::create($url);				
 		//var_dump($info->code);die;
 		//echo preg_match_all('/src="([\s\S]*?)"/', $info->code,$src[], PREG_SET_ORDER);die;
-		if($info && $info->code){
+		if($info && $info->code){			
 			$xpath = new \DOMXPath(@\DOMDocument::loadHTML($info->code));
 			$src = $xpath->evaluate("string(//iframe/@src)");	
 			if(!$src)
 				return $url;			
 		}
-		return $src."&rel=0";
+		if (preg_match('/youtube.com/',$info->code))
+			return $src."&rel=0";
+		else
+			return $src;
 	}
 }
