@@ -20,6 +20,8 @@ use common\models\Role;
 
 		<?php $form = ActiveForm::begin(); ?>
 
+		<div class="col-md-6">
+		
 		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("Firstname *") ?>
 		
 		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Lastname *") ?>
@@ -38,9 +40,10 @@ use common\models\Role;
             ['prompt'=>'--Access Level--']    // options
         )->label("User Access Level"); ?>
 		
-		
+	</div>
+	<div class="col-md-6">
 		<?= $form->field($profile, 'employee_number')->textInput(['maxlength' => true]) ?>
-		
+	
 		<?php
 		$division = ArrayHelper::map(Division::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'division_id', 'title');
 			echo $form->field($profile, 'division')->dropDownList(
@@ -70,11 +73,12 @@ use common\models\Role;
             $role,           // Flat array ('id'=>'label')
             ['prompt'=>'--Role--']    // options
         );  ?>
-				
-		<div class="form-group">
+		</div>	
+		<div class="form-group" align="center">
 			<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 		</div>
 
+		
 		<?php ActiveForm::end(); ?>
 	</div>
 </div>

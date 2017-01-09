@@ -31,7 +31,7 @@ class CopyController extends \yii\web\Controller
 				$module->setAttributes($copymodule->getAttributes(), false);
 				$module->module_id = ""; 
 				$module->module_order = $count; 
-				$module->title = $copymodule->title." ( copy ) "; 
+				$module->title = $copymodule->title; 
 				$module->program_id = $copyprogram_id; 
 				if($module->save())
 				{
