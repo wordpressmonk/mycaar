@@ -20,7 +20,7 @@ use common\models\Role;
 
 		<?php $form = ActiveForm::begin(); ?>
 
-		<div class="col-md-6">
+		<div class="col-md-6 col-sm-6">
 		
 		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("Firstname *") ?>
 		
@@ -41,7 +41,7 @@ use common\models\Role;
         )->label("User Access Level"); ?>
 		
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-6 col-sm-6">
 		<?= $form->field($profile, 'employee_number')->textInput(['maxlength' => true]) ?>
 	
 		<?php
@@ -73,10 +73,12 @@ use common\models\Role;
             $role,           // Flat array ('id'=>'label')
             ['prompt'=>'--Role--']    // options
         );  ?>
-		</div>	
-		<div class="form-group" align="center">
+	</div>	
+	<div class="col-md-12 col-sm-12">
+		<div class="form-group" align="center" >
 			<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 		</div>
+	</div>
 
 		
 		<?php ActiveForm::end(); ?>
