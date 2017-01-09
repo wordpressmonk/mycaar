@@ -270,6 +270,7 @@ function saveFile(input){
 			success: function(data){
 				waitingDialog.hide();
 				$(input).attr('src', data);
+				$(input).attr('data_media_type', ext);
 				$(input).next().val(data);
 			},
 			error:function(data){

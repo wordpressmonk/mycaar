@@ -460,6 +460,18 @@ console.log(fieldData.type);
 		break;
 	case 'video':
 		fieldData.type = 'iframe';
+		var ext = fieldData.data_media_type;
+		//console.log(ext);
+		if(ext == 'wmv' || ext == 'flv'){
+			fieldData.type = 'video';
+/* 			fieldMarkup = '<div class="prev_video"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
+			//'<video controls><source type="video/ogg; codecs=theora,vorbis" src="video.ogv">'+
+				'<source src="'+fieldData.src+'">'+
+				'Your browser doesn\'t support video of this format, you may download the video instead: <a href="'+fieldData.src+'">Download</a>'+
+			'</video>'; */
+
+		}
+		//else
 		fieldMarkup = '<div class="prev_video"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
 		'<' + fieldData.type + ' ' + fieldDataString + ' width="600" height="300" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
 		'</div>';
