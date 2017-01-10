@@ -473,7 +473,7 @@ console.log(fieldData.type);
 		}
 		//else
 		fieldMarkup = '<div class="prev_video"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
-		'<' + fieldData.type + ' ' + fieldDataString + ' width="600" height="300" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
+		'<' + fieldData.type + ' ' + fieldDataString + ' width="600" height="300" controls webkitallowfullscreen mozallowfullscreen allowfullscreen>' + fieldLabelVal + '</' + fieldData.type + '>'+
 		'</div>';
 		break;
 	case 'audio':
