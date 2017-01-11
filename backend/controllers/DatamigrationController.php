@@ -96,19 +96,9 @@ class DatamigrationController extends Controller
 
 		$url = 'http://mycaar.com.au/wp-content/data_extract.php?type=user';
 		$users = $this->fetch($url);
-		$i = 0;
 		$password = "reset123";
 		foreach( $users  as $user  )
 		{	
-			if($i == 0)
-			{
-				$i = $i + 1;
-				continue;			
-			}
-			else if( $user->email == 'andrew@mgatraining.com.au')
-				continue;	
-			
-			$i = $i + 1;
 			$new_user = new \common\models\User();
 			$new_user->username = $user->email; 
 			$new_user->email = $user->email; 			
@@ -116,8 +106,9 @@ class DatamigrationController extends Controller
 			$new_user->generateAuthKey();
 			$new_user->generatePasswordResetToken();
 			$new_user->c_id = 10;
+			$new_user->role = 'user';
 		
-			if($new_user->save(false))
+			if($new_user->save())
 			{ 			
 			 if($user->accesslevel == "subscriber")
 				$rolename = "user";
@@ -184,7 +175,6 @@ class DatamigrationController extends Controller
 				
 		} 
 		echo "<pre>";
-		print_r($i);
 		
     }
 	
