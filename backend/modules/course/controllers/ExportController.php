@@ -151,7 +151,7 @@ class ExportController extends Controller
 		$objDrawing = new \PHPExcel_Worksheet_Drawing();
 		$objDrawing->setName('Logo');
 		$objDrawing->setDescription('Logo');
-		if (file_exists(\Yii::$app->basePath.'/web/'.$company->logo)) {
+		if ($company->logo != '' && file_exists(\Yii::$app->basePath.'/web/'.$company->logo)) {
 			$objDrawing->setPath(\Yii::$app->basePath.'/web/'.$company->logo); //setOffsetY has no effect
 		}else{
 			$objDrawing->setPath(\Yii::$app->basePath.'/web/img/default_logo.jpg');

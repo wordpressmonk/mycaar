@@ -99,7 +99,7 @@ class ArchiveController extends Controller {
 		$objDrawing = new \PHPExcel_Worksheet_Drawing();
 		$objDrawing->setName('Logo');
 		$objDrawing->setDescription('Logo');
-		if (file_exists($path.'/web/'.$company->logo)) {
+		if ($company->logo != '' && file_exists($path.'/web/'.$company->logo)) {
 			$objDrawing->setPath($path.'/web/'.$company->logo); //setOffsetY has no effect
 		}else{
 			$objDrawing->setPath($path.'/web/img/default_logo.jpg');
