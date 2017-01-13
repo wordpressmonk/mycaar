@@ -273,7 +273,7 @@ class DatamigrationController extends Controller
 			$new->module_id = $module->module_id; 
 			$new->title = $unit->title;
 		
-			if($module->status == "publish")
+			if($unit->status == "publish")
 				$new->status = 1;
 			else
 				$new->status = 0;
@@ -327,31 +327,30 @@ class DatamigrationController extends Controller
 					$new_capability_question = new \common\models\CapabilityQuestion();
 				
 					$new_capability_question->unit_id = $unit->unit_id;
-					$new_capability_question->question = $title;
-					$new_capability_question->description = $capable->description;
+					$new_capability_question->question = htmlentities($title, ENT_QUOTES, 'UTF-8');
+					$new_capability_question->description = htmlentities($capable->description, ENT_QUOTES, 'UTF-8');
 					$new_capability_question->answer = "yes";
 					$new_capability_question->order_id = $key;
 					
 					if($new_capability_question->save())
 					{
-						$content .= "<field type='radio-group' description='".$capable->description."' label='".$title."' class='radio-group' name='radio-group-".$new_capability_question->cq_id."' src='false'><option label='yes' value='yes' selected='true'>'yes'</option><option  label='no' value='no'>'no'</option></field>";
+						$content .= "<field type='radio-group' description='".$new_capability_question->question."' label='Single Choice' class='radio-group' name='radio-group-".$new_capability_question->cq_id."' src='false'><option label='yes' value='yes' selected='true'>'yes'</option><option  label='no' value='no'>'no'</option></field>";
 						
 					}
 						
 				}	
 
 				$content .= "</fields></form-template>";
-				
-					//$unitelement = new \common\models\UnitElement();
 					
-					$unitelement = \common\models\UnitElement::find()->where(['unit_id'=>$unit->unit_id,"element_type"=>"cap_data"])->one();
+				$unitelement = \common\models\UnitElement::find()->where(['unit_id'=>$unit->unit_id,"element_type"=>"cap_data"])->one();
 					
 					if($unitelement)
 					{
 					$unitelement->unit_id = $unit->unit_id;
 					$unitelement->element_type = "cap_data";
 					$unitelement->element_order = 1;
-					$unitelement->content = $content;						
+					//$unitelement->content = $content;						
+					$unitelement->content = str_replace("&amp;","and",$content);						
 					$unitelement->save();
 					}					
 			}				
@@ -370,56 +369,169 @@ class DatamigrationController extends Controller
 			unset($type);
 			if($unit)
 			{
-				if($awaren->type == "radio" )
-					$type = "radio-group";
-				else if($awaren->type == "checkbox" )
-					$type = "checkbox-group";
-				else if($awaren->type == "file" )
-					$type = "filedownload";
-				
-				if(!empty($type))
+				if(!empty($awaren->aware_questions))
 				{
-					$new_awareness_question = new \common\models\AwarenessQuestion();
+					$content = "<form-template><fields>";
 					
-					$new_awareness_question->unit_id = $unit->unit_id;
-					$new_awareness_question->question = $awaren->title;
-					$new_awareness_question->description = $awaren->description;
-					$new_awareness_question->src = $awaren->source;				
-					$new_awareness_question->question_type = $type; 
-					$new_awareness_question->answer = "";
-					$new_awareness_question->order_id = $awaren->question_order;
-					
-					if($new_awareness_question->save(false))
+					foreach($awaren->aware_questions as $question)
 					{
-						$optionsvalues = [];
-						if($awaren->options)
-						{							
-							foreach($awaren->options as $option )
+						if($question->type == "radio" )
+							$type = "radio-group";
+						else if($question->type == "checkbox" )
+							$type = "checkbox-group";
+						else if($question->type == "file" )
+							$type = "filedownload";
+					
+						if(!empty($type))
+						{
+							$new_awareness_question = new \common\models\AwarenessQuestion();
+							
+							$new_awareness_question->unit_id = $unit->unit_id;
+							$new_awareness_question->question = htmlentities($question->title, ENT_QUOTES, 'UTF-8');
+							$new_awareness_question->description = htmlentities($question->description, ENT_QUOTES, 'UTF-8');
+							$new_awareness_question->src = $question->source;				
+							$new_awareness_question->question_type = $type; 
+							$new_awareness_question->answer = "";
+							$new_awareness_question->order_id = $question->question_order;
+							
+							if($new_awareness_question->save(false))
 							{
-							  $new_awareness_option = new \common\models\AwarenessOption();						
-							  $new_awareness_option->question_id = $new_awareness_question->aq_id;
-							  $new_awareness_option->answer = $option;
-							  $new_awareness_option->save();
-							  
-							  if(in_array($option, $awaren->right_answer))
-							  {
-								  $optionsvalues[] = $new_awareness_option->option_id; 
-							  }
-							}							
+								
+							$content .= "<field type='".$type."' description='".$new_awareness_question->description."' label='".$new_awareness_question->question."' class='".$type."' name='".$type."-".$new_awareness_question->aq_id."' src='".$question->source."'>";
+								
+								$optionsvalues = [];
+								if($question->options)
+								{							
+									foreach($question->options as $option )
+									{
+									  $new_awareness_option = new \common\models\AwarenessOption();						
+									  $new_awareness_option->question_id = $new_awareness_question->aq_id;
+									  $new_awareness_option->answer = htmlentities($option, ENT_QUOTES, 'UTF-8');
+									  $new_awareness_option->save();
+									  
+									  if(is_array($question->right_answer))
+									  {
+										if(in_array($option, $question->right_answer))										
+										{
+											$optionsvalues[] = $new_awareness_option->option_id; 
+											$content .= "<option option_id='".$new_awareness_option->option_id."'  label='".$new_awareness_option->answer."' value='".$new_awareness_option->answer."' selected='true' >'".$new_awareness_option->answer."'</option>";
+										}
+										else
+										{
+											$content .= "<option option_id='".$new_awareness_option->option_id."'  label='".$new_awareness_option->answer."' value='".$new_awareness_option->answer."' >'".$new_awareness_option->answer."'</option>"; 
+										}
+									  }
+									  else 
+									  {
+										if($question->right_answer ==  $option)
+										{
+										  $optionsvalues[] = $new_awareness_option->option_id; 
+										  $content .= "<option option_id='".$new_awareness_option->option_id."'  label='".$new_awareness_option->answer."' value='".$new_awareness_option->answer."' selected='true' >'".$new_awareness_option->answer."'</option>";
+										}
+										else
+										{
+											$content .= "<option option_id='".$new_awareness_option->option_id."'  label='".$new_awareness_option->answer."' value='".$new_awareness_option->answer."' >'".$new_awareness_option->answer."'</option>"; 
+										}
+									  }
+									  
+									  
+									  
+									}							
+								}
+								
+								$rightanswer = implode("_",$optionsvalues);
+								$new_awareness_question->answer = $rightanswer; 								
+								$new_awareness_question->save();
+								
+								$content .= "</field>";
+							}										
 						}
-						
-						$rightanswer = implode("_",$optionsvalues);
-						$new_awareness_question->answer = $rightanswer; 								
-						$new_awareness_question->save();
-						
-						
-						
-					}										
-				}
+					}	
+					
+					$content .= "</fields></form-template>";
+					
+					$unitelement = \common\models\UnitElement::find()->where(['unit_id'=>$unit->unit_id,"element_type"=>"aw_data"])->one();
+					
+					if($unitelement)
+					{
+					$unitelement->unit_id = $unit->unit_id;
+					$unitelement->element_type = "aw_data";
+					$unitelement->element_order = 1;
+					$unitelement->content = str_replace("&amp;","and",$content);						
+					$unitelement->save();
+					}
+					
+				}	
 			}
 		}
 	 
     }
 	
+	public function actionFetchAwarenessTestCompleted()
+    {
+		$programlist = \common\models\Program::find()->select('program_id')->where(['company_id'=>10])->all();
+		
+		foreach( $programlist  as $program )
+		{
+			$modulelist = \common\models\Module::find()->select(['program_id','module_id','unique_key'])->where(['program_id'=>$program->program_id])->all();
+			
+			foreach( $modulelist as $module )
+			{
+				$program_enrolled_user_list = \common\models\ProgramEnrollment::find()->select('user_id')->where(['program_id'=>$module->program_id])->all();
+				
+				foreach( $program_enrolled_user_list as $userlist)
+				{
+					$user = \common\models\User::find()->select(['email','id'])->where(['id'=>$userlist->user_id])->one();
+					$user_email = $user->email;
+					$module_unique_key = $module->unique_key;
+					
+						$url = "http://mycaar.com.au/wp-content/data_extract.php?type=complete&user=$user_email&course=$module_unique_key";
+						$unit_key_list = $this->fetch($url); 
+					
+					if(!empty($unit_key_list))
+					{
+						foreach( $unit_key_list as $unit_key )
+						{
+							$unit = \common\models\Unit::find()->select('unit_id')->where(['unique_key'=>$unit_key,'module_id'=>$module->module_id])->one();
+						
+							if(!empty($unit))
+							{
+								$awareness_question_list = \common\models\AwarenessQuestion::find()->select(['aq_id','answer'])->where(['unit_id'=>$unit->unit_id])->all();
+								
+								if(!empty($awareness_question_list))
+								{
+									foreach( $awareness_question_list as $aware )
+									{
+										$new_awar_ans = new \common\models\AwarenessAnswer();
+										$new_awar_ans->question_id =  $aware->aq_id;
+										$new_awar_ans->user_id =  $user->id;
+										$new_awar_ans->answer =  $aware->answer;
+										$new_awar_ans->save();
+										
+									}
+									
+										$new_unit_report = \common\models\UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$user->id])->one();
+										
+										if($new_unit_report == null)
+											$new_unit_report = new \common\models\UnitReport();
+										
+										$new_unit_report->unit_id =  $unit->unit_id;
+										$new_unit_report->student_id =  $user->id;
+										$new_unit_report->awareness_progress =  100;
+										$new_unit_report->save();
+								}
+							}
+							
+							
+						}
+					
+					}
+					
+				}
+				
+			}
+		}
+		
+	}	
 	
 }
