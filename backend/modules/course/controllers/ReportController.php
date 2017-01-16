@@ -79,7 +79,7 @@ class ReportController extends Controller
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					 'pagination' => [
-						'pageSize' => 3,
+						'pageSize' => 50,
 						 'page' =>$param['page'], 
 					], 
 			]);	
@@ -132,7 +132,7 @@ class ReportController extends Controller
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
-						'pageSize' => 3,
+						'pageSize' => 50,
 						 'page' =>0,
 					],
 			]);	

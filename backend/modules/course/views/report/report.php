@@ -62,7 +62,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-unit_id">Program</label>
-									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control','id'=>'program']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -122,7 +122,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							</div>
 						</div>
 				
-						<input type="text" class="form-control" name="page" id="page" value="<?= $selected_page ?>">
+						<input type="hidden" class="form-control" name="page" id="page" value="<?= $selected_page ?>">
 						<div class="form-group">
 							<button type="submit" id="submit_check"  class="btn btn-primary">Search</button>  
 							<a class="btn btn-danger" href="<?php echo Url::to(['report/search'])?>" >Clear Search </a>
@@ -304,12 +304,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		?>
 		<?php
 		
-		if(count($programs) == 1)
-		{
 			$usercount = count($program->programEnrollments);
-			$result1  = $usercount/3;
+			$result1  = $usercount/50;
 			$test = floor($result1);
-			if($usercount%3 == 0)
+			if($usercount%50 == 0)
 				$result = $test;
 			 else 
 				 $result = $test + 1;
@@ -320,13 +318,13 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			?>
 		
 		
-		<span  class="select_page <?php if($selected_page == $i){ echo 'selectedpage';} else { echo 'unselectedpage'; } ?> " data-id="<?= $i ?>" > 
+		<span  for="<?= $program->program_id ?>" class="select_page <?php if($selected_page == $i){ echo 'selectedpage';} else { echo 'unselectedpage'; } ?> " data-id="<?= $i ?>" > 
 			<a > <?= $j+1; ?></a>
 		</span>
 		
 		<?php
 			 }			 
-		}
+		
 		
 		} //module count && enrollment count
 		//else echo "No results found!";
@@ -375,6 +373,8 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	$(document).ready(function(){
 		
 		$(".select_page").click(function(){
+			var p_id = $(this).attr("for");
+			$('select[name^="program"] option[value="'+p_id+'"]').attr("selected","selected");			
 			$("#page").val($(this).attr("data-id"));			
 			$( "#filter_form" ).submit();		
 		});
