@@ -151,9 +151,11 @@ class ExportController extends Controller
 		$objDrawing = new \PHPExcel_Worksheet_Drawing();
 		$objDrawing->setName('Logo');
 		$objDrawing->setDescription('Logo');
-		//if (file_exists($site_left_client_img)) {
+		if ($company->logo != '' && file_exists(\Yii::$app->basePath.'/web/'.$company->logo)) {
 			$objDrawing->setPath(\Yii::$app->basePath.'/web/'.$company->logo); //setOffsetY has no effect
-		//};
+		}else{
+			$objDrawing->setPath(\Yii::$app->basePath.'/web/img/default_logo.jpg');
+		};
 		$objDrawing->setCoordinates('O1');
 		$objDrawing->setHeight(60); 
 		$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
@@ -243,7 +245,10 @@ class ExportController extends Controller
 			$objPHPExcel->getActiveSheet()->getStyle('A' . $perce . ':C' . $perce)->getFont()->setSize(10);
 			$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A' . $merging . ':C' . $merging);
 			$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A' . $perce . ':C' . $perce);
-			$worksheet->setCellValueByColumnAndRow('A9', $row + $student, $enrollment->userProfile->fullname);
+			if($enrollment->userProfile)
+				$worksheet->setCellValueByColumnAndRow('A9', $row + $student, $enrollment->userProfile->fullname);
+			else
+				$worksheet->setCellValueByColumnAndRow('A9', $row + $student, $enrollment->user->username);
 			$worksheet->setCellValueByColumnAndRow('A10', $row + $mark, $capability_percentage);
 			$sheet = $objPHPExcel->getActiveSheet();
 			$style = array(
