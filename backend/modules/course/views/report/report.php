@@ -28,6 +28,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	$selected_division = isset($params['division'])?$params['division']:'';
 	$selected_location = isset($params['location'])?$params['location']:'';
 	$selected_state = isset($params['state'])?$params['state']:'';
+	$selected_page = isset($params['page'])?$params['page']:0;
 //}
 ?>
 
@@ -49,7 +50,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			</div><!--end .card-head -->
 			<div class="card-body" style="display:none">
 				<div class="program-search">
-					<form method="post">
+					<form method="post" id="filter_form">
 						<div class="row">
 							<!--<div class="col-sm-6">
 								<div class="form-group">
@@ -70,7 +71,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-c_id">First Name</label>
-									<input type="text" class="form-control" name="firstname" value="<?=$firstname?>">
+									<input type="hidden" class="form-control" name="firstname" value="<?=$firstname?>">
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -120,8 +121,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								</div>
 							</div>
 						</div>
+				
+						<input type="text" class="form-control" name="page" id="page" value="<?= $selected_page ?>">
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary">Search</button>  
+							<button type="submit" id="submit_check"  class="btn btn-primary">Search</button>  
 							<a class="btn btn-danger" href="<?php echo Url::to(['report/search'])?>" >Clear Search </a>
 						</div>
 					</form>
@@ -135,11 +138,11 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				</div>
 		</div>-->
 	<?php 
-	$check_output ='';
-	
+	$check_output ='';	
 	//echo count($users);
 	foreach($programs as $program)
 	{
+		
 		$no_user_enrolled = true;
 		foreach($users as $key => $user){
 			if($user->user->isEnrolled($program->program_id))
@@ -147,13 +150,14 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					$no_user_enrolled = false;
 				}
 		}
+			
 		$modules = $program->publishedModules;
 		if(!$no_user_enrolled && count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
 		$check_output .= $program->program_id;
 		echo '<div class="mdl-grid row">
 			<div class="program_test" style="min-width:100%">
-				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
+				<span class="mdl-program"><h4><span class="mdl-test">Program 1</span> : '.$program->title.'</h4>
 			</span>';
 		//if(count($users) > 0 && count($program->programEnrollments)>0)
 		echo Html::beginForm(['/course/export/export'], 'post')
@@ -180,7 +184,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 
 		echo '<div class="horizontal al_cpp_category_16">';
 		echo '<ul class="name_list" >';
-		
+	
 			foreach($users as $user){
 				if($user->user->isEnrolled($program->program_id)){
 					$name = $user->userProfile->firstname. " ". $user->userProfile->lastname;
@@ -296,10 +300,34 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			} //if unit count
 		}
 		echo "</div></div>";
+		
 		?>
-
-
 		<?php
+		
+		if(count($programs) == 1)
+		{
+			$usercount = count($program->programEnrollments);
+			$result1  = $usercount/3;
+			$test = floor($result1);
+			if($usercount%3 == 0)
+				$result = $test;
+			 else 
+				 $result = $test + 1;
+			 
+			 for($i=0; $i<$result; $i++ )
+			 {
+				 $j = $i;
+			?>
+		
+		
+		<span  class="select_page <?php if($selected_page == $i){ echo 'selectedpage';} else { echo 'unselectedpage'; } ?> " data-id="<?= $i ?>" > 
+			<a > <?= $j+1; ?></a>
+		</span>
+		
+		<?php
+			 }			 
+		}
+		
 		} //module count && enrollment count
 		//else echo "No results found!";
 	}
@@ -343,10 +371,51 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			//alert("Sorry you can't able to attend this capability test, it is already completed!");
 		}
 	</script>
+	<script>
+	$(document).ready(function(){
+		
+		$(".select_page").click(function(){
+			$("#page").val($(this).attr("data-id"));			
+			$( "#filter_form" ).submit();		
+		});
+		
+		$("#submit_check").click(function(){ 
+			$("#page").val(0);
+		});
+			
+	});
+	</script>
+	
+	<style>
+	.selectedpage{
+		padding:5px 7px;
+		background-color:grey;
+		margin-left:8px;
+		cursor: pointer;
+	}
+	.unselectedpage{
+		padding:5px 7px;
+		background-color:#ccc;
+		margin-left:8px;
+		cursor: pointer;
+	}
+	.selectedpage a{ 
+		color:#fff;
+		text-decoration:none;
+		font-weight:bold;
+	}
+	.unselectedpage a{ 
+		color:#000;
+		text-decoration:none;
+		font-weight:bold;
+	}
+	
+	</style>
 	
 	<?php if($params){ ?>
 	<script>
 		//$('.card-head .tools .btn-collapse').trigger("click");
 	</script>
+	
 	
 	<?php } ?>

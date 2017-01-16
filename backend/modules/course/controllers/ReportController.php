@@ -57,29 +57,35 @@ class ReportController extends Controller
         ];
     }   
 
-	public function actionSearch($p_id=null,$data=null){		
+	public function actionSearch($p_id=null,$data=null){
+		
 		$programs = $users = [];
 		$param = false;
 		if(\Yii::$app->request->post())
 			$param = \Yii::$app->request->post();
 		else if($data)
-			$param = unserialize($data);
-		if($param){	
-			//find program
-			if(isset($param['program']) && $param['program'] !=''){
+			$param = unserialize($data);		
+		if($param){			
 				
-				$programs[] = Program::find()->where(['program_id'=>$param['program']])->one();;
+			//find program
+			if(isset($param['program']) && $param['program'] !=''){				
+				$programs[] = Program::find()->where(['program_id'=>$param['program']])->one();
 			}else{
 				$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
 			}
 			//$query = ProgramEnrollment::
 			$query = ProgramEnrollment::find()->orderBy('user_profile.firstname ASC');
+			
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
-					'pagination' => [
-						'pageSize' => 0,
-					],
+					 'pagination' => [
+						'pageSize' => 3,
+						 'page' =>$param['page'], 
+					], 
 			]);	
+		
+		
+			
 			$query->innerJoinWith(['userProfile as user_profile']);
 			$query->innerJoinWith(['user']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
@@ -101,8 +107,11 @@ class ReportController extends Controller
 				$query->andFilterWhere(['like', 'firstname',$param['firstname']]);
 			if(isset($param['lastname']) && $param['lastname'] !='')
 				$query->andFilterWhere(['like', 'lastname', $param['lastname']]);	
-			$query->groupBy('program_enrollment.user_id');
+			$query->groupBy('program_enrollment.user_id');		
 			$users = $dataProvider->models;
+			
+			//$users = array_slice( $users, 1, 2 ); 
+			
 			//print_r($programs);
 			return $this->render('report', [
 				'programs' => $programs,
@@ -123,7 +132,8 @@ class ReportController extends Controller
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
-						'pageSize' => 0,
+						'pageSize' => 3,
+						 'page' =>0,
 					],
 			]);	
 			$query->innerJoinWith(['user']);
@@ -131,9 +141,8 @@ class ReportController extends Controller
 			if($p_id)
 				$query->andFilterWhere(['program_id'=>$p_id]);	
 			$query->groupBy('program_enrollment.user_id');
-			
 			$users = $dataProvider->models;			
-			
+		
 			return $this->render('report', [
 						'programs' => $programs,
 						'users' => $users,

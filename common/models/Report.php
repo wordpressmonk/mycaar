@@ -36,6 +36,7 @@ class Report extends \yii\db\ActiveRecord
         return 'report';
     }
 
+
     /**
      * @inheritdoc
      */
@@ -73,7 +74,7 @@ class Report extends \yii\db\ActiveRecord
             'division' => 'Division',
             'location' => 'Location',
             'state' => 'State',
-            'role' => 'Role',
+            'role' => 'Role',			
         ];
     }
 }
