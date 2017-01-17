@@ -37,7 +37,7 @@ class Company extends \yii\db\ActiveRecord
             [['name', 'admin','slug'], 'required'],          
             [['about_us', 'logo'], 'required','on' => 'update_by_company_admin'],          
             [['about_us'], 'string'],
-			[['logo'], 'file','extensions' => 'jpg,png', 'skipOnEmpty' => true],
+			[['logo'], 'file','extensions' => 'jpg,jpeg,png', 'skipOnEmpty' => true],
             [['admin'], 'integer'],
             [['name'], 'string', 'max' => 200],
             [['admin'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['admin' => 'id']],

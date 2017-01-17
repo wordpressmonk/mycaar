@@ -71,7 +71,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-c_id">First Name</label>
-									<input type="hidden" class="form-control" name="firstname" value="<?=$firstname?>">
+									<input type="text" class="form-control" name="firstname" value="<?=$firstname?>">
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -157,7 +157,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		$check_output .= $program->program_id;
 		echo '<div class="mdl-grid row">
 			<div class="program_test" style="min-width:100%">
-				<span class="mdl-program"><h4><span class="mdl-test">Program 1</span> : '.$program->title.'</h4>
+				<span class="mdl-program"><h4><span class="mdl-test">Program </span> : '.$program->title.'</h4>
 			</span>';
 		//if(count($users) > 0 && count($program->programEnrollments)>0)
 		echo Html::beginForm(['/course/export/export'], 'post')
