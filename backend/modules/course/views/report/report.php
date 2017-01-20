@@ -235,7 +235,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					else 
 						$str.= '<li class="margin" style="margin-left: -304px">';
 						$str.= 
-							'<div class="single_unit_title">
+							'<div class="single_unit_title" style="overflow:visible; white-space:initial;">
                                         '.$unit->title.'
                             </div>
 							<div class="course_types">';

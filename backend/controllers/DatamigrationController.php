@@ -315,10 +315,18 @@ class DatamigrationController extends Controller
 		
 		$url = 'http://mycaar.com.au/wp-content/data_extract.php?type=capability';
 		$capability = $this->fetch($url);
-		foreach( $capability  as $capable )
+		$get_unique_key  = []; 	
+		foreach( $capability  as $key=>$capable )
 		{
-			$unit = \common\models\Unit::find()->select('unit_id')->where(['unique_key'=>$capable->unit_unique_key])->one();
 			
+		   if(in_array($capable->unit_unique_key,$get_unique_key ))
+		   {
+				continue;
+		   } else 
+		   {				
+				array_push($get_unique_key,$capable->unit_unique_key);
+				$unit = \common\models\Unit::find()->select('unit_id')->where(['unique_key'=>$capable->unit_unique_key])->one();
+		
 			if($unit)
 			{
 				$content = "<form-template><fields>";
@@ -353,8 +361,10 @@ class DatamigrationController extends Controller
 					$unitelement->content = str_replace("&amp;","and",$content);						
 					$unitelement->save();
 					}					
-			}				
+			}	
+		  }	
 		}
+		
 	}
 	
 	public function actionFetchAwareness()
@@ -474,7 +484,7 @@ class DatamigrationController extends Controller
 		foreach( $programlist  as $program )
 		{
 			$modulelist = \common\models\Module::find()->select(['program_id','module_id','unique_key'])->where(['program_id'=>$program->program_id])->all();
-			
+				
 			foreach( $modulelist as $module )
 			{
 				$program_enrolled_user_list = \common\models\ProgramEnrollment::find()->select('user_id')->where(['program_id'=>$module->program_id])->all();
@@ -486,7 +496,8 @@ class DatamigrationController extends Controller
 					$module_unique_key = $module->unique_key;
 					
 						$url = "http://mycaar.com.au/wp-content/data_extract.php?type=complete&user=$user_email&course=$module_unique_key";
-						$unit_key_list = $this->fetch($url); 
+						
+					$unit_key_list = $this->fetch($url); 
 					
 					if(!empty($unit_key_list))
 					{
@@ -525,13 +536,92 @@ class DatamigrationController extends Controller
 							
 						}
 					
-					}
+					} 
 					
 				}
 				
 			}
 		}
 		
+		echo "Completed";
+	
+	}	
+	
+	
+	public function actionFetchCapabilityTestCompleted()
+    {
+		$programlist = \common\models\Program::find()->select('program_id')->where(['company_id'=>1])->all();
+		
+		foreach( $programlist  as $program )
+		{
+			$modulelist = \common\models\Module::find()->select(['program_id','module_id','unique_key'])->where(['program_id'=>$program->program_id])->all();
+				
+			foreach( $modulelist as $module )
+			{
+				$program_enrolled_user_list = \common\models\ProgramEnrollment::find()->select('user_id')->where(['program_id'=>$module->program_id])->all();
+				
+				foreach( $program_enrolled_user_list as $userlist)
+				{
+					$user = \common\models\User::find()->select(['email','id'])->where(['id'=>$userlist->user_id])->one();
+					$user_email = $user->email;
+					$module_unique_key = $module->unique_key;
+					
+					$url = "http://mycaar.com.au/wp-content/data_extract.php?type=complete_capability&user=$user_email&course=$module_unique_key";
+						
+					$unit_key_list = $this->fetch($url); 
+					
+					if(!empty($unit_key_list))
+					{
+						
+						foreach( $unit_key_list as $unit_key )
+						{
+						
+						$unit = \common\models\Unit::find()->select('unit_id')->where(['unique_key'=>$unit_key->unit,'module_id'=>$module->module_id])->one();
+							
+							if(!empty($unit))
+							{
+								$capability_question_list = \common\models\CapabilityQuestion::find()->select(['cq_id','answer'])->where(['unit_id'=>$unit->unit_id])->all();
+								
+								if(!empty($capability_question_list))
+								{
+									foreach( $capability_question_list as $caps )
+									{
+										$new_cap_ans = new \common\models\CapabilityAnswer();
+										$new_cap_ans->question_id =  $caps->cq_id;
+										$new_cap_ans->user_id =  $user->id;
+										$new_cap_ans->answer =  $caps->answer;
+										$new_cap_ans->save();
+										
+									}
+									
+										$new_unit_report = \common\models\UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$user->id])->one();
+										
+										if($new_unit_report == null)
+											$new_unit_report = new \common\models\UnitReport();
+										
+										$new_unit_report->unit_id =  $unit->unit_id;
+										$new_unit_report->student_id =  $user->id;
+										$new_unit_report->capability_progress =  100;
+										
+										$user2 = \common\models\User::find()->select(['id'])->where(['email'=>$unit_key->attended_user])->one();										
+										$new_unit_report->cap_done_by =  $user2->id;
+									
+										$new_unit_report->save();
+								}
+							
+							}
+							
+						}
+					
+					} 
+					
+				}
+				
+			} 
+	 	}
+		
+		echo "Capability Answer Completed"; 
+	
 	}	
 	
 }

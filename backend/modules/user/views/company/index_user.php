@@ -150,8 +150,8 @@ $selected_state = isset($params['state'])?$params['state']:'';
 	<div class="row">
 		<div class="col-sm-3">
 			<div class="form-group">
-				<label class="control-label" for="searchreport-user_id">Change Role Name</label>
-					<?= Html::dropDownList('changeroleName', "",MyCaar::getChildRoles('company_admin'),['prompt'=>'--Change role to--','class'=>'form-control','id'=>'changeroleName']) ?> 
+				<label class="control-label" for="searchreport-user_id">Change Access Level</label>
+					<?= Html::dropDownList('changeroleName', "",MyCaar::getChildRoles('company_admin'),['prompt'=>'-- Change Access Level to --','class'=>'form-control','id'=>'changeroleName']) ?> 
 				<div class="help-block"></div>
 			</div>
 		</div>
