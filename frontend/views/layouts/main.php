@@ -121,7 +121,7 @@ AppAsset::register($this);
 			<div class="offcanvas">
 
 				<!-- BEGIN OFFCANVAS SEARCH -->
-				<div id="offcanvas-search" class="offcanvas-pane width-6">
+				<div id="offcanvas-search" class="offcanvas-pane width-6" >
 					<div class="offcanvas-head">
 						<span class="text-medium">									
 							<small><?php echo Yii::$app->user->identity->fullname;?></small>
