@@ -188,6 +188,22 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				  
 				</div>
 			</div>
+			
+			
+			<div class="modal fade" id="myModal4" role="dialog">
+				<div class="modal-dialog">
+				
+				  <!-- Modal content-->
+				  <div class="modal-content">
+				
+					<div class="modal-body text-medium">
+					  <img src="<?=Yii::$app->urlManagerBackEnd->baseUrl.'/img/warning1.png'?>" />
+					</div>
+				  </div>
+				  
+				</div>
+			</div>
+			
 		<!-- Modal -->
 
 	<script>
@@ -198,10 +214,20 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			var role = "<?=\Yii::$app->user->identity->roleName?>";
 			console.log(role);
 			if(role=="user")
-				alert("Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!");
-			else 
-				alert("Sorry, you're not able to complete your own capability test!");
+			{
+				//alert("Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!");
+				$("#myModal4").modal("show");
+			}
+			else{
+				
+				//alert("Sorry, you're not able to complete your own capability test!");
+				$("#myModal4").modal("show");
+			}
 		}
 
 	</script>
+	<style>
+	.modal-backdrop{
+		z-index:0 !important
+	}
 

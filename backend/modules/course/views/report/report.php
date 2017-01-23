@@ -250,12 +250,23 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														$str.= '<span class="first_heading">Aware</span>';
 													else $str.= '<span class="first_heading" style="display: none">Aware</span>';
 													$progress = $user->user->getUnitProgress($unit->unit_id);
+													
+													$onClick = "";
+													$target = "";
+													$href="javascript:void(0);";
 													if($user->user_id == \Yii::$app->user->id)
+													{
 														$href = \Yii::$app->urlManagerFrontEnd->baseUrl."/test/aw-test?u_id=".$unit->unit_id;
-													else $href="javascript:void(0);";
+														
+														$target = "target='_blank'";
+													}
+													else
+													{
+														$onClick = "popUpNotAllowedAware();";
+													}
 													//print_r($progress);
 													$str.= "<div name='unit1'>
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$href' target='_blank' ><span class='toolkit'><center>{$progress['ap']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$href' $target onClick=".$onClick." ><span class='toolkit'><center>{$progress['ap']}</center></span>
 															</a>
 														</div>
 
@@ -352,6 +363,34 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
       
     </div>
   </div>
+  
+  <div class="modal fade" id="myModal4" role="dialog">
+				<div class="modal-dialog">
+				
+				  <!-- Modal content-->
+				  <div class="modal-content">
+				
+					<div class="modal-body text-medium">
+					  <img src="<?=\Yii::$app->homeUrl;?>/img/warning1.png" />
+					</div>
+				  </div>
+				  
+				</div>
+			</div>
+			
+			<div class="modal fade" id="myModal3" role="dialog">
+				<div class="modal-dialog">
+				
+				  <!-- Modal content-->
+				  <div class="modal-content">
+				
+					<div class="modal-body text-medium">
+					 <img src="<?=\Yii::$app->homeUrl;?>/img/warning2.png" />
+					</div>
+				  </div>
+				  
+				</div>
+			</div>
 
 	<script>
 		$('.card-head .tools .btn-collapse').on('click', function (e) {
@@ -359,14 +398,17 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			materialadmin.AppCard.toggleCardCollapse(card);
 		});
 		function popUpNotAllowed(){
-			$(".modal-body").html("Sorry, you're not able to complete your own capability test!");
-			$("#myModal").modal("show");
+			//$(".modal-body").html("Sorry, you're not able to complete your own capability test!");
+			$("#myModal4").modal("show");
 			//alert("Sorry, you're not able to complete your own capability test!");
 		}
 		function popUpCompleted(){
-			$(".modal-body").html("Sorry you can't able to attend this capability test, it is already completed!");
-			$("#myModal").modal("show");
-			//alert("Sorry you can't able to attend this capability test, it is already completed!");
+			//$(".modal-body").html("Sorry you can't able to attend this capability test, it is already completed!");
+			//$("#myModal").modal("show");
+			alert("Sorry you can't able to attend this capability test, it is already completed!");
+		}
+		function popUpNotAllowedAware(){			
+			$("#myModal3").modal("show");			
 		}
 	</script>
 	<script>
