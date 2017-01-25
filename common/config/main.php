@@ -13,7 +13,16 @@ return [
 			'class' => 'yii\swiftmailer\Mailer',
 			'viewPath' => '@common/mail',
 			'useFileTransport' => false,//set this property to false to send mails to real email addresses
-			//comment the following array to send mail using php's mail function
+			//comment the following array to send mail using php's mail function		
+			'transport' => [
+          		 'class' => 'Swift_SmtpTransport',
+           		 'host' => 'mycaar.com.au',
+           		 'username' => 'support@mycaar.com.au',
+           		 'password' => 'support@2017',
+           		 'port' => '465',
+           		 'encryption' => 'ssl', 
+                        ], 
+						
 		],   
         'db' => [
             'class' => 'yii\db\Connection',

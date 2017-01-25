@@ -307,7 +307,7 @@ AppAsset::register($this);
 						<li>
 							<a href="<?=\Yii::$app->homeUrl?>site/change-password#pwd" id="pwd">
 								<div class="gui-icon"><i class="md md-input"></i></div>
-								<span class="title">Change Password</span>
+								<span class="title">Change Password345345</span>
 							</a>
 						</li><!--end /menu-li -->
 						<li><?= Html::beginForm(['/site/logout'], 'post')

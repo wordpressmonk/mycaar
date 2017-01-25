@@ -91,7 +91,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			else 
 				echo '<div class="course_listing al_single_course_width units-present-4" >'
 			;
-					echo '<div class="course_name" style="position:relative">
+					echo '<div class="course_name" style="position:relative;">
                             <h2>
                                 '.$module->title.'
                             </h2>
@@ -230,4 +230,5 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	.modal-backdrop{
 		z-index:0 !important
 	}
+	</style>
 

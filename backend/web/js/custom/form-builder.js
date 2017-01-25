@@ -737,7 +737,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
 		console.log('final',optionData);
         for (var i = 0; i < optionData.length; i++) {
           var option = utils.markup('option', optionData[i].label, optionData[i]).outerHTML;
-		 
+		// alert(option);
           options.push('\n\t\t\t' + option);
         }
         options.push('\n\t\t');
@@ -2085,7 +2085,7 @@ function formBuilderEventsFn() {
      * @todo   refactor this nasty ~crap~ code, its actually painful to look at
      * @param  {object} values
      */
-    var fieldOptions = function fieldOptions(values) {
+    var fieldOptions = function fieldOptions(values) { 
 		//console.log('sdf',values);
       var optionActions = [utils.markup('a', opts.messages.addOption, { className: 'add add-opt' })],
           fieldOptions = ['<label class="false-label">' + opts.messages.selectOptions + '</label>'],
@@ -2110,11 +2110,12 @@ function formBuilderEventsFn() {
             label: label,
             value: utils.hyphenCase(label)
           };
+		  //alert(option);
           return option;
         });
 		
         values.values[0].selected = true;
-      } else {
+      } else { 
 		 // console.log('sdf',values);
         // ensure option data is has all required keys
         values.values.forEach(function (option) {
@@ -2141,7 +2142,7 @@ function formBuilderEventsFn() {
      * @param  {object} values configuration object for advanced fields
      * @return {String}        markup for advanced fields
      */
-    var advFields = function advFields(values) {
+    var advFields = function advFields(values) { 
       var advFields = [],
           key,
           optionFields = ['select', 'checkbox-group', 'radio-group'],
@@ -2225,7 +2226,7 @@ function formBuilderEventsFn() {
 
       advFields.push(boolAttribute('access', values, accessLabels));
 
-      if (values.type === 'checkbox-group' || values.type === 'radio-group') {
+      if (values.type === 'checkbox-group' || values.type === 'radio-group' ) { 
         advFields.push(boolAttribute('other', values, { first: opts.messages.enableOther, second: opts.messages.enableOtherMsg }));
       }
 
@@ -2839,12 +2840,13 @@ function formBuilderEventsFn() {
     });
 
     // Copy field
-    $sortableFields.on('click touchstart', '.icon-copy', function (e) {
+    $sortableFields.on('click touchstart', '.icon-copy', function (e) { 
       e.preventDefault();
       var currentItem = $(this).parent().parent('li');
       var $clone = cloneItem(currentItem);
-      $clone.insertAfter(currentItem);
+      $clone.insertAfter(currentItem);	  	
       _helpers.updatePreview($clone);
+	  	console.log(currentItem);
       _helpers.save();
     });
 
