@@ -2577,8 +2577,9 @@ function formBuilderEventsFn() {
         className: 'copy-button btn icon-copy',
         title: opts.messages.copyButtonTooltip
       });
-
-      var liContents = utils.markup('div', [toggleBtn, copyBtn, delBtn], { className: 'field-actions' }).outerHTML;
+		// Copy Button Add or Removed Here 
+    //  var liContents = utils.markup('div', [toggleBtn, copyBtn, delBtn], { className: 'field-actions' }).outerHTML;
+     var liContents = utils.markup('div', [toggleBtn, delBtn], { className: 'field-actions' }).outerHTML;
 
       // Field preview Label
       liContents += '<label class="field-label">' + label + '</label>';
@@ -2843,10 +2844,11 @@ function formBuilderEventsFn() {
     $sortableFields.on('click touchstart', '.icon-copy', function (e) { 
       e.preventDefault();
       var currentItem = $(this).parent().parent('li');
+		//console.log(currentItem);	  
       var $clone = cloneItem(currentItem);
+	
       $clone.insertAfter(currentItem);	  	
-      _helpers.updatePreview($clone);
-	  	console.log(currentItem);
+      _helpers.updatePreview($clone);	  	
       _helpers.save();
     });
 

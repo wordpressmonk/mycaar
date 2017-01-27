@@ -624,4 +624,89 @@ class DatamigrationController extends Controller
 	
 	}	
 	
+	
+	public function actionFetchUserTest()
+    {
+
+		$url = 'http://mycaar.com.au/wp-content/data_extract.php?type=user';
+		$users = $this->fetch($url);
+		$new_user = "";
+		foreach( $users  as $user  )
+		{	
+			if($user->email == "peter@proweb.services")
+				continue;
+			
+			$new_user = \common\models\User::find()->select('id')->where(['email'=>$user->email])->one()->id;
+		
+			if($new_user)
+			{ 			
+			 
+				
+			if(!empty($user->division))
+			{				
+				$divisiontest = \common\models\Division::find()->where(['title'=>$user->division,'company_id'=>1])->one();
+				if($divisiontest)
+					$division = $divisiontest->division_id;
+				else
+					$division = "";
+			}
+			else 
+				$division = "";	
+			
+			
+			if(!empty($user->role))	
+			{
+				$roletest = \common\models\Role::find()->where(['title'=>$user->role,'company_id'=>1])->one();
+				if($roletest)
+					$role = $roletest->role_id;
+				else
+					$role = "";
+			}
+			else 
+				$role = "";	
+			
+			if(!empty($user->state))
+			{				
+				$statetest = \common\models\State::find()->where(['name'=>$user->state,'company_id'=>1])->one();
+				
+				if($statetest)
+					$state = $statetest->state_id;
+				else
+					$state = "";
+			}
+			else
+				$state = "";	
+			
+			if(!empty($user->location))	
+			{
+				$locationtest = \common\models\Location::find()->where(['name'=>$user->location,'company_id'=>1])->one();
+				
+				if($locationtest)
+					$location = $locationtest->location_id;
+				else
+					$location = "";
+			}
+			else
+				$location = "";
+			
+			$new_userprofile = \common\models\UserProfile::find()->where(['user_id'=>$new_user])->one();
+			//$new_userprofile = new \common\models\UserProfile();
+			$new_userprofile->user_id = $new_user;
+			$new_userprofile->firstname = $user->firstname;
+			$new_userprofile->lastname = $user->lastname; 
+			$new_userprofile->division = $division; 
+			$new_userprofile->role = $role; 
+			$new_userprofile->state = $state; 
+			$new_userprofile->location = $location; 
+			$new_userprofile->save();
+				
+			}
+			
+unset($new_user);		
+		} 
+		echo "<pre>";
+		
+    }
+	
+	
 }

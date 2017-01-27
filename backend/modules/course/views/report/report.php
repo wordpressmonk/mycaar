@@ -314,8 +314,11 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		
 		?>
 		<?php
-		
-			$usercount = count($program->programEnrollments);
+			if(!empty($firstname)||!empty($lastname)||!empty($selected_role)||!empty($selected_division)||!empty($selected_location)||!empty($selected_state))
+				$usercount = count($users);
+			else
+				$usercount = count($program->programEnrollments);
+			
 			$result1  = $usercount/50;
 			$test = floor($result1);
 			if($usercount%50 == 0)

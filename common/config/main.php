@@ -16,11 +16,11 @@ return [
 			//comment the following array to send mail using php's mail function		
 			'transport' => [
           		 'class' => 'Swift_SmtpTransport',
-           		 'host' => 'mycaar.com.au',
-           		 'username' => 'support@mycaar.com.au',
-           		 'password' => 'support@2017',
-           		 'port' => '465',
-           		 'encryption' => 'ssl', 
+           		 'host' => 'smtp.gmail.com',
+           		 'username' => 'arivu.ilan@gmail.com',
+           		 'password' => 'arivuilan',
+           		 'port' => '25',
+           		 'encryption' => 'tls', 
                         ], 
 						
 		],   
