@@ -84,7 +84,13 @@ class ReportController extends Controller
 					], 
 			]);	
 		
-		
+		$dataProvider2 = new ActiveDataProvider([
+				'query' => $query,
+				'pagination' => [
+						'pageSize' => 0,
+						 
+					], 				
+			]);	
 			
 			$query->innerJoinWith(['userProfile as user_profile']);
 			$query->innerJoinWith(['user']);
@@ -109,14 +115,16 @@ class ReportController extends Controller
 				$query->andFilterWhere(['like', 'lastname', $param['lastname']]);	
 			$query->groupBy('program_enrollment.user_id');		
 			$users = $dataProvider->models;
-			
+			$userscount = $dataProvider2->models;
+		
 			//$users = array_slice( $users, 1, 2 ); 
 			
 			//print_r($programs);
 			return $this->render('report', [
 				'programs' => $programs,
 				'users' => $users,
-				'params' => $param
+				'params' => $param,
+				'usersfiltercount' => $userscount
 			]);
 		}
 		
