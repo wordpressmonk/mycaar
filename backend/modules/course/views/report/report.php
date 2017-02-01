@@ -314,10 +314,11 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		
 		?>
 		<?php
-			 if(!empty($firstname)||!empty($lastname)||!empty($selected_role)||!empty($selected_division)||!empty($selected_location)||!empty($selected_state))
+			  if(!empty($selected_program)||!empty($firstname)||!empty($lastname)||!empty($selected_role)||!empty($selected_division)||!empty($selected_location)||!empty($selected_state))
 				$usercount = (isset($usersfiltercount))?count($usersfiltercount):0;
 			else  
-				$usercount = count($program->programEnrollments);
+				$usercount = count($program->programEnrollments); 
+			//$usercount = (isset($usersfiltercount))?count($usersfiltercount):0;
 			
 			$result1  = $usercount/50;
 			$test = floor($result1);
@@ -326,6 +327,8 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			 else 
 				 $result = $test + 1;
 			 
+			if($usercount > 50)
+			{
 			 for($i=0; $i<$result; $i++ )
 			 {
 				 $j = $i;
@@ -337,7 +340,8 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		</span>
 		
 		<?php
-			 }			 
+			 }
+			}	
 		
 		
 		} //module count && enrollment count

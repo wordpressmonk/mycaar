@@ -306,13 +306,15 @@ fbUtils.escapeHtml = function (html) {
 };
 
 // Escape an attribute
-fbUtils.escapeAttr = function (str) {
-  var match = {
+fbUtils.escapeAttr = function (str) {	
+  /*  var match = {
     '"': '&quot;',
     '&': '&amp;',
     '<': '&lt;',
-    '>': '&gt;'
-  };
+    '>': '&gt;' 
+  }; 
+   */
+  var match = {};
 
   function replaceTag(tag) {
     return match[tag] || tag;
@@ -354,8 +356,8 @@ fbUtils.unique = function (array) {
    * Generate preview markup
    * @param  {object} fieldData
    * @return {string}       preview markup for field
-   */
-fbUtils.fieldRender = function (fieldData, opts) {
+   */ 
+fbUtils.fieldRender = function (fieldData, opts) {  
 	console.log('den',fieldData);
   var preview = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   var fieldMarkup = '',
@@ -691,24 +693,30 @@ function formBuilderHelpersFn(opts, formBuilder) {
    * @return {Array}        Array of option values
    */
   _helpers.fieldOptionData = function (field) {
+	 // alert(JSON.stringify(field));
+	  // ARIVU
     var options = [];
 
     $('.sortable-options li', field).each(function () {
+		
       var $option = $(this),
           selected = $('.option-selected', $option).is(':checked'),
           attrs = {
+			  
         label: $('.option-value', $option).val(),
         value: $('.option-value', $option).val(),
 		option_id:$('.option-value', $option).attr('option_id'),
       };
-
+	/* console.log($option);
+	return; */
+	//alert(JSON.stringify($option));
       if (selected) {
         attrs.selected = selected;
       }
-
+	
       options.push(attrs);
     });
-
+	
     return options;
   };
 
@@ -782,7 +790,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
             if (roleVals.length) {
               fieldData.role = roleVals.join(',');
             }
-
+			
             fieldData.className = fieldData.className || fieldData.class; // backwards compatibility 
             match = /(?:^|\s)btn-(.*?)(?:\s|$)/g.exec(fieldData.className);
 
@@ -790,15 +798,16 @@ function formBuilderHelpersFn(opts, formBuilder) {
               fieldData.style = match[1];
             }
 
-            fieldData = utils.trimObj(fieldData);
-            fieldData = utils.escapeAttrs(fieldData);
-
+            fieldData = utils.trimObj(fieldData);			
+            //fieldData = utils.escapeAttrs(fieldData);			
+		
             multipleField = fieldData.type.match(/(select|checkbox-group|radio-group)/);
 
 
-            if (multipleField) {
+            if (multipleField) {	
               fieldData.values = _helpers.fieldOptionData($field);
             }
+			
 			console.log('zxc',$field[0].attributes.id.value);
 			fieldData.src = $('#value-'+$field[0].attributes.id.value).attr('src')||false;
 			fieldData.data_media_type = $('#value-'+$field[0].attributes.id.value).attr('data_media_type')||false;
@@ -806,7 +815,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
           })();
         }
       });
-    }
+    }	
 	//console.log(formData);
     return formData;
   };
@@ -2021,7 +2030,7 @@ function formBuilderEventsFn() {
         field.style = match[1];
       }
 
-      utils.escapeAttrs(field);
+      //utils.escapeAttrs(field);
 
       appendNewField(field);
       if (isNew) {
@@ -2528,16 +2537,22 @@ function formBuilderEventsFn() {
 		  if(values.src)
 			attributefield += '<a href="'+values.src+'">'+values.src+'</a>'; 
         }else {
+			
+         
+		 attrVal = attrVal.replace("&amp;","&");
+		
           inputConfig.value = attrVal;
           inputConfig.type = 'text';
+		  
           attributefield += '<input ' + utils.attrString(inputConfig) + '>';
         }
-
+		
         var inputWrap = '<div class="input-wrap">' + attributefield + '</div>';
-
+		
         attributefield = '<div class="form-group ' + attribute + '-wrap">' + attributeLabel + ' ' + inputWrap + '</div>';
       }
-	  //console.log(attributefield);
+	  //attributefield = attributefield.replace("&amp;","&");
+	  console.log(attributefield);
       return attributefield;
     };
 
@@ -3001,16 +3016,16 @@ function formBuilderEventsFn() {
         loadFields();
       }
     };
-
+	
     return formBuilder;
   };
 
-  $.fn.formBuilder = function (options) {
+  $.fn.formBuilder = function (options) { 
     options = options || {};
     return this.each(function () {
       var formBuilder = new FormBuilder(options, this);
       $(this).data('formBuilder', formBuilder);
-
+		
       return formBuilder;
     });
   };

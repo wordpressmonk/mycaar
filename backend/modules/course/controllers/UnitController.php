@@ -317,10 +317,12 @@ class UnitController extends Controller
 	 * Parms: type- aw or cp 
 	 * Reload the update page after save
 	 */
-	public function actionSaveTest($type){
+	public function actionSaveTest($type){	
+
 		$output = [];
-		$data = json_decode(Yii::$app->request->post()['data']);		
+		$data = json_decode(Yii::$app->request->post()['data']);	
 		$questions = $this->formatQuestions($data->html);
+		
 		if($type == "aw")
 			$this->saveQuestions(Yii::$app->request->post()['unit_id'],$questions);
 		if($type == "cp")
@@ -352,10 +354,11 @@ class UnitController extends Controller
 				'description' => [],
 				'src' => []
 			];
-		preg_match_all('/<option[^>]*?>([\s\S]*?)<\/option>/', $options_reg,$data['options'], PREG_SET_ORDER);
-		foreach($data['options'] as $key=>$dat){
+	
+	 	preg_match_all('/<option[^>]*?>([\s\S]*?)<\/option>/', $options_reg,$data['options'], PREG_SET_ORDER); 
+		  foreach($data['options'] as $key=>$dat){
 			preg_match_all('/option_id="([\s\S]*?)"/', $dat[0],$data['options'][$key][2], PREG_SET_ORDER);
-		}
+		}  
 		preg_match_all('/type="([\s\S]*?)"/', $field_reg,$data['type'], PREG_SET_ORDER);
 		preg_match_all('/description="([\s\S]*?)"/', $field_reg,$data['description'], PREG_SET_ORDER);
 		preg_match_all('/[^<option] label="([\s\S]*?)"/', $field_reg,$data['question'], PREG_SET_ORDER);
@@ -382,7 +385,8 @@ class UnitController extends Controller
 			$from_update[] = $q->aq_id;
 		}
 		$html  = '<form-template><fields>';			
-		foreach($questions as $order => $quest){		
+		foreach($questions as $order => $quest){
+			
 			$id = $quest['id'][0][1];
 			$id = preg_replace("/[^0-9]/","",$id);//die;
 			$awareness_question = AwarenessQuestion::find()->where(['aq_id'=>$id,'unit_id'=>$unit_id])->one();			
@@ -405,10 +409,15 @@ class UnitController extends Controller
 				//reformat the form data
 				$name = $quest['type'][0][1]."-".$awareness_question->aq_id; //change this to primary key
 				$type = $class = $quest['type'][0][1];
-				$label = htmlentities($quest['question'][0][1], ENT_QUOTES, 'UTF-8');
+				
+				//echo $label = htmlentities($quest['question'][0][1]), '.....';
+				
+				$label = htmlentities($quest['question'][0][1], ENT_QUOTES, 'UTF-8'); 
+				//$label = $quest['question'][0][1]; 
 				$src = $quest['src'][0][1];
 				if(isset($quest['description'][0][1]))
 					$description = htmlentities($quest['description'][0][1], ENT_QUOTES, 'UTF-8');
+					//$description = $quest['description'][0][1];
 				$html .= "<field type='$type' description='$description' label='$label' class='$class' name='$name' src='$src'>";					
 				//////////////
 				if(!empty($quest['options'])){
@@ -459,6 +468,7 @@ class UnitController extends Controller
 		if(!$element)
 			$element = new UnitElement();
 		
+		//echo $html;exit;
 		$element->unit_id = $unit_id;
 		$element->element_type = "aw_data";
 		$element->element_order = 1;

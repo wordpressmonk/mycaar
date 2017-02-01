@@ -76,8 +76,8 @@ $this->params['breadcrumbs'][] = $this->title;
 					return date('d-M-y', $data->actual_time)." 1.00 AM";
 				}
 			],
-            'updated_at',
-
+            //'updated_at', By Arivu Client -> Removed
+			
             //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

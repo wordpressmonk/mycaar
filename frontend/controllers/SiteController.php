@@ -82,9 +82,21 @@ class SiteController extends Controller
 		$user = User::findOne(\Yii::$app->user->id);
 		$enrolled = $user->getPrograms();
 		$programs = [];
+		$programs_id = "";
+		
+		foreach($enrolled as $tmprogramid){
+			$programs_id[] = $tmprogramid->program_id;
+		}
+	
+		$programs = Program::find()->where(['IN', 'program_id', $programs_id ])->orderBy('title')->all();
+		
+		/*  
 		foreach($enrolled as $program){
 			$programs[] = Program::findOne($program->program_id);
 		}
+		
+		By ARIVU CLIENT Correction
+		 */	
 		$users[] = Profile::find()->where(['user_id'=>\Yii::$app->user->id])->one();	 
         return $this->render('home', [
             'programs' => $programs,
