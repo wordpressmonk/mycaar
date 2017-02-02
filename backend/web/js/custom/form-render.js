@@ -446,8 +446,9 @@ console.log(fieldData.type);
       fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText + '</h3><p>' + mycaar_desc_field + '</p></div>';
       break;
 	case 'img':
+		// by Arivu Showing the img Under the Values [ fieldLabelVal Ref filedownload - Line - 455  ]
 		fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
-		'<' + fieldData.type + ' ' + fieldDataString + '>' + fieldLabelVal + '</' + fieldData.type + '>'+
+		'<' + fieldData.type + ' ' + fieldDataString + '></' + fieldData.type + '>'+
 		'</div>';
 		;
 		break;

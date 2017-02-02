@@ -320,8 +320,10 @@ class UnitController extends Controller
 	public function actionSaveTest($type){	
 
 		$output = [];
-		$data = json_decode(Yii::$app->request->post()['data']);	
-		$questions = $this->formatQuestions($data->html);
+		$data = json_decode(Yii::$app->request->post()['data']);
+		
+		$questions = $this->formatQuestions($data->html);	
+		
 		
 		if($type == "aw")
 			$this->saveQuestions(Yii::$app->request->post()['unit_id'],$questions);
@@ -345,6 +347,8 @@ class UnitController extends Controller
 		foreach($questions as $question){
 			$field_reg = $question[0];
 			$options_reg = $question[1];
+			
+			
 			$data = [
 				'question' => [],
 				'type' => [],
@@ -355,10 +359,23 @@ class UnitController extends Controller
 				'src' => []
 			];
 	
-	 	preg_match_all('/<option[^>]*?>([\s\S]*?)<\/option>/', $options_reg,$data['options'], PREG_SET_ORDER); 
-		  foreach($data['options'] as $key=>$dat){
+	 	preg_match_all('/<option[^>]*?>([\s\S]*?)<\/option>/', $options_reg,$data['options'], PREG_SET_ORDER); 	
+
+		// by ARIVU For Using [ > ] Greater symbol in Option Value 
+		foreach($data['options'] as $key=>$dat ) {
+			$str2 = strstr($dat[1], 'option_id');
+			if($str2)
+			{
+			$str3 = strstr($str2, '>');			
+			$checkvalue = substr($str3, 1);  
+			$data['options'][$key][1] = $checkvalue;
+			}			
+		}
+		
+		foreach($data['options'] as $key=>$dat) {
+			
 			preg_match_all('/option_id="([\s\S]*?)"/', $dat[0],$data['options'][$key][2], PREG_SET_ORDER);
-		}  
+		}
 		preg_match_all('/type="([\s\S]*?)"/', $field_reg,$data['type'], PREG_SET_ORDER);
 		preg_match_all('/description="([\s\S]*?)"/', $field_reg,$data['description'], PREG_SET_ORDER);
 		preg_match_all('/[^<option] label="([\s\S]*?)"/', $field_reg,$data['question'], PREG_SET_ORDER);
