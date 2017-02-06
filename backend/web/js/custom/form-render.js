@@ -352,13 +352,13 @@ fbUtils.escapeHtml = function (html) {
 
 // Escape an attribute
 fbUtils.escapeAttr = function (str) {
-  var match = {
+  /* var match = {
     '"': '&quot;',
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;'
-  };
-
+  }; */
+ var match = { };
   function replaceTag(tag) {
     return match[tag] || tag;
   }
@@ -455,8 +455,8 @@ console.log(fieldData.type);
 	case 'filedownload':
 		fieldData.type = 'a';
 		fieldLabelVal = 'Download File';
-		fieldMarkup = '<div class="small-padding filedownload-preview"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p><button class="btn btn-info btn-lg">'+
-		'<' + fieldData.type + ' href="'+fieldData.src+'" >' + fieldLabelVal + '</' + fieldData.type + '></button>'+
+		fieldMarkup = '<div class="small-padding filedownload-preview"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
+		'<' + fieldData.type + ' href="'+fieldData.src+'"  class="btn btn-info btn-lg" download >' + fieldLabelVal + '</' + fieldData.type + '>'+
 		'</div>';
 		break;
 	case 'video':

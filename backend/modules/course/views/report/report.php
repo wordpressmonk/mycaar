@@ -39,6 +39,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 
 	</div>-->
 
+	
 		<div class="card card-collapse card-collapsed small-padding">
 			<div class="card-head card-head-xs style-default">
 				<div class="tools">
@@ -256,7 +257,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 													$href="javascript:void(0);";
 													if($user->user_id == \Yii::$app->user->id)
 													{
-														$href = \Yii::$app->urlManagerFrontEnd->baseUrl."/test/aw-test?u_id=".$unit->unit_id;
+														// Client Asked to Go to Learn PAge By Arivu
+														//$href = \Yii::$app->urlManagerFrontEnd->baseUrl."/test/aw-test?u_id=".$unit->unit_id;
+														$href = \Yii::$app->urlManagerFrontEnd->baseUrl."/test/learn?u_id=".$unit->unit_id;
 														
 														$target = "target='_blank'";
 													}
@@ -378,7 +381,17 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				  <div class="modal-content">
 				
 					<div class="modal-body text-medium">
-					  <img src="<?=\Yii::$app->homeUrl;?>/img/warning1.png" />
+					  <!--<img src="<?=\Yii::$app->homeUrl;?>/img/warning1.png" />-->
+					  
+					   <div class="check_Popup_Capability">					
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						<i class="fa fa-times " data-dismiss="modal" aria-hidden="true"></i>
+						<p class="capability_3">Sorry</p>
+						<p class="capability_1">You are not able to complete your own capabilty test.</p>
+						<p class="capability_4">Please refer to your assigned coach or assessor to complete this step.</p>
+						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
+    				 </div> 
+					 
 					</div>
 				  </div>
 				  
@@ -392,13 +405,45 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				  <div class="modal-content">
 				
 					<div class="modal-body text-medium">
-					 <img src="<?=\Yii::$app->homeUrl;?>/img/warning2.png" />
+					 <!--<img src="<?=\Yii::$app->homeUrl;?>/img/warning2.png" />-->
+					 	
+					  <div class="check_Popup_Capability">					
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						<i class="fa fa-times " data-dismiss="modal" aria-hidden="true"></i>
+						<p class="capability_3">Sorry</p>
+						<p class="capability_1">You are not able to open another persons awareness test.</p>					
+						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
+    				 </div> 
+					 
 					</div>
 				  </div>
 				  
 				</div>
 			</div>
-
+			
+			<div class="modal fade" id="myModal5" role="dialog">
+				<div class="modal-dialog">
+				
+				  <!-- Modal content-->
+				  <div class="modal-content">
+				
+					<div class="modal-body text-medium">
+					 <!--<img src="<?=\Yii::$app->homeUrl;?>/img/warning2.png" />-->
+					 	
+					  <div class="check_Popup_Capability">					
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						<i class="fa fa-times " data-dismiss="modal" aria-hidden="true"></i>
+						<p class="capability_3">Oops</p>
+						<p class="capability_1">This Capability test has already been competed</p>					
+						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
+    				 </div> 
+					 
+					</div>
+				  </div>
+				  
+				</div>
+			</div>
+			
 	<script>
 		$('.card-head .tools .btn-collapse').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
@@ -412,7 +457,8 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		function popUpCompleted(){
 			//$(".modal-body").html("Sorry you can't able to attend this capability test, it is already completed!");
 			//$("#myModal").modal("show");
-			alert("Sorry you can't able to attend this capability test, it is already completed!");
+			//alert("Sorry you can't able to attend this capability test, it is already completed!");
+			$("#myModal5").modal("show");
 		}
 		function popUpNotAllowedAware(){			
 			$("#myModal3").modal("show");			
@@ -459,12 +505,17 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 		font-weight:bold;
 	}
 	
+	
+		/*For Chrome */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.name_list
+    {
+        float: left;
+        bottom: -140px;
+        position: relative;
+    
+    }
+    }
+	
 	</style>
 	
-	<?php if($params){ ?>
-	<script>
-		//$('.card-head .tools .btn-collapse').trigger("click");
-	</script>
-	
-	
-	<?php } ?>

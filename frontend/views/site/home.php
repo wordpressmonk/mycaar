@@ -16,6 +16,8 @@ $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 ?>
+
+	<div class="mdl-section-check">
     <div class="mdl-grid mdl-home">
 					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
 						<h1 class="mdl-sidebar"><strong>Home Page</strong></h1>
@@ -48,10 +50,11 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	foreach($programs as $program)
 	{
 		$modules = $program->publishedModules;
+		// mdl-cell This class is removed from [ mdl-cell-8-col ] for Alignment into stright line 
 		if(count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
 		echo '<div class="mdl-grid">
-			<div class="mdl-cell mdl-cell-8-col">
+			<div class="mdl-cell-8-col">
 				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4></span>
 			</div>
 		</div>';
@@ -178,11 +181,23 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				
 				  <!-- Modal content-->
 				  <div class="modal-content">
-					<div class="modal-header style-primary">
+					<!--<div class="modal-header style-primary">
 					  <h4 class="modal-title text-bold text-xxl">Sorry!</h4>
-					</div>
+					</div>-->
 					<div class="modal-body text-medium">
-					  <p>Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!</p>
+					  <!--<p>Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!</p>-->
+					  
+					 		 					  
+					 <div class="check_Popup_Capability">					
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						<i class="fa fa-times " data-dismiss="modal" aria-hidden="true"></i>
+						<p class="capability_3">Sorry</p>
+						<p class="capability_1">You are not able to complete your own capabilty test.</p>
+						<p class="capability_4">Please refer to your assigned coach or assessor to complete this step.</p>
+						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
+    				 </div> 					 
+					
+					
 					</div>
 				  </div>
 				  
@@ -197,7 +212,19 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				  <div class="modal-content">
 				
 					<div class="modal-body text-medium">
-					  <img src="<?=Yii::$app->urlManagerBackEnd->baseUrl.'/img/warning1.png'?>" />
+					 <!--<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl.'/img/warning1.png'?>" />-->
+							 					  
+					 <div class="check_Popup_Capability">
+					
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						<i class="fa fa-times" data-dismiss="modal" aria-hidden="true"></i>
+						<p class="capability_3">Sorry</p>
+						<p class="capability_1">You are not able to complete your own capabilty test.</p>
+						<p class="capability_4">Please refer to your assigned coach or assessor to complete this step.</p>
+						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
+    				 </div> 						 
+					
+
 					</div>
 				  </div>
 				  
@@ -205,7 +232,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			</div>
 			
 		<!-- Modal -->
-
+</div>
 	<script>
 	
 		function popUpNotAllowed(){
