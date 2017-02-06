@@ -120,11 +120,19 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
 								$aw_data = $element->content;
-								//print_r($aw_data);die;
+							
+						//$aw_data = "<form-template><fields><field type='checkbox-group' description='' label='Multiple &amp;amp;amp; Choice' class='checkbox-group' name='checkbox-group-938' src='false'><option option_id='2430' label='option-1         ' value='option-1         ' selected='true'>'option-1        '</option><option option_id='2431'  label='option-2         ' value='option-2         '>'option-2         '</option><option option_id='2432'  label='option-3         ' value='option-3         '>'option-3         '</option></field></fields></form-template>";
+							
 								//$aw_data = str_replace("&amp;", "&", $aw_data);
-								$aw_data = html_entity_decode($aw_data);
+								//$aw_data = html_entity_decode($aw_data);								
+								//var_dump($aw_data);exit;
+								
+								//print_r($aw_data);die;
+								
 								$aw_data = str_replace("&amp;", "&", $aw_data);								
 								$aw_data = str_replace("'", "\'", $aw_data);
+								//echo $aw_data;exit;
+								
 								//$aw_data = str_replace('"', '&quot;', $aw_data);
 							?>
 						<div id="aware_form"></div>
@@ -196,6 +204,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
     $( "#sortable" ).disableSelection();
   } );
 $(document).ready(function(){
+	
 	<!---------- validate unit title ------------>
 	$('.unit_view').click(function(){
 		//window.location.replace("<?=Url::to(['unit/update'])?>?id="+$(this).attr('data-unit_id'));
@@ -303,16 +312,22 @@ $(document).ready(function(){
 	   editOnAdd: true,
 	};
  	var aw_data = '<?=$aw_data?>';
+	
 	//aw_data.replace(/"/g,"&quot;");
 	//var aw_data = aw_data.replace(/&amp;/g, '&');
 	//console.log(aw_data);
 	if (aw_data) {
 		awareness_elements.formData = aw_data;
 	}	
+	
 	var awareness_editor = $(document.getElementById('aware_form'));
+	
 	$(awareness_editor).formBuilder(awareness_elements);
+	
+	
 	//$('#aware_form').formBuilder(awareness_elements);
 	//SaveAwarenessTest
+	
 	var saveBtn = document.querySelector('#frmb-2-save');
 	saveBtn.onclick = function() {
 		var req = [];
@@ -328,7 +343,12 @@ $(document).ready(function(){
 			return false;
 		}
 		var form_data = $(awareness_editor).data('formBuilder').formData;
+		// Arivu Check		
+		//alert(JSON.stringify(form_data));return;
+		//var awareness_data = JSON.stringify({'html':form_data});
 		var awareness_data = JSON.stringify({'html':form_data});
+	
+
 		//save to db
 		$.ajax({
 			url:'<?=Url::to(['unit/save-test','type'=>'aw'])?>',

@@ -28,6 +28,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	$selected_division = isset($params['division'])?$params['division']:'';
 	$selected_location = isset($params['location'])?$params['location']:'';
 	$selected_state = isset($params['state'])?$params['state']:'';
+	$selected_page = isset($params['page'])?$params['page']:0;
 //}
 ?>
 
@@ -37,6 +38,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					</div>
 
 	</div>-->
+
 
 		<div class="card card-collapse card-collapsed small-padding">
 			<div class="card-head card-head-xs style-default">
@@ -49,7 +51,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			</div><!--end .card-head -->
 			<div class="card-body" style="display:none">
 				<div class="program-search">
-					<form method="post">
+					<form method="post" id="filter_form">
 						<div class="row">
 							<!--<div class="col-sm-6">
 								<div class="form-group">
@@ -61,7 +63,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-unit_id">Program</label>
-									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control','id'=>'program']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -120,8 +122,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								</div>
 							</div>
 						</div>
+
+						<input type="hidden" class="form-control" name="page" id="page" value="<?= $selected_page ?>">
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary">Search</button>
+							<button type="submit" id="submit_check"  class="btn btn-primary">Search</button>
 							<a class="btn btn-danger" href="<?php echo Url::to(['report/search'])?>" >Clear Search </a>
 						</div>
 					</form>
@@ -134,12 +138,13 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					<span class="mdl-current"><h3>Current Programs :</h3></span>
 				</div>
 		</div>-->
+
 	<?php
 	$check_output ='';
-
 	//echo count($users);
 	foreach($programs as $program)
 	{
+
 		$no_user_enrolled = true;
 		foreach($users as $key => $user){
 			if($user->user->isEnrolled($program->program_id))
@@ -147,13 +152,14 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					$no_user_enrolled = false;
 				}
 		}
+
 		$modules = $program->publishedModules;
 		if(!$no_user_enrolled && count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
 		$check_output .= $program->program_id;
 		echo '<div class="mdl-grid row">
 			<div class="program_test" style="min-width:100%">
-				<span class="mdl-program"><h4><span class="mdl-test">Program</span> : '.$program->title.'</h4>
+				<span class="mdl-program"><h4><span class="mdl-test">Program </span> : '.$program->title.'</h4>
 			</span>';
 		//if(count($users) > 0 && count($program->programEnrollments)>0)
 		echo Html::beginForm(['/course/export/export'], 'post')
@@ -231,8 +237,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 						$str.= "<li>";
 					else
 						$str.= '<li class="margin" style="margin-left: -304px">';
+
 						$str.=
-							'<div class="single_unit_title">
+							'<div class="single_unit_title" style="overflow:visible; white-space:initial;">
                                         '.$unit->title.'
                             </div>
 							<div class="course_types">';
@@ -247,12 +254,25 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														$str.= '<span class="first_heading">Aware</span>';
 													else $str.= '<span class="first_heading" style="display: none">Aware</span>';
 													$progress = $user->user->getUnitProgress($unit->unit_id);
+
+													$onClick = "";
+													$target = "";
+													$href="javascript:void(0);";
 													if($user->user_id == \Yii::$app->user->id)
-														$href = \Yii::$app->urlManagerFrontEnd->baseUrl."/test/aw-test?u_id=".$unit->unit_id;
-													else $href="javascript:void(0);";
+													{
+														// Client Asked to Go to Learn PAge By Arivu
+														//$href = \Yii::$app->urlManagerFrontEnd->baseUrl."/test/aw-test?u_id=".$unit->unit_id;
+														$href = \Yii::$app->urlManagerFrontEnd->baseUrl."/test/learn?u_id=".$unit->unit_id;
+
+														$target = "target='_blank'";
+													}
+													else
+													{
+														$onClick = "popUpNotAllowedAware();";
+													}
 													//print_r($progress);
 													$str.= "<div name='unit1'>
-															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$href' target='_blank' ><span class='toolkit'><center>{$progress['ap']}</center></span>
+															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['ap']} mdl-small-icon-{$progress['ap']}' href='$href' $target onClick=".$onClick." ><span class='toolkit'><center>{$progress['ap']}</center></span>
 															</a>
 														</div>
 
@@ -297,10 +317,39 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			} //if unit count
 		}
 		echo "</div></div>";
-		?>
 
+		?>
+		<?php
+			  if(!empty($selected_program)||!empty($firstname)||!empty($lastname)||!empty($selected_role)||!empty($selected_division)||!empty($selected_location)||!empty($selected_state))
+				$usercount = (isset($usersfiltercount))?count($usersfiltercount):0;
+			else
+				$usercount = count($program->programEnrollments);
+			//$usercount = (isset($usersfiltercount))?count($usersfiltercount):0;
+
+			$result1  = $usercount/50;
+			$test = floor($result1);
+			if($usercount%50 == 0)
+				$result = $test;
+			 else
+				 $result = $test + 1;
+
+			if($usercount > 50)
+			{
+			 for($i=0; $i<$result; $i++ )
+			 {
+				 $j = $i;
+			?>
+
+
+		<span  for="<?= $program->program_id ?>" class="select_page <?php if($selected_page == $i){ echo 'selectedpage';} else { echo 'unselectedpage'; } ?> " data-id="<?= $i ?>" >
+			<a > <?= $j+1; ?></a>
+		</span>
 
 		<?php
+			 }
+			}
+
+
 		} //module count && enrollment count
 		//else echo "No results found!";
 	}
@@ -328,26 +377,155 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
     </div>
   </div>
 
+  <div class="modal fade" id="myModal4" role="dialog">
+				<div class="modal-dialog">
+
+				  <!-- Modal content-->
+				  <div class="modal-content">
+
+					<div class="modal-body text-medium">
+					  <!--<img src="<?=\Yii::$app->homeUrl;?>/img/warning1.png" />-->
+
+					   <div class="check_Popup_Capability">
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						<i class="fa fa-times " data-dismiss="modal" aria-hidden="true"></i>
+						<p class="capability_3">Sorry</p>
+						<p class="capability_1">You are not able to complete your own capabilty test.</p>
+						<p class="capability_4">Please refer to your assigned coach or assessor to complete this step.</p>
+						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
+    				 </div>
+
+					</div>
+				  </div>
+
+				</div>
+			</div>
+
+			<div class="modal fade" id="myModal3" role="dialog">
+				<div class="modal-dialog">
+
+				  <!-- Modal content-->
+				  <div class="modal-content">
+
+					<div class="modal-body text-medium">
+					 <!--<img src="<?=\Yii::$app->homeUrl;?>/img/warning2.png" />-->
+
+					  <div class="check_Popup_Capability">
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						<i class="fa fa-times " data-dismiss="modal" aria-hidden="true"></i>
+						<p class="capability_3">Sorry</p>
+						<p class="capability_1">You are not able to open another persons awareness test.</p>
+						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
+    				 </div>
+
+					</div>
+				  </div>
+
+				</div>
+			</div>
+
+			<div class="modal fade" id="myModal5" role="dialog">
+				<div class="modal-dialog">
+
+				  <!-- Modal content-->
+				  <div class="modal-content">
+
+					<div class="modal-body text-medium">
+					 <!--<img src="<?=\Yii::$app->homeUrl;?>/img/warning2.png" />-->
+
+					  <div class="check_Popup_Capability">
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						<i class="fa fa-times " data-dismiss="modal" aria-hidden="true"></i>
+						<p class="capability_3">Oops</p>
+						<p class="capability_1">This Capability test has already been competed</p>
+						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
+    				 </div>
+
+					</div>
+				  </div>
+
+				</div>
+			</div>
+
 	<script>
 		$('.card-head .tools .btn-collapse').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
 		});
 		function popUpNotAllowed(){
-			$(".modal-body").html("Sorry, you're not able to complete your own capability test!");
-			$("#myModal").modal("show");
+			//$(".modal-body").html("Sorry, you're not able to complete your own capability test!");
+			$("#myModal4").modal("show");
 			//alert("Sorry, you're not able to complete your own capability test!");
 		}
 		function popUpCompleted(){
-			$(".modal-body").html("Sorry you can't able to attend this capability test, it is already completed!");
-			$("#myModal").modal("show");
+			//$(".modal-body").html("Sorry you can't able to attend this capability test, it is already completed!");
+			//$("#myModal").modal("show");
 			//alert("Sorry you can't able to attend this capability test, it is already completed!");
+			$("#myModal5").modal("show");
+		}
+		function popUpNotAllowedAware(){
+			$("#myModal3").modal("show");
 		}
 	</script>
 
 	<?php if($params){ ?>
+
 	<script>
-		//$('.card-head .tools .btn-collapse').trigger("click");
+	$(document).ready(function(){
+
+		$(".select_page").click(function(){
+			var p_id = $(this).attr("for");
+			$('select[name^="program"] option[value="'+p_id+'"]').attr("selected","selected");
+			$("#page").val($(this).attr("data-id"));
+			$( "#filter_form" ).submit();
+		});
+
+		$("#submit_check").click(function(){
+			$("#page").val(0);
+		});
+
+	});
 	</script>
 
+
 	<?php } ?>
+
+
+	<style>
+	.selectedpage{
+		padding:5px 7px;
+		background-color:grey;
+		margin-left:8px;
+		cursor: pointer;
+	}
+	.unselectedpage{
+		padding:5px 7px;
+		background-color:#ccc;
+		margin-left:8px;
+		cursor: pointer;
+	}
+	.selectedpage a{
+		color:#fff;
+		text-decoration:none;
+		font-weight:bold;
+	}
+	.unselectedpage a{
+		color:#000;
+		text-decoration:none;
+		font-weight:bold;
+	}
+
+
+		/*For Chrome */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.name_list
+    {
+        float: left;
+        bottom: -140px;
+        position: relative;
+
+    }
+    }
+
+	</style>
+	

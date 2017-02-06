@@ -28,6 +28,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	$selected_division = isset($params['division'])?$params['division']:'';
 	$selected_location = isset($params['location'])?$params['location']:'';
 	$selected_state = isset($params['state'])?$params['state']:'';
+	$selected_page = isset($params['page'])?$params['page']:0;
 //}
 ?>
 
@@ -119,8 +120,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								</div>
 							</div>
 						</div>
+						<input type="hidden" class="form-control" name="page" id="page" value="<?= $selected_page ?>">
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary">Search</button>  
+							<button type="submit" id="submit_check" class="btn btn-primary">Search</button>  
 							<!--<a class="btn btn-danger" href="<?php //echo Url::to(['report/search'])?>" >Reset </a>-->
 						</div>
 					</form>

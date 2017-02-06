@@ -45,14 +45,15 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
-                <div style="color:#999;margin:1em 0">
-                    Forgotten Password? reset it <?= Html::a('here', ['site/request-password-reset']) ?>.
+				<div style="color:#0081CF;margin:1em 0;font-weight: 700;">
+                     <?= Html::a('Forgotten Password? Reset Here.', ['site/request-password-reset']) ?>
                 </div>
-
+				
                 <div class="form-group">
                     <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
-
+				
+				
             <?php ActiveForm::end(); ?>
         </div>
     </div>

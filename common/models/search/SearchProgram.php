@@ -77,8 +77,9 @@ class SearchProgram extends Program
      */
     public function searchCompanyPrograms($params)
     {
-        $query = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('program_id DESC');
-
+        $query = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title');
+       // $query = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('program_id DESC');
+		// By Arivu Order By Title Client -> Requirement
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

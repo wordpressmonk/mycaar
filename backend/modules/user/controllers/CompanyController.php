@@ -547,6 +547,7 @@ class CompanyController extends Controller
 	
 	 public function actionMultiChangeRole()
 	 {    
+			
 			$user_id = Yii::$app->request->post()['user_id'];	
 			$newrole = Yii::$app->request->post()['role'];	
 			if(($user_id) && ($newrole))
@@ -554,10 +555,13 @@ class CompanyController extends Controller
 				$user = explode(",",$user_id);		
 			 	 foreach($user as $tmp)
 				 {	
+					$model =  User::findOne(['id' => $tmp ]);
 					$auth = Yii::$app->authManager;
 					$auth->revokeAll($tmp);
 					$authorRole = $auth->getRole($newrole);
-					$auth->assign($authorRole, $tmp); 			
+					$auth->assign($authorRole, $tmp); 	
+					
+					$model->sendRollChangeEmail($user_id);
 				 }  
 			}  			
 		}

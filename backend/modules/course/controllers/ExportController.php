@@ -16,6 +16,7 @@ use common\models\Division;
 use common\models\State;
 use common\models\Location;
 use common\models\Role;
+set_time_limit(0);
 
 class ExportController extends Controller
 {	
@@ -195,6 +196,7 @@ class ExportController extends Controller
 		$mark      = 9;
 		$row = 0;
 		foreach($enrollments as $key=>$enrollment){
+			ini_set('max_execution_time', 2000);
 			if(in_array($enrollment->user_id,$filtered_users))
 			{	
 			$capability_percentage = $enrollment->user->getProgramProgress($program->program_id);
@@ -280,6 +282,7 @@ class ExportController extends Controller
 		$max_length = 30;
 		$modules = $program->publishedModules;
 		foreach($modules as $module){
+			ini_set('max_execution_time', 2000);
 			$units = $module->publishedUnits;
 			$unit_count = count($units);
 			if($unit_count){    
@@ -304,6 +307,7 @@ class ExportController extends Controller
 				$objPHPExcel->getActiveSheet()->getColumnDimension($this->cellsToWidthByColsRow($ending + 1))->setWidth(1);
 				$unittitle = $starting;
 				foreach($units as $unit){
+					ini_set('max_execution_time', 2000);
 					/***********************************************/
 					$StudentUnitFillColumn	= $unittitle;
 					$StudentUnitFillRow		= $rownumber + 1;
@@ -334,6 +338,7 @@ class ExportController extends Controller
 
 					//students 
 					foreach($enrollments as $enrollment){
+						ini_set('max_execution_time', 2000);
 						if(in_array($enrollment->user_id,$filtered_users))
 						{
 						/********************************************************************************/
