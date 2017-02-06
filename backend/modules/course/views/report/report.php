@@ -121,7 +121,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 							</div>
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary">Search</button>  
+							<button type="submit" class="btn btn-primary">Search</button>
 							<a class="btn btn-danger" href="<?php echo Url::to(['report/search'])?>" >Clear Search </a>
 						</div>
 					</form>
@@ -134,9 +134,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					<span class="mdl-current"><h3>Current Programs :</h3></span>
 				</div>
 		</div>-->
-	<?php 
+	<?php
 	$check_output ='';
-	
+
 	//echo count($users);
 	foreach($programs as $program)
 	{
@@ -164,7 +164,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 											['class' => 'btn ink-reaction btn-raised btn-xs btn-info']
 										)
 										. Html::endForm();
-										
+
 		echo '<div style="float: right;">
 						<ul>
 							<li>
@@ -180,7 +180,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 
 		echo '<div class="horizontal al_cpp_category_16">';
 		echo '<ul class="name_list" >';
-		
+
 			foreach($users as $user){
 				if($user->user->isEnrolled($program->program_id)){
 					$name = $user->userProfile->firstname. " ". $user->userProfile->lastname;
@@ -200,8 +200,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					</li>';
 				}
 			}
-	
+
 		echo '</ul>';
+		//print_r($modules);die;
 		//program bar starts from here
         echo'<div class="all_course al_pragram_width ">';
 		foreach($modules as $p_key=>$module)
@@ -214,7 +215,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			//$str.= $p_key;
 			if($p_key == 0)
 				$str.= '<div class="course_listing al_single_course_width units-present-4">';
-			else 
+			else
 				$str.= '<div class="course_listing al_single_course_width units-present-4">'
 			;
 					$str.= '<div class="course_name">
@@ -228,9 +229,9 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				foreach($units as $k=>$unit){
 					if($k==0)
 						$str.= "<li>";
-					else 
+					else
 						$str.= '<li class="margin" style="margin-left: -304px">';
-						$str.= 
+						$str.=
 							'<div class="single_unit_title">
                                         '.$unit->title.'
                             </div>
@@ -272,7 +273,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 														if($progress['cp'] == 'green'){
 															$onClick = "popUpCompleted();";
 															$href= 'javascript:void(0);';
-														}	
+														}
 														$str.= "<div name='unit1' id='{$progress['cp']}'>
 
 															<a class='mdl-button mdl-js-button mdl-button--fab mdl-hover-{$progress['cp']} mdl-small-icon-{$progress['cp']}' href=".$href." onClick=".$onClick."><span class='toolkit'><center>{$progress['cp']}</center></span>
@@ -286,10 +287,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 											</div>";
 								}//if enrolled
 							}
-								
+
 					$str.= "</div></li>";
 					//$i++;
-				}		
+				}
 			$str.= "</ul></div>";
 		$str.= "</div>";
 		if(!$no_user_enrolled) echo $str;
@@ -308,12 +309,12 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	//FOR DEBUG
 	foreach($users as $user){
 	$progress = $user->user->getProgramProgress(1);
-	} 
+	}
 	?>
 <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header style-primary">
@@ -323,7 +324,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
           <p>The <strong>show</strong> method shows the modal and the <strong>hide</strong> method hides the modal.</p>
         </div>
       </div>
-      
+
     </div>
   </div>
 
@@ -343,10 +344,10 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			//alert("Sorry you can't able to attend this capability test, it is already completed!");
 		}
 	</script>
-	
+
 	<?php if($params){ ?>
 	<script>
 		//$('.card-head .tools .btn-collapse').trigger("click");
 	</script>
-	
+
 	<?php } ?>
