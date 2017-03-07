@@ -64,14 +64,23 @@ class ReportController extends Controller
 		if(\Yii::$app->request->post())
 			$param = \Yii::$app->request->post();
 		else if($data)
-			$param = unserialize($data);		
+			$param = unserialize($data);
+
+		if($param)
+		{
+			if(isset($param['company']))
+				$company_id = $param['company'];
+			else
+				$company_id = \Yii::$app->user->identity->c_id;
+		}	
+		
 		if($param){			
 				
 			//find program
 			if(isset($param['program']) && $param['program'] !=''){				
 				$programs[] = Program::find()->where(['program_id'=>$param['program']])->one();
 			}else{
-				$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
+				$programs = Program::find()->where(['company_id'=>$company_id])->orderBy('title')->all();
 			}
 			//$query = ProgramEnrollment::
 			$query = ProgramEnrollment::find()->orderBy('user_profile.firstname ASC');
@@ -94,7 +103,7 @@ class ReportController extends Controller
 			
 			$query->innerJoinWith(['userProfile as user_profile']);
 			$query->innerJoinWith(['user']);
-			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);			
+			$query->andFilterWhere(['user.c_id'=>$company_id]);			
 			//if any of the user parametr is filled,then search for that users
 			//$query = User::find()->where(['c_id' =>Yii::$app->user->identity->c_id]);
 			if(isset($param['program']) && $param['program'] !='')
@@ -120,12 +129,14 @@ class ReportController extends Controller
 			//$users = array_slice( $users, 1, 2 ); 
 			
 			//print_r($programs);
-			return $this->render('report', [
-				'programs' => $programs,
-				'users' => $users,
-				'params' => $param,
-				'usersfiltercount' => $userscount
-			]);
+			
+				return $this->render('report', [
+					'programs' => $programs,
+					'users' => $users,
+					'params' => $param,
+					'usersfiltercount' => $userscount
+				]);
+			
 		}
 		
 		/* $dataProvider = new ActiveDataProvider([
@@ -155,7 +166,9 @@ class ReportController extends Controller
 						'programs' => $programs,
 						'users' => $users,
 						'params' => false,
-					]);				
+					]);	
+			
+					
 		}	
 	}
 	public function actionAssessorReport(){

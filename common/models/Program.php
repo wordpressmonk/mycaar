@@ -58,23 +58,23 @@ class Program extends \yii\db\ActiveRecord
         return $this->hasMany(Module::className(), ['program_id' => 'program_id'])
 		->orderBy(['module_order'=>'SORT_ASC']);
     }
-
+	
     /**
      * @return \yii\db\ActiveQuery for published modules
-     */
+     */	
 	public function getPublishedModules()
 	{
 		return $this->hasMany(Module::className(), ['program_id' => 'program_id'])->orderBy(['module_order'=>'SORT_ASC'])->andOnCondition(['status' => 1]);
 	}
-
+	
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getEnrollments()
     {
         return $this->hasMany(ProgramEnrollment::className(), ['program_id' => 'program_id']);
-    }
-
+    }	
+	
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -82,7 +82,7 @@ class Program extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ProgramEnrollment::className(), ['program_id' => 'program_id'])->joinWith(['userProfile as user_profile'])->orderBy(['user_profile.firstname'=>SORT_ASC]);;
     }
-
+	
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -90,10 +90,10 @@ class Program extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Company::className(), ['company_id' => 'company_id']);
     }
-
+	
     /**
      * To reset full program
-     */
+     */	
 	public function resetProgram(){
 		foreach($this->modules as $module){
 			$units = $module->units;
@@ -116,7 +116,7 @@ class Program extends \yii\db\ActiveRecord
 	}
     /**
      * To delete full program
-     */
+     */		
 	public function deleteProgram(){
 			$modules = $this->modules;
 			foreach($modules as $module){

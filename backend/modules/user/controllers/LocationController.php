@@ -140,4 +140,17 @@ class LocationController extends Controller
 			
     }
 	
+	public function actionGetLocation($c_id){
+		$mods = Location::find()->where(['company_id'=>$c_id])->orderBy('name')->all();
+		 if(count($mods)>0){
+			echo "<option value=''>--Select--</option>";
+			foreach($mods as $mod){			
+				  echo "<option value='".$mod->location_id."'>".$mod->name."</option>";
+			}
+		}
+		else{
+			echo "<option value=''>-</option>";
+		}
+	}
+	
 }

@@ -79,7 +79,7 @@ class TestController extends Controller
 			}
 
 		}
-    **/
+	**/
 		$element = UnitElement::find()->where(['unit_id'=>$u_id])->one();
 		$data = json_decode($element->content);
 		$formdata = $data->html;
@@ -117,7 +117,7 @@ class TestController extends Controller
 			}
 
 		}
-    **/
+**/
 		$total = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->count();
 		if($total == 0){
 			\Yii::$app->getSession()->setFlash('error', 'No questions found for this unit');
@@ -245,7 +245,7 @@ class TestController extends Controller
 				$this->saveProgress(\Yii::$app->user->id,$u_id);
 				return $this->redirect(["site/index#".$u_id]);
 			}
-
+				
 			if($this->saveProgress(\Yii::$app->user->id,$u_id)!= 100)
 				return $this->redirect(['retake','u_id'=>$u_id]);
 			//redirect to next page or homepage
@@ -308,7 +308,7 @@ class TestController extends Controller
 			$progress = ($resp['right_answer']/$resp['questions'])*100;//die;
 		//save progress to DB
 		$report = Report::find()->where(['unit_id'=>$unit_id,'student_id'=>$user_id])->one();
-
+		
 		if(!$report)
 			$report = new Report();
 		$report->unit_id = $unit_id;

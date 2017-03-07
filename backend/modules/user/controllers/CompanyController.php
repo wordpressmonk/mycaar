@@ -46,6 +46,11 @@ class CompanyController extends Controller
 			'access' => [
 				'class' => AccessControl::className(),
                 'rules' => [
+					[
+                        'actions' => ['multi-hide-company'],
+                        'allow' => true,
+						'roles' => ['superadmin']
+                    ],
                    
 					 [
                         'actions' => ['index','create','view','update','delete','index-user','create-user','view-user','update-user','delete-user','enroll-user','multi-delete','multi-delete-user','ajax-new-user','removelogo','multi-change-role'],
@@ -53,7 +58,7 @@ class CompanyController extends Controller
 						'roles' => ['company_admin']
                     ],
 					 [
-                        'actions' => ['index-role-user','view-role-user','enroll-user','my-profile','update-my-profile'],
+                        'actions' => ['index-role-user','view-role-user','create-role-user','update-role-user','enroll-user','my-profile','update-my-profile'],
                         'allow' => true,
 						'roles' => ['assessor']
                     ],
@@ -241,12 +246,14 @@ class CompanyController extends Controller
 	}	
 	
 	
-	public function actionIndexUser()
+	public function actionIndexUser($data=null)
     {		
 		$searchModel = new SearchUser(); 		
 		$extrasearch = false;
 		if(\Yii::$app->request->post())
 			$extrasearch = \Yii::$app->request->post();
+		else if($data)
+			$extrasearch = unserialize($data);	
 
         $dataProvider = $searchModel->searchcompanyadmin(Yii::$app->request->queryParams,$extrasearch);
 		
@@ -409,12 +416,14 @@ class CompanyController extends Controller
 	
 	// Index User Page of All User  for the Assessor Role User
 	
-	public function actionIndexRoleUser()
+	public function actionIndexRoleUser($data=null)
     {
         $searchModel = new SearchUser();		
 		$extrasearch = false;
 		if(\Yii::$app->request->post())
 			$extrasearch = \Yii::$app->request->post();
+		else if($data)
+			$extrasearch = unserialize($data);	
 
 		$dataProvider = $searchModel->searchcompanyadmin(Yii::$app->request->queryParams,$extrasearch);
 		
@@ -566,6 +575,133 @@ class CompanyController extends Controller
 			}  			
 		}
 
+public function actionCreateRoleUser(){					
+			$model = new User();
+			$profile = new Profile();									
+			$roles = MyCaar::getChildRoles('assessor');	
+			$profile->scenario = 'company_admin_user';
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
+			$model->username = $model->email;
+		if(empty($model->password))
+			 $model->password = MyCaar::getRandomPassword();
+			 
+			$model->generatePasswordResetToken();
+			$model->setPassword($model->password);
+			$model->generateAuthKey();
+			$model->c_id = Yii::$app->user->identity->c_id;						
+			if($model->save())
+			{				
+				//handle the role first				
+				$auth = Yii::$app->authManager;
+				$authorRole = $auth->getRole($model->role);
+				$auth->assign($authorRole, $model->id); 
+				//save profile first				
+				 $profile->user_id = $model->id;			
+				 $profile->save();	
+				
+					
+				// Email Function is "Send Email to respective user"
+				$model->sendEmail($model->password); 
+				return $this->redirect(['view-role-user', 'id' => $model->id]);
+			} else
+			{					
+				return $this->render('create_role_user', ['model' =>$model,'profile'=>$profile,'roles'=>$roles]);
+			}			
+        } else {			
+            return $this->render('create_role_user', ['model' => $model,'profile'=>$profile,'roles'=>$roles]);	
+		}		
+	}	
+	
+	
+	public function actionUpdateRoleUser($id)
+    {       
+		    $model = User::findOne($id);
+			$profile = Profile::find()->where(['user_id'=>$id])->one();				
+			$roles = MyCaar::getChildRoles('assessor');	
+			$model->role = $model->getRoleName();
+			
+		if(\Yii::$app->user->can('assessor')) {	
+			$model->scenario = 'update_by_company_admin';
+		}
+			$profile->scenario = 'company_admin_user';
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate())) {
+			
+			//handle the role first
+			$model->username = $model->email;
+			// Only To Change the Password 			
+			if(!empty($model->password))
+			{
+				$model->setPassword($model->password);
+				$model->generatePasswordResetToken();
+			}			
+			if($model->save())
+			{
+			//handle the role first		
+			$auth = Yii::$app->authManager;
+			$auth->revokeAll($id);
+			$authorRole = $auth->getRole($model->role);
+			$auth->assign($authorRole, $model->id);
+			//save profile first			
+			$profile->user_id = $model->id;			
+			$profile->save();	
+			
+			if(!empty($model->password))
+					$model->sendEmail($model->password); 
+				// Email Function Only Update Password is "Send Email to respective user"
+				
+			
+            return $this->redirect(['view-role-user', 'id' => $model->id]);
+			
+			} else {
+            return $this->render('update_role_user', ['model' => $model,'profile' => $profile,'roles' => $roles,]);
+			}
+        } else {
+            return $this->render('update_role_user', [
+                'model' => $model,
+				'profile' => $profile,
+				'roles' => $roles,
+            ]);
+        }
+    }
+    
+	
+	/**
+     * Multiple Hide an existing User for company admin model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+	 
+	public function actionMultiHideCompany()
+	 {    		
+		if(isset(Yii::$app->request->post()['hidecompany_id']) && !empty(Yii::$app->request->post()['hidecompany_id']))
+			$hidecompany_id = Yii::$app->request->post()['hidecompany_id']; 
+		
+		if(isset(Yii::$app->request->post()['showcompany_id']) && !empty(Yii::$app->request->post()['showcompany_id']))
+			$showcompany_id = Yii::$app->request->post()['showcompany_id']; 
+			
+		
+		  if(isset($hidecompany_id) && !empty($hidecompany_id))
+			{
+				foreach($hidecompany_id as $tmp)
+				{					
+				   $model = $this->findModel($tmp);
+				   $model->status = 1;
+				   $model->save();
+				}				 
+			}  
+			
+		  if(isset($showcompany_id) && !empty($showcompany_id))
+			{
+				 foreach($showcompany_id as $tmp)
+				 {					
+					$model = $this->findModel($tmp);
+					$model->status = 0;
+					$model->save();
+				 }				 
+			} 
+			
+		}
 
 	
 }

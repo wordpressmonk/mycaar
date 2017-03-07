@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Back To Users', ['index-role-user'], ['class' => 'btn btn-success']) ?>       
+   	<?= Html::a('Edit', ['update-role-user', 'id' => $model->user_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('All Users', ['index-role-user'], ['class' => 'btn btn-success']) ?>       
     </p>
 		
 		

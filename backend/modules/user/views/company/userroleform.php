@@ -76,7 +76,7 @@ use common\models\Role;
 	</div>	
 	<div class="col-md-12 col-sm-12">
 		<div class="form-group" align="center" >
-			<?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+			<?= Html::submitButton($model->isNewRecord ? 'Create ' : 'Update ', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 		</div>
 	</div>
 

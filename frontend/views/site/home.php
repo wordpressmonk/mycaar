@@ -17,14 +17,17 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 ?>
 
+<!--<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+    <!--<link rel="stylesheet" href="http://zavoloklom.github.io/material-design-iconic-font/css/docs.md-iconic-font.min.css">-->
+    
 	<div class="mdl-section-check">
-    <div class="mdl-grid mdl-home">
+    <div class="mdl-grid mdl-home ">
 					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
 						<h1 class="mdl-sidebar"><strong>Home Page</strong></h1>
 					</div>
-					<div class="mdl-cell mdl-cell-4-col mdl-section">
-						<ul style="width: 1000px;padding-left: 100px;">
-							<li>
+					<div class="mdl-cell mdl-cell-4-col mdl-section" >
+						<ul style="width: 1000px;padding-left: 100px;"> 
+							<li style="margin-left: -7%;">
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelyellow mdl-yellow" data-upgraded=",MaterialButton"> Amber</button><span class="mdl-complete">In Progress</span>
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelred mdl-darkred" data-upgraded=",MaterialButton">Red</button><span class="mdl-complete">- Not Commenced</span>
@@ -47,10 +50,11 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 	<?php 
 	}
 	$username ='';
+	
 	foreach($programs as $program)
 	{
 		$modules = $program->publishedModules;
-		// mdl-cell This class is removed from [ mdl-cell-8-col ] for Alignment into stright line 
+		// mdl-cell This class is removed from [ mdl-cell-8-col ] for Alignment into stright line - 56
 		if(count($modules) > 0 && count($program->programEnrollments) > 0)
 		{
 		echo '<div class="mdl-grid">
@@ -59,8 +63,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 			</div>
 		</div>';
 		echo '<div class="horizontal al_cpp_category_16">';
-		echo '<ul class="name_list" >';
-		
+		echo '<ul class="name_list" >';		
 			foreach($users as $user){
 				if($user->user->isEnrolled($program->program_id)){
 					$name = $user->firstname. " ". $user->lastname;
@@ -106,7 +109,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 					if($k==0)
 							echo "<li>";
 					else 
-						echo '<li class="margin" style="margin-left: -304px">';
+						echo '<li class="margin" style="margin-left: -298px">';
 						echo 
 							'<div class="single_unit_title" id="'.$unit->unit_id.'" style="overflow:visible; white-space:initial;" ><a href="#'.$unit->title.'">
                                         '.$unit->title.'
@@ -180,24 +183,22 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				<div class="modal-dialog">
 				
 				  <!-- Modal content-->
-				  <div class="modal-content">
+				  <div class="modal-content" style="margin:30% 0% 0% 3%" >
 					<!--<div class="modal-header style-primary">
 					  <h4 class="modal-title text-bold text-xxl">Sorry!</h4>
 					</div>-->
 					<div class="modal-body text-medium">
-					  <!--<p>Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!</p>-->
+					<!--  <p>Sorry, you may only access this capability test if you are an approved assessor. Please contact your assessor or manager to complete this step!</p>-->
 					  
-					 		 					  
-					 <div class="check_Popup_Capability">					
+    				  <div class="check_Popup_Capability">					
 						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
 						<i class="fa fa-times " data-dismiss="modal" aria-hidden="true"></i>
 						<p class="capability_3">Sorry</p>
 						<p class="capability_1">You are not able to complete your own capabilty test.</p>
 						<p class="capability_4">Please refer to your assigned coach or assessor to complete this step.</p>
 						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
-    				 </div> 					 
-					
-					
+    				 </div> 
+    				 
 					</div>
 				  </div>
 				  
@@ -209,30 +210,29 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				<div class="modal-dialog">
 				
 				  <!-- Modal content-->
-				  <div class="modal-content">
+				  <div class="modal-content" style="margin:30% 0% 0% 3%" >
 				
 					<div class="modal-body text-medium">
-					 <!--<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl.'/img/warning1.png'?>" />-->
-							 					  
-					 <div class="check_Popup_Capability">
-					
+					  <!--<img src="<?=Yii::$app->urlManagerBackEnd->baseUrl.'/img/warning1.png'?>" />-->
+					  	<div class="check_Popup_Capability">
+						<!--<i class="zmdi " data-dismiss="modal" aria-hidden="true" ></i>-->
 						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
 						<i class="fa fa-times" data-dismiss="modal" aria-hidden="true"></i>
 						<p class="capability_3">Sorry</p>
 						<p class="capability_1">You are not able to complete your own capabilty test.</p>
 						<p class="capability_4">Please refer to your assigned coach or assessor to complete this step.</p>
 						<button class="capability_2 " data-dismiss="modal" aria-hidden="true" >Go Back</button>
-    				 </div> 						 
+    				 	 </div> 		 					  
 					
-
+    				  
 					</div>
 				  </div>
 				  
 				</div>
 			</div>
-			
+		
 		<!-- Modal -->
-</div>
+   </div>	
 	<script>
 	
 		function popUpNotAllowed(){
@@ -251,11 +251,18 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 				$("#myModal4").modal("show");
 			}
 		}
+		
+		 $( window ).on( "load", function() {
+				 var height = $(document).scrollTop();				
+				 var top1 = parseInt(height) - parseInt(300);				 
+				 $("html,body").animate({scrollTop:top1}, 1000);				
+			});
 
 	</script>
 	<style>
 	.modal-backdrop{
 		z-index:0 !important
 	}
+
 	</style>
 

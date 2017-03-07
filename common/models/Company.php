@@ -86,13 +86,13 @@ class Company extends \yii\db\ActiveRecord
      */
 	 
 	public function uploadImage(){	
-		if($this->validate()) {	
+//		if($this->validate()) {	
 			$this->logo->saveAs('uploads/company_logo/'.$this->logo->baseName.'.'.$this->logo->extension);
 			$this->logo = 'uploads/company_logo/'.$this->logo->baseName.'.'.$this->logo->extension;
 			return true;	
-		 }else {
-			return false;
-		}	 	
+//		 }else {
+//			return false;
+//		}	 	
 	}	
 	public function deleteCompany(){
 		Division::deleteAll(['company_id'=>$this->company_id]);

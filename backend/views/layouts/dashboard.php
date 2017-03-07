@@ -115,7 +115,16 @@ AppAsset::register($this);
 			<!-- END CONTENT -->
 
 			<!-- BEGIN MENUBAR-->
-			<div id="menubar" class="menubar-inverse ">
+		<?php		
+			$leftmenu = "";
+			if(!Yii::$app->user->can('superadmin')){ 
+			$company = Company::find()->where(['company_id'=>\Yii::$app->user->identity->c_id ,'status'=>0])->one();	 
+			
+			if(!$company)
+			   	$leftmenu = "style='display:none'";
+			}  ?>
+		
+			<div id="menubar" class="menubar-inverse" <?= $leftmenu ?> >
 				<div class="menubar-fixed-panel">
 					<div>
 						<a class="btn btn-icon-toggle btn-default menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
@@ -129,7 +138,7 @@ AppAsset::register($this);
 						</a>
 					</div>
 				</div>
-				<div class="menubar-scroll-panel">
+				<div class="menubar-scroll-panel"  >
 
 					<!-- BEGIN MAIN MENU -->
 					<ul id="main-menu" class="gui-controls">
@@ -193,6 +202,7 @@ AppAsset::register($this);
 								{								
 								?>
 								<li><a id="all_usrs" href="<?=\Yii::$app->homeUrl?>user/company/index-role-user#all_usrs" ><span class="title">Users</span></a></li>
+								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/company/create-role-user#add_usr" ><span class="title">Add User</span></a></li>
 								<li><a id="my_profile" href="<?=\Yii::$app->homeUrl?>user/company/my-profile#my_profile" ><span class="title">My Profile</span></a></li>
 								<?php } ?>
 							<?php } ?>																		
@@ -208,7 +218,7 @@ AppAsset::register($this);
 							<!--start submenu -->
 								<li><a id="alpgs" href="<?=\Yii::$app->homeUrl?>course/program/company-programs#alpgs" ><span class="title">Programs</span></a></li>
 								<li><a id="add_pgm" href="<?=\Yii::$app->homeUrl?>course/program/create#add_pgm" ><span class="title">Add Program</span></a></li>
-								<li><a id="add_lsn" href="<?=\Yii::$app->homeUrl?>course/module/create#add_lsn" ><span class="title">Add Lessons</span></a></li>								
+								<li><a id="add_lsn" href="<?=\Yii::$app->homeUrl?>course/module/create#add_lsn" ><span class="title">Add Module</span></a></li>								
 							</ul>
 						</li>						
 						<?php } else if(\Yii::$app->user->can('company_admin')) { ?>
@@ -234,7 +244,7 @@ AppAsset::register($this);
 								<li><a id="reset_m" href="<?=\Yii::$app->homeUrl?>course/report/reset-modules#reset_m" ><span class="title">Reset Courses</span></a></li>
 								<li><a id="reset_un" href="<?=\Yii::$app->homeUrl?>course/report/reset-units#reset_un" ><span class="title">Reset Lessons</span></a></li>-->
 								<li><a id="reset_u" href="<?=\Yii::$app->homeUrl?>course/report/reset-users#reset_u" ><span class="title">Reset Progress</span></a></li>
-								<li><a id="auto_rst" href="<?=\Yii::$app->homeUrl?>course/autoreset/index#auto_rst" ><span class="title">Reset Schedules</span></a></li>
+							<!--	<li><a id="auto_rst" href="<?=\Yii::$app->homeUrl?>course/autoreset/index#auto_rst" ><span class="title">Reset Schedules</span></a></li> -->
 								<li><a id="archives" href="<?=\Yii::$app->homeUrl?>course/reports-archive/index#archives" ><span class="title">Archived Reports</span></a></li>
 								
 							</ul>

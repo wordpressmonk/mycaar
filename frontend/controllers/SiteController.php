@@ -19,11 +19,33 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
+
+class myAccessRule extends \yii\filters\AccessRule
+{
+    public function allows($action, $user, $request)
+    {
+        $isMatchAction = $this->matchAction($action);
+        if ($isMatchAction
+            && $this->matchRole($user)
+            && $this->matchIP($request->getUserIP())
+            && $this->matchVerb($request->getMethod())
+            && $this->matchController($action->controller)
+            && $this->matchCustom($action)
+        ) {
+            return $this->allow ? true : false;
+        } else {
+            return $this->allow && $isMatchAction ? false : null;
+        }
+    }
+}
+
+
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+	
     /**
      * @inheritdoc
      */
@@ -32,12 +54,18 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
+				'ruleConfig' => [
+                  'class' =>   myAccessRule::className()
+                ],
                 'only' => ['logout', 'signup','index'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
                         'allow' => true,
                         'roles' => ['?'],
+						'denyCallback' => function ($rule, $action) {
+								return $this->goHome();
+							},
                     ],
                     [
                         'actions' => ['logout','index'],
@@ -94,14 +122,23 @@ class SiteController extends Controller
 		foreach($enrolled as $program){
 			$programs[] = Program::findOne($program->program_id);
 		}
-		
+	
 		By ARIVU CLIENT Correction
 		 */	
-		$users[] = Profile::find()->where(['user_id'=>\Yii::$app->user->id])->one();	 
-        return $this->render('home', [
-            'programs' => $programs,
-            'users' => $users,
-        ]);
+		$users[] = Profile::find()->where(['user_id'=>\Yii::$app->user->id])->one();	
+		
+		if(!Yii::$app->user->can('superadmin')){ 
+			$company = Company::find()->where(['company_id'=>$user->c_id ,'status'=>0])->one();	 
+			
+			if(!$company)
+			   return $this->render('under_construction');
+		}
+	
+			return $this->render('home', [
+				'programs' => $programs,
+				'users' => $users,
+			]);
+		
     }
 
     /**

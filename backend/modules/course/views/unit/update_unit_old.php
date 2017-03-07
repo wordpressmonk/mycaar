@@ -96,14 +96,6 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'page'])->one();
 								$data = json_decode($element->content);
 								$formdata = $data->html;
-								
-								/* echo "<pre>";
-								print_r($formdata);
-								exit; */
-							
-								//$formdata = str_replace("&quot;", "''", $formdata);
-								// not required $formdata = str_replace("&amp;", "&", $formdata);
-								
 								$formdata = str_replace("'", "\'", $formdata);
 								$formdata = str_replace(array("\r", "\n"), '', $formdata);
 								//echo $formdata;die;
@@ -129,6 +121,14 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
 								$aw_data = $element->content;
 							
+						//$aw_data = "<form-template><fields><field type='checkbox-group' description='' label='Multiple &amp;amp;amp; Choice' class='checkbox-group' name='checkbox-group-938' src='false'><option option_id='2430' label='option-1         ' value='option-1         ' selected='true'>'option-1        '</option><option option_id='2431'  label='option-2         ' value='option-2         '>'option-2         '</option><option option_id='2432'  label='option-3         ' value='option-3         '>'option-3         '</option></field></fields></form-template>";
+							
+								//$aw_data = str_replace("&amp;", "&", $aw_data);
+								//$aw_data = html_entity_decode($aw_data);								
+								//var_dump($aw_data);exit;
+								
+								//print_r($aw_data);die;
+								
 								$aw_data = str_replace("&amp;", "&", $aw_data);								
 								$aw_data = str_replace("'", "\'", $aw_data);
 								//echo $aw_data;exit;
@@ -153,8 +153,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'cap_data'])->one();
 								$cp_data = $element->content;
-								//$cp_data = html_entity_decode($cp_data);
-								$cp_data = str_replace("&amp;", "&", $cp_data);
+								$cp_data = html_entity_decode($cp_data);
 								$cp_data = str_replace("'", "\'", $cp_data);
 								//$cp_data = str_replace(array("\r", "\n"), '', $cp_data);
 							?>
@@ -242,12 +241,8 @@ $(document).ready(function(){
 	//console.log(formData);
 	if (formData) {
 		unit_element_options.formData = formData;
-		var builder_data_test = unit_element_options.formData;
-		//var builder_data_test = JSON.stringify(unit_element_options.formData);
-	
 	}	 
 	$(unit_element_editor).formBuilder(unit_element_options);
-	
 	var saveBtn = document.querySelector('#frmb-0-save');
 	saveBtn.onclick = function() {
 		
@@ -287,8 +282,6 @@ $(document).ready(function(){
 		//console.log($(unit_element_editor).data('formBuilder').formData);
 		var builder_data = JSON.stringify({'html':$(unit_element_editor).data('formBuilder').formData});
 		//save to db
-		
-		
 		$.ajax({
 			url:'<?=Url::to(['unit/update','id'=>$model->unit_id])?>',
 			data: {unit_title:unit_title,builder_data : builder_data,unit_status:unit_status,reset_period:auto_reset_period,show_learning_page:show_learning_page},

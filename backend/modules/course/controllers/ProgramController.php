@@ -4,6 +4,7 @@ namespace backend\modules\course\controllers;
 
 use Yii;
 use common\models\Program;
+use common\models\Company;
 use common\models\search\SearchProgram;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -76,12 +77,32 @@ class ProgramController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-	public function actionDashboard(){
+	public function actionDashboard(){	 
+	
+	  if(!Yii::$app->user->can('superadmin')){ 
+			$company = Company::find()->where(['company_id'=>\Yii::$app->user->identity->c_id ,'status'=>0])->one();	 
+			
+			if(!$company)
+			   return $this->render('under_construction');
+		}
+		
+		return $this->render('dashboard');	 
+	}
+	
+	
+	/* public function actionDashboard(){
+	 if(\Yii::$app->user->can('superadmin')){ 
+		$companys = Company::find()->orderBy('name')->all();
+		return $this->render('dashboard_admin', [
+			'companys' => $companys,
+		]);
+	 }  else {	
 		$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
 		return $this->render('dashboard', [
 			'programs' => $programs,
 		]);
-	}
+	 }
+	} */
     /**
      * Lists all Program models.
      * @return mixed
@@ -138,8 +159,8 @@ class ProgramController extends Controller
     {
         $model = new Program();
 
-        if ($model->load(Yii::$app->request->post()) ) {
-			$model->company_id = Yii::$app->user->identity->c_id;
+        if ($model->load(Yii::$app->request->post())  && $model->save() ) {
+
 			$model->save();
 			if (\Yii::$app->user->can('superadmin')) {
 					return $this->redirect(['index']);
@@ -212,4 +233,19 @@ class ProgramController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+	public function actionGetProgram($c_id){
+		$mods = Program::find()->where(['company_id'=>$c_id])->orderBy('title')->all();
+		 if(count($mods)>0){
+			echo "<option value=''>--Select--</option>";
+			foreach($mods as $mod){			
+				  echo "<option value='".$mod->program_id."'>".$mod->title."</option>";
+			}
+		}
+		else{
+			echo "<option value=''>-</option>";
+		}
+	}
+
 }

@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use common\models\Company;
 use common\models\Program;
 use kartik\select2\Select2;
 /* @var $this yii\web\View */
@@ -21,7 +22,7 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="col-lg-10">
-				<h1><?=$model->isNewRecord ?"Add New Module":"Update: ".$model->title;?></h1>
+				<h1><?=$model->isNewRecord ?"Add Module":"Update: ".$model->title;?></h1>
 				<?php if($program){ ?>
 					<h4>[ Program: <a href="<?=Url::to(['program/view','id'=>$model->isNewRecord ?$program->program_id:$model->program->program_id])?>" ><?= $model->isNewRecord ?$program->title:$model->program->title;?> ]</a></h4>
 				<?php } ?>
@@ -68,15 +69,47 @@ $this->registerJsFile(\Yii::$app->homeUrl."js/custom/waitingfor.js");
 								?></p>
 								<?= $form->field($model, 'featured_image')->fileInput(['class'=>'form-control'])->label(false) ?>
 								
+
+	<?php if(Yii::$app->user->can("superadmin")){  ?>
+									
+								<h4>Company</h4>
+								<?php 
+							
+									 $data = ArrayHelper::map(Company::find()->all(), 'company_id', 'name');	
+									
+									echo Select2::widget([
+									   'name' => 'companyid',
+									   'id' => 'companyid',
+									   'value' => !empty($program->company_id)?$program->company_id:"", // value to initialize
+									   'data' => $data,
+									   'options' => [
+											'placeholder' => 'Select Company',
+											'disabled'=>$disabled,
+											'onchange' => '$.post( "'.Yii::$app->urlManager->createUrl(		'course/program/get-program?c_id=').'"+$(this).val(), function( data ) {
+													$( "select#module-program_id" ).html( data ).change();
+														});
+											
+											']
+									]);
+									
+								?>	
+								
+								<?php } ?>
+
 								<h4>Program</h4>
 								<?php 
 								if(Yii::$app->user->can("superadmin"))
-									$data = ArrayHelper::map(Program::find()->all(), 'program_id', 'title');
+								{
+									if(isset($program->company_id) && !empty($program->company_id))
+										$data = ArrayHelper::map(Program::find()->where(['company_id'=>$program->company_id])->all(), 'program_id', 'title');
+									else
+										$data = ArrayHelper::map(Program::find()->all(), 'program_id', 'title');
+								}
 								else
 									$data = ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->all(), 'program_id', 'title');
 								echo $form->field($model, 'program_id')->widget(Select2::classname(), [
 									'data' => $data,
-									'options' => ['placeholder' => 'Select Category','disabled'=>$disabled],
+									'options' => ['placeholder' => 'Select Program','disabled'=>$disabled],
 								])->label(false);	
 								?>	
 								<?= $form->field($model, 'language')->textInput(['maxlength' => true,'class'=>'form-control']) ?>								

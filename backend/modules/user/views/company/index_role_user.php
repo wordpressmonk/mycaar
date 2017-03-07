@@ -32,6 +32,7 @@ $selected_state = isset($params['state'])?$params['state']:'';
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<input type="hidden" id="search_field_val" name="search_field_val" value='<?php echo serialize($params); ?>' />
 <h1><?= Html::encode($this->title) ?></h1>
 <div class="card">
 
@@ -47,12 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="card-head style-default">
 				<div class="tools">
 					<div class="btn-group">
-						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapse"><i class="fa fa-angle-down"></i></a>
+						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapsed"><i class="fa fa-angle-down"></i></a>
 					</div>
 				</div>
 				<header>Search</header>
 			</div><!--end .card-head -->
-			<div class="card-body">
+			<div class="card-body" style="display:none">
 				<div class="program-search">
 					<form method="post" >
 						<div class="row">
@@ -72,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							</div>
 							<div class="col-sm-3">
 									<div class="form-group">
-									<label class="control-label" for="searchreport-c_id">Username / Email ID</label>
+									<label class="control-label" for="searchreport-c_id">User Name / Email ID</label>
 									<input type="text" class="form-control" name="email" value="<?=$email?>">
 									<div class="help-block"></div>
 								</div>
@@ -147,10 +148,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			[
 				'attribute' => 'firstname',
+                                'label' => 'First Name',
 				'value' => 'userProfile.firstname',				
 			],	
 			[
 				'attribute' => 'lastname',
+                                'label' => 'Last Name',
 				'value' => 'userProfile.lastname',				
 			],	
 			
@@ -172,20 +175,25 @@ $this->params['breadcrumbs'][] = $this->title;
 						return ($role)?$role->title:" (not set) ";
 					},				
 			], */
-            ['label' => 'Username / Email ID',
+            ['label' => 'User Name / Email ID',
 				'attribute' => 'email',			
 			 ],			
 		
 		
 			[
   'class' => 'yii\grid\ActionColumn',
-  'template' => '{view}',
+  'template' => '{view}{update}',
   'buttons' => [
     'view' => function ($url, $model) {
         return Html::a('<span style="margin-left:5px" class="glyphicon glyphicon-eye-open"></span>', 'view-role-user?id='.$model->id, [
                     'title' => Yii::t('app', 'View'),
         ]);
-    },	
+    },
+    'update' => function ($url, $model) {
+        return Html::a('<span style="margin-left:5px" class="glyphicon glyphicon-pencil"></span>', 'update-role-user?id='.$model->id, [
+                    'title' => Yii::t('app', 'Update'),
+        ]);
+    },		
   ],
 ],
         ],
@@ -194,6 +202,13 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
  <script>
+ 	$(".pagination li a").click(function(){			
+			var test = $(this).attr("href");
+			var new_url = $("#search_field_val").val();				 
+			$(this).attr("href", test+"&data="+new_url);
+			   			
+		});	
+		
 		$('.card-head .tools .btn-collapse').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);

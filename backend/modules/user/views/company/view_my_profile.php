@@ -25,10 +25,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
 
-            'firstname',
-            'lastname',
+           // 'firstname',
+           // 'lastname',
+          	[
+				'attribute' => 'firstname',
+				'label' => 'First Name',
+							
+			],	
 			[
-				 'label'=>'Username / Email ID',
+				'attribute' => 'lastname',
+				'label' => 'Last Name',
+							
+			],
+			[
+				 'label'=>'User Name / Email ID',
 				 'value' =>$model->user->email,
 			],
 			

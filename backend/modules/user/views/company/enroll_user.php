@@ -48,12 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="card-head style-default">
 				<div class="tools">
 					<div class="btn-group">
-						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapse"><i class="fa fa-angle-down"></i></a>
+						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapsed"><i class="fa fa-angle-down"></i></a>
 					</div>
 				</div>
 				<header>Search</header>
 			</div><!--end .card-head -->
-			<div class="card-body">
+			<div class="card-body" style="display:none">
 				<div class="program-search">
 					<form method="post" >
 						<div class="row">
@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						
 						<div class="col-sm-3">
 									<div class="form-group">
-									<label class="control-label" for="searchreport-c_id">Username</label>
+									<label class="control-label" for="searchreport-c_id">User Name</label>
 									<input type="text" class="form-control" name="username" value="<?=$username?>">
 									<div class="help-block"></div>
 								</div>

@@ -28,11 +28,11 @@ $this->params['breadcrumbs'][] = 'Update';
 
 		<?php $form = ActiveForm::begin(); ?>
 
-		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("Firstname *") ?>
+		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("First Name *") ?>
 		
-		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Lastname *") ?>
+		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Last Name *") ?>
 		
-		<?= $form->field($model, 'email')->textInput(['readonly'=>'readonly'])->label("Username / Email ID *") ?>
+		<?= $form->field($model, 'email')->textInput(['readonly'=>'readonly'])->label("User Name / Email ID *") ?>
 
 		<?= $form->field($model, 'role')->textInput(['readonly'=>'readonly'])->label("User Access Level") ?>
 	    

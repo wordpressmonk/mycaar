@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 
 use common\models\Program;
+use common\models\Company;
 use common\models\User;
 
 use common\models\Role;
@@ -20,6 +21,11 @@ $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 //if($params){
+if(Yii::$app->user->can("superadmin"))
+	$selected_company = isset($params['company'])?$params['company']:\Yii::$app->user->identity->c_id;
+else
+	$selected_company = \Yii::$app->user->identity->c_id;
+
 	$selected_user = isset($params['user'])?$params['user']:'';
 	$selected_program = isset($params['program'])?$params['program']:'';
 	$firstname = isset($params['firstname'])?$params['firstname']:'';
@@ -58,10 +64,43 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 									<div class="help-block"></div>
 								</div>
 							</div>-->
+						<?php if(Yii::$app->user->can("superadmin")){  ?>
+								<div class="col-sm-6">
+								<div class="form-group">
+									<label class="control-label" for="searchreport-cmp_id">Company</label>
+									<?= Html::dropDownList('company', "$selected_company",ArrayHelper::map(Company::find()->orderBy('name')->all(), 'company_id', 'name'),['prompt'=>'--Select--','class'=>'form-control','id'=>'company','required' => 'required',
+										  'onchange'=>'
+												$.post( "'.Yii::$app->urlManager->createUrl(		'course/program/get-program?c_id=').'"+$(this).val(), function( data ) {
+													$( "select#program" ).html( data ).change();
+														});
+														
+												$.post( "'.Yii::$app->urlManager->createUrl('user/role/get-role?c_id=').'"+$(this).val(), function( data ) {
+													$( "select#role" ).html( data ).change();
+														});
+												
+												$.post( "'.Yii::$app->urlManager->createUrl('user/division/get-division?c_id=').'"+$(this).val(), function( data ) {
+													$( "select#division" ).html( data ).change();
+														});
+												
+												$.post( "'.Yii::$app->urlManager->createUrl('user/location/get-location?c_id=').'"+$(this).val(), function( data ) {
+													$( "select#location" ).html( data ).change();
+														});
+
+												$.post( "'.Yii::$app->urlManager->createUrl('user/state/get-state?c_id=').'"+$(this).val(), function( data ) {
+													$( "select#state" ).html( data ).change();
+														});
+														
+												'] 
+											) ?>
+									<div class="help-block"></div>
+								</div>
+							</div>
+							
+						<?php } ?>		
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label" for="searchreport-unit_id">Program</label>
-									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('program', "$selected_program",ArrayHelper::map(Program::find()->where(['company_id'=>$selected_company])->orderBy('title')->all(), 'program_id', 'title'),['prompt'=>'--Select--','class'=>'form-control','id'=>'program']) ?>
 									<div class="help-block"></div>
 								</div>
 							</div>
@@ -87,7 +126,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Role</label>
 
-									<?= Html::dropDownList('role', "$selected_role",ArrayHelper::map(Role::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('role', "$selected_role",ArrayHelper::map(Role::find()->where(['company_id'=>$selected_company])->orderBy('title')->all(), 'role_id', 'title'),['prompt'=>'--Select--','class'=>'form-control','id'=>'role']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -96,7 +135,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Division</label>
 
-									<?= Html::dropDownList('division', "$selected_division",ArrayHelper::map(Division::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('division', "$selected_division",ArrayHelper::map(Division::find()->where(['company_id'=>$selected_company])->orderBy('title')->all(), 'division_id', 'title'),['prompt'=>'--Select--','class'=>'form-control','id'=>'division']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -105,7 +144,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
 
-									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control','id'=>'location']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -114,7 +153,7 @@ $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">State</label>
 
-									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('state', "$selected_state",ArrayHelper::map(State::find()->where(['company_id'=>$selected_company])->orderBy('name')->all(), 'state_id', 'name'),['prompt'=>'--Select--','class'=>'form-control','id'=>'state']) ?>
 
 									<div class="help-block"></div>
 								</div>
