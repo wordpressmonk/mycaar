@@ -314,7 +314,7 @@ fbUtils.escapeAttr = function (str) {
     '>': '&gt;' 
   }; 
    */
-  var match = { };
+  var match = {};
 
   function replaceTag(tag) {
     return match[tag] || tag;
@@ -799,7 +799,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
             }
 
             fieldData = utils.trimObj(fieldData);			
-            fieldData = utils.escapeAttrs(fieldData);			
+            //fieldData = utils.escapeAttrs(fieldData);			
 		
             multipleField = fieldData.type.match(/(select|checkbox-group|radio-group)/);
 
@@ -1462,7 +1462,7 @@ function formBuilderEventsFn() {
 (function ($) {
   var FormBuilder = function FormBuilder(options, element) {
     var formBuilder = this;
-		
+
     var defaults = {
       controlPosition: 'right',
       controlOrder: ['autocomplete', 'button', 'checkbox', 'checkbox-group', 'date', 'header', 'hidden', 'paragraph', 'number', 'radio-group', 'select', 'text', 'textarea','textdisplay','img', 'video', 'audio', 'file','filedownload','fileupload'],
@@ -2030,7 +2030,7 @@ function formBuilderEventsFn() {
         field.style = match[1];
       }
 
-      utils.escapeAttrs(field);
+      //utils.escapeAttrs(field);
 
       appendNewField(field);
       if (isNew) {
@@ -3015,12 +3015,12 @@ function formBuilderEventsFn() {
         _helpers.getData(formData);
         loadFields();
       }
-    };	
+    };
 	
     return formBuilder;
   };
 
-  $.fn.formBuilder = function (options) {  
+  $.fn.formBuilder = function (options) { 
     options = options || {};
     return this.each(function () {
       var formBuilder = new FormBuilder(options, this);

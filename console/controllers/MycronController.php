@@ -38,7 +38,7 @@ class MycronController extends Controller {
 			  $model->status = 1;
 			  $model->save(); 			  
 			}
-		}		     		
+		}	     		
     }
 
 

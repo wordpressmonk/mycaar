@@ -352,13 +352,13 @@ fbUtils.escapeHtml = function (html) {
 
 // Escape an attribute
 fbUtils.escapeAttr = function (str) {
-  /* var match = {
-    '"': '&quot;',
-    '&': '&amp;',
+   var match = {
+    '"': '&quot;', 
+    // '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;'
-  }; */
- var match = { };
+  }; 
+
   function replaceTag(tag) {
     return match[tag] || tag;
   }

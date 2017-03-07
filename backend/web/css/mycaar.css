@@ -215,21 +215,20 @@ background-color: lightgreen;
         background-color: white;
     }
     .course_name{
-        padding: 0px 40px 0px 0px !important;
-        height:36px !important;
-        width:99.76% !important;
+        padding: 0px !important;
+        height:43px !important;
+        width: auto !important;
         min-height: 0px !important;
         background-color: #4F81BE !important;
         margin-top:0px;
         font-size: 13px;
         color: #fff;
         text-align: center;
-
     }
     .single_unit_title{
         background: #e3e3e3;
         height: 55px;
-        width: 250px;
+        width: 249px;
         padding: 10px;
         margin-bottom: 4px;
         overflow: hidden;
@@ -237,14 +236,15 @@ background-color: lightgreen;
         font-weight: 500 !important;
         font-size: 13px !important;
         margin: 4px 0px 4px 302px;
+            position: relative;
     }
 
     .course_types .course_indicate .first_heading{
-        padding: 8px;
+        padding: 4px;
         background: #e3e3e3;
         width: 122.5px;
         height: 34px;
-        margin: 0px 0px 0px 148px;
+        margin: 0px 0px 0px 147px;
         display: block;
     }
 
@@ -290,6 +290,29 @@ background-color: lightgreen;
         overflow: hidden;
     }
 
+	.selectedpage{
+		padding:5px 7px;
+		background-color:grey;
+		margin-left:8px;
+		cursor: pointer;
+	}
+	.unselectedpage{
+		padding:5px 7px;
+		background-color:#ccc;
+		margin-left:8px;
+		cursor: pointer;
+	}
+	.selectedpage a{ 
+		color:#fff;
+		text-decoration:none;
+		font-weight:bold;
+	}
+	.unselectedpage a{ 
+		color:#000;
+		text-decoration:none;
+		font-weight:bold;
+	}
+	
 
     .assessement_item div[name='unit1']:last-child{
         margin-right: auto;
@@ -311,12 +334,12 @@ background-color: lightgreen;
     }
     .assessement_item div[name="unit1"] div[name="unit1"]{
         background: #e3e3e3;
-        padding: 0;
+        padding: 0px;
         text-align: center;
         width: auto;
         margin: 4px auto;
         margin-bottom: auto;
-        height: 41px;
+        height: 40px;
     }
     .assessement_item div[name='unit1'] div[name='unit1']{
         display: block;
@@ -330,9 +353,8 @@ background-color: lightgreen;
         text-align: center;
         overflow: hidden;
         vertical-align: middle;
-        margin-top: 0px;
+        margin:0px;
         display: inline-block;
-        margin-right: 5px;
         margin-left: -318px;
         font-weight: 600;
         font-size: 13px;
@@ -350,15 +372,22 @@ background-color: lightgreen;
 
     .all_course{
         display: block;
-        overflow-x: scroll;
-        overflow-y: hidden;
         white-space: nowrap;
         margin-left: 350px;
+        overflow: auto;
+       overflow-y: hidden; 
+       margin-bottom: 20px;
     }
 
     .course_name h2{
-        font-size: 19px !important;
-        padding-top: 6px;
+    font-size: 16px !important;
+    padding-top: 13px;
+    max-width: 27em;
+    overflow: visible;
+    white-space: initial;
+    margin: 0 auto;
+    vertical-align: super;
+    text-align:center;
     }
 
 
@@ -577,9 +606,9 @@ background-color: lightgreen;
 
     /*for progress bar*/
     .mdl-bar{
-        width: 317px;
+        width: 244px !important;
         background: #e3e3e3;
-        height: 41px;
+        height: 39px;
         margin-top: -4px;
     }
     .mdl-card--border{
@@ -598,82 +627,14 @@ background-color: lightgreen;
     .name_list{
         float: left;
         bottom: -140px;
-        position: relative;"
+        position: relative;
     }
 
+
 	
-/* Pop Desgin */
 
-.check_Popup_Capability{
-    border: 2px solid #21a0d5;
-    padding: 5%;
-    width: 102%;
-    height: 110%;
+	
 }
-
-.check_Popup_Capability .material-icons{
-    font-size: 54px;
-    margin-left: 44%;
-}
-
-.capability_3{
-    margin-left: 46%;
-    font-weight: bold;
-    color: #000000;
-}
-.capability_1{
-    text-align: center;
-    color: #9d9d9d;
-}
-.capability_2{
-    margin-left: 31%;
-    height: 30px;
-    width: 37%;
-    background: #21a0d5;
-    border: 1px solid #21a0d5;
-    color: #ffffff;
-    cursor: pointer;
-}
-
-.capability_4{
-    color: #9d9d9d;
-    text-align: center;
-}
-
-.Popup_Capability_color{
-    color: #abb3b9 !important;
-}
-
-
-.modal-content .text-medium{
-width: 98%;
-}
-
-.zmdi:before {
-    content: '\f136';
-}
-
-.zmdi {
-    display: inline-block;
-    font: normal normal normal 14px/1 'Material-Design-Iconic-Font';
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-        float: right;
-        cursor:pointer;
-        font-size: 20px !important;
-}
-
-.fade .modal-dialog{
-    margin-top: 11%;
-}
-
-.modal-content{
- overflow: hidden !important;
-}
-/* pop Desgin End */
-	}
 
 /* for firfox browser*/
 @-moz-document url-prefix() {
@@ -785,14 +746,15 @@ width: 98%;
     #content {
         background-color: white;
         margin-bottom: 125px;
+        width: 96% !important;
     }
     #base {
         background-color: white;
     }
     .course_name {
-        padding: 0px 40px 0px 0px !important;
-        height: 36px !important;
-        width: 99.76% !important;
+        padding: 0px !important;
+        height: 43px !important;
+        width: auto !important;
         min-height: 0px !important;
         background-color: #4F81BE !important;
         margin-top: 0px;
@@ -804,7 +766,7 @@ width: 98%;
     .single_unit_title {
         background: #e3e3e3;
         height: 55px;
-        width: 250px;
+        width: 249px;
         padding: 10px;
         margin-bottom: 4px;
         overflow: hidden;
@@ -815,11 +777,11 @@ width: 98%;
     }
 
     .course_types .course_indicate .first_heading {
-        padding: 8px;
+        padding: 4px;
         background: #e3e3e3;
         width: 122.5px;
-        height: 34px;
-        margin: 0px 0px 0px 148px;
+        height: 33px;
+        margin: 0px 0px 0px 147px;
         display: block;
         margin-right: -10px;
     }
@@ -887,7 +849,7 @@ width: 98%;
     }
     .assessement_item div[name="unit1"] div[name="unit1"] {
         background: #e3e3e3;
-        padding: 0;
+        padding: 0px;
         text-align: center;
         width: auto;
         margin: 4px auto;
@@ -898,7 +860,7 @@ width: 98%;
         display: block;
         float: right;
         width: 122.5px;
-        padding: 8px;
+        padding: 7px;
     }
     /*.assessement_item div[name='unit1'] div[name='unit1'] {
         display: block;
@@ -915,7 +877,7 @@ width: 98%;
         vertical-align: middle;
         margin-top: 0px;
         display: inline-block;
-        margin-right: 5px;
+        margin-right: 0px;
         margin-left: -318px;
         font-weight: 600;
         font-size: 13px;
@@ -933,15 +895,24 @@ width: 98%;
     }
     .all_course {
         display: block;
-        overflow-x: scroll;
+        overflow: auto;
         overflow-y: hidden;
         white-space: nowrap;
         margin-left: 350px;
+        margin-bottom: 20px;
     }
-
+.horizontal{
+	overflow-y:auto;
+}
     .course_name h2 {
-        font-size: 19px !important;
-        padding-top: 6px;
+       font-size: 16px !important;
+    padding-top: 13px;
+    max-width: 27em;
+    overflow: visible;
+    white-space: initial;
+    margin: 0 auto;
+    vertical-align: super;
+    text-align:center;
     }
 
 
@@ -1158,9 +1129,9 @@ width: 98%;
     /*for progress bar*/
 
     .mdl-bar{
-        width: 317px;
+        width: 244px;
         background: #e3e3e3;
-        height: 41px;
+        height: 40px;
         margin-top: -4px;
     }
 
@@ -1178,9 +1149,33 @@ width: 98%;
 
     .name_list{
         float: left;
-        bottom: -157px;
-        position: relative;"
+        bottom: -140px;
+        position: relative;
     }
+	
+	.selectedpage{
+		padding:5px 7px;
+		background-color:grey;
+		margin-left:8px;
+		cursor: pointer;
+	}
+	.unselectedpage{
+		padding:5px 7px;
+		background-color:#ccc;
+		margin-left:8px;
+		cursor: pointer;
+	}
+	.selectedpage a{ 
+		color:#fff;
+		text-decoration:none;
+		font-weight:bold;
+	}
+	.unselectedpage a{ 
+		color:#000;
+		text-decoration:none;
+		font-weight:bold;
+	}
+
 
 }
 /*** Summernote textarea **/
@@ -1255,6 +1250,7 @@ width: 98%;
 width: 98%;
 }
 
+
 .fade .modal-dialog{
     margin-top: 11%;
 }
@@ -1262,7 +1258,6 @@ width: 98%;
 .modal-content{
  overflow: hidden !important;
 }
-
 .fa-exclamation-triangle{
 margin-left: 46%;
 font-size: 37px !important;
@@ -1272,6 +1267,88 @@ float: right;
     font-size: 20px !important;
 	cursor:pointer;
 }
-
 /* pop Desgin End */
-/*end firfox*/
+
+/*For mozilla */
+
+@media screen and (min-width:320px) and (max-width:480px) {
+	.all_course {
+        display: block;
+        overflow: visible;
+        overflow-y: visible;
+        white-space: nowrap;
+        margin-left: 0px;
+        margin-bottom: 20px;
+    }
+.horizontal{
+	overflow-y:auto;
+}
+.w3-progressbar {
+    background-color: transparent;
+	font-size: 10px;
+margin-left: 2px;
+}
+  .mdl-label {
+    font-size: 10px;
+}
+.mdl-bar{
+        width: 160px !important;
+    }
+}
+
+/*For mozilla */
+
+/*safari*/
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+.all_course {
+margin-left: 0px;
+width: 72%;
+overflow: auto;
+overflow-y: hidden !important;
+}
+.mdl-bar {
+padding-top: 1px;
+}
+.name_list {
+ margin-top: 10px !important;  
+}
+
+}
+/*end safari*/
+
+/*mobile responsive for safari*/
+
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+.w3-progressbar {
+background-color: transparent;
+}
+
+.mdl-bar {
+width: 160px;
+}
+
+.mdl-label {
+font-size: 10px;
+}
+
+.w3-progressbar {
+font-size: 10px;
+}
+
+.name_list {
+margin-top: 17px;
+}
+
+.all_course {
+margin-left: 0px;
+width: 72%;
+white-space: nowrap;
+overflow: visible;
+overflow-y: visible !important;
+}
+
+.horizontal {
+overflow-y: auto;
+}
+
+/*mobile responsive for safari*/

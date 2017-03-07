@@ -22,13 +22,20 @@ return [
            		 'port' => '25',
            		 'encryption' => 'tls', 
                         ], 
-						
+
 		],   
-        'db' => [
+        /* 'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=mycaar_v2',
             'username' => 'mycaar_v2user',
             'password' => 'mycaar@2017v2',
+            'charset' => 'utf8',
+        ], */	
+	'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=wordpres_mycaar_demo',
+            'username' => 'wordpres_mycaar',
+            'password' => 'mycaar@123',
             'charset' => 'utf8',
         ],		
     ],

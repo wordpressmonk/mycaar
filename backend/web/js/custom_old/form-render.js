@@ -352,14 +352,13 @@ fbUtils.escapeHtml = function (html) {
 
 // Escape an attribute
 fbUtils.escapeAttr = function (str) {
-  var match = {
-  /**  '"': '&quot;',
+ /* var match = {
+    '"': '&quot;',
     '&': '&amp;',
     '<': '&lt;',
-    '>': '&gt;' */
-  }; 
-
-  
+    '>': '&gt;'
+  }; */
+var match = { };
   function replaceTag(tag) {
     return match[tag] || tag;
   }
@@ -447,14 +446,13 @@ console.log(fieldData.type);
       fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText + '</h3><p>' + mycaar_desc_field + '</p></div>';
       break;
 	case 'img':
-	// By Arivu Image UNder Name[ fieldLabelVal ] is Removed [ Client ] - Ref Line 459
+	// by Arivu Showing the img Under the Values [ fieldLabelVal Ref filedownload - Line - 455  ]
 		fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
 		'<' + fieldData.type + ' ' + fieldDataString + '></' + fieldData.type + '>'+
 		'</div>';
 		;
 		break;
 	case 'filedownload':
-	
 		fieldData.type = 'a';
 		fieldLabelVal = 'Download File';
 		fieldMarkup = '<div class="small-padding filedownload-preview"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+

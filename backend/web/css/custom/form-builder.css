@@ -176,9 +176,9 @@ Author: Kevin Chappell <kevin.b.chappell@gmail.com>
 .frmb-control li {
   cursor: move;
   list-style: none;
-  margin: 10px 6px;
+  margin: 10px 10px;
   box-shadow: 0 0 1px 0 inset;
-  padding: 7px;
+  padding: 10px;
   text-align: left;
   background: #fff;
   -webkit-user-select: none;
@@ -1276,8 +1276,3 @@ a.btn.toggle-form {
     clear: both; }
     .form-builder-dialog .button-wrap .btn {
       margin-left: 10px; }
-	  
-.ui-sortable-handle{
-margin-left: 5px !important;
-   
-}	  
