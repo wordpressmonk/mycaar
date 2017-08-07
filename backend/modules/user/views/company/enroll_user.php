@@ -15,6 +15,32 @@ use common\models\Division;
 use common\models\Location;
 use common\models\State;
 
+
+$selected_company = \Yii::$app->user->identity->c_id;
+
+if(Yii::$app->user->can("company_assessor")){
+	$location = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	}
+else if(Yii::$app->user->can("group_assessor")){
+	$access_location = \Yii::$app->user->identity->userProfile->access_location;
+	if(!empty($access_location))
+	 $useraccesslocation = explode(",",$access_location);
+ 
+	$getlocation = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	foreach($getlocation as $key=>$get)
+	{
+		if(isset($useraccesslocation) && in_array($get->location_id,$useraccesslocation))
+		{
+		 $location[$key]['location_id']= $get->location_id;
+		 $location[$key]['name']= $get->name;
+		}
+	}	
+}
+else if(Yii::$app->user->can("local_assessor")){
+	$locationid = \Yii::$app->user->identity->userProfile->location;
+	$location = Location::find()->where(['company_id'=>$selected_company,'location_id'=>$locationid])->orderBy('name')->all();
+}
+
 $program_id = isset($params['Program'])?$params['Program']:'';
 $username = isset($params['username'])?$params['username']:'';
 $fullname = isset($params['fullname'])?$params['fullname']:'';
@@ -120,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
 
-									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map($location, 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -255,9 +281,15 @@ $this->params['breadcrumbs'][] = $this->title;
 </script>		
 
  <script>
-		$('.card-head .tools .btn-collapse').on('click', function (e) {
+		//$('.card-head .tools .btn-collapse').on('click', function (e) {
+		$('.card-head').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
 		});
 		
 </script>			
+<style>
+	.card-head{
+		cursor:pointer
+	}
+</style>

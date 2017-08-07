@@ -47,7 +47,7 @@ class CompanyController extends Controller
 				'class' => AccessControl::className(),
                 'rules' => [
 					[
-                        'actions' => ['multi-hide-company'],
+                        'actions' => ['multi-hide-company','hide-company','show-company','message-company'],
                         'allow' => true,
 						'roles' => ['superadmin']
                     ],
@@ -57,10 +57,11 @@ class CompanyController extends Controller
                         'allow' => true,
 						'roles' => ['company_admin']
                     ],
-					 [
-                        'actions' => ['index-role-user','view-role-user','create-role-user','update-role-user','enroll-user','my-profile','update-my-profile'],
+					[
+                        'actions' => ['index-role-user','view-role-user','create-role-user','update-role-user','enroll-user','my-profile','update-my-profile','delete-role-user'],
                         'allow' => true,
-						'roles' => ['assessor']
+						//'roles' => ['assessor']
+						'roles' => ['company_assessor','group_assessor','local_assessor']
                     ],
 				],
 			],
@@ -213,7 +214,8 @@ class CompanyController extends Controller
 			$profile = new Profile();									
 			$roles = MyCaar::getChildRoles('company_admin');	
 			$profile->scenario = 'company_admin_user';
-		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
+		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {
+				
 			$model->username = $model->email;
 		if(empty($model->password))
 			 $model->password = MyCaar::getRandomPassword();
@@ -221,7 +223,8 @@ class CompanyController extends Controller
 			$model->generatePasswordResetToken();
 			$model->setPassword($model->password);
 			$model->generateAuthKey();
-			$model->c_id = Yii::$app->user->identity->c_id;						
+			$model->c_id = Yii::$app->user->identity->c_id;		
+	
 			if($model->save())
 			{				
 				//handle the role first				
@@ -229,7 +232,11 @@ class CompanyController extends Controller
 				$authorRole = $auth->getRole($model->role);
 				$auth->assign($authorRole, $model->id); 
 				//save profile first				
-				 $profile->user_id = $model->id;			
+				 $profile->user_id = $model->id;
+				 $access_location = "";
+					if($model->role == "group_assessor")
+					    $access_location = implode(",",$profile->access_location);
+				 $profile->access_location	= $access_location;		 
 				 $profile->save();	
 				
 					
@@ -316,7 +323,11 @@ class CompanyController extends Controller
 			$authorRole = $auth->getRole($model->role);
 			$auth->assign($authorRole, $model->id);
 			//save profile first			
-			$profile->user_id = $model->id;			
+			$profile->user_id = $model->id;	
+			$access_location = "";
+			 if($model->role == "group_assessor")
+				$access_location = implode(",",$profile->access_location);
+			$profile->access_location	= $access_location;				
 			$profile->save();	
 			
 			if(!empty($model->password))
@@ -578,7 +589,9 @@ class CompanyController extends Controller
 public function actionCreateRoleUser(){					
 			$model = new User();
 			$profile = new Profile();									
-			$roles = MyCaar::getChildRoles('assessor');	
+			//$roles = MyCaar::getChildRoles('assessor');	
+			$roles = MyCaar::getChildRoles(Yii::$app->user->identity->role);
+			
 			$profile->scenario = 'company_admin_user';
 		if(($model->load(Yii::$app->request->post())) && ($profile->load(Yii::$app->request->post())) && ($model->validate()) && ($profile->validate()))   {	
 			$model->username = $model->email;
@@ -617,7 +630,8 @@ public function actionCreateRoleUser(){
     {       
 		    $model = User::findOne($id);
 			$profile = Profile::find()->where(['user_id'=>$id])->one();				
-			$roles = MyCaar::getChildRoles('assessor');	
+			//$roles = MyCaar::getChildRoles('assessor');	
+			$roles = MyCaar::getChildRoles(Yii::$app->user->identity->role);
 			$model->role = $model->getRoleName();
 			
 		if(\Yii::$app->user->can('assessor')) {	
@@ -703,5 +717,54 @@ public function actionCreateRoleUser(){
 			
 		}
 
-	
+		
+		
+	public function actionHideCompany()
+	 {    		
+		if(isset(Yii::$app->request->post()['hidecompany_id']) && !empty(Yii::$app->request->post()['hidecompany_id']))
+			$hidecompany_id = Yii::$app->request->post()['hidecompany_id']; 
+				
+		  if(isset($hidecompany_id) && !empty($hidecompany_id))
+			{				
+				   $model = $this->findModel($hidecompany_id);
+				   $model->status = 1;
+				   $model->save();				 
+			}  
+		
+		}
+		
+	public function actionShowCompany()
+	 {    		
+		if(isset(Yii::$app->request->post()['showcompany_id']) && !empty(Yii::$app->request->post()['showcompany_id']))
+			$showcompany_id = Yii::$app->request->post()['showcompany_id']; 
+				
+		  if(isset($showcompany_id) && !empty($showcompany_id))
+			{			
+					$model = $this->findModel($showcompany_id);
+					$model->status = 0;
+					$model->save();			 
+			}  
+		
+		}	
+	 public function actionDeleteRoleUser($id)
+     {		
+		$user = User::findOne($id);
+		if(\Yii::$app->user->can($user->getRoleName()) && \Yii::$app->user->id != $user->id)
+			$user->delete();
+        return $this->redirect(['index-role-user']);
+     }	
+	 
+	 public function actionMessageCompany()
+	 {    		
+		if(isset(Yii::$app->request->post()['company_id']) && !empty(Yii::$app->request->post()['company_id']))
+		{
+			$company_id = Yii::$app->request->post()['company_id']; 			
+			$message = Yii::$app->request->post()['message'];			
+			$model = $this->findModel($company_id);
+			$model->message = $message;
+			$model->save();				
+		}		
+	}
+		
+		
 }

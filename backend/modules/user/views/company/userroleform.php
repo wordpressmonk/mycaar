@@ -11,6 +11,34 @@ use common\models\Role;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 /* @var $form yii\widgets\ActiveForm */
+
+
+$selected_company = \Yii::$app->user->identity->c_id;
+if(Yii::$app->user->can("company_assessor")){
+	$location = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	}
+else if(Yii::$app->user->can("group_assessor")){
+	$access_location = \Yii::$app->user->identity->userProfile->access_location;
+	if(!empty($access_location))
+	 $useraccesslocation = explode(",",$access_location);
+ 
+	$getlocation = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	foreach($getlocation as $key=>$get)
+	{
+		if(isset($useraccesslocation) && in_array($get->location_id,$useraccesslocation))
+		{
+		 $location[$key]['location_id']= $get->location_id;
+		 $location[$key]['name']= $get->name;
+		}
+	}	
+}
+else if(Yii::$app->user->can("local_assessor")){
+	$locationid = \Yii::$app->user->identity->userProfile->location;
+	$location = Location::find()->where(['company_id'=>$selected_company,'location_id'=>$locationid])->orderBy('name')->all();
+}
+
+
+
 ?>
 
 
@@ -61,7 +89,7 @@ use common\models\Role;
 		
 		
 		<?php
-		$location = ArrayHelper::map(Location::find()->where(['company_id' =>Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name');
+		$location = ArrayHelper::map($location, 'location_id', 'name');
 			echo $form->field($profile, 'location')->dropDownList(
             $location,           // Flat array ('id'=>'label')
             ['prompt'=>'--Location--']    // options

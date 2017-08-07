@@ -136,7 +136,7 @@ AppAsset::register($this);
 					<div class="offcanvas-body no-padding">
 					
 					<div class="small-padding">
-					<?php if(\Yii::$app->user->can("assessor")) {?>
+					<?php if((\Yii::$app->user->can("company_assessor")) || (\Yii::$app->user->can("group_assessor")) || (\Yii::$app->user->can("local_assessor")) ) {?>
 					<a href="<?=Yii::$app->urlManagerBackEnd->baseUrl?>">DASHBOARD</a>
 					<?php } ?>
 					<?= Html::beginForm(['/site/logout'], 'post')

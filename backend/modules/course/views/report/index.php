@@ -20,6 +20,30 @@ use yii\helpers\Url;
 $this->title = 'Assessor Reports';
 $this->params['breadcrumbs'][] = $this->title;
 
+$selected_company = \Yii::$app->user->identity->c_id;
+if(Yii::$app->user->can("company_assessor")){
+	$location = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	}
+else if(Yii::$app->user->can("group_assessor")){
+	$access_location = \Yii::$app->user->identity->userProfile->access_location;
+	if(!empty($access_location))
+	 $useraccesslocation = explode(",",$access_location);
+ 
+	$getlocation = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	foreach($getlocation as $key=>$get)
+	{
+		if(isset($useraccesslocation) && in_array($get->location_id,$useraccesslocation))
+		{
+		 $location[$key]['location_id']= $get->location_id;
+		 $location[$key]['name']= $get->name;
+		}
+	}	
+}
+else if(Yii::$app->user->can("local_assessor")){
+	$locationid = \Yii::$app->user->identity->userProfile->location;
+	$location = Location::find()->where(['company_id'=>$selected_company,'location_id'=>$locationid])->orderBy('name')->all();
+}
+
 
 $accesslevel = isset($params['accesslevel'])?$params['accesslevel']:'';
 $programid = isset($params['programid'])?$params['programid']:'';
@@ -72,7 +96,7 @@ $selected_state = isset($params['state'])?$params['state']:'';
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
 
-									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map($location, 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -140,7 +164,7 @@ $selected_state = isset($params['state'])?$params['state']:'';
 
 	
     <p>
-        <?= Html::a('Dashboard', ['report/search#db'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Dashboard', ['/#db'], ['class' => 'btn btn-success']) ?>
     </p>
 
 	<?= GridView::widget([
@@ -210,7 +234,8 @@ $selected_state = isset($params['state'])?$params['state']:'';
 
  <script>
  //$(document).ready(function(){
-	  	$('.card-head .tools .btn-collapse').on('click', function (e) {
+	  	//$('.card-head .tools .btn-collapse').on('click', function (e) {
+	  	$('.card-head').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
 
@@ -275,4 +300,9 @@ $selected_state = isset($params['state'])?$params['state']:'';
 				 
 <?php } ?>	
 </script>	
+<style>
+	.card-head{
+		cursor:pointer
+	}
+</style>
 

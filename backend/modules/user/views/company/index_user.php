@@ -311,7 +311,8 @@ $selected_state = isset($params['state'])?$params['state']:'';
 		 
       </script> 
 	  <script>
-		$('.card-head .tools .btn-collapse').on('click', function (e) {
+		//$('.card-head .tools .btn-collapse').on('click', function (e) {
+		$('.card-head').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
 		});

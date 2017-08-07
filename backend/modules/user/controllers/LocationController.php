@@ -153,4 +153,51 @@ class LocationController extends Controller
 		}
 	}
 	
+	
+	public function actionGroupLocation($id){
+		
+		if($id == "group_assessor")
+		{
+			$cid = Yii::$app->user->identity->c_id;
+			if($cid)
+			{
+				$mods = Location::find()->where(['company_id'=>$cid])->orderBy('name')->all();
+				if($mods)
+				{
+				  foreach($mods as $mod){		
+					echo "<input type='checkbox' name='UserProfile[access_location][]' value='".$mod->location_id."'> ".$mod->name."<br>";
+				  }
+				}
+			} else {
+				echo "Invalid Company Name";
+			}
+		}	
+	}
+	
+	public function actionUpdateGroupLocation($locations,$id){
+		$accesslocation = explode(",",$locations);
+		 if($id == "group_assessor")
+		{
+			$cid = Yii::$app->user->identity->c_id;			
+			if($cid)
+			{
+				$mods = Location::find()->where(['company_id'=>$cid])->orderBy('name')->all();
+				if($mods)
+				{
+				  foreach($mods as $mod){	
+					if (in_array($mod->location_id, $accesslocation))
+					{
+					echo "<input type='checkbox' checked='checked' name='UserProfile[access_location][]' value='".$mod->location_id."'> ".$mod->name."<br>";
+					} else 
+					{
+					echo "<input type='checkbox' name='UserProfile[access_location][]' value='".$mod->location_id."'> ".$mod->name."<br>";
+					}	
+				  }
+				}
+			} else {
+				echo "Invalid Company Name";
+			}
+		}	 
+	}
+	
 }

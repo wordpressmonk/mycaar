@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('userform', [
+    <?= $this->render('userroleform', [
         'model' => $model,
 		'profile'=>$profile,
 		'roles' => $roles,

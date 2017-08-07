@@ -31,7 +31,8 @@ class TestController extends Controller
                     [
                         'actions' => ['cp-test'],
                         'allow' => true,
-						'roles' => ['assessor']
+						//'roles' => ['assessor']
+						'roles' => ['company_assessor','group_assessor','local_assessor']
                     ],
                 ],
             ], 

@@ -45,7 +45,8 @@ class ReportController extends Controller
                     [
                         'actions' => ['search','assessor-report'],
                         'allow' => true,
-						'roles' => ['assessor']
+						//'roles' => ['assessor']
+						'roles' => ['company_assessor','group_assessor','local_assessor']
                     ],
                     [
                         'actions' => ['reset-programs','reset-modules','reset-units','reset-users'],
@@ -116,6 +117,18 @@ class ReportController extends Controller
 				$query->andFilterWhere(['role'=>$param['role']]);
 			if(isset($param['location']) && $param['location'] !='')
 				$query->andFilterWhere(['location'=>$param['location']]);
+			else 
+			{
+				 if(!Yii::$app->user->can('superadmin')){ 
+				  if(Yii::$app->user->can("group_assessor")){		
+					$setlocation = \Yii::$app->user->identity->userProfile->access_location;			  
+					$query->andFilterWhere(['in', 'location', $setlocation]);
+				  }
+				  else if(Yii::$app->user->can("local_assessor")){	
+					$query->andFilterWhere(['location'=>\Yii::$app->user->identity->userProfile->location]);
+				  }
+				 }
+			}
 			if(isset($param['division']) && $param['division'] !='')
 				$query->andFilterWhere(['division'=>$param['division']]); 
 			if(isset($param['firstname']) && $param['firstname'] !='')
@@ -125,11 +138,8 @@ class ReportController extends Controller
 			$query->groupBy('program_enrollment.user_id');		
 			$users = $dataProvider->models;
 			$userscount = $dataProvider2->models;
-		
-			//$users = array_slice( $users, 1, 2 ); 
-			
-			//print_r($programs);
-			
+					
+			//$users = array_slice( $users, 1, 2 ); 			
 				return $this->render('report', [
 					'programs' => $programs,
 					'users' => $users,
@@ -137,12 +147,8 @@ class ReportController extends Controller
 					'usersfiltercount' => $userscount
 				]);
 			
-		}
-		
-		/* $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]); */		
-        else {
+		} else {
+			
 		 if($p_id)
 			$programs[] = Program::find()->where(['program_id'=>$p_id])->one();
 		 else $programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
@@ -151,17 +157,24 @@ class ReportController extends Controller
 			$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 					'pagination' => [
-						'pageSize' => 50,
+						'pageSize' =>50,
 						 'page' =>0,
 					],
 			]);	
 			$query->innerJoinWith(['user']);
 			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
-			if($p_id)
-				$query->andFilterWhere(['program_id'=>$p_id]);	
+			
+			 if(Yii::$app->user->can("group_assessor")){		
+				$setlocation = \Yii::$app->user->identity->userProfile->access_location;			  
+				$query->andFilterWhere(['in', 'location', $setlocation]);
+			  }
+			  else if(Yii::$app->user->can("local_assessor")){	
+				$query->andFilterWhere(['location'=>\Yii::$app->user->identity->userProfile->location]);
+			  }
+			  
 			$query->groupBy('program_enrollment.user_id');
 			$users = $dataProvider->models;			
-		
+			
 			return $this->render('report', [
 						'programs' => $programs,
 						'users' => $users,

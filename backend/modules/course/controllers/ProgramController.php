@@ -5,12 +5,14 @@ namespace backend\modules\course\controllers;
 use Yii;
 use common\models\Program;
 use common\models\Company;
+use common\models\ProgramEnrollment;
 use common\models\search\SearchProgram;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\search\SearchModule;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 /**
  * ProgramController implements the CRUD actions for Program model.
  */
@@ -45,7 +47,8 @@ class ProgramController extends Controller
                     [
                         'actions' => ['dashboard'],
                         'allow' => true,
-						'roles' => ['assessor']
+						//'roles' => ['assessor']
+						'roles' => ['company_assessor','group_assessor','local_assessor']
                     ],
                 ],
             ], 
@@ -79,14 +82,46 @@ class ProgramController extends Controller
     }
 	public function actionDashboard(){	 
 	
+	if(Yii::$app->user->can('superadmin')){ 
+			return $this->render('dashboard_system');	 
+	}
 	  if(!Yii::$app->user->can('superadmin')){ 
-			$company = Company::find()->where(['company_id'=>\Yii::$app->user->identity->c_id ,'status'=>0])->one();	 
+			$company = Company::find()->where(['company_id'=>\Yii::$app->user->identity->c_id ])->one();	 
 			
-			if(!$company)
-			   return $this->render('under_construction');
-		}
+			if($company && $company->status == 1)
+			   return $this->render('under_construction', [ 'company' => $company] );
+			}
 		
-		return $this->render('dashboard');	 
+		
+			$programs = Program::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('title')->all();
+			$query = ProgramEnrollment::find()->orderBy('user_profile.firstname ASC');
+			$query->innerJoinWith(['userProfile as user_profile']);
+			$dataProvider = new ActiveDataProvider([
+				'query' => $query,
+				 'pagination'=>false,
+			]);	
+			$query->innerJoinWith(['user']);
+			$query->andFilterWhere(['user.c_id'=>\Yii::$app->user->identity->c_id]);
+			
+			 if(Yii::$app->user->can("group_assessor")){		
+				$setlocation = \Yii::$app->user->identity->userProfile->access_location;			  
+				$query->andFilterWhere(['in', 'location', $setlocation]);
+			  }
+			  else if(Yii::$app->user->can("local_assessor")){	
+				$query->andFilterWhere(['location'=>\Yii::$app->user->identity->userProfile->location]);
+			  }
+			  
+			$query->groupBy('program_enrollment.user_id');
+			$users = $dataProvider->models;			
+			
+			return $this->render('dashboard', [
+						'programs' => $programs,
+						'users' => $users,
+						'params' => false,
+					]);	
+					
+		
+		//return $this->render('dashboard');	 
 	}
 	
 	

@@ -629,14 +629,6 @@ background-color: lightgreen;
         bottom: -140px;
         position: relative;
     }
-
-
-<<<<<<< HEAD
-	
-
-	
-=======
->>>>>>> d58c9030587e0dd592f12be1e2552f53ccf63526
 }
 
 /* for firfox browser*/
@@ -1302,11 +1294,8 @@ margin-left: 2px;
 /*For mozilla */
 
 /*safari*/
-<<<<<<< HEAD
-@media screen and (-webkit-min-device-pixel-ratio:0) { 
-=======
 
->>>>>>> d58c9030587e0dd592f12be1e2552f53ccf63526
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
 .all_course {
 margin-left: 0px;
 width: 72%;
@@ -1317,13 +1306,7 @@ overflow-y: hidden !important;
 padding-top: 1px;
 }
 .name_list {
-<<<<<<< HEAD
- margin-top: 10px !important;  
-}
-
-=======
 margin-top: 10px;
->>>>>>> d58c9030587e0dd592f12be1e2552f53ccf63526
 }
 /*end safari*/
 
@@ -1361,5 +1344,7 @@ overflow-y: visible !important;
 .horizontal {
 overflow-y: auto;
 }
+
+
 
 /*mobile responsive for safari*/

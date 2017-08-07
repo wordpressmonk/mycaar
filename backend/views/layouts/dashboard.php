@@ -196,7 +196,7 @@ AppAsset::register($this);
 								<li><a id="add_usr" href="<?=\Yii::$app->homeUrl?>user/company/create-user#add_usr" ><span class="title">Add User</span></a></li>
 								<li><a id="import_usrs" href="<?=\Yii::$app->homeUrl?>user/importuser/importexcel#import_usrs" ><span class="title">Import Users</span></a></li>
 									<?php } ?>
-							<?php } else if(\Yii::$app->user->can('assessor')) { ?>
+							<?php } else if((\Yii::$app->user->can('company_assessor'))||(\Yii::$app->user->can('group_assessor'))||(\Yii::$app->user->can('local_assessor'))) { ?>
 							<?php 
 								if(Company::findOne(Yii::$app->user->identity->c_id))
 								{								
@@ -253,7 +253,7 @@ AppAsset::register($this);
 							?>
 						</li>
 						<!-- END Admin -->
-						<?php } else if(\Yii::$app->user->can('assessor')) {?>	
+						<?php } else if((\Yii::$app->user->can('company_assessor'))||(\Yii::$app->user->can('group_assessor'))||(\Yii::$app->user->can('local_assessor'))) {?>	
 						<li class="gui-folder">
 							<a>
 								<div class="gui-icon"><i class="md md-view-list"></i></div>

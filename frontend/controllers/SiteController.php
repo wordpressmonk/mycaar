@@ -128,10 +128,10 @@ class SiteController extends Controller
 		$users[] = Profile::find()->where(['user_id'=>\Yii::$app->user->id])->one();	
 		
 		if(!Yii::$app->user->can('superadmin')){ 
-			$company = Company::find()->where(['company_id'=>$user->c_id ,'status'=>0])->one();	 
+			$company = Company::find()->where(['company_id'=>$user->c_id ])->one();	 
 			
-			if(!$company)
-			   return $this->render('under_construction');
+			if($company && $company->status == 1)
+			   return $this->render('under_construction', [ 'company' => $company] );
 		}
 	
 			return $this->render('home', [

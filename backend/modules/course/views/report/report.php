@@ -17,6 +17,8 @@ use common\models\State;
 /* @var $searchModel common\models\search\SearchProgram */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$testFGH = '';
+
 $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
@@ -25,6 +27,29 @@ if(Yii::$app->user->can("superadmin"))
 	$selected_company = isset($params['company'])?$params['company']:\Yii::$app->user->identity->c_id;
 else
 	$selected_company = \Yii::$app->user->identity->c_id;
+
+if(Yii::$app->user->can("company_assessor")){
+	$location = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	}
+else if(Yii::$app->user->can("group_assessor")){
+	$access_location = \Yii::$app->user->identity->userProfile->access_location;
+	if(!empty($access_location))
+	 $useraccesslocation = explode(",",$access_location);
+ 
+	$getlocation = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	foreach($getlocation as $key=>$get)
+	{
+		if(isset($useraccesslocation) && in_array($get->location_id,$useraccesslocation))
+		{
+		 $location[$key]['location_id']= $get->location_id;
+		 $location[$key]['name']= $get->name;
+		}
+	}	
+}
+else if(Yii::$app->user->can("local_assessor")){
+	$locationid = \Yii::$app->user->identity->userProfile->location;
+	$location = Location::find()->where(['company_id'=>$selected_company,'location_id'=>$locationid])->orderBy('name')->all();
+}
 
 	$selected_user = isset($params['user'])?$params['user']:'';
 	$selected_program = isset($params['program'])?$params['program']:'';
@@ -38,16 +63,9 @@ else
 //}
 ?>
 
-    <!--<div class="mdl-grid mdl-home">
-					<div class="mdl-cell mdl-cell-8-col" style="margin: 0px 32px 0px 4px !important;">
-						<h1 class="mdl-sidebar"><strong>Dashboard & Search</strong></h1>
-					</div>
-
-	</div>-->
-	
-		
-   
-
+  <script src="<?=Yii::$app->homeUrl;?>js/js/pie-chart.js" type="text/javascript"></script>
+	<link href="<?=Yii::$app->homeUrl;?>js/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+	  
 		<div class="card card-collapse card-collapsed small-padding">
 			<div class="card-head card-head-xs style-default">
 				<div class="tools">
@@ -147,7 +165,7 @@ else
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
 
-									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control','id'=>'location']) ?>
+									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map($location, 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control','id'=>'location']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -211,7 +229,7 @@ else
 										)
 										. Html::endForm();
 										
-		echo '<div style="float: right;">
+		/*echo '<div style="float: right;">
 						<ul>
 							<li>
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgreen mdl-icon" data-upgraded=",MaterialButton">Green</button><span class="mdl-complete">Complete</span>
@@ -220,20 +238,25 @@ else
 								<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-hover-fabelgrey mdl-lightgrey" data-upgraded=",MaterialButton">Grey</button><span class="mdl-complete">- Not applicable</span>
 							</li>
 						</ul>
-					</div>';
+					</div>'; */
+					
 		echo '</div>
 		</div>';
 
 		echo '<div class="horizontal al_cpp_category_16">';
+		//echo '<div id="demo-pie-1" class="pie-title-center" data-percent="25"> <span class="pie-value"></span> </div>';
 		echo '<ul class="name_list" >';
-	
+		$overalluser = 0;
+		$countprogress = 0;
 			foreach($users as $user){
 				if($user->user->isEnrolled($program->program_id)){
 					$name = $user->userProfile->firstname. " ". $user->userProfile->lastname;
 					if($name == '')
 						$name = $user->user->username;
 					//$progress = 0;
-					$progress = $user->user->getProgramProgress($program->program_id);
+					$overalluser = $overalluser + 1;
+					$newprogress = $progress = $user->user->getProgramProgress($program->program_id);
+					$countprogress = $countprogress + $newprogress;
 					echo '
 					<li><div class="mdl-grid" >
 						<div class="mdl-cell mdl-cell--3-col mdl-bar" >
@@ -248,6 +271,8 @@ else
 			}
 	
 		echo '</ul>';
+		$overallprec = $countprogress/$overalluser;
+		echo '<div id="demo-pie-1" class="pie-title-center" data-percent="'.$overallprec.'"> <span class="pie-value"></span> </div>';
 		//program bar starts from here
         echo'<div class="all_course al_pragram_width ">';
 		foreach($modules as $p_key=>$module)
@@ -363,10 +388,19 @@ else
 		?>
 		<?php
 			  if(!empty($selected_program)||!empty($firstname)||!empty($lastname)||!empty($selected_role)||!empty($selected_division)||!empty($selected_location)||!empty($selected_state))
+			  {
+				
 				$usercount = (isset($usersfiltercount))?count($usersfiltercount):0;
+			  }
 			else  
+			{
+				
 				$usercount = count($program->programEnrollments); 
 			//$usercount = (isset($usersfiltercount))?count($usersfiltercount):0;
+			
+			}
+			
+			
 			
 			$result1  = $usercount/50;
 			$test = floor($result1);
@@ -394,6 +428,8 @@ else
 		
 		} //module count && enrollment count
 		//else echo "No results found!";
+		
+		//echo "Programid->".$program->program_id."   ^  total member->".$testFGH;
 	}
 	if($check_output == '')
 		echo "No results found!";
@@ -491,7 +527,8 @@ else
 			
 
 	<script>
-		$('.card-head .tools .btn-collapse').on('click', function (e) {
+		//$('.card-head .tools .btn-collapse').on('click', function (e) {
+		$('.card-head').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
 		});
@@ -572,6 +609,21 @@ else
 			}); 
 			
 	});
+	</script>
+	
+	<script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#demo-pie-1').pieChart({
+                barColor: '#68b828',
+                trackColor: '#eee',
+                lineCap: 'square',
+                lineWidth: 14,
+                onStep: function (from, to, percent) {
+                    $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+                }
+            });
+          });
 	</script>
 	
 	<style>
@@ -656,4 +708,28 @@ margin-left: 2px;
 
 	</style>
 	
-	
+	<style>
+	.card-head{
+		cursor:pointer
+	}
+	</style>
+<style>
+.pie-title-center {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+}
+
+.pie-value {
+  display: block;
+  position: absolute;
+  font-size: 14px;
+  height: 40px;
+  top: 50%;
+  left: 0;
+  right: 0;
+  margin-top: -20px;
+  line-height: 40px;
+}
+
+</style>
