@@ -24,9 +24,9 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
 
     <?php $form = ActiveForm::begin(); ?>
 
-	 <?= $form->field($model,'old_password')->passwordInput(['autofocus' => true,'value'=>''])->label('Current Password') ?>	 
-	 <?= $form->field($model,'new_password')->passwordInput(['value'=>''])->label('New Password') ?>
-	 <?= $form->field($model,'confirm_password')->passwordInput(['value'=>''])->label('Confirm Password') ?>
+	 <?= $form->field($model,'old_password')->passwordInput(['autofocus' => true])->label('Current Password') ?>	 
+	 <?= $form->field($model,'new_password')->passwordInput()->label('New Password') ?>
+	 <?= $form->field($model,'confirm_password')->passwordInput()->label('Confirm Password') ?>
 
 	 
 	 <div class="form-group">

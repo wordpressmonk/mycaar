@@ -24,7 +24,7 @@ class ExportController extends Controller
 		
 		
 		$program = Program::findOne(\Yii::$app->request->post()['p_id']);
-		$company = Company::findOne(\Yii::$app->user->identity->c_id);
+		$company = Company::findOne(\Yii::$app->request->post()['c_id']);
 		
 		//////////////////get users searched////////////////////////////
 		$param = unserialize(\Yii::$app->request->post()['params']);
@@ -151,9 +151,11 @@ class ExportController extends Controller
 		$objDrawing = new \PHPExcel_Worksheet_Drawing();
 		$objDrawing->setName('Logo');
 		$objDrawing->setDescription('Logo');
-		//if (file_exists($site_left_client_img)) {
+		if ($company->logo != '' && file_exists(\Yii::$app->basePath.'/web/'.$company->logo)) {
 			$objDrawing->setPath(\Yii::$app->basePath.'/web/'.$company->logo); //setOffsetY has no effect
-		//};
+		}else{
+			$objDrawing->setPath(\Yii::$app->basePath.'/web/img/default_logo.jpg');
+		};
 		$objDrawing->setCoordinates('O1');
 		$objDrawing->setHeight(60); 
 		$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
@@ -193,6 +195,7 @@ class ExportController extends Controller
 		$mark      = 9;
 		$row = 0;
 		foreach($enrollments as $key=>$enrollment){
+
 			if(in_array($enrollment->user_id,$filtered_users))
 			{	
 			$capability_percentage = $enrollment->user->getProgramProgress($program->program_id);
@@ -243,7 +246,10 @@ class ExportController extends Controller
 			$objPHPExcel->getActiveSheet()->getStyle('A' . $perce . ':C' . $perce)->getFont()->setSize(10);
 			$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A' . $merging . ':C' . $merging);
 			$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A' . $perce . ':C' . $perce);
-			$worksheet->setCellValueByColumnAndRow('A9', $row + $student, $enrollment->userProfile->fullname);
+			if($enrollment->userProfile)
+				$worksheet->setCellValueByColumnAndRow('A9', $row + $student, $enrollment->userProfile->fullname);
+			else
+				$worksheet->setCellValueByColumnAndRow('A9', $row + $student, $enrollment->user->username);
 			$worksheet->setCellValueByColumnAndRow('A10', $row + $mark, $capability_percentage);
 			$sheet = $objPHPExcel->getActiveSheet();
 			$style = array(
@@ -275,6 +281,7 @@ class ExportController extends Controller
 		$max_length = 30;
 		$modules = $program->publishedModules;
 		foreach($modules as $module){
+
 			$units = $module->publishedUnits;
 			$unit_count = count($units);
 			if($unit_count){    
@@ -299,6 +306,7 @@ class ExportController extends Controller
 				$objPHPExcel->getActiveSheet()->getColumnDimension($this->cellsToWidthByColsRow($ending + 1))->setWidth(1);
 				$unittitle = $starting;
 				foreach($units as $unit){
+
 					/***********************************************/
 					$StudentUnitFillColumn	= $unittitle;
 					$StudentUnitFillRow		= $rownumber + 1;
@@ -329,6 +337,7 @@ class ExportController extends Controller
 
 					//students 
 					foreach($enrollments as $enrollment){
+
 						if(in_array($enrollment->user_id,$filtered_users))
 						{
 						/********************************************************************************/

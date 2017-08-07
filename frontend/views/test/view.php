@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$element = UnitElement::find()->where(['unit_id'=>$model->unit_id])->one();
 			$data = json_decode($element->content);
 			$formdata = $data->html;
+			$formdata = str_replace("'", "\'", $formdata);
 			$formdata = str_replace(array("\r", "\n"), '', $formdata);
 		?>
 	<form id="fb-render"></form>

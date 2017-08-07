@@ -306,13 +306,15 @@ fbUtils.escapeHtml = function (html) {
 };
 
 // Escape an attribute
-fbUtils.escapeAttr = function (str) {
-  var match = {
+fbUtils.escapeAttr = function (str) {	
+  /*  var match = {
     '"': '&quot;',
     '&': '&amp;',
     '<': '&lt;',
-    '>': '&gt;'
-  };
+    '>': '&gt;' 
+  }; 
+   */
+  var match = { };
 
   function replaceTag(tag) {
     return match[tag] || tag;
@@ -354,8 +356,8 @@ fbUtils.unique = function (array) {
    * Generate preview markup
    * @param  {object} fieldData
    * @return {string}       preview markup for field
-   */
-fbUtils.fieldRender = function (fieldData, opts) {
+   */ 
+fbUtils.fieldRender = function (fieldData, opts) {  
 	console.log('den',fieldData);
   var preview = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   var fieldMarkup = '',
@@ -691,24 +693,30 @@ function formBuilderHelpersFn(opts, formBuilder) {
    * @return {Array}        Array of option values
    */
   _helpers.fieldOptionData = function (field) {
+	 // alert(JSON.stringify(field));
+	  // ARIVU
     var options = [];
 
     $('.sortable-options li', field).each(function () {
+		
       var $option = $(this),
           selected = $('.option-selected', $option).is(':checked'),
           attrs = {
+			  
         label: $('.option-value', $option).val(),
         value: $('.option-value', $option).val(),
 		option_id:$('.option-value', $option).attr('option_id'),
       };
-
+	/* console.log($option);
+	return; */
+	//alert(JSON.stringify($option));
       if (selected) {
         attrs.selected = selected;
       }
-
+	
       options.push(attrs);
     });
-
+	
     return options;
   };
 
@@ -737,7 +745,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
 		console.log('final',optionData);
         for (var i = 0; i < optionData.length; i++) {
           var option = utils.markup('option', optionData[i].label, optionData[i]).outerHTML;
-		 
+		// alert(option);
           options.push('\n\t\t\t' + option);
         }
         options.push('\n\t\t');
@@ -782,7 +790,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
             if (roleVals.length) {
               fieldData.role = roleVals.join(',');
             }
-
+			
             fieldData.className = fieldData.className || fieldData.class; // backwards compatibility 
             match = /(?:^|\s)btn-(.*?)(?:\s|$)/g.exec(fieldData.className);
 
@@ -790,15 +798,16 @@ function formBuilderHelpersFn(opts, formBuilder) {
               fieldData.style = match[1];
             }
 
-            fieldData = utils.trimObj(fieldData);
-            fieldData = utils.escapeAttrs(fieldData);
-
+            fieldData = utils.trimObj(fieldData);			
+            fieldData = utils.escapeAttrs(fieldData);			
+		
             multipleField = fieldData.type.match(/(select|checkbox-group|radio-group)/);
 
 
-            if (multipleField) {
+            if (multipleField) {	
               fieldData.values = _helpers.fieldOptionData($field);
             }
+			
 			console.log('zxc',$field[0].attributes.id.value);
 			fieldData.src = $('#value-'+$field[0].attributes.id.value).attr('src')||false;
 			fieldData.data_media_type = $('#value-'+$field[0].attributes.id.value).attr('data_media_type')||false;
@@ -806,7 +815,7 @@ function formBuilderHelpersFn(opts, formBuilder) {
           })();
         }
       });
-    }
+    }	
 	//console.log(formData);
     return formData;
   };
@@ -1453,7 +1462,7 @@ function formBuilderEventsFn() {
 (function ($) {
   var FormBuilder = function FormBuilder(options, element) {
     var formBuilder = this;
-
+		
     var defaults = {
       controlPosition: 'right',
       controlOrder: ['autocomplete', 'button', 'checkbox', 'checkbox-group', 'date', 'header', 'hidden', 'paragraph', 'number', 'radio-group', 'select', 'text', 'textarea','textdisplay','img', 'video', 'audio', 'file','filedownload','fileupload'],
@@ -2085,7 +2094,7 @@ function formBuilderEventsFn() {
      * @todo   refactor this nasty ~crap~ code, its actually painful to look at
      * @param  {object} values
      */
-    var fieldOptions = function fieldOptions(values) {
+    var fieldOptions = function fieldOptions(values) { 
 		//console.log('sdf',values);
       var optionActions = [utils.markup('a', opts.messages.addOption, { className: 'add add-opt' })],
           fieldOptions = ['<label class="false-label">' + opts.messages.selectOptions + '</label>'],
@@ -2110,11 +2119,12 @@ function formBuilderEventsFn() {
             label: label,
             value: utils.hyphenCase(label)
           };
+		  //alert(option);
           return option;
         });
 		
         values.values[0].selected = true;
-      } else {
+      } else { 
 		 // console.log('sdf',values);
         // ensure option data is has all required keys
         values.values.forEach(function (option) {
@@ -2141,7 +2151,7 @@ function formBuilderEventsFn() {
      * @param  {object} values configuration object for advanced fields
      * @return {String}        markup for advanced fields
      */
-    var advFields = function advFields(values) {
+    var advFields = function advFields(values) { 
       var advFields = [],
           key,
           optionFields = ['select', 'checkbox-group', 'radio-group'],
@@ -2225,7 +2235,7 @@ function formBuilderEventsFn() {
 
       advFields.push(boolAttribute('access', values, accessLabels));
 
-      if (values.type === 'checkbox-group' || values.type === 'radio-group') {
+      if (values.type === 'checkbox-group' || values.type === 'radio-group' ) { 
         advFields.push(boolAttribute('other', values, { first: opts.messages.enableOther, second: opts.messages.enableOtherMsg }));
       }
 
@@ -2527,16 +2537,22 @@ function formBuilderEventsFn() {
 		  if(values.src)
 			attributefield += '<a href="'+values.src+'">'+values.src+'</a>'; 
         }else {
+			
+         
+		 attrVal = attrVal.replace("&amp;","&");
+		
           inputConfig.value = attrVal;
           inputConfig.type = 'text';
+		  
           attributefield += '<input ' + utils.attrString(inputConfig) + '>';
         }
-
+		
         var inputWrap = '<div class="input-wrap">' + attributefield + '</div>';
-
+		
         attributefield = '<div class="form-group ' + attribute + '-wrap">' + attributeLabel + ' ' + inputWrap + '</div>';
       }
-	  //console.log(attributefield);
+	  //attributefield = attributefield.replace("&amp;","&");
+	  console.log(attributefield);
       return attributefield;
     };
 
@@ -2576,8 +2592,9 @@ function formBuilderEventsFn() {
         className: 'copy-button btn icon-copy',
         title: opts.messages.copyButtonTooltip
       });
-
-      var liContents = utils.markup('div', [toggleBtn, copyBtn, delBtn], { className: 'field-actions' }).outerHTML;
+		// Copy Button Add or Removed Here 
+    //  var liContents = utils.markup('div', [toggleBtn, copyBtn, delBtn], { className: 'field-actions' }).outerHTML;
+     var liContents = utils.markup('div', [toggleBtn, delBtn], { className: 'field-actions' }).outerHTML;
 
       // Field preview Label
       liContents += '<label class="field-label">' + label + '</label>';
@@ -2839,12 +2856,14 @@ function formBuilderEventsFn() {
     });
 
     // Copy field
-    $sortableFields.on('click touchstart', '.icon-copy', function (e) {
+    $sortableFields.on('click touchstart', '.icon-copy', function (e) { 
       e.preventDefault();
       var currentItem = $(this).parent().parent('li');
+		//console.log(currentItem);	  
       var $clone = cloneItem(currentItem);
-      $clone.insertAfter(currentItem);
-      _helpers.updatePreview($clone);
+	
+      $clone.insertAfter(currentItem);	  	
+      _helpers.updatePreview($clone);	  	
       _helpers.save();
     });
 
@@ -2996,17 +3015,17 @@ function formBuilderEventsFn() {
         _helpers.getData(formData);
         loadFields();
       }
-    };
-
+    };	
+	
     return formBuilder;
   };
 
-  $.fn.formBuilder = function (options) {
+  $.fn.formBuilder = function (options) {  
     options = options || {};
     return this.each(function () {
       var formBuilder = new FormBuilder(options, this);
       $(this).data('formBuilder', formBuilder);
-
+		
       return formBuilder;
     });
   };

@@ -18,10 +18,11 @@ class AppAsset extends AssetBundle
 		'css/theme-default/materialadmin.css?1425466319',
 		'css/theme-default/font-awesome.min.css?1422529194',
 		'css/theme-default/material-design-iconic-font.min.css',
-		'css/theme-default/libs/summernote/summernote.css?1425218701'
+		'css/theme-default/libs/summernote/summernote.css?1425218701',
 		//'css/theme-default/libs/DataTables/jquery.dataTables.css?1423553989',
 		//'css/theme-default/libs/DataTables/extensions/dataTables.colVis.css?1423553990',
 		//'css/theme-default/libs/DataTables/extensions/dataTables.tableTools.css?1423553990',
+		'css/theme-default/libs/morris/morris.core.css?1420463396'
     ];
     public $jsOptions = [
 		//'async' => 'async',
@@ -44,6 +45,7 @@ class AppAsset extends AssetBundle
 		'js/libs/bootstrap-datepicker/bootstrap-datepicker.js',
 		'js/libs/summernote/summernote.min.js',
 		'js/libs/multi-select/jquery.multi-select.js',
+		'js/libs/morris.js/morris.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

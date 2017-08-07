@@ -11,6 +11,19 @@ use common\models\SiteMeta;
 use common\models\SetPassword;
 use yii\web\UploadedFile;
 
+///////////////////////////////////////
+
+
+//use common\models\User;
+use common\models\Company;
+use common\models\Program;
+use common\models\ProgramEnrollment;
+
+
+
+
+
+
 /**
  * Site controller
  */
@@ -26,7 +39,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','error','test-mail'],
+                        'actions' => ['login','error','test-mail','test-awareness','test-capability'],
                         'allow' => true,
                     ],
                     [
@@ -283,5 +296,243 @@ class SiteController extends Controller
 			return $this->render('sitemeta', ['left' =>$left_logo,'right'=>$right_logo,'model'=>$model]);	
 			
 	}
+	
+	
+	
+	public function actionTestAwareness()
+    {
+		echo "Started Running";
+		echo "<br>";
+		
+		$connection = \Yii::$app->db;
+		$model = $connection->createCommand('SELECT u.id as user_id FROM `company` c,`user` u, `program` p, `program_enrollment` pe where c.company_id = u.c_id and c.company_id = p.company_id and c.company_id = 1 and p.program_id = pe.program_id and u.id = pe.user_id and p.program_id =1');
+		$temp_all_users = $model->queryAll();
+		
+		$all_users = array();
+		foreach ($temp_all_users as $key=>$tmp) {
+			$all_users[$key] = $tmp['user_id'];
+		
+		}
+
+
+		/* echo "<pre>";
+		print_r($all_users);		
+		exit; */
+		
+		$model2 = $connection->createCommand('SELECT aq.aq_id, aq.unit_id, aq.question, aq.answer FROM `module` m, `unit` u, `awareness_question` aq where m.module_id = u.module_id and u.unit_id = aq.unit_id and m.module_id = 11 and m.program_id = 1');
+		$awareness_question = $model2->queryAll();
+		
+		$all_awareness_question = array();
+		foreach ($awareness_question as $key=>$tmp1) {
+			$all_awareness_question[$key] = $tmp1['aq_id'];
+		
+		}
+		
+		/* echo "<pre>";
+		print_r($all_awareness_question);		
+		exit; */
+		
+		
+		
+		
+		$model22 = $connection->createCommand('SELECT * FROM `unit` where module_id = 11');
+		$units = $model22->queryAll();
+		
+		
+		$all_unit = array();
+		foreach ($units as $key=>$tmp3) {
+			$all_unit[$key] = $tmp3['unit_id'];
+		
+		}
+		
+		/* echo "<pre>";
+		print_r($all_unit);
+		exit; */
+		
+		foreach($all_users as $user_id)
+		{
+			 foreach($all_awareness_question as $aware_ques)
+			{
+				//echo $user_id."___".$aware_ques."<br>";
+				
+				$model3 = $connection->createCommand('SELECT * FROM `awareness_question` WHERE `aq_id` = '.$aware_ques );
+				$check_question = $model3->queryOne();
+				
+				//  echo "<pre>";
+				//print_r($check_question['answer']);   
+				
+				//exit;
+				
+				
+				$model4 = $connection->createCommand('SELECT * FROM `awareness_answer` WHERE `question_id` = '.$aware_ques.' AND `user_id` = '.$user_id);
+				
+				$check_answer = $model4->queryOne();
+				
+				//echo "<pre>";
+				//print_r($check_answer); 
+				
+				if(!empty($check_answer))
+				{
+					
+					$model5 = $connection->createCommand("UPDATE `awareness_answer` SET  `answer`= '$check_question[answer]' WHERE `aa_id`= '$check_answer[aa_id]'");
+					$update_answer = $model5->query();
+					
+				} else 
+				{
+					
+					$model6 = $connection->createCommand("INSERT INTO `awareness_answer`(`question_id`, `user_id`, `answer` ) VALUES ('$aware_ques','$user_id','$check_question[answer]')");
+					$insert_answer = $model6->query();
+				}
+				
+			}
+			 
+			
+			foreach ($all_unit as $unit_id) {
+					
+				$model7 = $connection->createCommand('SELECT * FROM `unit_report` WHERE `unit_id` = '.$unit_id.' AND `student_id` ='.$user_id);
+				
+				$check_unit_report = $model7->queryOne();
+				
+				if(!empty($check_unit_report))
+				{
+					
+					$model8 = $connection->createCommand("UPDATE `unit_report` SET  `awareness_progress`= '100' WHERE `report_id`= '$check_unit_report[report_id]'");
+					$update_answer = $model8->query();
+					
+				} else 
+				{
+					
+					$model9 = $connection->createCommand("INSERT INTO `unit_report`(`unit_id`, `student_id`, `awareness_progress`) VALUES ('$unit_id','$user_id','100')");
+					$insert_answer = $model9->query();
+				}
+			}
+			
+		}
+		
+		
+	}
+
+
+
+
+public function actionTestCapability()
+    {
+		echo "Started Running";
+		echo "<br>";
+		
+		$connection = \Yii::$app->db;
+		$model = $connection->createCommand('SELECT u.id as user_id FROM `company` c,`user` u, `program` p, `program_enrollment` pe where c.company_id = u.c_id and c.company_id = p.company_id and c.company_id = 1 and p.program_id = pe.program_id and u.id = pe.user_id and p.program_id =1');
+		$temp_all_users = $model->queryAll();
+		
+		$all_users = array();
+		foreach ($temp_all_users as $key=>$tmp) {
+			$all_users[$key] = $tmp['user_id'];
+		
+		}
+
+
+		/* echo "<pre>";
+		print_r($all_users);		
+		exit; */
+		
+		$model2 = $connection->createCommand('SELECT cq.cq_id, cq.unit_id, cq.question, cq.answer FROM `module` m, `unit` u, `capability_question` cq where m.module_id = u.module_id and u.unit_id = cq.unit_id and m.module_id = 11 and m.program_id = 1');
+		$capability_question = $model2->queryAll();
+		
+		$all_capability_question = array();
+		foreach ($capability_question as $key=>$tmp1) {
+			$all_capability_question[$key] = $tmp1['cq_id'];
+		
+		}
+		
+		/* echo "<pre>";
+		print_r($all_capability_question);		
+		exit; */
+		
+		
+		
+		
+		$model22 = $connection->createCommand('SELECT * FROM `unit` where module_id = 11');
+		$units = $model22->queryAll();
+		
+		
+		$all_unit = array();
+		foreach ($units as $key=>$tmp3) {
+			$all_unit[$key] = $tmp3['unit_id'];
+		
+		}
+		
+		/* echo "<pre>";
+		print_r($all_unit);
+		exit; */
+		
+		foreach($all_users as $user_id)
+		{
+			 foreach($all_capability_question as $cap_ques)
+			{
+				//echo $user_id."___".$cap_ques."<br>";
+				
+				$model3 = $connection->createCommand('SELECT * FROM `capability_question` WHERE `cq_id` = '.$cap_ques );
+				$check_question = $model3->queryOne();
+				
+				//  echo "<pre>";
+				//print_r($check_question['answer']);   
+				
+				//exit;
+				
+				
+				$model4 = $connection->createCommand('SELECT * FROM `capability_answer` WHERE `question_id` = '.$cap_ques.' AND `user_id` = '.$user_id);
+				
+				$check_answer = $model4->queryOne();
+				
+				//echo "<pre>";
+				//print_r($check_answer); 
+				
+				if(!empty($check_answer))
+				{
+					
+					$model5 = $connection->createCommand("UPDATE `capability_answer` SET  `answer`= '$check_question[answer]' WHERE `ca_id`= '$check_answer[ca_id]'");
+					$update_answer = $model5->query();
+					
+				} else 
+				{
+					
+					$model6 = $connection->createCommand("INSERT INTO `capability_answer`(`question_id`, `user_id`, `answer` ) VALUES ('$cap_ques','$user_id','$check_question[answer]')");
+					$insert_answer = $model6->query();
+				}
+				
+			}
+			 
+			
+			foreach ($all_unit as $unit_id) {
+					
+				$model7 = $connection->createCommand('SELECT * FROM `unit_report` WHERE `unit_id` = '.$unit_id.' AND `student_id` ='.$user_id);
+				
+				$check_unit_report = $model7->queryOne();
+				
+				if(!empty($check_unit_report))
+				{
+					if(!empty($check_unit_report['cap_done_by']))
+					{
+						$cap_done_by = $check_unit_report['cap_done_by']; 
+					} else {
+						$cap_done_by = 3;
+					}
+					
+					$model8 = $connection->createCommand("UPDATE `unit_report` SET  `capability_progress`= '100',`cap_done_by` = '$cap_done_by'  WHERE `report_id`= '$check_unit_report[report_id]'");
+					$update_answer = $model8->query();
+					
+				} else 
+				{
+					
+					$model9 = $connection->createCommand("INSERT INTO `unit_report`(`unit_id`, `student_id`, `capability_progress`,`cap_done_by`) VALUES ('$unit_id','$user_id','100','3')");
+					$insert_answer = $model9->query();
+				}
+			}
+			
+		}
+		
+		
+	}	
+
 	
 }

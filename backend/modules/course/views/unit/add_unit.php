@@ -184,6 +184,7 @@ $(document).ready(function(){
 	$(unit_element_editor).formBuilder(unit_element_options);
 	var saveBtn = document.querySelector('#frmb-0-save');
 	saveBtn.onclick = function() {
+		$('#frmb-0-save').attr("disabled",true);
 		var unit_status = 0;
 		if($('#unit_status').is(":checked"))
 			unit_status = 1;
@@ -194,12 +195,14 @@ $(document).ready(function(){
 		if(auto_reset_period.length > 2){
 			$('.field-reset-period').addClass('has-error');
 			$('.field-reset-period .help-block').html('Invalid reset period');
+			$('#frmb-0-save').attr("disabled",false);
 			return false;
 		}
 		var unit_title = $('#unit_title').val();
 		if(!unit_title || unit_title == ''){
 			$('.field-unit-title .help-block').html('Title cannot be blank');
 			$('.field-unit-title').addClass('has-error');
+			$('#frmb-0-save').attr("disabled",false);
 			return false;
 		}
 		//see if any of the url fields are empty
@@ -213,6 +216,7 @@ $(document).ready(function(){
 			}
 		});
 		if(req.length > 0){
+			$('#frmb-0-save').attr("disabled",false);
 			return false;
 		}
 		//console.log($(unit_element_editor).data('formBuilder').formData);
@@ -224,7 +228,7 @@ $(document).ready(function(){
 			type: 'post',
 			dataType : 'json',
 			success : function(data){
-				console.log(data);
+				console.log(data);		
 			}
 		});
 		//console.log($(unit_element_editor).data('formBuilder').formData);

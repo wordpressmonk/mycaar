@@ -6,6 +6,9 @@
     opacity: 1;
   }
 }
+
+
+
 @-moz-keyframes fadeIn {
   from {
     opacity: 0;
@@ -6032,6 +6035,7 @@ overflow: hidden!important;
 }
 .offcanvas-pane.active {
   display: block;
+      height: 145px;
   -webkit-box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.38);
   box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.38);
   -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.22, 0.99, 0.68, 0.98);
@@ -7645,7 +7649,7 @@ sub.badge {
   padding: 48px;
 }
 .small-padding {
-  padding: 12px;
+  padding: 10px 0px 0px 20px;
 }
 .no-y-padding {
   padding: 0 24px;
@@ -7889,7 +7893,7 @@ sub.badge {
   margin-right: auto;
 }
 .contain-lg {
-  max-width: 1200px;
+  max-width: 1094px;
   margin-left: auto;
   margin-right: auto;
 }

@@ -152,4 +152,12 @@ function updateOutput(output){
 	})  
 	console.log('changed');
 }
+
+/// Default collapseAll Function
+$(document).ready(function(){
+   $(".nestable-list").nestable({
+      collapsedClass:'dd-collapsed',
+   }).nestable('collapseAll');//Add this line
+});
+
 </script>

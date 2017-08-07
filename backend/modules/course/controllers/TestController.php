@@ -31,7 +31,8 @@ class TestController extends Controller
                     [
                         'actions' => ['cp-test'],
                         'allow' => true,
-						'roles' => ['assessor']
+						//'roles' => ['assessor']
+						'roles' => ['company_assessor','group_assessor','local_assessor']
                     ],
                 ],
             ], 
@@ -57,10 +58,12 @@ class TestController extends Controller
 		
 		$user = User::findOne($user_id);
 		$model = $this->findModel($unit_id);
+	if(!\Yii::$app->user->can("superadmin"))
+	{
 		/** SOME ACCESS CHECKS **/
 		$this->isAllowed($user_id,$unit_id);
 		/** SOME ACCESS CHECKS **/
-		
+	}	
 		$session = Yii::$app->session;
 		$attempted = Report::find()->where(['unit_id'=>$unit_id,'student_id'=>$user_id])->one();
 		if($attempted && $attempted->capability_progress == 100 ){
@@ -101,7 +104,8 @@ class TestController extends Controller
 
 			if(isset(Yii::$app->request->post()['save_n_exit'])){
 				$session->remove($unit_id."_cp_".$user_id);
-				return $this->redirect(['report/search','p_id'=>$model->module->program->program_id,'data'=>$data]);
+				$idcheck = 	"cw_".$unit_id."_".$user_id;
+				return $this->redirect(['report/search','p_id'=>$model->module->program->program_id,'data'=>$data,'#' => $idcheck]);
 			}else
 			return $this->redirect(["cp-test","user_id"=>$user_id,"unit_id"=>$unit_id]);
 			

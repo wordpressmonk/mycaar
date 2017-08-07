@@ -25,6 +25,9 @@ use kartik\select2\Select2;
 				'data' => $data,
 				'options' => ['placeholder' => 'Select company'],
 			]);		
+		}else if(\Yii::$app->user->can('company_admin'))
+		{		
+			echo $form->field($model, 'company_id')->hiddenInput(['value'=>Yii::$app->user->identity->c_id])->label(false);
 		}
 	?>
 	

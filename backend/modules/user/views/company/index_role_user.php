@@ -15,6 +15,30 @@ use common\models\State;
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(\Yii::$app->homeUrl."css/custom/w3.css");
+$selected_company = \Yii::$app->user->identity->c_id;
+if(Yii::$app->user->can("company_assessor")){
+	$location = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	}
+else if(Yii::$app->user->can("group_assessor")){
+	$access_location = \Yii::$app->user->identity->userProfile->access_location;
+	if(!empty($access_location))
+	 $useraccesslocation = explode(",",$access_location);
+ 
+	$getlocation = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+	foreach($getlocation as $key=>$get)
+	{
+		if(isset($useraccesslocation) && in_array($get->location_id,$useraccesslocation))
+		{
+		 $location[$key]['location_id']= $get->location_id;
+		 $location[$key]['name']= $get->name;
+		}
+	}	
+}
+else if(Yii::$app->user->can("local_assessor")){
+	$locationid = \Yii::$app->user->identity->userProfile->location;
+	$location = Location::find()->where(['company_id'=>$selected_company,'location_id'=>$locationid])->orderBy('name')->all();
+}
+
 $firstname = isset($params['firstname'])?$params['firstname']:'';
 $lastname = isset($params['lastname'])?$params['lastname']:'';
 $email = isset($params['email'])?$params['email']:'';
@@ -32,6 +56,7 @@ $selected_state = isset($params['state'])?$params['state']:'';
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<input type="hidden" id="search_field_val" name="search_field_val" value='<?php echo serialize($params); ?>' />
 <h1><?= Html::encode($this->title) ?></h1>
 <div class="card">
 
@@ -47,12 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="card-head style-default">
 				<div class="tools">
 					<div class="btn-group">
-						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapse"><i class="fa fa-angle-down"></i></a>
+						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapsed"><i class="fa fa-angle-down"></i></a>
 					</div>
 				</div>
 				<header>Search</header>
 			</div><!--end .card-head -->
-			<div class="card-body">
+			<div class="card-body" style="display:none">
 				<div class="program-search">
 					<form method="post" >
 						<div class="row">
@@ -72,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							</div>
 							<div class="col-sm-3">
 									<div class="form-group">
-									<label class="control-label" for="searchreport-c_id">Username / Email ID</label>
+									<label class="control-label" for="searchreport-c_id">User Name / Email ID</label>
 									<input type="text" class="form-control" name="email" value="<?=$email?>">
 									<div class="help-block"></div>
 								</div>
@@ -112,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
 								<div class="form-group">
 									<label class="control-label" for="searchreport-user_id">Location</label>
 
-									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map(Location::find()->where(['company_id'=>\Yii::$app->user->identity->c_id])->orderBy('name')->all(), 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
+									<?= Html::dropDownList('location', "$selected_location",ArrayHelper::map($location, 'location_id', 'name'),['prompt'=>'--Select--','class'=>'form-control']) ?>
 
 									<div class="help-block"></div>
 								</div>
@@ -147,10 +172,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			[
 				'attribute' => 'firstname',
+                                'label' => 'First Name',
 				'value' => 'userProfile.firstname',				
 			],	
 			[
 				'attribute' => 'lastname',
+                                'label' => 'Last Name',
 				'value' => 'userProfile.lastname',				
 			],	
 			
@@ -172,18 +199,31 @@ $this->params['breadcrumbs'][] = $this->title;
 						return ($role)?$role->title:" (not set) ";
 					},				
 			], */
-            ['label' => 'Username / Email ID',
+            ['label' => 'User Name / Email ID',
 				'attribute' => 'email',			
 			 ],			
 		
 		
 			[
   'class' => 'yii\grid\ActionColumn',
-  'template' => '{view}',
+  'template' => '{view}{update}{delete}',
   'buttons' => [
     'view' => function ($url, $model) {
         return Html::a('<span style="margin-left:5px" class="glyphicon glyphicon-eye-open"></span>', 'view-role-user?id='.$model->id, [
                     'title' => Yii::t('app', 'View'),
+        ]);
+    },
+    'update' => function ($url, $model) {
+        return Html::a('<span style="margin-left:5px" class="glyphicon glyphicon-pencil"></span>', 'update-role-user?id='.$model->id, [
+                    'title' => Yii::t('app', 'Update'),
+        ]);
+    },	
+	'delete' => function ($url, $model) {
+        return Html::a('<span style="margin-left:5px" class="glyphicon glyphicon-trash"></span>', 'delete-role-user?id='.$model->id, [
+                    'title' => Yii::t('app', 'Delete'),
+					'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                   ],
         ]);
     },	
   ],
@@ -194,11 +234,24 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
  <script>
-		$('.card-head .tools .btn-collapse').on('click', function (e) {
+ 	$(".pagination li a").click(function(){			
+			var test = $(this).attr("href");
+			var new_url = $("#search_field_val").val();				 
+			$(this).attr("href", test+"&data="+new_url);
+			   			
+		});	
+		
+		//$('.card-head .tools .btn-collapse').on('click', function (e) {
+		$('.card-head').on('click', function (e) {
 			var card = $(e.currentTarget).closest('.card');
 			materialadmin.AppCard.toggleCardCollapse(card);
 		});
 		
 	</script>
+<style>
+	.card-head{
+		cursor:pointer
+	}
+	</style>	
 
 

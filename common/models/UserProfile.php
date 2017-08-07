@@ -46,6 +46,7 @@ class UserProfile extends \yii\db\ActiveRecord
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'division_id']],
             [['location'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['location' => 'location_id']],
             [['state'], 'exist', 'skipOnError' => true, 'targetClass' => State::className(), 'targetAttribute' => ['state' => 'state_id']],
+			['access_location','safe'],
         ];
     }
 
@@ -54,7 +55,8 @@ class UserProfile extends \yii\db\ActiveRecord
 	public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['company_admin_user'] = ['firstname','lastname','division','location','state','role','employee_number'];//Scenario Values Only Accepted
+        $scenarios['company_admin_user'] = ['firstname','lastname','division','location','state','role','employee_number',
+		'access_location'];//Scenario Values Only Accepted
         return $scenarios;
     }
 	
@@ -73,12 +75,21 @@ class UserProfile extends \yii\db\ActiveRecord
             'state' => 'State',
             'role' => 'Role',
             'employee_number' => 'Employee Number',
+            'access_location' => 'Access Location',
         ];
     }
 	
 	public function getFullname(){
 		 return $this->firstname. " ". $this->lastname;
 	}
+	
+	/**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserProfile()
+    {
+       return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
 	
     /**
      * @return \yii\db\ActiveQuery

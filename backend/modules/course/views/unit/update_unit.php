@@ -96,6 +96,14 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'page'])->one();
 								$data = json_decode($element->content);
 								$formdata = $data->html;
+								
+								/* echo "<pre>";
+								print_r($formdata);
+								exit; */
+							
+								//$formdata = str_replace("&quot;", "''", $formdata);
+								// not required $formdata = str_replace("&amp;", "&", $formdata);
+								
 								$formdata = str_replace("'", "\'", $formdata);
 								$formdata = str_replace(array("\r", "\n"), '', $formdata);
 								//echo $formdata;die;
@@ -120,11 +128,11 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'aw_data'])->one();
 								$aw_data = $element->content;
-								//print_r($aw_data);die;
-								//$aw_data = str_replace("&amp;", "&", $aw_data);
-								$aw_data = html_entity_decode($aw_data);
+							
 								$aw_data = str_replace("&amp;", "&", $aw_data);								
 								$aw_data = str_replace("'", "\'", $aw_data);
+								//echo $aw_data;exit;
+								
 								//$aw_data = str_replace('"', '&quot;', $aw_data);
 							?>
 						<div id="aware_form"></div>
@@ -145,7 +153,8 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
 							<?php 
 								$element = UnitElement::find()->where(['unit_id'=>$model->unit_id,'element_type'=>'cap_data'])->one();
 								$cp_data = $element->content;
-								$cp_data = html_entity_decode($cp_data);
+								//$cp_data = html_entity_decode($cp_data);
+								$cp_data = str_replace("&amp;", "&", $cp_data);
 								$cp_data = str_replace("'", "\'", $cp_data);
 								//$cp_data = str_replace(array("\r", "\n"), '', $cp_data);
 							?>
@@ -196,6 +205,7 @@ button#frmb-0-view-data,button#frmb-4-view-data,button#frmb-2-view-data{
     $( "#sortable" ).disableSelection();
   } );
 $(document).ready(function(){
+	
 	<!---------- validate unit title ------------>
 	$('.unit_view').click(function(){
 		//window.location.replace("<?=Url::to(['unit/update'])?>?id="+$(this).attr('data-unit_id'));
@@ -232,8 +242,12 @@ $(document).ready(function(){
 	//console.log(formData);
 	if (formData) {
 		unit_element_options.formData = formData;
+		var builder_data_test = unit_element_options.formData;
+		//var builder_data_test = JSON.stringify(unit_element_options.formData);
+	
 	}	 
 	$(unit_element_editor).formBuilder(unit_element_options);
+	
 	var saveBtn = document.querySelector('#frmb-0-save');
 	saveBtn.onclick = function() {
 		
@@ -273,6 +287,8 @@ $(document).ready(function(){
 		//console.log($(unit_element_editor).data('formBuilder').formData);
 		var builder_data = JSON.stringify({'html':$(unit_element_editor).data('formBuilder').formData});
 		//save to db
+		
+		
 		$.ajax({
 			url:'<?=Url::to(['unit/update','id'=>$model->unit_id])?>',
 			data: {unit_title:unit_title,builder_data : builder_data,unit_status:unit_status,reset_period:auto_reset_period,show_learning_page:show_learning_page},
@@ -303,16 +319,22 @@ $(document).ready(function(){
 	   editOnAdd: true,
 	};
  	var aw_data = '<?=$aw_data?>';
+	
 	//aw_data.replace(/"/g,"&quot;");
 	//var aw_data = aw_data.replace(/&amp;/g, '&');
 	//console.log(aw_data);
 	if (aw_data) {
 		awareness_elements.formData = aw_data;
 	}	
+	
 	var awareness_editor = $(document.getElementById('aware_form'));
+	
 	$(awareness_editor).formBuilder(awareness_elements);
+	
+	
 	//$('#aware_form').formBuilder(awareness_elements);
 	//SaveAwarenessTest
+	
 	var saveBtn = document.querySelector('#frmb-2-save');
 	saveBtn.onclick = function() {
 		var req = [];
@@ -328,7 +350,12 @@ $(document).ready(function(){
 			return false;
 		}
 		var form_data = $(awareness_editor).data('formBuilder').formData;
+		// Arivu Check		
+		//alert(JSON.stringify(form_data));return;
+		//var awareness_data = JSON.stringify({'html':form_data});
 		var awareness_data = JSON.stringify({'html':form_data});
+	
+
 		//save to db
 		$.ajax({
 			url:'<?=Url::to(['unit/save-test','type'=>'aw'])?>',

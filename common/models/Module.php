@@ -102,13 +102,14 @@ class Module extends \yii\db\ActiveRecord
     }	
 	
 	public function uploadImage(){
-		//if($this->validate()) {
+//		if($this->validate()) {
 			$this->featured_image->saveAs('uploads/' . $this->featured_image->baseName . '.' .$this->featured_image->extension);
 			$this->featured_image = 'uploads/'.$this->featured_image->baseName.'.'.$this->featured_image->extension;
 			return true;
-		/* }else
-			return false; */
+//		}else
+//			return false;
 	}
+	
 	
 	public function uploadVideo(){
 		//if($this->validate()) {

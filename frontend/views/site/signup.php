@@ -28,11 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-			 <?= $form->field($profile, 'firstname',['inputOptions' => ['autocomplete' => 'off']])->textInput(['autofocus' => true]) ?>
+			 <?= $form->field($profile, 'firstname',['inputOptions' => ['autocomplete' => 'off']])->textInput(['autofocus' => true])->label("First Name") ?>
 			 
-			 <?= $form->field($profile, 'lastname')->textInput() ?>
+			 <?= $form->field($profile, 'lastname')->textInput()->label("Last Name")  ?>
 			  
-             <?= $form->field($model, 'email')->textInput()->label("Username / Email ID") ?>
+             <?= $form->field($model, 'email')->textInput()->label("User Name / Email ID") ?>
 			
 			 <?= $form->field($model, 'company_id')->hiddenInput(['value'=>$company->company_id])->label(false)  ?>
 			

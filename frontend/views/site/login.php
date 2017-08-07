@@ -39,14 +39,14 @@ if(isset($sessioncheck) && !empty($sessioncheck)) { ?>
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label("User Name") ?>
 
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
-                <div style="color:#999;margin:1em 0">
-                    Forgotten Password? reset it <?= Html::a('here', ['site/request-password-reset']) ?>.
+               <div style="color:#0081CF;margin:1em 0;font-weight: 700;">
+                     <?= Html::a('Forgotten Password? Reset Here.', ['site/request-password-reset']) ?>
                 </div>
 
                 <div class="form-group">

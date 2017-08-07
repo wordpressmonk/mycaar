@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\User;
+use common\models\Location;
 use yii\data\ArrayDataProvider;
 use yii\data\SqlDataProvider;
 use yii\db\Query;
@@ -130,6 +131,39 @@ class SearchProgramEnrollment extends User
 	
 	  public function searchfilter($params,$extrasearch)
     {
+		
+	$selected_company = \Yii::$app->user->identity->c_id;
+
+	if(Yii::$app->user->can("company_assessor")){
+			$getlocation = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+		    foreach($getlocation as $key=>$get)
+			{
+			 $location[$key]= $get->location_id;		
+		    }	
+		}
+	else if(Yii::$app->user->can("group_assessor")){
+		$access_location = \Yii::$app->user->identity->userProfile->access_location;
+		if(!empty($access_location))
+		 $useraccesslocation = explode(",",$access_location);
+	 
+		$getlocation = Location::find()->where(['company_id'=>$selected_company])->orderBy('name')->all();
+		foreach($getlocation as $key=>$get)
+		{
+			if(isset($useraccesslocation) && in_array($get->location_id,$useraccesslocation))
+			{
+			 $location[$key]= $get->location_id;
+			}
+		}	
+	}
+	else if(Yii::$app->user->can("local_assessor")){
+		$locationid = \Yii::$app->user->identity->userProfile->location;
+		$location = Location::find()->where(['company_id'=>$selected_company,'location_id'=>$locationid])->orderBy('name')->all();
+	}
+
+		
+		$setlocation = implode(",",$location);
+		
+		
 		/// Variable for Temporary Following Condition.
 		$program_id = '';
 		$division = '';
@@ -142,6 +176,7 @@ class SearchProgramEnrollment extends User
 		$fullname = '';
 		$wherecondition = '';
 		$tmpwhere = '';
+		
 		
 		
 		$params['SearchProgramEnrollment']['Program'] = $extrasearch['Program'];		
@@ -230,7 +265,7 @@ class SearchProgramEnrollment extends User
 						`user_profile` `up` on ((`up`.`user_id` = `u`.`id`)) 
 					left join 
 						`program_enrollment` `pe` on(((`pe`.`program_id` = `p`.`program_id`) and (`pe`.`user_id` = `u`.`id`)
-						))) 
+						))) where up.location in ('.$setlocation.') 
 						
 						) as tmp '.$tmpwhere.'order by tmp.fullname' ,
 	

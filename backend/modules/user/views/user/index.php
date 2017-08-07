@@ -55,10 +55,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			],	
 			[
 				'attribute' => 'firstname',
+                                'label' => 'First Name',
 				'value' => 'userProfile.firstname',				
 			],	
 			[
 				'attribute' => 'lastname',
+                                'label' => 'Last Name',
 				'value' => 'userProfile.lastname',				
 			],								
 			[
@@ -69,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'filter' => Html::activeDropDownList($searchModel, 'roleName',MyCaar::getChildRolesName(MyCaar::getRoleNameByUserid(Yii::$app->user->identity->id)),['class'=>'form-control input-sm','prompt' => 'Role Name']),				 
 		*/		
 			],
-             ['label' => 'Username / Email ID',
+             ['label' => 'User Name / Email ID',
 				'attribute' => 'email',			
 			 ],
 			

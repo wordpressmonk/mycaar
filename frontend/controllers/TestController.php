@@ -68,6 +68,8 @@ class TestController extends Controller
 		$previous_unit = Unit::find()->where(['and', "unit_order<$current_unit->unit_order", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_order DESC')->one();
 		//
 		$user = User::findOne(\Yii::$app->user->id);
+    /**
+    Commented due to requirement change
 		if($previous_unit && $user->getRoleName() == 'user' ){
 			//print_r($current_unit);die;
 			$previous_unit_report = Report::find()->where(['unit_id'=>$previous_unit->unit_id,'student_id'=>\Yii::$app->user->id])->one();
@@ -77,6 +79,7 @@ class TestController extends Controller
 			}
 
 		}
+	**/
 		$element = UnitElement::find()->where(['unit_id'=>$u_id])->one();
 		$data = json_decode($element->content);
 		$formdata = $data->html;
@@ -103,6 +106,8 @@ class TestController extends Controller
 		$previous_unit = Unit::find()->where(['and', "unit_order<$current_unit->unit_order", "module_id=$current_unit->module_id","status=1"])->orderBy('unit_order DESC')->one();
 		//
 		$user = User::findOne(\Yii::$app->user->id);
+    /**
+    Commented due to requirement change
 		if($previous_unit && $user->getRoleName() == 'user' ){
 			//print_r($current_unit);die;
 			$previous_unit_report = Report::find()->where(['unit_id'=>$previous_unit->unit_id,'student_id'=>\Yii::$app->user->id])->one();
@@ -112,6 +117,7 @@ class TestController extends Controller
 			}
 
 		}
+**/
 		$total = AwarenessQuestion::find()->where('unit_id = :unit_id', [':unit_id' => $u_id])->count();
 		if($total == 0){
 			\Yii::$app->getSession()->setFlash('error', 'No questions found for this unit');

@@ -353,12 +353,13 @@ fbUtils.escapeHtml = function (html) {
 // Escape an attribute
 fbUtils.escapeAttr = function (str) {
   var match = {
-    '"': '&quot;',
+  /**  '"': '&quot;',
     '&': '&amp;',
     '<': '&lt;',
-    '>': '&gt;'
-  };
+    '>': '&gt;' */
+  }; 
 
+  
   function replaceTag(tag) {
     return match[tag] || tag;
   }
@@ -446,22 +447,36 @@ console.log(fieldData.type);
       fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText + '</h3><p>' + mycaar_desc_field + '</p></div>';
       break;
 	case 'img':
+	// By Arivu Image UNder Name[ fieldLabelVal ] is Removed [ Client ] - Ref Line 459
 		fieldMarkup = '<div class="small-padding"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
-		'<' + fieldData.type + ' ' + fieldDataString + '>' + fieldLabelVal + '</' + fieldData.type + '>'+
+		'<' + fieldData.type + ' ' + fieldDataString + '></' + fieldData.type + '>'+
 		'</div>';
 		;
 		break;
 	case 'filedownload':
+	
 		fieldData.type = 'a';
 		fieldLabelVal = 'Download File';
-		fieldMarkup = '<div class="small-padding filedownload-preview"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p><button class="btn btn-info btn-lg">'+
-		'<' + fieldData.type + ' href="'+fieldData.src+'" >' + fieldLabelVal + '</' + fieldData.type + '></button>'+
+		fieldMarkup = '<div class="small-padding filedownload-preview"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
+		'<' + fieldData.type + ' href="'+fieldData.src+'" class="btn btn-info btn-lg" download >' + fieldLabelVal + '</' + fieldData.type + '>'+
 		'</div>';
 		break;
 	case 'video':
 		fieldData.type = 'iframe';
+		var ext = fieldData.data_media_type;
+		//console.log(ext);
+		if(ext == 'wmv' || ext == 'flv'){
+			fieldData.type = 'video';
+/* 			fieldMarkup = '<div class="prev_video"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
+			//'<video controls><source type="video/ogg; codecs=theora,vorbis" src="video.ogv">'+
+				'<source src="'+fieldData.src+'">'+
+				'Your browser doesn\'t support video of this format, you may download the video instead: <a href="'+fieldData.src+'">Download</a>'+
+			'</video>'; */
+
+		}
+		//else
 		fieldMarkup = '<div class="prev_video"><h3>'+fieldLabelText+'</h3><p>'+mycaar_desc_field+'</p>'+
-		'<' + fieldData.type + ' ' + fieldDataString + ' width="600" height="300" controls>' + fieldLabelVal + '</' + fieldData.type + '>'+
+		'<' + fieldData.type + ' ' + fieldDataString + ' width="600" height="300" controls webkitallowfullscreen mozallowfullscreen allowfullscreen>' + fieldLabelVal + '</' + fieldData.type + '>'+
 		'</div>';
 		break;
 	case 'audio':

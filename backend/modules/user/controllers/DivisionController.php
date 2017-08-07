@@ -139,4 +139,18 @@ class DivisionController extends Controller
 		}
 		
     }
+	
+	public function actionGetDivision($c_id){
+		$mods = Division::find()->where(['company_id'=>$c_id])->orderBy('title')->all();
+		 if(count($mods)>0){
+			echo "<option value=''>--Select--</option>";
+			foreach($mods as $mod){			
+				  echo "<option value='".$mod->division_id."'>".$mod->title."</option>";
+			}
+		}
+		else{
+			echo "<option value=''>-</option>";
+		}
+	}
+	
 }

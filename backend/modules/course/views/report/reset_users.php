@@ -41,12 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="card-head style-default">
 				<div class="tools">
 					<div class="btn-group">
-						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapse"><i class="fa fa-angle-down"></i></a>
+						<a class="btn btn-icon-toggle btn-collapse" data-toggle="collapsed"><i class="fa fa-angle-down"></i></a>
 					</div>
 				</div>
 				<header>Search the results</header>
 			</div><!--end .card-head -->
-			<div class="card-body">
+			<div class="card-body" style="display:none">
 				<div class="program-search">
 					<form method="get">
 
@@ -220,11 +220,13 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 	<script>
-/* 	$('.card-head .tools .btn-collapse').on('click', function (e) {
+//	$('.card-head .tools .btn-collapse').on('click', function (e) {
+	$('.card-head').on('click', function (e) {
 		var card = $(e.currentTarget).closest('.card');
 		materialadmin.AppCard.toggleCardCollapse(card);
 	});
-	$( "#module_select" ).change(function() {					
+	
+/*	$( "#module_select" ).change(function() {					
 		var mod_id = $(this).val();				
 		window.location.href = "<?=Yii::$app->homeUrl;?>course/report/reset-users?type=m&u_id="+mod_id;
 	});

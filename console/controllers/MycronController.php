@@ -31,7 +31,6 @@ class MycronController extends Controller {
             ->setSubject($tmp->subject);
             
 		 $message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
-		 $message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
 		 $message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
 		 $message->send();	
 					
@@ -39,7 +38,7 @@ class MycronController extends Controller {
 			  $model->status = 1;
 			  $model->save(); 			  
 			}
-		}		     		
+		}	     		
     }
 
 

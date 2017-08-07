@@ -22,12 +22,12 @@ use common\models\Role;
 
 		<div class="col-md-6 col-sm-6">
 		
-		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("Firstname *") ?>
+		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("First Name *") ?>
 		
-		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Lastname *") ?>
+		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Last Name *") ?>
 		
 		<?php if($model->isNewRecord){ ?>
-		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID *") ?>
+		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("User Name / Email ID *") ?>
 		<?php } else { ?>
 		<?= $form->field($model, 'email')->textInput(['maxlength' => true,'readonly'=>'readonly'])->label("Username / Email ID *") ?>
 		<?php } ?>
@@ -35,10 +35,33 @@ use common\models\Role;
 		<?= $form->field($model, 'password')->passwordInput()->label("Password (Optional)") ?>
 		
 		
-			<?= $form->field($model, 'role')->dropDownList(
+		<?php if($model->isNewRecord)
+			{	
+			
+			echo $form->field($model, 'role')->dropDownList(
             $roles,           // Flat array ('id'=>'label')
-            ['prompt'=>'--Access Level--']    // options
-        )->label("User Access Level"); ?>
+            ['prompt'=>'--Access Level--',
+			'onchange'=>'
+                $.post( "'.Yii::$app->urlManager->createUrl('user/location/group-location?id=').'"+$(this).val(), function( data ) {
+                  $( "#grouplocation" ).html( data );
+				  $( "#grouplocation" ).show();
+                });']    // options
+			)->label("User Access Level"); 
+			
+			} else { 
+			
+			echo $form->field($model, 'role')->dropDownList(
+            $roles,           // Flat array ('id'=>'label')
+            ['prompt'=>'--Access Level--',
+			'onchange'=>'
+			$.post( "'.Yii::$app->urlManager->createUrl('user/location/update-group-location?locations='.$profile->access_location.'&id=').'"+$(this).val(), function( data ) {
+                  $( "#grouplocation" ).html( data );
+				  $( "#grouplocation" ).show();
+                });']    // options
+				)->label("User Access Level"); 
+			}
+		?>
+		
 		
 	</div>
 	<div class="col-md-6 col-sm-6">
@@ -73,6 +96,9 @@ use common\models\Role;
             $role,           // Flat array ('id'=>'label')
             ['prompt'=>'--Role--']    // options
         );  ?>
+	</div>
+	<div class="col-md-12 col-sm-12" id="grouplocation" style="display:none">
+		Select Locations for This Group Accessor
 	</div>	
 	<div class="col-md-12 col-sm-12">
 		<div class="form-group" align="center" >
@@ -84,3 +110,14 @@ use common\models\Role;
 		<?php ActiveForm::end(); ?>
 	</div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	<?php if($model->role == "group_assessor")
+	{
+		?>
+	$( "#user-role" ).trigger( "change" );
+	<?php } ?>	
+});
+
+</script>

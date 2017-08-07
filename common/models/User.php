@@ -480,7 +480,6 @@ class User extends ActiveRecord implements IdentityInterface
             ->setSubject('MyCaar Please Verified your Email');
        
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
-		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
 		
 		return $message->send();
@@ -510,7 +509,6 @@ class User extends ActiveRecord implements IdentityInterface
             ->setSubject('MyCaar Please Reset Your Password');
        	
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
-		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
 		
 		return $message->send();
@@ -540,7 +538,6 @@ class User extends ActiveRecord implements IdentityInterface
             ->setSubject('MyCaar Change Password Success');
        	
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
-		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
 		
 		return $message->send();
@@ -562,6 +559,71 @@ class User extends ActiveRecord implements IdentityInterface
 		 $this->save(false);		 
 	 }	 
 	 
-	  
+	public function sendRollChangeEmail($id)
+    {
+        /* @var $user User */
+        $user = User::findOne([
+            'status' => User::STATUS_ACTIVE,
+            'id' => $id,
+        ]);
+			
+        if (!$user) {
+            return false;
+        }
+		
+        $message = Yii::$app
+            ->mail
+            ->compose(
+                ['html' => 'roleChanged-Send-html'],
+                ['user' => $user]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => 'MyCaar '])
+			->setTo($user->email)
+            ->setSubject('MyCaar Access Level Confirmation');
+       	
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
+		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
+		
+		$message->send(); 
+    }	
+	
+	 
+	 public function getProgramoverallProgress($user_id,$program_id){
+		$enrolled = ProgramEnrollment::find()->where(['user_id'=>$user_id,'program_id'=>$program_id])->one();
+		if($enrolled)
+		{
+		 $program = Program::findOne($program_id);
+		 $modules = $program->publishedModules;
+		 $total_tests = 0;
+		 $tests_completed = 0;
+		 foreach($modules as $module){
+				$units = $module->publishedUnits; 
+ 				foreach($units as $unit){
+						$n_tests = 2;
+						$capabilty_progress = $awareness_progress = 0;
+						$c_status = CapabilityQuestion::find()->where(['unit_id'=>$unit->unit_id])->one();
+						if(!$c_status)
+							$n_tests = 1;
+						$report = UnitReport::find()->where(['unit_id'=>$unit->unit_id,'student_id'=>$user_id])->one();
+						if($report){
+							$capabilty_progress = $report->capability_progress;
+							$awareness_progress = $report->awareness_progress;					
+						}				
+						if($capabilty_progress == 100 )					
+							$tests_completed = $tests_completed+1;
+						if($awareness_progress == 100 )					
+							$tests_completed = $tests_completed+1;
+
+						$total_tests = 	$total_tests + $n_tests;
+				}
+		 }
+
+			 if($total_tests == 0)
+				 return 0;
+			 $progress =  ($tests_completed/$total_tests)*100;
+				 return (int)$progress;			 
+		 }
+		
+	 }
 	
 }

@@ -141,4 +141,17 @@ class RoleController extends Controller
 			
     }
 	
+	public function actionGetRole($c_id){
+		$mods = Role::find()->where(['company_id'=>$c_id])->orderBy('title')->all();
+		 if(count($mods)>0){
+			echo "<option value=''>--Select--</option>";
+			foreach($mods as $mod){			
+				  echo "<option value='".$mod->role_id."'>".$mod->title."</option>";
+			}
+		}
+		else{
+			echo "<option value=''>-</option>";
+		}
+	}
+	
 }

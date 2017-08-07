@@ -16,12 +16,12 @@ use common\models\Company;
 
 		<?php /* $form->field($model, 'username')->textInput(['maxlength' => true]) */ ?>
 		
-		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("Firstname *") ?>
+		<?= $form->field($profile, 'firstname')->textInput(['maxlength' => true])->label("First Name *") ?>
 		
-		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Lastname *") ?>
+		<?= $form->field($profile, 'lastname')->textInput(['maxlength' => true])->label("Last Name *") ?>
 		
 		<?php if($model->isNewRecord){ ?>
-		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("Username / Email ID *") ?>
+		<?= $form->field($model, 'email')->textInput(['maxlength' => true])->label("User Name / Email ID *") ?>
 		<?php } else { ?>
 		<?= $form->field($model, 'email')->textInput(['maxlength' => true,'readonly'=>'readonly'])->label("Username / Email ID *") ?>
 		<?php } ?>

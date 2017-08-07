@@ -240,5 +240,9 @@ class UserController extends Controller
 			}  			
 		}
 		
-		
+	 public function actionPdf(){
+        Yii::$app->response->format = 'pdf';
+        $this->layout = '//print';
+        return $this->render('myview');
+    }	
 }

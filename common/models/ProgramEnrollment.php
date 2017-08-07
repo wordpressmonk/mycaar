@@ -102,7 +102,6 @@ public function sendEnrollmentEmail($id,$programname)
             ->setSubject('MyCaar Enrollment Confirmation');
        	
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('MIME-version', '1.0\n');
-		$message->getSwiftMessage()->getHeaders()->addTextHeader('Content-Type', 'text/html');
 		$message->getSwiftMessage()->getHeaders()->addTextHeader('charset', ' iso-8859-1\n');
 		
 		return $message->send(); 
